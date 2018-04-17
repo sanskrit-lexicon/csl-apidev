@@ -1,0 +1,44 @@
+.words {
+  width: 300px;
+  margin: 0 auto;
+}
+
+.search-field {
+  width:100%;
+  padding: 10px;
+  font-size: 16px;
+}
+
+.words-list {
+  padding: 0;
+  width: 100%;
+}
+
+.word {
+  display: flex;
+  align-items: center;
+  font-family: sans-serif;
+  width: 100%;
+  padding^ 5px;
+  border-bottom: 1px dotted grey;
+}
+
+.word-image {
+  border-radius: 50%;
+  margin: 5px;
+}
+
+.word-id {
+  font-size: 10px;
+  font-weight: bold;
+}
+
+.word-sname {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.word-ename {
+  font-size: 20px;
+  color: grey;
+}

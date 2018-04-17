@@ -1,0 +1,2 @@
+72933 read from word_frequency.txt
+4932 duplicates

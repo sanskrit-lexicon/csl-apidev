@@ -1,0 +1,222 @@
+204179 <SA>
+004062 <em title="<s>
+002602 <em title="Atmane-pada">
+001300 <em title="Nominal verb">
+000004 <em title="Scholiast or Commentator">
+000004 <em title="Vedic or Veda">
+000001 <em title="ablative">
+000004 <em title="according to">
+000004 <em title="accusative">
+000001 <em title="adjective (cf. mfn.)">
+000002 <em title="case">
+000005 <em title="commentator or commentary">
+000011 <em title="confer, compare">
+000001 <em title="dative case">
+000419 <em title="dual number">
+042319 <em title="feminine">
+000002 <em title="genitive case">
+000003 <em title="grammar">
+007419 <em title="indeclinable">
+000001 <em title="instrumental case">
+094241 <em title="masculine gender">
+064691 <em title="masculine, feminine and neuter; or adjective">
+056354 <em title="neuter gender">
+000026 <em title="nominative case">
+002171 <em title="plural">
+000008 <em title="quod vide">
+000004 <em title="wrong reading">
+022188 <em>
+056621 <font class='sdata'>
+016307 <font color="brown" size="-1">
+002773 <font color="brown">
+000011 <font color="gray" size="-1" class='sdata'>
+000048 <font color="gray" size="-1">
+000001 <font color="orange">
+038662 <font color="purple">
+078629 <font color='#004400' size="-1">
+275659 <font color='#004400'>
+146178 <font size='-1' color='#006600'>
+005437 <font size='-1'>
+014384 <p>
+004427 <span  title="<s>
+000004 <span  title="AEolic">
+000136 <span  title="Anglo-Saxon">
+001499 <span  title="Aorist">
+000004 <span  title="Arabic">
+000006 <span  title="Armenian">
+000003 <span  title="Armorican or the language of Brittany">
+000002 <span  title="Atmane-pada">
+000238 <span  title="Bombay edition">
+000059 <span  title="Calcutta edition">
+002615 <span  title="Causal">
+000004 <span  title="Classical">
+000185 <span  title="Comparative degree">
+000027 <span  title="Conditional">
+000952 <span  title="Desiderative">
+000204 <span  title="English">
+000339 <span  title="Epic">
+000001 <span  title="Gaelic">
+000302 <span  title="German">
+000204 <span  title="Gothic">
+000514 <span  title="Greek">
+000052 <span  title="Hibernian or Irish">
+000004 <span  title="Hindi">
+000002 <span  title="Icelandic">
+000618 <span  title="Intensive">
+000005 <span  title="Introduction">
+000540 <span  title="Latin">
+000002 <span  title="Lettish">
+000191 <span  title="Lithuanian">
+047822 <span  title="Name (also title or epithet)">
+000008 <span  title="Nominal verb">
+000001 <span  title="Ossetic">
+000897 <span  title="Passive voice">
+000024 <span  title="Persian">
+000346 <span  title="Potential">
+000011 <span  title="Russian">
+000006 <span  title="Saxon">
+000788 <span  title="Scholiast or Commentator">
+000115 <span  title="Slavonic or Slavonian">
+000220 <span  title="Vedic or Veda">
+000150 <span  title="Zend">
+001047 <span  title="ablative">
+000919 <span  title="according to">
+002642 <span  title="accusative">
+000025 <span  title="additions">
+000037 <span  title="adjective (cf. mfn.)">
+000049 <span  title="adverb">
+000053 <span  title="algebra">
+000009 <span  title="anatomy">
+000007 <span  title="anomalous">
+000106 <span  title="arithmetic">
+000117 <span  title="astrology">
+000253 <span  title="astronomy">
+000057 <span  title="case">
+000543 <span  title="chapter">
+000632 <span  title="column">
+000062 <span  title="columns">
+001590 <span  title="commentator or commentary">
+003428 <span  title="compound">
+011814 <span  title="confer, compare">
+000014 <span  title="conjectural">
+000003 <span  title="consonant">
+000665 <span  title="dative case">
+000005 <span  title="defective">
+000030 <span  title="diminutive">
+000174 <span  title="dramatic language">
+000509 <span  title="dual number">
+000112 <span  title="edition">
+001349 <span  title="especially">
+000042 <span  title="etymology">
+001275 <span  title="exempli gratia, 'for example'">
+000250 <span  title="figuratively">
+000066 <span  title="from">
+000632 <span  title="future">
+001642 <span  title="genitive case">
+000039 <span  title="geometry">
+000955 <span  title="grammar">
+000263 <span  title="ibidem or 'in the same place or book or text' as the preceding">
+001492 <span  title="id est">
+004315 <span  title="idem or 'the same meaning as that of a preceding word'">
+000001 <span  title="identical">
+000412 <span  title="imperative">
+000417 <span  title="imperfect tense">
+000228 <span  title="impersonal or used impersonally">
+003426 <span  title="in fine compositi or 'at the end of a compound'">
+000295 <span  title="in the beginning of a compound">
+000009 <span  title="indeclinable">
+000788 <span  title="infinitive mood">
+001619 <span  title="instrumental case">
+000002 <span  title="interjection">
+000003 <span  title="interpolation">
+000054 <span  title="irregular">
+000001 <span  title="latitude">
+000006 <span  title="lexicographers (i.e. a word or meaning which although give in native lexicons, has not yet been met with in any published text)">
+000215 <span  title="literally">
+002039 <span  title="locative case">
+000014 <span  title="logic">
+000006 <span  title="longitude">
+000021 <span  title="manuscript">
+000012 <span  title="manuscripts">
+000004 <span  title="masculine gender">
+000003 <span  title="masculine, feminine and neuter; or adjective">
+000034 <span  title="mathematics">
+000047 <span  title="medicine">
+000003 <span  title="metri causa">
+000004 <span  title="metronymic">
+000036 <span  title="modern">
+000009 <span  title="mythology">
+000149 <span  title="negative">
+000553 <span  title="nominative case">
+000004 <span  title="obsolete">
+000106 <span  title="onomatopoetic (i.e. formed from imitation of sounds)">
+000052 <span  title="originally">
+000830 <span  title="page and participle (cf. p.p.)">
+000006 <span  title="paroxytone">
+000016 <span  title="participle">
+003705 <span  title="particular">
+000056 <span  title="past participle">
+001670 <span  title="patronymic">
+000897 <span  title="perfect tense">
+000004 <span  title="perhaps">
+000075 <span  title="person">
+000206 <span  title="philosophy">
+003154 <span  title="plural">
+000044 <span  title="poetry or poetic">
+000007 <span  title="preceding">
+000045 <span  title="preposition">
+000067 <span  title="present tense">
+000005 <span  title="privative">
+000067 <span  title="probably">
+000026 <span  title="pronominal">
+000041 <span  title="pronoun">
+000001 <span  title="proper">
+003578 <span  title="quod vide">
+000014 <span  title="reduplicated">
+000208 <span  title="rhetoric">
+000566 <span  title="scilicet">
+000276 <span  title="several">
+000015 <span  title="singular">
+000552 <span  title="sub voce, i.e. the word in the Sanskrit order">
+000456 <span  title="subjunctive">
+000028 <span  title="substantive">
+000002 <span  title="suffix">
+000010 <span  title="superlative degree">
+000003 <span  title="surgery">
+003554 <span  title="varia lectio">
+000001 <span  title="verb">
+000147 <span  title="vocative case">
+000002 <span  title="vowel">
+012487 <span  title="work">
+002036 <span  title="wrong reading">
+306300 <span class='blue smaller'>
+001125 <span class='greek'>
+033244 <span class='red'>
+147547 <span class='sdata'>
+025427 <span class='smaller'>
+000001 <span style='font-family: siddhanta_deva;'>
+000001 <span title="<s>
+000001 <span title="Anglo-Saxon" class="ab">
+000023 <span title="Bombay edition" class="ab">
+000005 <span title="Calcutta edition" class="ab">
+000002 <span title="Causal" class="ab">
+000002 <span title="German" class="ab">
+000005 <span title="Greek" class="ab">
+000001 <span title="Intensive" class="ab">
+000130 <span title="Introduction" class="ab">
+000003 <span title="Latin" class="ab">
+000002 <span title="Name (also title or epithet)" class="ab">
+004906 <span title="Scholiast or Commentator" class="ab">
+000002 <span title="Zend" class="ab">
+000003 <span title="case" class="ab">
+000018 <span title="chapter" class="ab">
+000008 <span title="column" class="ab">
+000006 <span title="commentator or commentary" class="ab">
+000011 <span title="confer, compare" class="ab">
+000019 <span title="edition" class="ab">
+000010 <span title="especially" class="ab">
+000003 <span title="exempli gratia, 'for example'" class="ab">
+000004 <span title="idem or 'the same meaning as that of a preceding word'" class="ab">
+000001 <span title="modern" class="ab">
+000027 <span title="sequens" class="ab">
+000001 <span title="work" class="ab">

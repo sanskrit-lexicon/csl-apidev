@@ -1,0 +1,200 @@
+<!DOCTYPE html> <!-- html5 -->
+<html>
+<head>
+<META charset="UTF-8">
+<title>Cologne Basic Display</title>
+<!--
+<link rel="stylesheet" href="display.css" type="text/css">
+-->
+<!-- links to jquery, using CDNs -->
+<script type="text/javascript" src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+<!-- firefox dev tool note on next two:
+This site makes use of a SHA-1 Certificate; it's recommended you use certificates with signature algorithms that use hash functions stronger than SHA-1.
+-->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+<!-- jquery-ui not used currently -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+
+<style>
+body {
+ color: black; background-color:#DBE4ED;
+ /*font-size: 14pt; */
+}
+/*
+#disp {
+ resize: both;
+ overflow: auto;
+}
+*/
+#dataframe {
+ color: black; background-color: white;
+ width: 600px;
+ height: 400px;
+ /* resize doesn't work on Firefox. 
+  On Chrome, the size may be increased, but not decreased*/
+ resize: both;
+ overflow: auto;
+}
+
+#accentdiv,#filterdiv,#translitdiv,#dictionary input,label {display:block;}
+
+#preferences {
+ position:absolute;
+ left:100px;
+ top: 15px;
+}
+#preferences td {
+ /*border:1px solid black;*/
+ background-color:white;
+ padding-left:5px;
+ padding-right:5px;
+ text-align:center;
+}
+#citationdiv{
+ padding-bottom:5px;
+}
+</style>
+<script> 
+// cross origin error
+//Cross-Origin Request Blocked: The Same Origin Policy disallows reading the remote resource at http://www.sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/getword.php?key=guru&filter=deva&dict=WIL&accent=no&transLit=slp1. (Reason: CORS header 'Access-Control-Allow-Origin' missing).
+ // Jquery
+$(document).ready(function() {
+ $('#key').keypress(function (e) {
+  if(e.which == 13)  // the enter key code
+   {e.preventDefault();
+    basicDisplay();
+   }
+ }); // end keypress
+ $('#transLit,#filter,#dict,#accent').change(function(event) {
+  cookieUpdate(true);   
+ });
+ 
+ basicDisplay = function () {
+  var key = $('#key').val();
+  var dict = $('#dict').val();
+  var input = $('#transLit').val();
+  var output = $('#filter').val();
+  var accent = $('#accent').val();
+  var options = $('#options').val();
+  //console.log('key=',key,', dict=',dict,', input=',input,
+  //  ', output=',output,' accent=',accent);
+  // TODO: check for valid inputs before ajax call
+  var urlbase="http://www.sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/getword.php";
+  var url =  urlbase +  
+   "?key=" +escape(key) + 
+   "&filter=" +escape(output) +
+   "&dict=" + escape(dict) +
+   "&accent=" + escape(accent) +
+   "&options=" + escape(options) +
+   "&transLit=" + escape(input);
+    //jQuery("#disp").html(""); // clear output
+    jQuery("#dataframe").attr("src",url);
+  
+ }; // basicDisplay
+cookieUpdate = function(flag) {
+ // Cookie for holding transLit, filter, accent, dict values;
+ // When flag is true, update cookies from corresponding dom values
+ // When flag is false, initialize dom values from cookie values,
+ //  but use default values if cookie values not present.
+ var cookieNames = ['transLit','filter','accent','dict'];
+ var domids = ['#transLit','#filter','#accent','#dict'];
+ var cookieOptions = {expires: 365, path:'/'}; // 365 days
+ var i,cookieName,cookieValue,domid;
+ if (flag) { // set values of cookies acc. to 'value' of corresponding ids
+  for(i=0;i<cookieNames.length;i++) {
+   cookieName=cookieNames[i];
+   domid=domids[i];
+   cookieValue=$(domid).val();
+   $.cookie(cookieName,cookieValue,cookieOptions);
+  }
+  return;
+ }
+ // When flag is false. For initializing (a) cookies, and (b) dom values
+ var cookieDefaultValues = ['hk','deva','no','mw'];
+ for(i=0;i<cookieNames.length;i++) {
+  cookieName=cookieNames[i];
+  domid=domids[i];
+  cookieValue = $.cookie(cookieName); // old value of cookie
+  if(! cookieValue) { // cookie not defined. 
+   cookieValue= cookieDefaultValues[i]; // Use default value
+   $.cookie(cookieName,cookieValue,cookieOptions); // and set cook
+  }
+  // set dom value
+  $(domid).val(cookieValue);
+ }
+};
+
+cookieUpdate(false);  // for initializing cookie
+
+}); // end ready
+ </script>
+<script> // see MWScan/2014/web/webtcdev/main_webtc.js
+</script>
+</head>
+<body>
+ <div id="logo">
+     <a href="http://www.sanskrit-lexicon.uni-koeln.de/">
+      <img id="unilogo" src="http://www.sanskrit-lexicon.uni-koeln.de/images/cologne_univ_seal.gif"
+           alt="University of Cologne" width="60" height="60" 
+           title="Cologne Sanskrit Lexicon"/>
+      </a>
+ </div>
+
+<table id="preferences">
+<tr><td>
+ <div id="dictionary">
+ <label for="dictcode">dictionary</label>
+ <input type="text" name="dictcode" size="4" id="dict" value="" />
+ </div>
+
+</td><td>
+ <div id="translitdiv">
+  <label for="transLit">input</label>
+  <select name="transLit" id="transLit">
+   <option value='hk' selected='selected'>KH <!--Kyoto-Harvard--></option>
+   <option value='slp1'>SLP1</option>
+   <option value='itrans'>ITRANS</option>
+   <option value='deva'>Devanagari</option>
+   <option value='roman'>IAST</option>
+  </select>
+ </div>
+</td><td>
+ <div id="filterdiv">
+  <label for="filter">output</label>
+  <select name="filter" id="filter">
+   <option value='deva'>Devanagari</option>
+   <option value='hk'>KH <!--Kyoto-Harvard--></option>
+   <option value='slp1'>SLP1</option>
+   <option value='itrans'>ITRANS</option>
+   <option value='roman' selected='selected'>IAST</option>
+  </select>
+ </div>
+</td><td>
+ <div id="accentdiv">  <!-- possibly should be per dictionary -->
+  <label for="accent">accent?</label>
+ <select name="accent" id="accent">
+  <option value="yes">Show</option>
+  <option value="no" selected="selected">Hide</option>
+ </select>
+ </div>
+</td></tr>
+</table> <!-- preferences -->
+ <div id="citationdiv">
+  citation:&nbsp;
+  <input type="text" name="key" size="20" id="key" value="" style="height:1.4em;"/>
+ </div>
+ <div id="optionsdiv">
+  <label for="options">display Options</label>
+  <select name="options" id="options">
+   <option value="0">Default</option>
+   <option value="1">Compress</option>
+  </select>
+ </div>
+ <div id="disp">
+  <!-- Requesting data will change the src attribute of this iframe -->
+  <iframe id="dataframe">  
+   <p>Your browser does not support iframes.</p>
+  </iframe>
+ </div>
+</body>
+</html>

@@ -1,0 +1,16 @@
+
+v0.2   computes variants only with the php algorithm.
+
+* ../v0.0/word_frequency.js
+a Javascript file, with 72934 lines of form:
+localStorage.setItem("a", "11");
+localStorage.setItem("akaṇṭaka", "5");
+
+From Marcis Gasuns. Adapted from work of Oliver Hellwig (sp?).
+
+* word_frequency.txt
+a 1
+akaRwaka 5
+SLP1 transliteration
+python word_frequency.py ../v0.0/word_frequency.js word_frequency.txt
+

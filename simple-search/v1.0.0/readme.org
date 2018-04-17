@@ -1,0 +1,50 @@
+
+v0.2a   computes variants only with the php algorithm,
+  Assume input key is HK, and
+  compute variants in SLP1.
+  Reason: more efficient
+
+* ../v0.0/word_frequency.js
+a Javascript file, with 72934 lines of form:
+localStorage.setItem("a", "11");
+localStorage.setItem("akaṇṭaka", "5");
+
+From Marcis Gasuns. Adapted from work of Oliver Hellwig (sp?).
+
+* word_frequency.txt
+a 1
+akaRwaka 5
+SLP1 transliteration
+python word_frequency.py ../v0.0/word_frequency.js word_frequency.txt
+
+* Documentation of method
+getword_list_1.0.php
+ keyparmin is what user input.
+ Also use 'dict' and 'output' parameters when generating results.
+ keysin0 is list of alternates:
+    keysin0 = generate_alternates($keyparmin)
+      a) wordin1 = convert_nonascii(keyparmin)
+         -- if keyparmin consists wholly of letters a-zA-Z, then wordin1=keyparmin1
+         -- Otherwise, 
+            -- transcode keyparmin from devanagari to SLP1, and then to HK
+            -- transcode result from IAST to SLP1, and then to HK.
+      b) Construct a  Simple_Search instance object from wordin1 [see below]
+         The 'keysin' attribute of this object is a list of SLP1 spellings
+         returned generate_alternates.
+         (keyin0 of Simple_Search is wordin1)
+         - alternates = generate_hkalternates(keyin0)
+           (wordin = keyin0)
+          b1. wordin = correcthk(wordin)
+            ii,ee -> i;   uu,oo -> u; aa -> a; chh -> ch; E -> ai;
+            O -> au;
+	    rXX -> rX    [  ODD: undouble consonant after 'r' Why?]
+            R^i, RR^i -> R  [ vocalic R ]
+          b2.  split wordin into sequence of letters.
+            For each letter x, make a list of alternate letters:
+              if x = f -> [p,ph]  
+              otherwise [x]
+          b3. 
+ Simple_Search constructor.
+
+ For each key in keysin0:
+  

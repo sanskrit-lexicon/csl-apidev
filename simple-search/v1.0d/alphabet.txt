@@ -1,0 +1,49 @@
+ 1 a a a अ
+ 2 A A ā आ
+ 3 i i i इ
+ 4 I I ī ई
+ 5 u u u उ
+ 6 U U ū ऊ
+ 7 f R ṛ ऋ
+ 8 F RR ṝ ॠ
+ 9 x lR ḷ ऌ
+10 X lRR ḹ ॡ
+11 e e e ए
+12 E ai ai ऐ
+13 o o o ओ
+14 O au au औ
+15 M M ṃ ं
+16 H H ḥ ः
+17 k k k क्
+18 K kh kh ख्
+19 g g g ग्
+20 G gh gh घ्
+21 N G ṅ ङ्
+22 c c c च्
+23 C ch ch छ्
+24 j j j ज्
+25 J jh jh झ्
+26 Y J ñ ञ्
+27 w T ṭ ट्
+28 W Th ṭh ठ्
+29 q D ḍ ड्
+30 Q Dh ḍh ढ्
+31 R N ṇ ण्
+32 t t t त्
+33 T th th थ्
+34 d d d द्
+35 D dh dh ध्
+36 n n n न्
+37 p p p प्
+38 P ph ph फ्
+39 b b b ब्
+40 B bh bh भ्
+41 m m m म्
+42 y y y य्
+43 r r r र्
+44 l l l ल्
+45 v v v व्
+46 S z ś श्
+47 z S ṣ ष्
+48 s s s स्
+49 h h h ह्

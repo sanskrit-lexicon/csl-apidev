@@ -1,0 +1,75 @@
+
+
+#disp {
+ position:absolute;
+ top:5px;
+ left: 200px;
+ right: 5px;
+ /*height: 500px; */
+ bottom: 5px; 
+ background-color: white;
+ overflow: auto;
+ border:1px solid black;
+}
+
+#displist {
+ position:absolute;
+ top:5px;
+ left: 5px;
+ width: 180px;
+ /*height: 500px;*/
+ bottom: 5px;
+ background-color: #DCDCDC;
+ background-color: #EDEDED;
+ overflow: auto;
+ /*line-height:100%;  */
+ border:1px solid black;
+ padding-left: 5px;
+}
+
+#displist a {
+ font-size:12pt;
+ line-height: 100%;
+ color:black;
+}
+div.displist > a:link{
+text-decoration: none
+}
+
+div.displist > a:hover {
+background-color:#A9C1CB;
+cursor: pointer;
+text-decoration: none
+}
+
+.listlink {
+ font-size:12pt;
+ line-height: 100%;
+ color:black;
+ background-color:yellow;
+}
+.listlinkCurrent {
+ background-color:#00ffff; /*teal is #008080*/
+}
+a.listlink:link{
+text-decoration: none
+}
+
+a.listlink:hover {
+background-color:#A9C1CB;
+cursor: pointer;
+text-decoration: none
+}
+/* Jul 18, 2015. font family for capitalization, only SNP */
+@font-face { /* for 'ls' text in pwg */
+ src: url(../fonts/CharterIndoCapital.otf);
+ font-family: charterindocapital;
+}
+.botcap {
+color:gray; 
+font-family:charterindocapital;
+}
+
+.cssshade {
+ background-color:#EAEAEA; /* light gray */
+}

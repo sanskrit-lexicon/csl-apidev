@@ -1,0 +1,107 @@
+; Compare test1 for v1.0  and v1.0d
+; 35 Cases . 23 cases are same for v1.0  and v1.0d
+; Case 1:  vishnu mw (EQ)
+v1.0  = vizRu
+v1.0d = vizRu
+; Case 2:  vishnuh ap90 (EQ)
+v1.0  = 
+v1.0d = 
+; Case 3:  deva skd (EQ)
+v1.0  = devaH,devaM,deva,devA
+v1.0d = devaH,devaM,deva,devA
+; Case 4:  shringara mw (NEQ)
+v1.0  = 
+v1.0d = SfNgAra,SfNgArA
+; Case 5:  Sankara mw (NEQ)
+v1.0  = Sakra,SAkra,sakara,saMkram,SAMkara,saMkara,SaMkarA,SaNkara,SaMkara,Sakara
+v1.0d = Sakra,SAkra,sakAra,SakAra,sAkAra,sakara,saMkAra,saMkara,SAMkara,SaNkara,SaMkara,SaMkarA,Sakara
+; Case 6:  matri mw (NEQ)
+v1.0  = mAtf
+v1.0d = mAtra,mAtf,mAWara,maTara,maTra,natra,nAtra
+; Case 7:  krishna mw (EQ)
+v1.0  = kfzRa,kfzRA
+v1.0d = kfzRa,kfzRA
+; Case 8:  krushna mw (EQ)
+v1.0  = kfzRa,kfzRA
+v1.0d = kfzRa,kfzRA
+; Case 9:  punya mw (EQ)
+v1.0  = puRya,puRyA
+v1.0d = puRya,puRyA
+; Case 10:  kapa mw (EQ)
+v1.0  = kaPa,kapa,kApA
+v1.0d = kaPa,kapa,kApA
+; Case 11:  kafa mw (NEQ)
+v1.0  = kara,Kara,kaPa,kAra,kArA,KarA,kapa,Karam,kAram,kApA,KAra
+v1.0d = kara,Kara,kaPa,kAra,kArA,KarA,kapa,KAra,kApA
+; Case 12:  sanskrit mw (EQ)
+v1.0  = saMskfta
+v1.0d = saMskfta
+; Case 13:  acarya mw (NEQ)
+v1.0  = Acarya
+v1.0d = AcArya,AcAryA,Acarya
+; Case 14:  acarya ap90 (NEQ)
+v1.0  = 
+v1.0d = AcAryaH
+; Case 15:  kut mw (EQ)
+v1.0  = kUwa,kuTa,kuwa,kuw,kuWa,kuta,kuT,kUw,kut
+v1.0d = kUwa,kuTa,kuwa,kuw,kuWa,kuta,kuT,kUw,kut
+; Case 16:  dukha mw (EQ)
+v1.0  = DUka,DukA,Duka
+v1.0d = DUka,DukA,Duka
+; Case 17:  dhaval mw (EQ)
+v1.0  = Davala
+v1.0d = Davala
+; Case 18:  ashvah mw (EQ)
+v1.0  = aSva,asva,ASva
+v1.0d = aSva,asva,ASva
+; Case 19:  hari mw (NEQ)
+v1.0  = hari,hrI,harI
+v1.0d = hara,hari,hAra,hrI,harI,hAri
+; Case 20:  karmman mw (NEQ)
+v1.0  = karman,karuRam
+v1.0d = karman,kArmaRa,karuRam
+; Case 21:  sangama mw (EQ)
+v1.0  = sagaRa,sAMgama,sAgama,saMgama,saGana
+v1.0d = sagaRa,sAMgama,sAgama,saMgama,saGana
+; Case 22:  aja mw (EQ)
+v1.0  = aja,ajA,Aja,Ajan,AjA
+v1.0d = aja,ajA,Aja,Ajan,AjA
+; Case 23:  manduka mw (NEQ)
+v1.0  = maRqUka,maDuka,maDUka,mADUka,mADuka,mARqUka,maDukA,nAnduka,mAduka,maRquka
+v1.0d = maRqUka,maDuka,maDUka,mADUka,mADuka,mARqUka,maDukA,maRquka,nAnduka,mAduka
+; Case 24:  go mw (EQ)
+v1.0  = go
+v1.0d = go
+; Case 25:  gai mw (EQ)
+v1.0  = gE
+v1.0d = gE
+; Case 26:  pook mw (EQ)
+v1.0  = Puka,puka
+v1.0d = Puka,puka
+; Case 27:  danda mw (EQ)
+v1.0  = daRqa,dada,DanDa,DAnDA,daDan,dARqA,daRqA,dadA,daDa,dARqa
+v1.0d = daRqa,dada,DanDa,DAnDA,daDan,dARqA,daRqA,dadA,daDa,dARqa
+; Case 28:  karma mw (NEQ)
+v1.0  = karman,karRa,karuRA,karuRa,karuRam,karuma,Karma,karma
+v1.0d = karman,karRa,karuRA,karuRa,kArma,Karma,karuma,karma,kArRa
+; Case 29:  kartri skd (NEQ)
+v1.0  = kartrI
+v1.0d = kAritA,karttA,kartra
+; Case 30:  atman skd (EQ)
+v1.0  = AtmA
+v1.0d = AtmA
+; Case 31:  ushas skd (NEQ)
+v1.0  = uzA,Uza,UzaM,UzaH,UzA,uzaH,uza,uzaM
+v1.0d = uzA,UzA
+; Case 32:  gunavat skd (EQ)
+v1.0  = guRavAn
+v1.0d = guRavAn
+; Case 33:  hanumat skd (EQ)
+v1.0  = hanUmAn,hanumAn
+v1.0d = hanUmAn,hanumAn
+; Case 34:  hanumat mw (EQ)
+v1.0  = hanUmat,hanumat
+v1.0d = hanUmat,hanumat
+; Case 35:  hanuman mw (EQ)
+v1.0  = hanuman
+v1.0d = hanuman

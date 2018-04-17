@@ -1,0 +1,19 @@
+
+v0.1a   computes variants both by original javascript algorithm and
+by a php translation of this algorithm.
+It prints to dbg_apidev.txt  whether the two algorithms are the same.
+Several examples provide good evidence that the two algorithms are the
+same.
+* ../v0.0/word_frequency.js
+a Javascript file, with 72934 lines of form:
+localStorage.setItem("a", "11");
+localStorage.setItem("akaṇṭaka", "5");
+
+From Marcis Gasuns. Adapted from work of Oliver Hellwig (sp?).
+
+* word_frequency.txt
+a 1
+akaRwaka 5
+SLP1 transliteration
+python word_frequency.py ../v0.0/word_frequency.js word_frequency.txt
+

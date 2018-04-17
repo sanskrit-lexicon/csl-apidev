@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Test fetching</title>
+    <script type = "text/javascript" src = "http://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  </head>
+  <body>
+    <script>
+    'use strict';
+
+class Word {
+  constructor(html) {
+    this.html = html;
+    this.parse();
+    this.frequency = localStorage.getItem(this.name);
+    if (this.frequency == null) {
+      this.frequency = 0 - this.name.length;
+    }
+    console.log("this.name=|"+this.name+"|");
+  }
+
+  toString() {
+      return "("+this.frequency+")"+this.name;
+  }
+
+  parse() {
+    var range = document.createRange();
+    range.selectNode(document.body); // required in Safari
+    var fragment = range.createContextualFragment(this.html);
+    var elements = fragment.children;
+
+    this.name = elements.item(1).innerHTML.substr(6);
+
+    var e = elements.item(2);
+    this.article = e.innerHTML;
+    var pl = this.article.split("]");
+
+    this.L =  pl[0].substr(68);
+    //console.log("L="+this.L);
+    this.lines = this.article.split('<br/>');
+  }
+
+  write() {
+//    document.write("<h1>("+this.frequency+") "+this.name+"</h1><br>" + this.article+"<br>");
+    console.log("---------->" + this.name);
+    llist.push(this);
+    if (--handleCount>0) {
+      console.log("handleCount="+handleCount);
+      setTimeout(onGetDataTimeout, 1000);
+    }
+
+  }
+
+}
+
+function onGetDataTimeout() {
+  if (handleCount == -2) {
+    return;
+  }
+
+  if (handleCount == -1) {
+    document.body.innerHTML = '';
+    document.write('<input type="text" size="40" onchange="test(this.value)"><a href="#" onclick="openInNewTab(\'settings.html\');">Settings>></a>');
+    llist.sort(function(a,b){
+      var res;
+      if (a.frequency >= 0){
+          res = a.frequency - b.frequency;
+      } else {
+        if (b.frequency < 0) {
+          res =b.frequency - a.frequency;
+        } else {
+          res = -1;
+        }
+      }
+      return 0-res;
+    }).forEach(function(w) {
+      if ((w.name != null) && (w.name.indexOf("und:")==-1 )){
+        document.write("<h1>"+w.name+"</h1><br>" + w.article+"<br>");
+        console.log("<h1>"+w.name+"</h1><br>" + w.article+"<br>");
+      }
+
+    });
+    console.log("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+    console.log("handleCount = -2;");
+    handleCount = -2;
+    console.log("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+    return;
+  }
+
+  if (handleCount >0) {
+    if (repeatCnt<3) {
+      setTimeout(onGetDataTimeout, 1000);
+      repeatCnt++;
+      return;
+    } else {
+      if (errlist.length>0){
+        document.write("<br><b>List not full. Fetch data errors:<br>"+errlist.toString()+"</b><br>");
+      }
+        handleCount = -1;
+    }
+  }
+
+}
+
+/**
+ Data model class
+*/
+    class DataModel {
+      constructor(initialData) {
+
+        this.url = initialData.url;
+        this.key = initialData.key;
+        this.filter = initialData.filter;
+        this.noLit = initialData.noLit;
+        this.transLit = initialData.transLit;
+        this.isGetDataProcessing = false;
+        this.cleanWordslist();
+      }
+
+      setKey(key) {
+        //key may be changed as quick as user print. That's why we need check that
+        // latest call fo getData function has been done.
+        if (this.isGetDataProcessing) {
+          return;
+        }
+
+        //we didn't find empty word, but it's needed to clean wordslist
+        if (key==="") {
+          cleanWordslist();
+          return;
+        }
+        this.key = key;
+        this.getData();
+      }
+
+      cleanWordslist() {
+        this.wordslist = [];
+      }
+
+      getData() {
+        this.isGetDataProcessing = true;
+        if (this.noLit==null){
+          this.noLit = localStorage.getItem('settings.noLit');
+        }
+        var dataurl = this.url + "?key="+this.key+"&filter="+this.filter+"&noLit="+this.noLit+"&transLit=" + this.transLit;
+        console.log('ejf. dataurl=',dataurl);
+        handleCount++;
+          $.ajax({
+            url: dataurl,
+            cache: false,
+            method: "GET",
+            wkey:this.key,
+          })
+            .done(function( html ) {
+                this.isGetDataProcessing = false;
+                // ejf
+                console.log('html = ',html);
+                //document.write(html);
+                $('#outputdiv').html(html);
+                return;
+                let w = new Word(html);
+                if (w.name != ""){
+                    if (this.wordslist==null){
+                      this.wordslist = [];
+                    }
+
+
+                    if (w.name.includes("not found: ")){
+                        console.log("null");
+                    } else {
+
+                      var Lindx = w.L;
+                      if (llist.indexOf(Lindx)!=-1) {
+                        console.log("word repeated");
+                      } else {
+                        llist.push(Lindx);
+                        console.log("w.name=" + w.name + " w.L=" + Lindx + " llist="+llist.toString());
+                        w.write();
+                      }
+                    }
+                } else {
+                  console.log("null");
+                }
+            })
+            .fail(function( jqXHR, textStatus, errorThrown){
+              errlist.push(dataurl + " " +textStatus.toString()+" "+errorThrown.toString()+"<br>");
+            });
+      }
+    }
+
+    /**
+    Test data
+    */
+        var test ={}
+        test.url = "http://www.sanskrit-lexicon.uni-koeln.de/scans/WILScan/2014/web/webtc/getword.php";
+        test.key = "om";
+        test.filter = "roman";
+        test.noLit = "off";
+        test.transLit="slp1";
+
+
+  //  dm.setKey("qqq");
+
+    let NOT_FOUND = "not found";
+
+    //----------------------------------------------------------------
+    var transitionTable = [
+	["a","A"],
+	["i","I"],
+	["u","U"],
+	["r","R","RR"],
+	["l","lR","lRR"],
+	["h","H"],
+	["M","n","N","J","G"],
+	["z","S","s"],
+	["b","v"],
+	["k","kh"],
+	["g","gh"],
+	["c","ch"],
+	["j","jh"],
+	["T","Th","t","th"],
+	["D","Dh","d","dh"],
+	["p","ph"],
+	["b","bh"],
+	["sh","z"]
+]
+
+var searchList;
+
+function doVariant(pref, word) {
+
+	if (pref.length == 0) {
+		searchList.push(word);
+	}
+
+	if (word.length==0) {
+		return;
+	 }
+
+	var varChar = getChar(word);
+
+	if (word.length > 1) {
+		doVariant(pref + word[0], word.substring(1));
+	}
+
+	transitionTable.forEach(function(variants) {
+    	var cases = [];
+    	var isExist = false;
+
+    	variants.forEach(function(variant) {
+    		if (variant == varChar) {
+    			isExist = true;
+    		} else {
+    			cases.push(variant);
+    		}
+		});
+
+    	if (isExist == true) {
+    		cases.forEach(function(newChar) {
+    			var subWord = word.substring(varChar.length);
+    			searchList.push(pref + newChar + subWord);
+    			if (word.length > 1) {
+    				doVariant(pref + newChar, subWord);
+    			}
+			});
+    	}
+	});
+}
+
+function getChar(word) {
+
+	var newChar = "";
+
+	transitionTable.forEach(function(variants) {
+		variants.forEach(function(variant) {
+			var ln = variant.length;
+			if (word.substring(0,ln) == variant) {
+				if ( ln > newChar.length) {
+					newChar = variant;
+				}
+			}
+		});
+	});
+
+	return newChar;
+}
+
+function getVariants(word){
+
+
+	searchList = [];
+	//console.log(word);
+
+	doVariant("",word);
+
+	console.log(searchList.toString());
+
+  return searchList;
+}
+
+
+    </script>
+
+    <script>
+        //word_frequency.js is loaded when it's data absence in browser's localStorage
+        //TODO: uncleare how to check actual version without loading js file
+        class WordFrequencyManager {
+
+          checkVersion() {
+            var localValue = localStorage.getItem('FreqWordList.version');
+            var value = parseInt(localValue, 10);
+
+          // Uncomment following for manual update
+          // this.loadScript("word_frequency.js", this.execute);
+
+            if (value > 0) {
+              console.log("WordFrequencyManager:checkVersion - current version=" + value);
+            } else {
+              console.log("WordFrequencyManager:checkVersion - FreqWordList.version not found in localStorage");
+              this.loadScript("word_frequency.js", this.execute);
+            }
+          }
+
+          loadScript(url, callback) {
+            // Adding the script tag to the head as suggested before
+            var head = document.getElementsByTagName('head')[0];
+            var script = document.createElement('script');
+            script.type = 'text/javascript';
+            script.src = url;
+
+            // Then bind the event to the callback function.
+            // There are several events for cross browser compatibility.
+            script.onreadystatechange = callback;
+            script.onload = callback;
+
+            // Fire the loading
+            head.appendChild(script);
+          }
+
+          execute() {
+            console.log("WordFrequencyManager:execute - word_frequency.js has been loaded");
+            let fwl = new FreqWordList();
+            localStorage.setItem('FreqWordList.version', fwl.version);
+            console.log("WordFrequencyManager:execute - update version " + fwl.version);
+            console.log("WordFrequencyManager:execute - start fill() ");
+            fwl.fill();
+            console.log("WordFrequencyManager:execute - finish fill() ");
+          }
+        }
+
+        let wfm = new WordFrequencyManager();
+        wfm.checkVersion();
+    </script>
+
+    <script>
+    var llist = [];
+    var errlist = [];
+    var handleCount = 0;
+    var repeatCnt = 0;
+    llist.sort(function(a,b){
+      var res;
+      if (a.frequency >= 0){
+          res = a.frequency - b.frequency;
+      } else {
+        if (b.frequency < 0) {
+          res = 0-res;
+        } else {
+          res = -1;
+        }
+      }
+
+      return res;
+    });
+
+    function test(find_word) {
+      llist = [];
+      errlist = [];
+      handleCount = 0;
+      repeatCnt = 0;
+
+      //document.body.innerHTML = 'Loading...';
+       $('#outputdiv').html("<p>Loading...</p>");
+    var res = getVariants(find_word, llist);
+    
+    //res = [res[0]];  // ejf
+    var wstring = res.join(',');
+    res = [wstring];
+    res.forEach(function(w) {
+      /**
+      Test data
+      */
+          var test ={}
+          //test.url = "http://www.sanskrit-lexicon.uni-koeln.de/scans/WILScan/2014/web/webtc/getword.php";
+          test.key = "om";
+          //test.filter = "roman";
+          //test.noLit = "off";
+          //test.transLit="slp1";
+
+          this.noLit = localStorage.getItem('settings.noLit');
+          test.transLit = localStorage.getItem('settings.transLit');
+          test.filter = localStorage.getItem('settings.filter');
+          test.url = localStorage.getItem('settings.url');
+          // ejf reset test.url
+          test.url = "http://www.sanskrit-lexicon.uni-koeln.de/scans/WILScan/2014/web/webtc/getword_phreebie.php";
+          test.transLit = 'hk';
+          test.filter = 'deva';
+      let dm = new DataModel(test);
+      console.log("w=" + w);
+        dm.setKey(w);
+    });
+    }
+    </script>
+
+    <script type="text/javascript">
+    function openInNewTab(url) {
+      var win = window.open(url, '_blank');
+      win.focus();
+    }
+    </script>
+	   <input type="text" size="40" onchange="test(this.value)">
+     <a href="#" onclick="openInNewTab('settings.html');">Settings>></a>
+   <div id="outputdiv"></div>
+  </body>
+</html>

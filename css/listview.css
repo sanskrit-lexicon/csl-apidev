@@ -1,0 +1,102 @@
+/* Aug 15, 2015
+  Make everything a descendant of #CologneListview.
+  Then, in listview.php give parent  element this id.
+*/
+
+
+#CologneListview .dispdiv {
+ position:absolute;
+ top:5px;
+ left: 200px;
+ right: 5px;
+ /*height: 500px; */
+ bottom: 5px; 
+ background-color: white;
+ overflow: auto;
+ border:1px solid black;
+}
+
+#CologneListview .dispdivlist {
+ position:absolute;
+ top:5px;
+ left: 5px;
+ width: 180px;
+ /*height: 500px;*/
+ bottom: 5px;
+ background-color: #DCDCDC;
+ background-color: #EDEDED;
+ overflow: auto;
+ /*line-height:100%;  */
+ border:1px solid black;
+ padding-left: 5px;
+}
+
+#CologneListview .dispdivlist a {
+ font-size:12pt;
+ line-height: 100%;
+ color:black;
+}
+#CologneListview .dispdivlist > a:link{
+text-decoration: none
+}
+
+#CologneListview .dispdivlist > a:hover {
+background-color:#A9C1CB;
+cursor: pointer;
+text-decoration: none
+}
+
+#CologneListview .listlink {
+ font-size:12pt;
+ line-height: 100%;
+ color:black;
+ background-color:yellow;
+}
+#CologneListview .listlinkCurrent {
+ background-color:#00ffff; /*teal is #008080*/
+}
+#CologneListview a.listlink:link{
+text-decoration: none
+}
+
+#CologneListview a.listlink:hover {
+background-color:#A9C1CB;
+cursor: pointer;
+text-decoration: none
+}
+/* Jul 18, 2015. font family for capitalization, only SNP */
+@font-face { /* for 'ls' text in pwg */
+ src: url(../fonts/CharterIndoCapital.otf);
+ font-family: charterindocapital;
+}
+/* 01-05-2018 */
+@font-face { /* for normal text in pwg */
+ src: url(../fonts/oldstandard.otf);
+ font-family: oldstandard;
+}
+@font-face { 
+ src: url(../fonts/oldstandarditalic.otf);
+ font-family: oldstandard_i;
+}
+
+#CologneListview .botcap {
+color:gray; 
+font-family:charterindocapital;
+}
+
+#CologneListview .cssshade {
+ background-color:#EAEAEA; /* light gray */
+}
+@font-face { 
+ src: url(../fonts/siddhanta.ttf);
+ font-family: siddhanta_deva;
+}
+#CologneListview .sdata {
+ font-family: siddhanta_deva;
+/* color:red; */
+}
+#CologneListview .dispdivlist {
+ font-family: siddhanta_deva;
+ color:red;
+ line-height:130%;
+}

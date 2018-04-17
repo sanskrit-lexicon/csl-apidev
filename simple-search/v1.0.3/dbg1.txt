@@ -1,0 +1,1485 @@
+Using ngramdirectory ngram1
+searchdict_add: sangama
+doVariant:  non-valid ngram SaMg
+doVariant:  non-valid ngram SaMG
+doVariant:  non-valid ngram SangaMa
+doVariant:  non-valid ngram SangaMA
+searchdict_add: Sangana
+searchdict_add: SanganA
+searchdict_add: SangaRa
+searchdict_add: SangaRA
+searchdict_add: SangaYa
+searchdict_add: SangaYA
+searchdict_add: SangaNa
+searchdict_add: SangaNA
+searchdict_add: Sangama
+searchdict_add: SangamA
+doVariant:  non-valid ngram SangAMa
+doVariant:  non-valid ngram SangAMA
+searchdict_add: SangAna
+searchdict_add: SangAnA
+searchdict_add: SangARa
+searchdict_add: SangARA
+doVariant:  non-valid ngram SangAYa
+doVariant:  non-valid ngram SangAYA
+searchdict_add: SangANa
+searchdict_add: SangANA
+searchdict_add: SangAma
+searchdict_add: SangAmA
+doVariant:  non-valid ngram SanG
+doVariant:  non-valid ngram SaRga
+doVariant:  non-valid ngram SaRgA
+doVariant:  non-valid ngram SaRG
+doVariant:  non-valid ngram SaYga
+doVariant:  non-valid ngram SaYgA
+doVariant:  non-valid ngram SaYG
+doVariant:  non-valid ngram SaNgaMa
+doVariant:  non-valid ngram SaNgaMA
+searchdict_add: SaNgana
+searchdict_add: SaNganA
+searchdict_add: SaNgaRa
+searchdict_add: SaNgaRA
+searchdict_add: SaNgaYa
+searchdict_add: SaNgaYA
+searchdict_add: SaNgaNa
+searchdict_add: SaNgaNA
+searchdict_add: SaNgama
+searchdict_add: SaNgamA
+doVariant:  non-valid ngram SaNgAMa
+doVariant:  non-valid ngram SaNgAMA
+searchdict_add: SaNgAna
+searchdict_add: SaNgAnA
+searchdict_add: SaNgARa
+searchdict_add: SaNgARA
+doVariant:  non-valid ngram SaNgAYa
+doVariant:  non-valid ngram SaNgAYA
+searchdict_add: SaNgANa
+searchdict_add: SaNgANA
+searchdict_add: SaNgAma
+searchdict_add: SaNgAmA
+doVariant:  non-valid ngram SaNGaMa
+doVariant:  non-valid ngram SaNGaMA
+searchdict_add: SaNGana
+searchdict_add: SaNGanA
+searchdict_add: SaNGaRa
+searchdict_add: SaNGaRA
+searchdict_add: SaNGaYa
+searchdict_add: SaNGaYA
+searchdict_add: SaNGaNa
+searchdict_add: SaNGaNA
+searchdict_add: SaNGama
+searchdict_add: SaNGamA
+doVariant:  non-valid ngram SaNGAMa
+doVariant:  non-valid ngram SaNGAMA
+searchdict_add: SaNGAna
+searchdict_add: SaNGAnA
+searchdict_add: SaNGARa
+searchdict_add: SaNGARA
+doVariant:  non-valid ngram SaNGAY
+searchdict_add: SaNGANa
+searchdict_add: SaNGANA
+searchdict_add: SaNGAma
+searchdict_add: SaNGAmA
+doVariant:  non-valid ngram SamgaMa
+doVariant:  non-valid ngram SamgaMA
+searchdict_add: Samgana
+searchdict_add: SamganA
+searchdict_add: SamgaRa
+searchdict_add: SamgaRA
+searchdict_add: SamgaYa
+searchdict_add: SamgaYA
+searchdict_add: SamgaNa
+searchdict_add: SamgaNA
+searchdict_add: Samgama
+searchdict_add: SamgamA
+doVariant:  non-valid ngram SamgAMa
+doVariant:  non-valid ngram SamgAMA
+searchdict_add: SamgAna
+searchdict_add: SamgAnA
+searchdict_add: SamgARa
+searchdict_add: SamgARA
+doVariant:  non-valid ngram SamgAYa
+doVariant:  non-valid ngram SamgAYA
+searchdict_add: SamgANa
+searchdict_add: SamgANA
+searchdict_add: SamgAma
+searchdict_add: SamgAmA
+doVariant:  non-valid ngram SamG
+doVariant:  non-valid ngram SAMg
+doVariant:  non-valid ngram SAMG
+doVariant:  non-valid ngram SAngaMa
+doVariant:  non-valid ngram SAngaMA
+searchdict_add: SAngana
+searchdict_add: SAnganA
+searchdict_add: SAngaRa
+searchdict_add: SAngaRA
+searchdict_add: SAngaYa
+searchdict_add: SAngaYA
+searchdict_add: SAngaNa
+searchdict_add: SAngaNA
+searchdict_add: SAngama
+searchdict_add: SAngamA
+doVariant:  non-valid ngram SAngAMa
+doVariant:  non-valid ngram SAngAMA
+searchdict_add: SAngAna
+searchdict_add: SAngAnA
+searchdict_add: SAngARa
+searchdict_add: SAngARA
+doVariant:  non-valid ngram SAngAYa
+doVariant:  non-valid ngram SAngAYA
+searchdict_add: SAngANa
+searchdict_add: SAngANA
+searchdict_add: SAngAma
+searchdict_add: SAngAmA
+doVariant:  non-valid ngram SAnG
+doVariant:  non-valid ngram SARg
+doVariant:  non-valid ngram SARG
+doVariant:  non-valid ngram SAY
+doVariant:  non-valid ngram SANgaMa
+doVariant:  non-valid ngram SANgaMA
+searchdict_add: SANgana
+searchdict_add: SANganA
+searchdict_add: SANgaRa
+searchdict_add: SANgaRA
+searchdict_add: SANgaYa
+searchdict_add: SANgaYA
+searchdict_add: SANgaNa
+searchdict_add: SANgaNA
+searchdict_add: SANgama
+searchdict_add: SANgamA
+doVariant:  non-valid ngram SANgAMa
+doVariant:  non-valid ngram SANgAMA
+searchdict_add: SANgAna
+searchdict_add: SANgAnA
+searchdict_add: SANgARa
+searchdict_add: SANgARA
+doVariant:  non-valid ngram SANgAYa
+doVariant:  non-valid ngram SANgAYA
+searchdict_add: SANgANa
+searchdict_add: SANgANA
+searchdict_add: SANgAma
+searchdict_add: SANgAmA
+doVariant:  non-valid ngram SANGaMa
+doVariant:  non-valid ngram SANGaMA
+searchdict_add: SANGana
+searchdict_add: SANGanA
+searchdict_add: SANGaRa
+searchdict_add: SANGaRA
+searchdict_add: SANGaYa
+searchdict_add: SANGaYA
+searchdict_add: SANGaNa
+searchdict_add: SANGaNA
+searchdict_add: SANGama
+searchdict_add: SANGamA
+doVariant:  non-valid ngram SANGAMa
+doVariant:  non-valid ngram SANGAMA
+searchdict_add: SANGAna
+searchdict_add: SANGAnA
+searchdict_add: SANGARa
+searchdict_add: SANGARA
+doVariant:  non-valid ngram SANGAY
+searchdict_add: SANGANa
+searchdict_add: SANGANA
+searchdict_add: SANGAma
+searchdict_add: SANGAmA
+doVariant:  non-valid ngram SAmgaMa
+doVariant:  non-valid ngram SAmgaMA
+searchdict_add: SAmgana
+searchdict_add: SAmganA
+searchdict_add: SAmgaRa
+searchdict_add: SAmgaRA
+searchdict_add: SAmgaYa
+searchdict_add: SAmgaYA
+searchdict_add: SAmgaNa
+searchdict_add: SAmgaNA
+searchdict_add: SAmgama
+searchdict_add: SAmgamA
+doVariant:  non-valid ngram SAmgAMa
+doVariant:  non-valid ngram SAmgAMA
+searchdict_add: SAmgAna
+searchdict_add: SAmgAnA
+searchdict_add: SAmgARa
+searchdict_add: SAmgARA
+doVariant:  non-valid ngram SAmgAYa
+doVariant:  non-valid ngram SAmgAYA
+searchdict_add: SAmgANa
+searchdict_add: SAmgANA
+searchdict_add: SAmgAma
+searchdict_add: SAmgAmA
+doVariant:  non-valid ngram SAmG
+doVariant:  non-valid ngram zaM
+doVariant:  non-valid ngram zangaMa
+doVariant:  non-valid ngram zangaMA
+searchdict_add: zangana
+searchdict_add: zanganA
+searchdict_add: zangaRa
+searchdict_add: zangaRA
+searchdict_add: zangaYa
+searchdict_add: zangaYA
+searchdict_add: zangaNa
+searchdict_add: zangaNA
+searchdict_add: zangama
+searchdict_add: zangamA
+doVariant:  non-valid ngram zangAMa
+doVariant:  non-valid ngram zangAMA
+searchdict_add: zangAna
+searchdict_add: zangAnA
+searchdict_add: zangARa
+searchdict_add: zangARA
+doVariant:  non-valid ngram zangAYa
+doVariant:  non-valid ngram zangAYA
+searchdict_add: zangANa
+searchdict_add: zangANA
+searchdict_add: zangAma
+searchdict_add: zangAmA
+doVariant:  non-valid ngram zanG
+doVariant:  non-valid ngram zaRga
+doVariant:  non-valid ngram zaRgA
+doVariant:  non-valid ngram zaRG
+doVariant:  non-valid ngram zaYga
+doVariant:  non-valid ngram zaYgA
+doVariant:  non-valid ngram zaYG
+doVariant:  non-valid ngram zaNgaMa
+doVariant:  non-valid ngram zaNgaMA
+searchdict_add: zaNgana
+searchdict_add: zaNganA
+searchdict_add: zaNgaRa
+searchdict_add: zaNgaRA
+searchdict_add: zaNgaYa
+searchdict_add: zaNgaYA
+searchdict_add: zaNgaNa
+searchdict_add: zaNgaNA
+searchdict_add: zaNgama
+searchdict_add: zaNgamA
+doVariant:  non-valid ngram zaNgAMa
+doVariant:  non-valid ngram zaNgAMA
+searchdict_add: zaNgAna
+searchdict_add: zaNgAnA
+searchdict_add: zaNgARa
+searchdict_add: zaNgARA
+doVariant:  non-valid ngram zaNgAYa
+doVariant:  non-valid ngram zaNgAYA
+searchdict_add: zaNgANa
+searchdict_add: zaNgANA
+searchdict_add: zaNgAma
+searchdict_add: zaNgAmA
+doVariant:  non-valid ngram zaNGaMa
+doVariant:  non-valid ngram zaNGaMA
+searchdict_add: zaNGana
+searchdict_add: zaNGanA
+searchdict_add: zaNGaRa
+searchdict_add: zaNGaRA
+searchdict_add: zaNGaYa
+searchdict_add: zaNGaYA
+searchdict_add: zaNGaNa
+searchdict_add: zaNGaNA
+searchdict_add: zaNGama
+searchdict_add: zaNGamA
+doVariant:  non-valid ngram zaNGAMa
+doVariant:  non-valid ngram zaNGAMA
+searchdict_add: zaNGAna
+searchdict_add: zaNGAnA
+searchdict_add: zaNGARa
+searchdict_add: zaNGARA
+doVariant:  non-valid ngram zaNGAY
+searchdict_add: zaNGANa
+searchdict_add: zaNGANA
+searchdict_add: zaNGAma
+searchdict_add: zaNGAmA
+doVariant:  non-valid ngram zamgaMa
+doVariant:  non-valid ngram zamgaMA
+searchdict_add: zamgana
+searchdict_add: zamganA
+searchdict_add: zamgaRa
+searchdict_add: zamgaRA
+searchdict_add: zamgaYa
+searchdict_add: zamgaYA
+searchdict_add: zamgaNa
+searchdict_add: zamgaNA
+searchdict_add: zamgama
+searchdict_add: zamgamA
+doVariant:  non-valid ngram zamgAMa
+doVariant:  non-valid ngram zamgAMA
+searchdict_add: zamgAna
+searchdict_add: zamgAnA
+searchdict_add: zamgARa
+searchdict_add: zamgARA
+doVariant:  non-valid ngram zamgAYa
+doVariant:  non-valid ngram zamgAYA
+searchdict_add: zamgANa
+searchdict_add: zamgANA
+searchdict_add: zamgAma
+searchdict_add: zamgAmA
+doVariant:  non-valid ngram zamG
+doVariant:  non-valid ngram zAM
+doVariant:  non-valid ngram zAngaMa
+doVariant:  non-valid ngram zAngaMA
+searchdict_add: zAngana
+searchdict_add: zAnganA
+searchdict_add: zAngaRa
+searchdict_add: zAngaRA
+searchdict_add: zAngaYa
+searchdict_add: zAngaYA
+searchdict_add: zAngaNa
+searchdict_add: zAngaNA
+searchdict_add: zAngama
+searchdict_add: zAngamA
+doVariant:  non-valid ngram zAngAMa
+doVariant:  non-valid ngram zAngAMA
+searchdict_add: zAngAna
+searchdict_add: zAngAnA
+searchdict_add: zAngARa
+searchdict_add: zAngARA
+doVariant:  non-valid ngram zAngAYa
+doVariant:  non-valid ngram zAngAYA
+searchdict_add: zAngANa
+searchdict_add: zAngANA
+searchdict_add: zAngAma
+searchdict_add: zAngAmA
+doVariant:  non-valid ngram zAnG
+doVariant:  non-valid ngram zARg
+doVariant:  non-valid ngram zARG
+doVariant:  non-valid ngram zAY
+doVariant:  non-valid ngram zANgaMa
+doVariant:  non-valid ngram zANgaMA
+searchdict_add: zANgana
+searchdict_add: zANganA
+searchdict_add: zANgaRa
+searchdict_add: zANgaRA
+searchdict_add: zANgaYa
+searchdict_add: zANgaYA
+searchdict_add: zANgaNa
+searchdict_add: zANgaNA
+searchdict_add: zANgama
+searchdict_add: zANgamA
+doVariant:  non-valid ngram zANgAMa
+doVariant:  non-valid ngram zANgAMA
+searchdict_add: zANgAna
+searchdict_add: zANgAnA
+searchdict_add: zANgARa
+searchdict_add: zANgARA
+doVariant:  non-valid ngram zANgAYa
+doVariant:  non-valid ngram zANgAYA
+searchdict_add: zANgANa
+searchdict_add: zANgANA
+searchdict_add: zANgAma
+searchdict_add: zANgAmA
+doVariant:  non-valid ngram zANGaMa
+doVariant:  non-valid ngram zANGaMA
+searchdict_add: zANGana
+searchdict_add: zANGanA
+searchdict_add: zANGaRa
+searchdict_add: zANGaRA
+searchdict_add: zANGaYa
+searchdict_add: zANGaYA
+searchdict_add: zANGaNa
+searchdict_add: zANGaNA
+searchdict_add: zANGama
+searchdict_add: zANGamA
+doVariant:  non-valid ngram zANGAMa
+doVariant:  non-valid ngram zANGAMA
+searchdict_add: zANGAna
+searchdict_add: zANGAnA
+searchdict_add: zANGARa
+searchdict_add: zANGARA
+doVariant:  non-valid ngram zANGAY
+searchdict_add: zANGANa
+searchdict_add: zANGANA
+searchdict_add: zANGAma
+searchdict_add: zANGAmA
+doVariant:  non-valid ngram zAmgaMa
+doVariant:  non-valid ngram zAmgaMA
+searchdict_add: zAmgana
+searchdict_add: zAmganA
+searchdict_add: zAmgaRa
+searchdict_add: zAmgaRA
+searchdict_add: zAmgaYa
+searchdict_add: zAmgaYA
+searchdict_add: zAmgaNa
+searchdict_add: zAmgaNA
+searchdict_add: zAmgama
+searchdict_add: zAmgamA
+doVariant:  non-valid ngram zAmgAMa
+doVariant:  non-valid ngram zAmgAMA
+searchdict_add: zAmgAna
+searchdict_add: zAmgAnA
+searchdict_add: zAmgARa
+searchdict_add: zAmgARA
+doVariant:  non-valid ngram zAmgAYa
+doVariant:  non-valid ngram zAmgAYA
+searchdict_add: zAmgANa
+searchdict_add: zAmgANA
+searchdict_add: zAmgAma
+searchdict_add: zAmgAmA
+doVariant:  non-valid ngram zAmG
+doVariant:  non-valid ngram saMg
+doVariant:  non-valid ngram saMG
+doVariant:  non-valid ngram sangaMa
+doVariant:  non-valid ngram sangaMA
+searchdict_add: sangana
+searchdict_add: sanganA
+searchdict_add: sangaRa
+searchdict_add: sangaRA
+searchdict_add: sangaYa
+searchdict_add: sangaYA
+searchdict_add: sangaNa
+searchdict_add: sangaNA
+searchdict_add: sangama
+searchdict_add: sangamA
+doVariant:  non-valid ngram sangAMa
+doVariant:  non-valid ngram sangAMA
+searchdict_add: sangAna
+searchdict_add: sangAnA
+searchdict_add: sangARa
+searchdict_add: sangARA
+doVariant:  non-valid ngram sangAYa
+doVariant:  non-valid ngram sangAYA
+searchdict_add: sangANa
+searchdict_add: sangANA
+searchdict_add: sangAma
+searchdict_add: sangAmA
+doVariant:  non-valid ngram sanG
+doVariant:  non-valid ngram saRga
+doVariant:  non-valid ngram saRgA
+doVariant:  non-valid ngram saRG
+doVariant:  non-valid ngram saYga
+doVariant:  non-valid ngram saYgA
+doVariant:  non-valid ngram saYG
+doVariant:  non-valid ngram saNgaMa
+doVariant:  non-valid ngram saNgaMA
+searchdict_add: saNgana
+searchdict_add: saNganA
+searchdict_add: saNgaRa
+searchdict_add: saNgaRA
+searchdict_add: saNgaYa
+searchdict_add: saNgaYA
+searchdict_add: saNgaNa
+searchdict_add: saNgaNA
+searchdict_add: saNgama
+searchdict_add: saNgamA
+doVariant:  non-valid ngram saNgAMa
+doVariant:  non-valid ngram saNgAMA
+searchdict_add: saNgAna
+searchdict_add: saNgAnA
+searchdict_add: saNgARa
+searchdict_add: saNgARA
+doVariant:  non-valid ngram saNgAYa
+doVariant:  non-valid ngram saNgAYA
+searchdict_add: saNgANa
+searchdict_add: saNgANA
+searchdict_add: saNgAma
+searchdict_add: saNgAmA
+doVariant:  non-valid ngram saNGaMa
+doVariant:  non-valid ngram saNGaMA
+searchdict_add: saNGana
+searchdict_add: saNGanA
+searchdict_add: saNGaRa
+searchdict_add: saNGaRA
+searchdict_add: saNGaYa
+searchdict_add: saNGaYA
+searchdict_add: saNGaNa
+searchdict_add: saNGaNA
+searchdict_add: saNGama
+searchdict_add: saNGamA
+doVariant:  non-valid ngram saNGAMa
+doVariant:  non-valid ngram saNGAMA
+searchdict_add: saNGAna
+searchdict_add: saNGAnA
+searchdict_add: saNGARa
+searchdict_add: saNGARA
+doVariant:  non-valid ngram saNGAY
+searchdict_add: saNGANa
+searchdict_add: saNGANA
+searchdict_add: saNGAma
+searchdict_add: saNGAmA
+doVariant:  non-valid ngram samgaMa
+doVariant:  non-valid ngram samgaMA
+searchdict_add: samgana
+searchdict_add: samganA
+searchdict_add: samgaRa
+searchdict_add: samgaRA
+searchdict_add: samgaYa
+searchdict_add: samgaYA
+searchdict_add: samgaNa
+searchdict_add: samgaNA
+searchdict_add: samgama
+searchdict_add: samgamA
+doVariant:  non-valid ngram samgAMa
+doVariant:  non-valid ngram samgAMA
+searchdict_add: samgAna
+searchdict_add: samgAnA
+searchdict_add: samgARa
+searchdict_add: samgARA
+doVariant:  non-valid ngram samgAYa
+doVariant:  non-valid ngram samgAYA
+searchdict_add: samgANa
+searchdict_add: samgANA
+searchdict_add: samgAma
+searchdict_add: samgAmA
+doVariant:  non-valid ngram samG
+doVariant:  non-valid ngram sAMg
+doVariant:  non-valid ngram sAMG
+doVariant:  non-valid ngram sAngaMa
+doVariant:  non-valid ngram sAngaMA
+searchdict_add: sAngana
+searchdict_add: sAnganA
+searchdict_add: sAngaRa
+searchdict_add: sAngaRA
+searchdict_add: sAngaYa
+searchdict_add: sAngaYA
+searchdict_add: sAngaNa
+searchdict_add: sAngaNA
+searchdict_add: sAngama
+searchdict_add: sAngamA
+doVariant:  non-valid ngram sAngAMa
+doVariant:  non-valid ngram sAngAMA
+searchdict_add: sAngAna
+searchdict_add: sAngAnA
+searchdict_add: sAngARa
+searchdict_add: sAngARA
+doVariant:  non-valid ngram sAngAYa
+doVariant:  non-valid ngram sAngAYA
+searchdict_add: sAngANa
+searchdict_add: sAngANA
+searchdict_add: sAngAma
+searchdict_add: sAngAmA
+doVariant:  non-valid ngram sAnG
+doVariant:  non-valid ngram sARg
+doVariant:  non-valid ngram sARG
+doVariant:  non-valid ngram sAYg
+doVariant:  non-valid ngram sAYG
+doVariant:  non-valid ngram sANgaMa
+doVariant:  non-valid ngram sANgaMA
+searchdict_add: sANgana
+searchdict_add: sANganA
+searchdict_add: sANgaRa
+searchdict_add: sANgaRA
+searchdict_add: sANgaYa
+searchdict_add: sANgaYA
+searchdict_add: sANgaNa
+searchdict_add: sANgaNA
+searchdict_add: sANgama
+searchdict_add: sANgamA
+doVariant:  non-valid ngram sANgAMa
+doVariant:  non-valid ngram sANgAMA
+searchdict_add: sANgAna
+searchdict_add: sANgAnA
+searchdict_add: sANgARa
+searchdict_add: sANgARA
+doVariant:  non-valid ngram sANgAYa
+doVariant:  non-valid ngram sANgAYA
+searchdict_add: sANgANa
+searchdict_add: sANgANA
+searchdict_add: sANgAma
+searchdict_add: sANgAmA
+doVariant:  non-valid ngram sANGaMa
+doVariant:  non-valid ngram sANGaMA
+searchdict_add: sANGana
+searchdict_add: sANGanA
+searchdict_add: sANGaRa
+searchdict_add: sANGaRA
+searchdict_add: sANGaYa
+searchdict_add: sANGaYA
+searchdict_add: sANGaNa
+searchdict_add: sANGaNA
+searchdict_add: sANGama
+searchdict_add: sANGamA
+doVariant:  non-valid ngram sANGAMa
+doVariant:  non-valid ngram sANGAMA
+searchdict_add: sANGAna
+searchdict_add: sANGAnA
+searchdict_add: sANGARa
+searchdict_add: sANGARA
+doVariant:  non-valid ngram sANGAY
+searchdict_add: sANGANa
+searchdict_add: sANGANA
+searchdict_add: sANGAma
+searchdict_add: sANGAmA
+doVariant:  non-valid ngram sAmgaMa
+doVariant:  non-valid ngram sAmgaMA
+searchdict_add: sAmgana
+searchdict_add: sAmganA
+searchdict_add: sAmgaRa
+searchdict_add: sAmgaRA
+searchdict_add: sAmgaYa
+searchdict_add: sAmgaYA
+searchdict_add: sAmgaNa
+searchdict_add: sAmgaNA
+searchdict_add: sAmgama
+searchdict_add: sAmgamA
+doVariant:  non-valid ngram sAmgAMa
+doVariant:  non-valid ngram sAmgAMA
+searchdict_add: sAmgAna
+searchdict_add: sAmgAnA
+searchdict_add: sAmgARa
+searchdict_add: sAmgARA
+doVariant:  non-valid ngram sAmgAYa
+doVariant:  non-valid ngram sAmgAYA
+searchdict_add: sAmgANa
+searchdict_add: sAmgANA
+searchdict_add: sAmgAma
+searchdict_add: sAmgAmA
+doVariant:  non-valid ngram sAmG
+doVariant:  non-valid ngram zh
+doVariant:  non-valid ngram shaMg
+doVariant:  non-valid ngram shaMG
+doVariant:  non-valid ngram shangaMa
+doVariant:  non-valid ngram shangaMA
+searchdict_add: shangana
+searchdict_add: shanganA
+searchdict_add: shangaRa
+searchdict_add: shangaRA
+searchdict_add: shangaYa
+searchdict_add: shangaYA
+searchdict_add: shangaNa
+searchdict_add: shangaNA
+searchdict_add: shangama
+searchdict_add: shangamA
+doVariant:  non-valid ngram shangAMa
+doVariant:  non-valid ngram shangAMA
+searchdict_add: shangAna
+searchdict_add: shangAnA
+searchdict_add: shangARa
+searchdict_add: shangARA
+doVariant:  non-valid ngram shangAYa
+doVariant:  non-valid ngram shangAYA
+searchdict_add: shangANa
+searchdict_add: shangANA
+searchdict_add: shangAma
+searchdict_add: shangAmA
+doVariant:  non-valid ngram shanG
+doVariant:  non-valid ngram shaRga
+doVariant:  non-valid ngram shaRgA
+doVariant:  non-valid ngram shaRG
+doVariant:  non-valid ngram shaYga
+doVariant:  non-valid ngram shaYgA
+doVariant:  non-valid ngram shaYG
+doVariant:  non-valid ngram shaNgaMa
+doVariant:  non-valid ngram shaNgaMA
+searchdict_add: shaNgana
+searchdict_add: shaNganA
+searchdict_add: shaNgaRa
+searchdict_add: shaNgaRA
+searchdict_add: shaNgaYa
+searchdict_add: shaNgaYA
+searchdict_add: shaNgaNa
+searchdict_add: shaNgaNA
+searchdict_add: shaNgama
+searchdict_add: shaNgamA
+doVariant:  non-valid ngram shaNgAMa
+doVariant:  non-valid ngram shaNgAMA
+searchdict_add: shaNgAna
+searchdict_add: shaNgAnA
+searchdict_add: shaNgARa
+searchdict_add: shaNgARA
+doVariant:  non-valid ngram shaNgAYa
+doVariant:  non-valid ngram shaNgAYA
+searchdict_add: shaNgANa
+searchdict_add: shaNgANA
+searchdict_add: shaNgAma
+searchdict_add: shaNgAmA
+doVariant:  non-valid ngram shaNGaMa
+doVariant:  non-valid ngram shaNGaMA
+searchdict_add: shaNGana
+searchdict_add: shaNGanA
+searchdict_add: shaNGaRa
+searchdict_add: shaNGaRA
+searchdict_add: shaNGaYa
+searchdict_add: shaNGaYA
+searchdict_add: shaNGaNa
+searchdict_add: shaNGaNA
+searchdict_add: shaNGama
+searchdict_add: shaNGamA
+doVariant:  non-valid ngram shaNGAMa
+doVariant:  non-valid ngram shaNGAMA
+searchdict_add: shaNGAna
+searchdict_add: shaNGAnA
+searchdict_add: shaNGARa
+searchdict_add: shaNGARA
+doVariant:  non-valid ngram shaNGAY
+searchdict_add: shaNGANa
+searchdict_add: shaNGANA
+searchdict_add: shaNGAma
+searchdict_add: shaNGAmA
+doVariant:  non-valid ngram shamgaMa
+doVariant:  non-valid ngram shamgaMA
+searchdict_add: shamgana
+searchdict_add: shamganA
+searchdict_add: shamgaRa
+searchdict_add: shamgaRA
+searchdict_add: shamgaYa
+searchdict_add: shamgaYA
+searchdict_add: shamgaNa
+searchdict_add: shamgaNA
+searchdict_add: shamgama
+searchdict_add: shamgamA
+doVariant:  non-valid ngram shamgAMa
+doVariant:  non-valid ngram shamgAMA
+searchdict_add: shamgAna
+searchdict_add: shamgAnA
+searchdict_add: shamgARa
+searchdict_add: shamgARA
+doVariant:  non-valid ngram shamgAYa
+doVariant:  non-valid ngram shamgAYA
+searchdict_add: shamgANa
+searchdict_add: shamgANA
+searchdict_add: shamgAma
+searchdict_add: shamgAmA
+doVariant:  non-valid ngram shamG
+doVariant:  non-valid ngram shA
+searchdict_add: sangama
+searchdict_add: sangaman
+searchdict_add: Sangana
+searchdict_add: Sanganan
+searchdict_add: SanganA
+searchdict_add: SangaRa
+searchdict_add: SangaRan
+searchdict_add: SangaRA
+searchdict_add: SangaYa
+searchdict_add: SangaYan
+searchdict_add: SangaYA
+searchdict_add: SangaNa
+searchdict_add: SangaNan
+searchdict_add: SangaNA
+searchdict_add: Sangama
+searchdict_add: Sangaman
+searchdict_add: SangamA
+searchdict_add: SangAna
+searchdict_add: SangAnan
+searchdict_add: SangAnA
+searchdict_add: SangARa
+searchdict_add: SangARan
+searchdict_add: SangARA
+searchdict_add: SangANa
+searchdict_add: SangANan
+searchdict_add: SangANA
+searchdict_add: SangAma
+searchdict_add: SangAman
+searchdict_add: SangAmA
+searchdict_add: SaNgana
+searchdict_add: SaNganan
+searchdict_add: SaNganA
+searchdict_add: SaNgaRa
+searchdict_add: SaNgaRan
+searchdict_add: SaNgaRA
+searchdict_add: SaNgaYa
+searchdict_add: SaNgaYan
+searchdict_add: SaNgaYA
+searchdict_add: SaNgaNa
+searchdict_add: SaNgaNan
+searchdict_add: SaNgaNA
+searchdict_add: SaNgama
+searchdict_add: SaNgaman
+searchdict_add: SaNgamA
+searchdict_add: SaNgAna
+searchdict_add: SaNgAnan
+searchdict_add: SaNgAnA
+searchdict_add: SaNgARa
+searchdict_add: SaNgARan
+searchdict_add: SaNgARA
+searchdict_add: SaNgANa
+searchdict_add: SaNgANan
+searchdict_add: SaNgANA
+searchdict_add: SaNgAma
+searchdict_add: SaNgAman
+searchdict_add: SaNgAmA
+searchdict_add: SaNGana
+searchdict_add: SaNGanan
+searchdict_add: SaNGanA
+searchdict_add: SaNGaRa
+searchdict_add: SaNGaRan
+searchdict_add: SaNGaRA
+searchdict_add: SaNGaYa
+searchdict_add: SaNGaYan
+searchdict_add: SaNGaYA
+searchdict_add: SaNGaNa
+searchdict_add: SaNGaNan
+searchdict_add: SaNGaNA
+searchdict_add: SaNGama
+searchdict_add: SaNGaman
+searchdict_add: SaNGamA
+searchdict_add: SaNGAna
+searchdict_add: SaNGAnan
+searchdict_add: SaNGAnA
+searchdict_add: SaNGARa
+searchdict_add: SaNGARan
+searchdict_add: SaNGARA
+searchdict_add: SaNGANa
+searchdict_add: SaNGANan
+searchdict_add: SaNGANA
+searchdict_add: SaNGAma
+searchdict_add: SaNGAman
+searchdict_add: SaNGAmA
+searchdict_add: Samgana
+searchdict_add: Samganan
+searchdict_add: SamganA
+searchdict_add: SamgaRa
+searchdict_add: SamgaRan
+searchdict_add: SamgaRA
+searchdict_add: SamgaYa
+searchdict_add: SamgaYan
+searchdict_add: SamgaYA
+searchdict_add: SamgaNa
+searchdict_add: SamgaNan
+searchdict_add: SamgaNA
+searchdict_add: Samgama
+searchdict_add: Samgaman
+searchdict_add: SamgamA
+searchdict_add: SamgAna
+searchdict_add: SamgAnan
+searchdict_add: SamgAnA
+searchdict_add: SamgARa
+searchdict_add: SamgARan
+searchdict_add: SamgARA
+searchdict_add: SamgANa
+searchdict_add: SamgANan
+searchdict_add: SamgANA
+searchdict_add: SamgAma
+searchdict_add: SamgAman
+searchdict_add: SamgAmA
+searchdict_add: SAngana
+searchdict_add: SAnganan
+searchdict_add: SAnganA
+searchdict_add: SAngaRa
+searchdict_add: SAngaRan
+searchdict_add: SAngaRA
+searchdict_add: SAngaYa
+searchdict_add: SAngaYan
+searchdict_add: SAngaYA
+searchdict_add: SAngaNa
+searchdict_add: SAngaNan
+searchdict_add: SAngaNA
+searchdict_add: SAngama
+searchdict_add: SAngaman
+searchdict_add: SAngamA
+searchdict_add: SAngAna
+searchdict_add: SAngAnan
+searchdict_add: SAngAnA
+searchdict_add: SAngARa
+searchdict_add: SAngARan
+searchdict_add: SAngARA
+searchdict_add: SAngANa
+searchdict_add: SAngANan
+searchdict_add: SAngANA
+searchdict_add: SAngAma
+searchdict_add: SAngAman
+searchdict_add: SAngAmA
+searchdict_add: SANgana
+searchdict_add: SANganan
+searchdict_add: SANganA
+searchdict_add: SANgaRa
+searchdict_add: SANgaRan
+searchdict_add: SANgaRA
+searchdict_add: SANgaYa
+searchdict_add: SANgaYan
+searchdict_add: SANgaYA
+searchdict_add: SANgaNa
+searchdict_add: SANgaNan
+searchdict_add: SANgaNA
+searchdict_add: SANgama
+searchdict_add: SANgaman
+searchdict_add: SANgamA
+searchdict_add: SANgAna
+searchdict_add: SANgAnan
+searchdict_add: SANgAnA
+searchdict_add: SANgARa
+searchdict_add: SANgARan
+searchdict_add: SANgARA
+searchdict_add: SANgANa
+searchdict_add: SANgANan
+searchdict_add: SANgANA
+searchdict_add: SANgAma
+searchdict_add: SANgAman
+searchdict_add: SANgAmA
+searchdict_add: SANGana
+searchdict_add: SANGanan
+searchdict_add: SANGanA
+searchdict_add: SANGaRa
+searchdict_add: SANGaRan
+searchdict_add: SANGaRA
+searchdict_add: SANGaYa
+searchdict_add: SANGaYan
+searchdict_add: SANGaYA
+searchdict_add: SANGaNa
+searchdict_add: SANGaNan
+searchdict_add: SANGaNA
+searchdict_add: SANGama
+searchdict_add: SANGaman
+searchdict_add: SANGamA
+searchdict_add: SANGAna
+searchdict_add: SANGAnan
+searchdict_add: SANGAnA
+searchdict_add: SANGARa
+searchdict_add: SANGARan
+searchdict_add: SANGARA
+searchdict_add: SANGANa
+searchdict_add: SANGANan
+searchdict_add: SANGANA
+searchdict_add: SANGAma
+searchdict_add: SANGAman
+searchdict_add: SANGAmA
+searchdict_add: SAmgana
+searchdict_add: SAmganan
+searchdict_add: SAmganA
+searchdict_add: SAmgaRa
+searchdict_add: SAmgaRan
+searchdict_add: SAmgaRA
+searchdict_add: SAmgaYa
+searchdict_add: SAmgaYan
+searchdict_add: SAmgaYA
+searchdict_add: SAmgaNa
+searchdict_add: SAmgaNan
+searchdict_add: SAmgaNA
+searchdict_add: SAmgama
+searchdict_add: SAmgaman
+searchdict_add: SAmgamA
+searchdict_add: SAmgAna
+searchdict_add: SAmgAnan
+searchdict_add: SAmgAnA
+searchdict_add: SAmgARa
+searchdict_add: SAmgARan
+searchdict_add: SAmgARA
+searchdict_add: SAmgANa
+searchdict_add: SAmgANan
+searchdict_add: SAmgANA
+searchdict_add: SAmgAma
+searchdict_add: SAmgAman
+searchdict_add: SAmgAmA
+searchdict_add: zangana
+searchdict_add: zanganan
+searchdict_add: zanganA
+searchdict_add: zangaRa
+searchdict_add: zangaRan
+searchdict_add: zangaRA
+searchdict_add: zangaYa
+searchdict_add: zangaYan
+searchdict_add: zangaYA
+searchdict_add: zangaNa
+searchdict_add: zangaNan
+searchdict_add: zangaNA
+searchdict_add: zangama
+searchdict_add: zangaman
+searchdict_add: zangamA
+searchdict_add: zangAna
+searchdict_add: zangAnan
+searchdict_add: zangAnA
+searchdict_add: zangARa
+searchdict_add: zangARan
+searchdict_add: zangARA
+searchdict_add: zangANa
+searchdict_add: zangANan
+searchdict_add: zangANA
+searchdict_add: zangAma
+searchdict_add: zangAman
+searchdict_add: zangAmA
+searchdict_add: zaNgana
+searchdict_add: zaNganan
+searchdict_add: zaNganA
+searchdict_add: zaNgaRa
+searchdict_add: zaNgaRan
+searchdict_add: zaNgaRA
+searchdict_add: zaNgaYa
+searchdict_add: zaNgaYan
+searchdict_add: zaNgaYA
+searchdict_add: zaNgaNa
+searchdict_add: zaNgaNan
+searchdict_add: zaNgaNA
+searchdict_add: zaNgama
+searchdict_add: zaNgaman
+searchdict_add: zaNgamA
+searchdict_add: zaNgAna
+searchdict_add: zaNgAnan
+searchdict_add: zaNgAnA
+searchdict_add: zaNgARa
+searchdict_add: zaNgARan
+searchdict_add: zaNgARA
+searchdict_add: zaNgANa
+searchdict_add: zaNgANan
+searchdict_add: zaNgANA
+searchdict_add: zaNgAma
+searchdict_add: zaNgAman
+searchdict_add: zaNgAmA
+searchdict_add: zaNGana
+searchdict_add: zaNGanan
+searchdict_add: zaNGanA
+searchdict_add: zaNGaRa
+searchdict_add: zaNGaRan
+searchdict_add: zaNGaRA
+searchdict_add: zaNGaYa
+searchdict_add: zaNGaYan
+searchdict_add: zaNGaYA
+searchdict_add: zaNGaNa
+searchdict_add: zaNGaNan
+searchdict_add: zaNGaNA
+searchdict_add: zaNGama
+searchdict_add: zaNGaman
+searchdict_add: zaNGamA
+searchdict_add: zaNGAna
+searchdict_add: zaNGAnan
+searchdict_add: zaNGAnA
+searchdict_add: zaNGARa
+searchdict_add: zaNGARan
+searchdict_add: zaNGARA
+searchdict_add: zaNGANa
+searchdict_add: zaNGANan
+searchdict_add: zaNGANA
+searchdict_add: zaNGAma
+searchdict_add: zaNGAman
+searchdict_add: zaNGAmA
+searchdict_add: zamgana
+searchdict_add: zamganan
+searchdict_add: zamganA
+searchdict_add: zamgaRa
+searchdict_add: zamgaRan
+searchdict_add: zamgaRA
+searchdict_add: zamgaYa
+searchdict_add: zamgaYan
+searchdict_add: zamgaYA
+searchdict_add: zamgaNa
+searchdict_add: zamgaNan
+searchdict_add: zamgaNA
+searchdict_add: zamgama
+searchdict_add: zamgaman
+searchdict_add: zamgamA
+searchdict_add: zamgAna
+searchdict_add: zamgAnan
+searchdict_add: zamgAnA
+searchdict_add: zamgARa
+searchdict_add: zamgARan
+searchdict_add: zamgARA
+searchdict_add: zamgANa
+searchdict_add: zamgANan
+searchdict_add: zamgANA
+searchdict_add: zamgAma
+searchdict_add: zamgAman
+searchdict_add: zamgAmA
+searchdict_add: zAngana
+searchdict_add: zAnganan
+searchdict_add: zAnganA
+searchdict_add: zAngaRa
+searchdict_add: zAngaRan
+searchdict_add: zAngaRA
+searchdict_add: zAngaYa
+searchdict_add: zAngaYan
+searchdict_add: zAngaYA
+searchdict_add: zAngaNa
+searchdict_add: zAngaNan
+searchdict_add: zAngaNA
+searchdict_add: zAngama
+searchdict_add: zAngaman
+searchdict_add: zAngamA
+searchdict_add: zAngAna
+searchdict_add: zAngAnan
+searchdict_add: zAngAnA
+searchdict_add: zAngARa
+searchdict_add: zAngARan
+searchdict_add: zAngARA
+searchdict_add: zAngANa
+searchdict_add: zAngANan
+searchdict_add: zAngANA
+searchdict_add: zAngAma
+searchdict_add: zAngAman
+searchdict_add: zAngAmA
+searchdict_add: zANgana
+searchdict_add: zANganan
+searchdict_add: zANganA
+searchdict_add: zANgaRa
+searchdict_add: zANgaRan
+searchdict_add: zANgaRA
+searchdict_add: zANgaYa
+searchdict_add: zANgaYan
+searchdict_add: zANgaYA
+searchdict_add: zANgaNa
+searchdict_add: zANgaNan
+searchdict_add: zANgaNA
+searchdict_add: zANgama
+searchdict_add: zANgaman
+searchdict_add: zANgamA
+searchdict_add: zANgAna
+searchdict_add: zANgAnan
+searchdict_add: zANgAnA
+searchdict_add: zANgARa
+searchdict_add: zANgARan
+searchdict_add: zANgARA
+searchdict_add: zANgANa
+searchdict_add: zANgANan
+searchdict_add: zANgANA
+searchdict_add: zANgAma
+searchdict_add: zANgAman
+searchdict_add: zANgAmA
+searchdict_add: zANGana
+searchdict_add: zANGanan
+searchdict_add: zANGanA
+searchdict_add: zANGaRa
+searchdict_add: zANGaRan
+searchdict_add: zANGaRA
+searchdict_add: zANGaYa
+searchdict_add: zANGaYan
+searchdict_add: zANGaYA
+searchdict_add: zANGaNa
+searchdict_add: zANGaNan
+searchdict_add: zANGaNA
+searchdict_add: zANGama
+searchdict_add: zANGaman
+searchdict_add: zANGamA
+searchdict_add: zANGAna
+searchdict_add: zANGAnan
+searchdict_add: zANGAnA
+searchdict_add: zANGARa
+searchdict_add: zANGARan
+searchdict_add: zANGARA
+searchdict_add: zANGANa
+searchdict_add: zANGANan
+searchdict_add: zANGANA
+searchdict_add: zANGAma
+searchdict_add: zANGAman
+searchdict_add: zANGAmA
+searchdict_add: zAmgana
+searchdict_add: zAmganan
+searchdict_add: zAmganA
+searchdict_add: zAmgaRa
+searchdict_add: zAmgaRan
+searchdict_add: zAmgaRA
+searchdict_add: zAmgaYa
+searchdict_add: zAmgaYan
+searchdict_add: zAmgaYA
+searchdict_add: zAmgaNa
+searchdict_add: zAmgaNan
+searchdict_add: zAmgaNA
+searchdict_add: zAmgama
+searchdict_add: zAmgaman
+searchdict_add: zAmgamA
+searchdict_add: zAmgAna
+searchdict_add: zAmgAnan
+searchdict_add: zAmgAnA
+searchdict_add: zAmgARa
+searchdict_add: zAmgARan
+searchdict_add: zAmgARA
+searchdict_add: zAmgANa
+searchdict_add: zAmgANan
+searchdict_add: zAmgANA
+searchdict_add: zAmgAma
+searchdict_add: zAmgAman
+searchdict_add: zAmgAmA
+searchdict_add: sangana
+searchdict_add: sanganan
+searchdict_add: sanganA
+searchdict_add: sangaRa
+searchdict_add: sangaRan
+searchdict_add: sangaRA
+searchdict_add: sangaYa
+searchdict_add: sangaYan
+searchdict_add: sangaYA
+searchdict_add: sangaNa
+searchdict_add: sangaNan
+searchdict_add: sangaNA
+searchdict_add: sangamA
+searchdict_add: sangAna
+searchdict_add: sangAnan
+searchdict_add: sangAnA
+searchdict_add: sangARa
+searchdict_add: sangARan
+searchdict_add: sangARA
+searchdict_add: sangANa
+searchdict_add: sangANan
+searchdict_add: sangANA
+searchdict_add: sangAma
+searchdict_add: sangAman
+searchdict_add: sangAmA
+searchdict_add: saNgana
+searchdict_add: saNganan
+searchdict_add: saNganA
+searchdict_add: saNgaRa
+searchdict_add: saNgaRan
+searchdict_add: saNgaRA
+searchdict_add: saNgaYa
+searchdict_add: saNgaYan
+searchdict_add: saNgaYA
+searchdict_add: saNgaNa
+searchdict_add: saNgaNan
+searchdict_add: saNgaNA
+searchdict_add: saNgama
+searchdict_add: saNgaman
+searchdict_add: saNgamA
+searchdict_add: saNgAna
+searchdict_add: saNgAnan
+searchdict_add: saNgAnA
+searchdict_add: saNgARa
+searchdict_add: saNgARan
+searchdict_add: saNgARA
+searchdict_add: saNgANa
+searchdict_add: saNgANan
+searchdict_add: saNgANA
+searchdict_add: saNgAma
+searchdict_add: saNgAman
+searchdict_add: saNgAmA
+searchdict_add: saNGana
+searchdict_add: saNGanan
+searchdict_add: saNGanA
+searchdict_add: saNGaRa
+searchdict_add: saNGaRan
+searchdict_add: saNGaRA
+searchdict_add: saNGaYa
+searchdict_add: saNGaYan
+searchdict_add: saNGaYA
+searchdict_add: saNGaNa
+searchdict_add: saNGaNan
+searchdict_add: saNGaNA
+searchdict_add: saNGama
+searchdict_add: saNGaman
+searchdict_add: saNGamA
+searchdict_add: saNGAna
+searchdict_add: saNGAnan
+searchdict_add: saNGAnA
+searchdict_add: saNGARa
+searchdict_add: saNGARan
+searchdict_add: saNGARA
+searchdict_add: saNGANa
+searchdict_add: saNGANan
+searchdict_add: saNGANA
+searchdict_add: saNGAma
+searchdict_add: saNGAman
+searchdict_add: saNGAmA
+searchdict_add: samgana
+searchdict_add: samganan
+searchdict_add: samganA
+searchdict_add: samgaRa
+searchdict_add: samgaRan
+searchdict_add: samgaRA
+searchdict_add: samgaYa
+searchdict_add: samgaYan
+searchdict_add: samgaYA
+searchdict_add: samgaNa
+searchdict_add: samgaNan
+searchdict_add: samgaNA
+searchdict_add: samgama
+searchdict_add: samgaman
+searchdict_add: samgamA
+searchdict_add: samgAna
+searchdict_add: samgAnan
+searchdict_add: samgAnA
+searchdict_add: samgARa
+searchdict_add: samgARan
+searchdict_add: samgARA
+searchdict_add: samgANa
+searchdict_add: samgANan
+searchdict_add: samgANA
+searchdict_add: samgAma
+searchdict_add: samgAman
+searchdict_add: samgAmA
+searchdict_add: sAngana
+searchdict_add: sAnganan
+searchdict_add: sAnganA
+searchdict_add: sAngaRa
+searchdict_add: sAngaRan
+searchdict_add: sAngaRA
+searchdict_add: sAngaYa
+searchdict_add: sAngaYan
+searchdict_add: sAngaYA
+searchdict_add: sAngaNa
+searchdict_add: sAngaNan
+searchdict_add: sAngaNA
+searchdict_add: sAngama
+searchdict_add: sAngaman
+searchdict_add: sAngamA
+searchdict_add: sAngAna
+searchdict_add: sAngAnan
+searchdict_add: sAngAnA
+searchdict_add: sAngARa
+searchdict_add: sAngARan
+searchdict_add: sAngARA
+searchdict_add: sAngANa
+searchdict_add: sAngANan
+searchdict_add: sAngANA
+searchdict_add: sAngAma
+searchdict_add: sAngAman
+searchdict_add: sAngAmA
+searchdict_add: sANgana
+searchdict_add: sANganan
+searchdict_add: sANganA
+searchdict_add: sANgaRa
+searchdict_add: sANgaRan
+searchdict_add: sANgaRA
+searchdict_add: sANgaYa
+searchdict_add: sANgaYan
+searchdict_add: sANgaYA
+searchdict_add: sANgaNa
+searchdict_add: sANgaNan
+searchdict_add: sANgaNA
+searchdict_add: sANgama
+searchdict_add: sANgaman
+searchdict_add: sANgamA
+searchdict_add: sANgAna
+searchdict_add: sANgAnan
+searchdict_add: sANgAnA
+searchdict_add: sANgARa
+searchdict_add: sANgARan
+searchdict_add: sANgARA
+searchdict_add: sANgANa
+searchdict_add: sANgANan
+searchdict_add: sANgANA
+searchdict_add: sANgAma
+searchdict_add: sANgAman
+searchdict_add: sANgAmA
+searchdict_add: sANGana
+searchdict_add: sANGanan
+searchdict_add: sANGanA
+searchdict_add: sANGaRa
+searchdict_add: sANGaRan
+searchdict_add: sANGaRA
+searchdict_add: sANGaYa
+searchdict_add: sANGaYan
+searchdict_add: sANGaYA
+searchdict_add: sANGaNa
+searchdict_add: sANGaNan
+searchdict_add: sANGaNA
+searchdict_add: sANGama
+searchdict_add: sANGaman
+searchdict_add: sANGamA
+searchdict_add: sANGAna
+searchdict_add: sANGAnan
+searchdict_add: sANGAnA
+searchdict_add: sANGARa
+searchdict_add: sANGARan
+searchdict_add: sANGARA
+searchdict_add: sANGANa
+searchdict_add: sANGANan
+searchdict_add: sANGANA
+searchdict_add: sANGAma
+searchdict_add: sANGAman
+searchdict_add: sANGAmA
+searchdict_add: sAmgana
+searchdict_add: sAmganan
+searchdict_add: sAmganA
+searchdict_add: sAmgaRa
+searchdict_add: sAmgaRan
+searchdict_add: sAmgaRA
+searchdict_add: sAmgaYa
+searchdict_add: sAmgaYan
+searchdict_add: sAmgaYA
+searchdict_add: sAmgaNa
+searchdict_add: sAmgaNan
+searchdict_add: sAmgaNA
+searchdict_add: sAmgama
+searchdict_add: sAmgaman
+searchdict_add: sAmgamA
+searchdict_add: sAmgAna
+searchdict_add: sAmgAnan
+searchdict_add: sAmgAnA
+searchdict_add: sAmgARa
+searchdict_add: sAmgARan
+searchdict_add: sAmgARA
+searchdict_add: sAmgANa
+searchdict_add: sAmgANan
+searchdict_add: sAmgANA
+searchdict_add: sAmgAma
+searchdict_add: sAmgAman
+searchdict_add: sAmgAmA
+searchdict_add: shangana
+searchdict_add: shanganan
+searchdict_add: shanganA
+searchdict_add: shangaRa
+searchdict_add: shangaRan
+searchdict_add: shangaRA
+searchdict_add: shangaYa
+searchdict_add: shangaYan
+searchdict_add: shangaYA
+searchdict_add: shangaNa
+searchdict_add: shangaNan
+searchdict_add: shangaNA
+searchdict_add: shangama
+searchdict_add: shangaman
+searchdict_add: shangamA
+searchdict_add: shangAna
+searchdict_add: shangAnan
+searchdict_add: shangAnA
+searchdict_add: shangARa
+searchdict_add: shangARan
+searchdict_add: shangARA
+searchdict_add: shangANa
+searchdict_add: shangANan
+searchdict_add: shangANA
+searchdict_add: shangAma
+searchdict_add: shangAman
+searchdict_add: shangAmA
+searchdict_add: shaNgana
+searchdict_add: shaNganan
+searchdict_add: shaNganA
+searchdict_add: shaNgaRa
+searchdict_add: shaNgaRan
+searchdict_add: shaNgaRA
+searchdict_add: shaNgaYa
+searchdict_add: shaNgaYan
+searchdict_add: shaNgaYA
+searchdict_add: shaNgaNa
+searchdict_add: shaNgaNan
+searchdict_add: shaNgaNA
+searchdict_add: shaNgama
+searchdict_add: shaNgaman
+searchdict_add: shaNgamA
+searchdict_add: shaNgAna
+searchdict_add: shaNgAnan
+searchdict_add: shaNgAnA
+searchdict_add: shaNgARa
+searchdict_add: shaNgARan
+searchdict_add: shaNgARA
+searchdict_add: shaNgANa
+searchdict_add: shaNgANan
+searchdict_add: shaNgANA
+searchdict_add: shaNgAma
+searchdict_add: shaNgAman
+searchdict_add: shaNgAmA
+searchdict_add: shaNGana
+searchdict_add: shaNGanan
+searchdict_add: shaNGanA
+searchdict_add: shaNGaRa
+searchdict_add: shaNGaRan
+searchdict_add: shaNGaRA
+searchdict_add: shaNGaYa
+searchdict_add: shaNGaYan
+searchdict_add: shaNGaYA
+searchdict_add: shaNGaNa
+searchdict_add: shaNGaNan
+searchdict_add: shaNGaNA
+searchdict_add: shaNGama
+searchdict_add: shaNGaman
+searchdict_add: shaNGamA
+searchdict_add: shaNGAna
+searchdict_add: shaNGAnan
+searchdict_add: shaNGAnA
+searchdict_add: shaNGARa
+searchdict_add: shaNGARan
+searchdict_add: shaNGARA
+searchdict_add: shaNGANa
+searchdict_add: shaNGANan
+searchdict_add: shaNGANA
+searchdict_add: shaNGAma
+searchdict_add: shaNGAman
+searchdict_add: shaNGAmA
+searchdict_add: shamgana
+searchdict_add: shamganan
+searchdict_add: shamganA
+searchdict_add: shamgaRa
+searchdict_add: shamgaRan
+searchdict_add: shamgaRA
+searchdict_add: shamgaYa
+searchdict_add: shamgaYan
+searchdict_add: shamgaYA
+searchdict_add: shamgaNa
+searchdict_add: shamgaNan
+searchdict_add: shamgaNA
+searchdict_add: shamgama
+searchdict_add: shamgaman
+searchdict_add: shamgamA
+searchdict_add: shamgAna
+searchdict_add: shamgAnan
+searchdict_add: shamgAnA
+searchdict_add: shamgARa
+searchdict_add: shamgARan
+searchdict_add: shamgARA
+searchdict_add: shamgANa
+searchdict_add: shamgANan
+searchdict_add: shamgANA
+searchdict_add: shamgAma
+searchdict_add: shamgAman
+searchdict_add: shamgAmA

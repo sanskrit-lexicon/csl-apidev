@@ -1,0 +1,88 @@
+<html>
+<head>
+<META charset="UTF-8">
+<title>easyspell</title>
+<!--
+<link rel="stylesheet" href="display.css" type="text/css">
+-->
+<!-- links to jquery, using CDNs -->
+<script type="text/javascript" src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script> 
+ // Jquery
+$(document).ready(function() {
+ var testrequest = function(request) {
+  jQuery.ajax({
+   url:"http://www.sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/easyspell.php",
+   datatype:"jsonp",
+   data:request,
+   success: function(response) {
+    console.log('ajax success calling display_response');
+    display_response(response);
+   }
+ });
+};
+var request = {
+   dict:'mw',
+   words:["shiva", "shivA", "shiba", "shibA", "shIva", "shIvA", "shIba",
+           "shIbA", "sHiva", "sHivA", "sHiba", "sHibA", "sHIva", "sHIvA",
+           "sHIba", "sHIbA", "ziva", "zivA", "ziba", "zibA", "zIva",
+           "zIvA", "zIba", "zIbA"]
+  };
+var display_request = function (request) {
+ var html = "";
+ html = html + "<H3>request sent to Cologne</H3>\n";
+ var dict=request.dict;
+ html = html + "<p>dict = "+dict+ "</p>\n";
+ var i,word,words;
+ words=request.words;
+ html = html + "<ol>\n";
+ for(i=0; i < words.length; i++) {
+  word = words[i];
+  html = html + "<li>"+word+"</li>\n";
+ }
+ html = html + "</ol>\n";
+ jQuery('#request').html(html);
+};
+
+var display_response = function (response) {
+ console.log('response type=',typeof response);
+ console.log('response=',response);
+ var html = "";
+ html = html + "<H3>response from Cologne</H3>\n";
+ var dict=response['dict'];
+ var status = response.status;
+ console.log('response: dict=',dict,'status=',status);
+ html = html + "<p>dict = "+dict+ ", status="+status+"</p>\n";
+ var i,word,words,out;
+ words=response.words;
+ console.log('words=',words);
+ html = html + "<ol>\n";
+ for(i=0;i< words.length; i++) {
+  word = words[i];
+  out =  word.word + " , slp1=" + word.slp1 + " , found=" + word.status
+  html = html + "<li>"+out+"</li>\n";
+ }
+ html = html + "</ol>\n";
+ jQuery('#response').html(html);
+};
+ display_request(request);
+ testrequest(request);
+ 
+}
+);
+</script>
+<style>
+#response {
+position:absolute; left:250px; top:5px;
+}
+#request {
+position:absolute; left:5px; top:5px; width:200px;
+}
+</style>
+</head>
+<body>
+ <div id="request"></div>
+ <div id="response" ></div>
+</body>
+</html>
+

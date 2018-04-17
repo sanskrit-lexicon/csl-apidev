@@ -1,0 +1,868 @@
+diff MW72_webtc_main.css ACC_webtc_main.css
+
+------------------------------------------------------------------------
+
+diff MW72_webtc_main.css AE_webtc_main.css
+
+------------------------------------------------------------------------
+
+diff MW72_webtc_main.css AP90_webtc_main.css
+31c31
+< .pb {font-size:smaller; }
+---
+> .pb {font-size:8pt; font-weight:lighter; }
+
+------------------------------------------------------------------------
+
+diff MW72_webtc_main.css AP_webtc_main.css
+27a28,37
+> @font-face { 
+>  src: url(../fonts/siddhanta.ttf);
+>  font-family: siddhanta_deva;
+> }
+> .sdata_siddhanta {
+>  color:blue;  /* was teal */
+>  font-size:larger;
+>  font-family: siddhanta_deva;
+> }
+> 
+
+------------------------------------------------------------------------
+
+diff MW72_webtc_main.css BEN_webtc_main.css
+
+------------------------------------------------------------------------
+
+diff MW72_webtc_main.css BHS_webtc_main.css
+
+------------------------------------------------------------------------
+
+diff MW72_webtc_main.css BOP_webtc_main.css
+
+------------------------------------------------------------------------
+
+diff MW72_webtc_main.css BOR_webtc_main.css
+
+------------------------------------------------------------------------
+
+diff MW72_webtc_main.css BUR_webtc_main.css
+11,13d10
+<         /* Dec 5, 2013.  This font-family specification
+<            interacts unfavorably with the combining characters
+<            used to display devanagari and roman unicode
+15,16c12
+<         */
+< 	font-size: 14pt;
+---
+> 	font-size: 12pt;
+18d13
+< td {line-height: 150%;}
+23,37d17
+< .g {font-size:smaller;font-style:italic;}
+< .lang {font-size:smaller;font-style:italic;}
+< .hrefdata {font-size:smaller;}
+< .lnum {font-size:smaller;}
+< /*.sdata {color:black;font-size:larger;} */ /* for devanagari */
+< .sdata {color:teal;}
+< .sdatadeva {color:teal;font-size:larger;}
+< .asdata {color:blue;font-size:larger;}
+< .pb {font-size:smaller; }
+< .hom {color:red;}
+< .footnote {font-size:smaller;}
+< .ls {color:gray; font-size:smaller;}
+< .gram {font-weight:bold;}
+< .divm {font-weight:bold;}
+< .wide {font-stretch:wider;}
+48,52c28
+<  /* 
+<  overflow: auto; 
+<  */
+<  overflow-y:auto;
+<  overflow-x:hidden;
+---
+>  overflow: auto;
+61c37
+<   margin-top: 10px; /* 20px; Dec 5, 2013 */
+---
+>   margin-top: 20px;
+75c51
+<  /* font-weight: normal; */
+---
+>  font-weight: normal;
+80c56
+< 	/*font-family: verdana,arial,helvetica,sansserif; */ /*Dec 5, 2013*/
+---
+> 	font-family: verdana,arial,helvetica,sansserif;
+
+------------------------------------------------------------------------
+
+diff MW72_webtc_main.css CAE_webtc_main.css
+0a1,3
+> /* June 5, 2014
+>  Modify to use web-fonts. See font.css
+> */
+28,29c31,36
+< .sdata {color:teal;}
+< .sdatadeva {color:teal;font-size:larger;}
+---
+> .sdata {
+>  color:teal;
+>  font-size:larger;
+>  font-family: '';
+> }
+> 
+34d40
+< .ls {color:gray; font-size:smaller;}
+38c44
+< 
+---
+> .key {font-size:larger; color:black;}
+57,68d62
+< table.display {
+<   width: 100%;
+<   margin-left:     5px;
+<   margin-right:    5px;
+<   margin-top: 10px; /* 20px; Dec 5, 2013 */
+< /*
+<   font-size:       larger;
+<   border-style: solid;
+<   border: 2px;
+<   padding: 15px;
+< */
+< }
+74,76d67
+< td.display {
+<  /* font-weight: normal; */
+< }
+
+------------------------------------------------------------------------
+
+diff MW72_webtc_main.css CCS_webtc_main.css
+0a1,3
+> /* May 12, 2014
+>  Modify to use web-font "Old_Standard_Indologique-Regular.otf"
+> */
+28,29c31,84
+< .sdata {color:teal;}
+< .sdatadeva {color:teal;font-size:larger;}
+---
+> .sdata {
+>  color:teal;
+>  font-size:larger;
+>  font-family: '';
+> }
+> 
+> @font-face { 
+>  src: url(../fonts/praja.ttf);
+>  font-family: praja_deva;
+> }
+> .sdata_praja {
+>  color:teal;
+>  font-size:larger;
+>  font-family: praja_deva;
+> }
+> @font-face { 
+>  src: url(../fonts/sanskrit2003.ttf);
+>  font-family: sanskrit2003_deva;
+> }
+> .sdata_sanskrit2003 {
+>  color:teal;
+>  font-size:larger;
+>  font-family: sanskrit2003_deva;
+> }
+> @font-face { 
+>  src: url(../fonts/siddhanta.ttf);
+>  font-family: siddhanta_deva;
+> }
+> .sdata_siddhanta {
+>  color:teal;
+>  font-size:larger;
+>  font-family: siddhanta_deva;
+> }
+> .sdata_system {
+>  color:teal;
+>  font-size:larger;
+>  font-family: '';
+> }
+> @font-face { /* for normal text in pwg */
+>  src: url(../fonts/oldstandard.otf);
+>  font-family: oldstandard;
+> }
+> @font-face { 
+>  src: url(../fonts/oldstandarditalic.otf);
+>  font-family: oldstandard_i;
+> }
+> @font-face { /* for 'ls' text in pwg */
+>  src: url(../fonts/CharterIndoCapital.otf);
+>  font-family: charterindocapital;
+> }
+> 
+> i {
+>  font-family: oldstandard_i;
+> }
+34c89,94
+< .ls {color:gray; font-size:smaller;}
+---
+> .ls {
+> color:gray; 
+> font-size:smaller;
+> font-family:charterindocapital;
+> /* text-transform:capitalize; */
+> }
+38c98
+< 
+---
+> .key {font-size:larger; color:black;}
+56a117,119
+> .display {
+>   font-family: oldstandard;
+> }
+61a125
+>   font-family: oldstandard;
+75a140
+>   font-family: oldstandard;
+
+------------------------------------------------------------------------
+
+diff MW72_webtc_main.css GRA_webtc_main.css
+
+------------------------------------------------------------------------
+
+diff MW72_webtc_main.css GST_webtc_main.css
+
+------------------------------------------------------------------------
+
+diff MW72_webtc_main.css IEG_webtc_main.css
+
+------------------------------------------------------------------------
+
+diff MW72_webtc_main.css INM_webtc_main.css
+
+------------------------------------------------------------------------
+
+diff MW72_webtc_main.css KRM_webtc_main.css
+
+------------------------------------------------------------------------
+
+diff MW72_webtc_main.css MCI_webtc_main.css
+
+------------------------------------------------------------------------
+
+diff MW72_webtc_main.css MD_webtc_main.css
+
+------------------------------------------------------------------------
+
+diff MW72_webtc_main.css MWE_webtc_main.css
+11,13d10
+<         /* Dec 5, 2013.  This font-family specification
+<            interacts unfavorably with the combining characters
+<            used to display devanagari and roman unicode
+15,16c12
+<         */
+< 	font-size: 14pt;
+---
+> 	font-size: 12pt;
+18c14,20
+< td {line-height: 150%;}
+---
+> /* Jul 8, 2014  
+>   Without this line-height, Devanagari does not align properly with non-deva
+>   A line-height of  150% and 130% both seem to work for alignment 
+> */
+> 
+>  td {line-height: 130%;}  
+> 
+23,37d24
+< .g {font-size:smaller;font-style:italic;}
+< .lang {font-size:smaller;font-style:italic;}
+< .hrefdata {font-size:smaller;}
+< .lnum {font-size:smaller;}
+< /*.sdata {color:black;font-size:larger;} */ /* for devanagari */
+< .sdata {color:teal;}
+< .sdatadeva {color:teal;font-size:larger;}
+< .asdata {color:blue;font-size:larger;}
+< .pb {font-size:smaller; }
+< .hom {color:red;}
+< .footnote {font-size:smaller;}
+< .ls {color:gray; font-size:smaller;}
+< .gram {font-weight:bold;}
+< .divm {font-weight:bold;}
+< .wide {font-stretch:wider;}
+48,52c35
+<  /* 
+<  overflow: auto; 
+<  */
+<  overflow-y:auto;
+<  overflow-x:hidden;
+---
+>  overflow: auto;
+61c44
+<   margin-top: 10px; /* 20px; Dec 5, 2013 */
+---
+>   margin-top: 20px;
+75c58
+<  /* font-weight: normal; */
+---
+>  font-weight: normal;
+80c63
+< 	/*font-family: verdana,arial,helvetica,sansserif; */ /*Dec 5, 2013*/
+---
+> 	font-family: verdana,arial,helvetica,sansserif;
+
+------------------------------------------------------------------------
+
+diff MW72_webtc_main.css MW_webtc_main.css
+0a1,4
+> /* July 8, 2014
+>  Same as for PWG, except that old_standard is not used.
+>  Uses siddhanta for devanagari
+> */
+16c20
+< 	font-size: 14pt;
+---
+> 	font-size: 12pt;  /* was 14pt */ /* Jul 8, 2014 */
+18c22,28
+< td {line-height: 150%;}
+---
+> /* Jul 8, 2014  
+>   Without this line-height, Devanagari does not align properly with non-deva
+>   A line-height of  150% and 130% both seem to work for alignment 
+> */
+> 
+>  td {line-height: 130%;}  
+> 
+28,29c38,92
+< .sdata {color:teal;}
+< .sdatadeva {color:teal;font-size:larger;}
+---
+> .sdata {
+>  color:blue;  /* was teal */
+>  /* font-size:larger; */  /* sdata is used for Roman or other, not deva */
+>  font-family: '';
+> }
+> 
+> @font-face { 
+>  src: url(../fonts/praja.ttf);
+>  font-family: praja_deva;
+> }
+> .sdata_praja {
+>  color:blue;  /* was teal */
+>  font-size:larger;
+>  font-family: praja_deva;
+> }
+> @font-face { 
+>  src: url(../fonts/sanskrit2003.ttf);
+>  font-family: sanskrit2003_deva;
+> }
+> .sdata_sanskrit2003 {
+>  color:blue;  /* was teal */
+>  font-size:larger;
+>  font-family: sanskrit2003_deva;
+> }
+> @font-face { 
+>  src: url(../fonts/siddhanta.ttf);
+>  font-family: siddhanta_deva;
+> }
+> .sdata_siddhanta {
+>  color:blue;  /* was teal */
+>  font-size:larger;
+>  font-family: siddhanta_deva;
+> }
+> .sdata_system {
+>  color:blue;  /* was teal */
+>  font-size:larger;
+>  font-family: '';
+> }
+> @font-face { /* for normal text in pwg */
+>  src: url(../fonts/oldstandard.otf);
+>  font-family: oldstandard;
+> }
+> @font-face { 
+>  src: url(../fonts/oldstandarditalic.otf);
+>  font-family: oldstandard_i;
+>  
+> }
+> @font-face { /* for 'ls' text in pwg */
+>  src: url(../fonts/CharterIndoCapital.otf);
+>  font-family: charterindocapital;
+> }
+> 
+> i {
+>  /*font-family: oldstandard_i; */
+> }
+34c97,102
+< .ls {color:gray; font-size:smaller;}
+---
+> .ls {
+> color:gray; 
+> font-size:smaller;
+> font-family:charterindocapital;
+> /* text-transform:capitalize; */
+> }
+38c106
+< 
+---
+> .key {font-size:larger; color:black;}
+56a125,127
+> .display {
+>   /* font-family: oldstandard; */
+> }
+58c129,131
+<   width: 100%;
+---
+>   /*width: 100%; */
+>   /* width: 600px;  July 18, 2014 */
+>   max-width: 600px; /* July 25, 2014 */
+60c133,134
+<   margin-right:    5px;
+---
+>   /* margin-right:    5px;*/
+> 
+61a136
+>   /*font-family: oldstandard; */
+75a151
+>   /*font-family: oldstandard;*/
+99a176,185
+> .red {
+>  color:red;
+> }
+> .blue { color:blue; }
+> .smaller {
+>  font-size:smaller;
+> }
+> .lightgreen {
+>  color: #004400;
+> }
+101c187
+<         color: black;
+---
+>         color:blue; /* color: black; */
+106c192
+< 	color: #36648b;
+---
+> 	color:blue;/* color: #36648b; */
+110c196
+< 	color: #4876ff;
+---
+> 	color:blue;/* color: #4876ff; */
+115c201
+< 	color: #000033;
+---
+> 	color:blue;/* color: #000033; */
+
+------------------------------------------------------------------------
+
+diff MW72_webtc_main.css PD_webtc_main.css
+0a1,3
+> /* May 12, 2014
+>  Modify to use web-font "Old_Standard_Indologique-Regular.otf"
+> */
+28,29c31,84
+< .sdata {color:teal;}
+< .sdatadeva {color:teal;font-size:larger;}
+---
+> .sdata {
+>  color:teal;
+>  font-size:larger;
+>  font-family: '';
+> }
+> 
+> @font-face { 
+>  src: url(../fonts/praja.ttf);
+>  font-family: praja_deva;
+> }
+> .sdata_praja {
+>  color:teal;
+>  font-size:larger;
+>  font-family: praja_deva;
+> }
+> @font-face { 
+>  src: url(../fonts/sanskrit2003.ttf);
+>  font-family: sanskrit2003_deva;
+> }
+> .sdata_sanskrit2003 {
+>  color:teal;
+>  font-size:larger;
+>  font-family: sanskrit2003_deva;
+> }
+> @font-face { 
+>  src: url(../fonts/siddhanta.ttf);
+>  font-family: siddhanta_deva;
+> }
+> .sdata_siddhanta {
+>  color:teal;
+>  font-size:larger;
+>  font-family: siddhanta_deva;
+> }
+> .sdata_system {
+>  color:teal;
+>  font-size:larger;
+>  font-family: '';
+> }
+> @font-face { /* for normal text in pwg */
+>  src: url(../fonts/oldstandard.otf);
+>  font-family: oldstandard;
+> }
+> @font-face { 
+>  src: url(../fonts/oldstandarditalic.otf);
+>  font-family: oldstandard_i;
+> }
+> @font-face { /* for 'ls' text in pwg */
+>  src: url(../fonts/CharterIndoCapital.otf);
+>  font-family: charterindocapital;
+> }
+> 
+> i {
+>  font-family: oldstandard_i;
+> }
+34c89,94
+< .ls {color:gray; font-size:smaller;}
+---
+> .ls {
+> color:gray; 
+> font-size:smaller;
+> font-family:charterindocapital;
+> /* text-transform:capitalize; */
+> }
+38c98
+< 
+---
+> .key {font-size:larger; color:black;}
+56a117,119
+> .display {
+>   font-family: oldstandard;
+> }
+61a125
+>   font-family: oldstandard;
+75a140
+>   font-family: oldstandard;
+
+------------------------------------------------------------------------
+
+diff MW72_webtc_main.css PE_webtc_main.css
+
+------------------------------------------------------------------------
+
+diff MW72_webtc_main.css PGN_webtc_main.css
+
+------------------------------------------------------------------------
+
+diff MW72_webtc_main.css PUI_webtc_main.css
+
+------------------------------------------------------------------------
+
+diff MW72_webtc_main.css PWG_webtc_main.css
+0a1,3
+> /* May 12, 2014
+>  Modify to use web-font "Old_Standard_Indologique-Regular.otf"
+> */
+28,29c31,85
+< .sdata {color:teal;}
+< .sdatadeva {color:teal;font-size:larger;}
+---
+> .sdata {
+>  color:teal;
+>  font-size:larger;
+>  font-family: '';
+> }
+> 
+> @font-face { 
+>  src: url(../fonts/praja.ttf);
+>  font-family: praja_deva;
+> }
+> .sdata_praja {
+>  color:teal;
+>  font-size:larger;
+>  font-family: praja_deva;
+> }
+> @font-face { 
+>  src: url(../fonts/sanskrit2003.ttf);
+>  font-family: sanskrit2003_deva;
+> }
+> .sdata_sanskrit2003 {
+>  color:teal;
+>  font-size:larger;
+>  font-family: sanskrit2003_deva;
+> }
+> @font-face { 
+>  src: url(../fonts/siddhanta.ttf);
+>  font-family: siddhanta_deva;
+> }
+> .sdata_siddhanta {
+>  color:teal;
+>  font-size:larger;
+>  font-family: siddhanta_deva;
+> }
+> .sdata_system {
+>  color:teal;
+>  font-size:larger;
+>  font-family: '';
+> }
+> @font-face { /* for normal text in pwg */
+>  src: url(../fonts/oldstandard.otf);
+>  font-family: oldstandard;
+> }
+> @font-face { 
+>  src: url(../fonts/oldstandarditalic.otf);
+>  font-family: oldstandard_i;
+>  
+> }
+> @font-face { /* for 'ls' text in pwg */
+>  src: url(../fonts/CharterIndoCapital.otf);
+>  font-family: charterindocapital;
+> }
+> 
+> i {
+>  font-family: oldstandard_i;
+> }
+34c90,95
+< .ls {color:gray; font-size:smaller;}
+---
+> .ls {
+> color:gray; 
+> font-size:smaller;
+> font-family:charterindocapital;
+> /* text-transform:capitalize; */
+> }
+38c99
+< 
+---
+> .key {font-size:larger; color:black;}
+56a118,120
+> .display {
+>   font-family: oldstandard;
+> }
+61a126
+>   font-family: oldstandard;
+75a141
+>   font-family: oldstandard;
+
+------------------------------------------------------------------------
+
+diff MW72_webtc_main.css PW_webtc_main.css
+0a1,3
+> /* June 5, 2014
+>  Modify to use web-fonts. See font.css
+> */
+28,29c31,36
+< .sdata {color:teal;}
+< .sdatadeva {color:teal;font-size:larger;}
+---
+> .sdata {
+>  color:teal;
+>  font-size:larger;
+>  font-family: '';
+> }
+> 
+34d40
+< .ls {color:gray; font-size:smaller;}
+38c44
+< 
+---
+> .key {font-size:larger; color:black;}
+57,68d62
+< table.display {
+<   width: 100%;
+<   margin-left:     5px;
+<   margin-right:    5px;
+<   margin-top: 10px; /* 20px; Dec 5, 2013 */
+< /*
+<   font-size:       larger;
+<   border-style: solid;
+<   border: 2px;
+<   padding: 15px;
+< */
+< }
+74,76d67
+< td.display {
+<  /* font-weight: normal; */
+< }
+
+------------------------------------------------------------------------
+
+diff MW72_webtc_main.css SCH_webtc_main.css
+
+------------------------------------------------------------------------
+
+diff MW72_webtc_main.css SHS_webtc_main.css
+
+------------------------------------------------------------------------
+
+diff MW72_webtc_main.css SKD_webtc_main.css
+11,13d10
+<         /* Dec 5, 2013.  This font-family specification
+<            interacts unfavorably with the combining characters
+<            used to display devanagari and roman unicode
+15,16c12
+<         */
+< 	font-size: 14pt;
+---
+> 	font-size: 12pt;
+18d13
+< td {line-height: 150%;}
+23,37d17
+< .g {font-size:smaller;font-style:italic;}
+< .lang {font-size:smaller;font-style:italic;}
+< .hrefdata {font-size:smaller;}
+< .lnum {font-size:smaller;}
+< /*.sdata {color:black;font-size:larger;} */ /* for devanagari */
+< .sdata {color:teal;}
+< .sdatadeva {color:teal;font-size:larger;}
+< .asdata {color:blue;font-size:larger;}
+< .pb {font-size:smaller; }
+< .hom {color:red;}
+< .footnote {font-size:smaller;}
+< .ls {color:gray; font-size:smaller;}
+< .gram {font-weight:bold;}
+< .divm {font-weight:bold;}
+< .wide {font-stretch:wider;}
+48,52c28
+<  /* 
+<  overflow: auto; 
+<  */
+<  overflow-y:auto;
+<  overflow-x:hidden;
+---
+>  overflow: auto;
+61c37
+<   margin-top: 10px; /* 20px; Dec 5, 2013 */
+---
+>   margin-top: 20px;
+75c51
+<  /* font-weight: normal; */
+---
+>  font-weight: normal;
+80c56
+< 	/*font-family: verdana,arial,helvetica,sansserif; */ /*Dec 5, 2013*/
+---
+> 	font-family: verdana,arial,helvetica,sansserif;
+
+------------------------------------------------------------------------
+
+diff MW72_webtc_main.css SNP_webtc_main.css
+
+------------------------------------------------------------------------
+
+diff MW72_webtc_main.css STC_webtc_main.css
+11,13d10
+<         /* Dec 5, 2013.  This font-family specification
+<            interacts unfavorably with the combining characters
+<            used to display devanagari and roman unicode
+15,16c12
+<         */
+< 	font-size: 14pt;
+---
+> 	font-size: 12pt;
+18d13
+< td {line-height: 150%;}
+23,37d17
+< .g {font-size:smaller;font-style:italic;}
+< .lang {font-size:smaller;font-style:italic;}
+< .hrefdata {font-size:smaller;}
+< .lnum {font-size:smaller;}
+< /*.sdata {color:black;font-size:larger;} */ /* for devanagari */
+< .sdata {color:teal;}
+< .sdatadeva {color:teal;font-size:larger;}
+< .asdata {color:blue;font-size:larger;}
+< .pb {font-size:smaller; }
+< .hom {color:red;}
+< .footnote {font-size:smaller;}
+< .ls {color:gray; font-size:smaller;}
+< .gram {font-weight:bold;}
+< .divm {font-weight:bold;}
+< .wide {font-stretch:wider;}
+48,52c28
+<  /* 
+<  overflow: auto; 
+<  */
+<  overflow-y:auto;
+<  overflow-x:hidden;
+---
+>  overflow: auto;
+60,61c36,38
+<   margin-right:    5px;
+<   margin-top: 10px; /* 20px; Dec 5, 2013 */
+---
+>   /*margin-right:    5px; */
+>   width: 600px;  /* July 18, 2014 */
+>   margin-top: 20px;
+75c52
+<  /* font-weight: normal; */
+---
+>  font-weight: normal;
+80c57
+< 	/*font-family: verdana,arial,helvetica,sansserif; */ /*Dec 5, 2013*/
+---
+> 	font-family: verdana,arial,helvetica,sansserif;
+101,102c78,79
+<         color: black;
+< 	/* color: #00008b; */
+---
+>         /* color: black;*/
+> 	 color: #00008b;
+
+------------------------------------------------------------------------
+
+diff MW72_webtc_main.css VCP_webtc_main.css
+11,13d10
+<         /* Dec 5, 2013.  This font-family specification
+<            interacts unfavorably with the combining characters
+<            used to display devanagari and roman unicode
+15,16c12
+<         */
+< 	font-size: 14pt;
+---
+> 	font-size: 12pt;
+18d13
+< td {line-height: 150%;}
+23,37d17
+< .g {font-size:smaller;font-style:italic;}
+< .lang {font-size:smaller;font-style:italic;}
+< .hrefdata {font-size:smaller;}
+< .lnum {font-size:smaller;}
+< /*.sdata {color:black;font-size:larger;} */ /* for devanagari */
+< .sdata {color:teal;}
+< .sdatadeva {color:teal;font-size:larger;}
+< .asdata {color:blue;font-size:larger;}
+< .pb {font-size:smaller; }
+< .hom {color:red;}
+< .footnote {font-size:smaller;}
+< .ls {color:gray; font-size:smaller;}
+< .gram {font-weight:bold;}
+< .divm {font-weight:bold;}
+< .wide {font-stretch:wider;}
+48,52c28
+<  /* 
+<  overflow: auto; 
+<  */
+<  overflow-y:auto;
+<  overflow-x:hidden;
+---
+>  overflow: auto;
+61c37
+<   margin-top: 10px; /* 20px; Dec 5, 2013 */
+---
+>   margin-top: 20px;
+75c51
+<  /* font-weight: normal; */
+---
+>  font-weight: normal;
+80c56
+< 	/*font-family: verdana,arial,helvetica,sansserif; */ /*Dec 5, 2013*/
+---
+> 	font-family: verdana,arial,helvetica,sansserif;
+
+------------------------------------------------------------------------
+
+diff MW72_webtc_main.css VEI_webtc_main.css
+
+------------------------------------------------------------------------
+
+diff MW72_webtc_main.css WIL_webtc_main.css
+
+------------------------------------------------------------------------
+
+diff MW72_webtc_main.css YAT_webtc_main.css
+
+------------------------------------------------------------------------
+

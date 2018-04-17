@@ -1,0 +1,259 @@
+body {
+	color: black;
+	background-color: white ; /*#bcee68; */
+	/*font-family: verdana,arial,helvetica,sansserif; */
+	font-size: 12pt;
+}
+td, th {
+  padding:         5px;
+  text-align:      left;
+  vertical-aligh:  top;
+  line-height:     150%;
+/*  background-color: #DBE4ED;  */
+}
+
+.greek {
+ font-family: Gentium, Palatino Linotype, Arial Unicode MS;
+ font-size: 12pt;
+}
+.g {font-size:smaller;font-style:italic;}
+.lang {font-size:smaller;font-style:italic;}
+.hrefdata {font-size:smaller;}
+.lnum {font-size:smaller;}
+.sdata {color:teal;}
+.asdata {color:blue;}
+.pb {font-size:smaller; }
+.hom {color:red;}
+.footnote {font-size:smaller;}
+.ls {color:gray; font-size:smaller;}
+.gram {font-weight:bold;}
+.divm {font-weight:bold;}
+.wide {font-stretch:wider;}
+@font-face { 
+ src: url(../fonts/siddhanta.ttf);
+ font-family: siddhanta_deva;
+}
+
+.sdata_siddhanta {
+ color:teal;
+ font-size:larger;
+ font-family: siddhanta_deva;
+}
+
+p {
+	padding-left: 15pt;
+	padding-right: 15pt;
+}
+p.words {
+text-align: left;
+}
+a.words {
+ color: blue;
+font-size: larger; 
+font-family: arial,helvetica,verdana,sansserif;
+}
+plex {
+	color: black;
+	background-color: #36648b;
+	font-family: verdana,arial,helvetica,sansserif;
+	font-size: 12pt;
+}
+
+h1 {
+	font-size: 24pt;
+}
+
+h2 {
+	font-size: 20pt;
+	padding-left: 15pt;
+	padding-top: 20pt;
+}
+
+h3 {
+	font-size: 18pt;
+	padding-left: 30pt;
+	padding-top: 20pt;
+}
+
+a:link {
+}
+
+a:visited {
+	color: #36648b;
+}
+
+a:active {
+	color: #4876ff;
+}
+
+a:hover {
+	background-color: #ffffcc;
+	color: #000033;
+	cursor:pointer;
+}
+body {
+  font-family:     Verdana, Geneva, Arial, sans-serif;
+  font-size:       small;
+  text-align:      center;
+}
+h1 {
+  color:           #cc6600;
+  border-top:   thin dotted #888888;
+  font-size:       1.7em;
+}
+
+h2 {
+  font-size:       1.3em;
+}
+
+table {
+  width: 100%;
+  margin-left:     5px;
+  margin-right:    5px;
+  margin-top: 0px;
+  font-size:       larger;
+}
+table.display {
+  width: 100%;
+  margin-left:     5px;
+  margin-right:    5px;
+/*
+  margin-top: 20px;
+  border: 2px;
+*/
+  font-size:       larger;
+}
+td.display {
+/*
+  border-width: 2px;
+  border-style: solid;
+  border-color: orange;
+*/
+}
+li.display {
+margin-left: 5px;
+}
+td, th {
+  padding:         5px;
+  text-align:      left;
+/*  background-color: #DBE4ED;  */
+}
+td.ready {
+/* font-size: ; */
+ font-weight: normal;
+ font-style: italic;
+}
+.hk {
+ font-size: 100%;
+}
+.hklarge {
+ font-size: 150%;
+}
+th {
+  text-align:      left;
+  background-color: #DBE4ED; 
+}
+span.abbr {
+ color: #339933;
+ text-decoration: underline;
+}
+span.abbr:hover {color: #FF00FF} 
+
+span.hk {
+ color:blue;
+ }
+span.hklarge {
+ color:blue;
+ }
+span.q {
+  color: #333333;
+}
+span.entity {
+ color: red;
+}
+span.see {
+ font-weight: bolder;
+ font-style: italic;
+}
+span.sense {
+ font-weight: bolder;
+}
+span.datakey {
+ font-weight: bolder;
+}
+p.tabkey {
+ font-weight: bolder;
+ font-size : larger;
+}
+span.pb {
+ font-size : smaller;
+}
+.container {
+ width: 800px;
+}
+#head {
+/*
+ background-color: #DBE4ED; 
+ padding: 10px;
+  position:absolute;
+  left: 1%;
+  width: 29%;
+*/
+}
+
+#headtitle {
+ font-size: 12pt; /*normal;*/
+ font-weight: bolder;
+}
+#updbutton {
+ background-color: red;
+}
+#disp {
+  position:absolute;
+  left: 1%;
+  width: 29%;
+ background-color: white;
+ overflow: auto;
+ height: 400px;
+ border: solid;
+}
+#data {
+ position:absolute;
+ left: 31%;
+  width: 68%;
+ background-color: white;
+ overflow: auto;
+ height: 400px;
+ border: solid;
+}
+#ansdiv {
+ position:absolute;
+ left: 1%;
+ width: 99%;
+ background-color: white;
+ overflow: auto;
+ height: 400px;
+ border: solid;
+}
+#querydiv {
+  background-color: #DBE4ED; 
+}
+th.display {
+ font-size: larger;
+/*	text-decoration: underline; */
+}
+li.display {
+ font-size: larger;
+/*	text-decoration: underline; */
+}
+
+#navbtns {
+  position:absolute;
+/*
+  top: 580px;
+*/
+  left: 1%;
+  width: 48%;
+  height: 50px;
+/*  border: thin solid;  */
+}

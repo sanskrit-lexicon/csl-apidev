@@ -1,0 +1,73 @@
+@font-face { 
+ src: url(../fonts/praja.ttf);
+ font-family: praja_deva;
+}
+.sdata_praja {
+ color:teal;
+ font-size:larger;
+ font-family: praja_deva;
+}
+@font-face { 
+ src: url(../fonts/sanskrit2003.ttf);
+ font-family: sanskrit2003_deva;
+}
+.sdata_sanskrit2003 {
+ color:teal;
+ font-size:larger;
+ font-family: sanskrit2003_deva;
+}
+@font-face { 
+ src: url(../fonts/siddhanta.ttf);
+ font-family: siddhanta_deva;
+}
+.sdata_siddhanta {
+ color:teal;
+ font-size:larger;
+ font-family: siddhanta_deva;
+}
+.sdata_system {
+ color:teal;
+ font-size:larger;
+ font-family: '';
+}
+@font-face { /* for normal text in pwg */
+ src: url(../fonts/oldstandard.otf);
+ font-family: oldstandard;
+}
+@font-face { 
+ src: url(../fonts/oldstandarditalic.otf);
+ font-family: oldstandard_i;
+ 
+}
+@font-face { /* for 'ls' text in pwg */
+ src: url(../fonts/CharterIndoCapital.otf);
+ font-family: charterindocapital;
+}
+
+i {
+ font-family: oldstandard_i;
+}
+.noti {
+ font-family: oldstandard;
+}
+.ls {
+color:gray; 
+font-size:smaller;
+font-family:charterindocapital;
+/* text-transform:capitalize; */
+}
+.display {
+  font-family: oldstandard;
+}
+table.display {
+  width: 100%;
+  margin-left:     5px;
+  margin-right:    5px;
+  margin-top: 10px; /* 20px; Dec 5, 2013 */
+  font-family: oldstandard;
+
+}
+td.display {
+ /* font-weight: normal; */
+  font-family: oldstandard;
+}

@@ -1,0 +1,25 @@
+
+wf0  08-17-2017
+Separate out the word_frequency data source.
+# word_frequency_adj.txt  is the starting point
+cp ../v0.1/word_frequency_adj.txt .
+
+*  word_frequency_norm.txt
+  Convert the spellings to 'normalized' form, using hwnorm1c
+python word_frequency_norm.py word_frequency_adj.txt word_frequency_norm.txt word_frequency_diff.txt
+
+ # 4120 out of 67050 records have a change in spelling due to normalization.
+ # details written to word_frequency_diff.txt
+* word_frequency_hwnorm1c.txt
+  # which of the word_frequency words are hwnorm1c in hwnorm1c?
+python word_frequency_hwnorm1c.py word_frequency_norm.txt word_frequency_hwnorm1c.txt
+
+* wf.txt
+ We filter word_frequency_hwnorm1c by requiring that the word
+ appears in at least one dictionary  (last field is not 0).
+ Reason: We are using this to search for words in hwnorm1c.
+ So, the search will ultimately fail if the word does not appear
+ in hwnorm1c. Thus, keeping such words in the word frequency file has
+ no utility.
+python wf.py  word_frequency_hwnorm1c.txt wf.txt
+

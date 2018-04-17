@@ -1,0 +1,19 @@
+500131 <SA>
+110734 <br/>
+009227 <hr/>
+199456 <i>
+094019 <span class='display'>
+089838 <span class='divm'>
+000038 <span class='footnote'>
+124337 <span class='gram'>
+006431 <span class='hom'>
+000400 <span class='lang'>
+415717 <span class='ls'>
+009473 <span class='pb'>
+500131 <span class='sdata'>
+051799 <span class='wide'>
+042628 <span style='font-size:70%'>
+248526 <span style='font-size:80%'>
+557205 <span style='font-size:90%'>
+009227 <span style='font-weight:bold;'>
+000117 <span>

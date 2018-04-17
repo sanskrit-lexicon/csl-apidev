@@ -1,0 +1,99 @@
+
+list-0.2s.html is the main deliverable.
+* list-0.2s.html dependencies
+It depends on:
+  jquery-ui.css, jquery.js, jquery.cookie.js
+  jquery-ui.js
+AND
+  apidev/sample/dictnames.js
+  apidev/sample/cookieUpdate.js
+  apidev/fonts/siddhanta.ttf
+AND
+  http://www.sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/listview.php
+AND  (for v1.0, use v1.0/getword_list_1.0.php)
+  http://www.sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/simple-search/v1.0d/getword_list_1.0.php
+AND
+  http://www.sanskrit-lexicon.uni-koeln.de/js/piwik_analytics.js
+
+getword_list_1.0.php depends on getword_list_1.0_main.php
+
+getword_list_1.0_main.php depends on
+ $_REQUEST global variable
+  apidev/utilities/transcoder.php
+                  /dal.php
+                  /dbgprint.php
+                  /parm.php
+  simple_search.php
+  dalnorm.php  (uses awork/sanhw1/hwnorm1c.sqlite)
+../wf0/wf.txt
+
+simple_search.php depends on:
+  apidev/utilities/transcoder.php
+                  /dbgprint.php
+  dalnorm.php 
+  ngram_check.php
+    simple_search initializes with 4 files:
+      ngram_2_mw.txt, ngram_3_mw.txt, ngram_2_beg_mw.txt, ngram_3_beg_mw.txt
+
+* -------------------------------------------------------------------------
+* test_suite
+sh test_suite.sh
+  runs getword_test.py for various inputs. 
+  input and output files are in test_suite directory
+
+getword_test.py dependencies:
+ runs getword_list_1.0.cli.php as a subprocess,
+    (passing key/dict command-line arguments)
+ getword_list_1.0.cli.php sets $_REQUEST values, and
+ imports getword_list_1.0.php
+NOTE on efficiency:
+  There should be a more efficient way to do this.
+
+* test_compare
+python test_compare.py test1 test1_compare.txt
+ compares v0.1/test1_compare.txt and v0.1d/test1_compare.txt
+
+* -------------------------------------------------------------------------
+* Documentation of method
+getword_list_1.0.php
+ keyparmin is what user input: 
+   Assumed to be one of (a) Devanagari, (b) IAST, (c) HK.
+ Also use 'dict' and 'output' parameters when generating results.
+ keysin0 is list of alternates:
+    keysin0 = generate_alternates($keyparmin)
+      a) wordin1 = convert_nonascii(keyparmin):   wordin1 is supposed to be HK.
+         -- if keyparmin consists wholly of letters a-zA-Z, then wordin1=keyparmin
+         -- Otherwise, 
+            -- 1. Let wordin1 be the transcoding of keyparmin from devanagari to SLP1;
+               2. If wordin1 is different than keyparmin (i.e., if keyparmin has devanagari),
+                  then further transcode wordin1 to HK, and return wordin1
+            -- We now know that keyparmin (a) has non-alphabetical characters and
+               (b) does not have Devanagari characters.  Assume those non-alphabetical
+               characters are present due to IAST diacritics (i.e., the user has entered
+               IAST).  
+               1. Change and 'w,W' in keyparmin to 'v':
+                  Reason: w,W are not in HK alphabet; BUT are in SLP1 alphabet.
+                  NOTE: Need to check if any other letters are similar
+               2. Let wordin1 be the transcoding of keyparmin from IAST to SLP1
+                  If there is no difference between wordin1 and keyparmin, then return.
+                  Otherwise, further transcode wordin1 from SLP1 to HK
+      b) Construct a  Simple_Search instance object from wordin1 [see below]
+         The 'keysin' attribute of this object is a list of SLP1 spellings.
+         This list is  the value returned by generate_alternates($keyparmin).
+         (keyin0 of Simple_Search is wordin1)
+         - alternates = generate_hkalternates(keyin0)
+           (wordin = keyin0)
+          b1. wordin = correcthk(wordin)
+            ii,ee -> i;   uu,oo -> u; aa -> a; chh -> ch; E -> ai;
+            O -> au;
+	    rXX -> rX    [  ODD: undouble consonant after 'r' Why?]
+            R^i, RR^i -> R  [ vocalic R ]
+          b2.  split wordin into sequence of letters.
+            For each letter x, make a list of alternate letters:
+              if x = f -> [p,ph]  
+              otherwise [x]
+          b3. 
+ Simple_Search constructor.
+
+ For each key in keysin0:
+  

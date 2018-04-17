@@ -1,0 +1,2147 @@
+Length of transitionTable=17
+doVariant: '', 'guru'
+doVariant: varChar=g
+doVariant: 'g', 'uru'
+doVariant: varChar=u
+doVariant: 'gu', 'ru'
+doVariant: varChar=r
+doVariant: 'gur', 'u'
+doVariant: varChar=u
+doVariant: 'guR', 'u'
+doVariant: varChar=u
+doVariant: 'guRR', 'u'
+doVariant: varChar=u
+doVariant: 'guri', 'u'
+doVariant: varChar=u
+doVariant: 'gU', 'ru'
+doVariant: varChar=r
+doVariant: 'gUr', 'u'
+doVariant: varChar=u
+doVariant: 'gUR', 'u'
+doVariant: varChar=u
+doVariant: 'gURR', 'u'
+doVariant: varChar=u
+doVariant: 'gUri', 'u'
+doVariant: varChar=u
+doVariant: 'gh', 'uru'
+doVariant: varChar=u
+doVariant: 'ghu', 'ru'
+doVariant: varChar=r
+doVariant: 'ghur', 'u'
+doVariant: varChar=u
+doVariant: 'ghuR', 'u'
+doVariant: varChar=u
+doVariant: 'ghuRR', 'u'
+doVariant: varChar=u
+doVariant: 'ghuri', 'u'
+doVariant: varChar=u
+doVariant: 'ghU', 'ru'
+doVariant: varChar=r
+doVariant: 'ghUr', 'u'
+doVariant: varChar=u
+doVariant: 'ghUR', 'u'
+doVariant: varChar=u
+doVariant: 'ghURR', 'u'
+doVariant: varChar=u
+doVariant: 'ghUri', 'u'
+doVariant: varChar=u
+guru has  alternates
+Length of transitionTable=17
+doVariant: '', 'krishna'
+doVariant: varChar=k
+doVariant: 'k', 'rishna'
+doVariant: varChar=ri
+doVariant: 'kr', 'ishna'
+doVariant: varChar=i
+doVariant: 'kri', 'shna'
+doVariant: varChar=sh
+doVariant: 'kris', 'hna'
+doVariant: varChar=h
+doVariant: 'krish', 'na'
+doVariant: varChar=n
+doVariant: 'krishn', 'a'
+doVariant: varChar=a
+doVariant: 'krishM', 'a'
+doVariant: varChar=a
+doVariant: 'krishN', 'a'
+doVariant: varChar=a
+doVariant: 'krishJ', 'a'
+doVariant: varChar=a
+doVariant: 'krishG', 'a'
+doVariant: varChar=a
+doVariant: 'krishm', 'a'
+doVariant: varChar=a
+doVariant: 'krisH', 'na'
+doVariant: varChar=n
+doVariant: 'krisHn', 'a'
+doVariant: varChar=a
+doVariant: 'krisHM', 'a'
+doVariant: varChar=a
+doVariant: 'krisHN', 'a'
+doVariant: varChar=a
+doVariant: 'krisHJ', 'a'
+doVariant: varChar=a
+doVariant: 'krisHG', 'a'
+doVariant: varChar=a
+doVariant: 'krisHm', 'a'
+doVariant: varChar=a
+doVariant: 'kriz', 'na'
+doVariant: varChar=n
+doVariant: 'krizn', 'a'
+doVariant: varChar=a
+doVariant: 'krizM', 'a'
+doVariant: varChar=a
+doVariant: 'krizN', 'a'
+doVariant: varChar=a
+doVariant: 'krizJ', 'a'
+doVariant: varChar=a
+doVariant: 'krizG', 'a'
+doVariant: varChar=a
+doVariant: 'krizm', 'a'
+doVariant: varChar=a
+doVariant: 'kriS', 'na'
+doVariant: varChar=n
+doVariant: 'kriSn', 'a'
+doVariant: varChar=a
+doVariant: 'kriSM', 'a'
+doVariant: varChar=a
+doVariant: 'kriSN', 'a'
+doVariant: varChar=a
+doVariant: 'kriSJ', 'a'
+doVariant: varChar=a
+doVariant: 'kriSG', 'a'
+doVariant: varChar=a
+doVariant: 'kriSm', 'a'
+doVariant: varChar=a
+doVariant: 'kris', 'na'
+doVariant: varChar=n
+doVariant: 'krisn', 'a'
+doVariant: varChar=a
+doVariant: 'krisM', 'a'
+doVariant: varChar=a
+doVariant: 'krisN', 'a'
+doVariant: varChar=a
+doVariant: 'krisJ', 'a'
+doVariant: varChar=a
+doVariant: 'krisG', 'a'
+doVariant: varChar=a
+doVariant: 'krism', 'a'
+doVariant: varChar=a
+doVariant: 'kriSh', 'na'
+doVariant: varChar=n
+doVariant: 'kriShn', 'a'
+doVariant: varChar=a
+doVariant: 'kriShM', 'a'
+doVariant: varChar=a
+doVariant: 'kriShN', 'a'
+doVariant: varChar=a
+doVariant: 'kriShJ', 'a'
+doVariant: varChar=a
+doVariant: 'kriShG', 'a'
+doVariant: varChar=a
+doVariant: 'kriShm', 'a'
+doVariant: varChar=a
+doVariant: 'krI', 'shna'
+doVariant: varChar=sh
+doVariant: 'krIs', 'hna'
+doVariant: varChar=h
+doVariant: 'krIsh', 'na'
+doVariant: varChar=n
+doVariant: 'krIshn', 'a'
+doVariant: varChar=a
+doVariant: 'krIshM', 'a'
+doVariant: varChar=a
+doVariant: 'krIshN', 'a'
+doVariant: varChar=a
+doVariant: 'krIshJ', 'a'
+doVariant: varChar=a
+doVariant: 'krIshG', 'a'
+doVariant: varChar=a
+doVariant: 'krIshm', 'a'
+doVariant: varChar=a
+doVariant: 'krIsH', 'na'
+doVariant: varChar=n
+doVariant: 'krIsHn', 'a'
+doVariant: varChar=a
+doVariant: 'krIsHM', 'a'
+doVariant: varChar=a
+doVariant: 'krIsHN', 'a'
+doVariant: varChar=a
+doVariant: 'krIsHJ', 'a'
+doVariant: varChar=a
+doVariant: 'krIsHG', 'a'
+doVariant: varChar=a
+doVariant: 'krIsHm', 'a'
+doVariant: varChar=a
+doVariant: 'krIz', 'na'
+doVariant: varChar=n
+doVariant: 'krIzn', 'a'
+doVariant: varChar=a
+doVariant: 'krIzM', 'a'
+doVariant: varChar=a
+doVariant: 'krIzN', 'a'
+doVariant: varChar=a
+doVariant: 'krIzJ', 'a'
+doVariant: varChar=a
+doVariant: 'krIzG', 'a'
+doVariant: varChar=a
+doVariant: 'krIzm', 'a'
+doVariant: varChar=a
+doVariant: 'krIS', 'na'
+doVariant: varChar=n
+doVariant: 'krISn', 'a'
+doVariant: varChar=a
+doVariant: 'krISM', 'a'
+doVariant: varChar=a
+doVariant: 'krISN', 'a'
+doVariant: varChar=a
+doVariant: 'krISJ', 'a'
+doVariant: varChar=a
+doVariant: 'krISG', 'a'
+doVariant: varChar=a
+doVariant: 'krISm', 'a'
+doVariant: varChar=a
+doVariant: 'krIs', 'na'
+doVariant: varChar=n
+doVariant: 'krIsn', 'a'
+doVariant: varChar=a
+doVariant: 'krIsM', 'a'
+doVariant: varChar=a
+doVariant: 'krIsN', 'a'
+doVariant: varChar=a
+doVariant: 'krIsJ', 'a'
+doVariant: varChar=a
+doVariant: 'krIsG', 'a'
+doVariant: varChar=a
+doVariant: 'krIsm', 'a'
+doVariant: varChar=a
+doVariant: 'krISh', 'na'
+doVariant: varChar=n
+doVariant: 'krIShn', 'a'
+doVariant: varChar=a
+doVariant: 'krIShM', 'a'
+doVariant: varChar=a
+doVariant: 'krIShN', 'a'
+doVariant: varChar=a
+doVariant: 'krIShJ', 'a'
+doVariant: varChar=a
+doVariant: 'krIShG', 'a'
+doVariant: varChar=a
+doVariant: 'krIShm', 'a'
+doVariant: varChar=a
+doVariant: 'kr', 'shna'
+doVariant: varChar=sh
+doVariant: 'krs', 'hna'
+doVariant: varChar=h
+doVariant: 'krsh', 'na'
+doVariant: varChar=n
+doVariant: 'krshn', 'a'
+doVariant: varChar=a
+doVariant: 'krshM', 'a'
+doVariant: varChar=a
+doVariant: 'krshN', 'a'
+doVariant: varChar=a
+doVariant: 'krshJ', 'a'
+doVariant: varChar=a
+doVariant: 'krshG', 'a'
+doVariant: varChar=a
+doVariant: 'krshm', 'a'
+doVariant: varChar=a
+doVariant: 'krsH', 'na'
+doVariant: varChar=n
+doVariant: 'krsHn', 'a'
+doVariant: varChar=a
+doVariant: 'krsHM', 'a'
+doVariant: varChar=a
+doVariant: 'krsHN', 'a'
+doVariant: varChar=a
+doVariant: 'krsHJ', 'a'
+doVariant: varChar=a
+doVariant: 'krsHG', 'a'
+doVariant: varChar=a
+doVariant: 'krsHm', 'a'
+doVariant: varChar=a
+doVariant: 'krz', 'na'
+doVariant: varChar=n
+doVariant: 'krzn', 'a'
+doVariant: varChar=a
+doVariant: 'krzM', 'a'
+doVariant: varChar=a
+doVariant: 'krzN', 'a'
+doVariant: varChar=a
+doVariant: 'krzJ', 'a'
+doVariant: varChar=a
+doVariant: 'krzG', 'a'
+doVariant: varChar=a
+doVariant: 'krzm', 'a'
+doVariant: varChar=a
+doVariant: 'krS', 'na'
+doVariant: varChar=n
+doVariant: 'krSn', 'a'
+doVariant: varChar=a
+doVariant: 'krSM', 'a'
+doVariant: varChar=a
+doVariant: 'krSN', 'a'
+doVariant: varChar=a
+doVariant: 'krSJ', 'a'
+doVariant: varChar=a
+doVariant: 'krSG', 'a'
+doVariant: varChar=a
+doVariant: 'krSm', 'a'
+doVariant: varChar=a
+doVariant: 'krs', 'na'
+doVariant: varChar=n
+doVariant: 'krsn', 'a'
+doVariant: varChar=a
+doVariant: 'krsM', 'a'
+doVariant: varChar=a
+doVariant: 'krsN', 'a'
+doVariant: varChar=a
+doVariant: 'krsJ', 'a'
+doVariant: varChar=a
+doVariant: 'krsG', 'a'
+doVariant: varChar=a
+doVariant: 'krsm', 'a'
+doVariant: varChar=a
+doVariant: 'krSh', 'na'
+doVariant: varChar=n
+doVariant: 'krShn', 'a'
+doVariant: varChar=a
+doVariant: 'krShM', 'a'
+doVariant: varChar=a
+doVariant: 'krShN', 'a'
+doVariant: varChar=a
+doVariant: 'krShJ', 'a'
+doVariant: varChar=a
+doVariant: 'krShG', 'a'
+doVariant: varChar=a
+doVariant: 'krShm', 'a'
+doVariant: varChar=a
+doVariant: 'kR', 'shna'
+doVariant: varChar=sh
+doVariant: 'kRs', 'hna'
+doVariant: varChar=h
+doVariant: 'kRsh', 'na'
+doVariant: varChar=n
+doVariant: 'kRshn', 'a'
+doVariant: varChar=a
+doVariant: 'kRshM', 'a'
+doVariant: varChar=a
+doVariant: 'kRshN', 'a'
+doVariant: varChar=a
+doVariant: 'kRshJ', 'a'
+doVariant: varChar=a
+doVariant: 'kRshG', 'a'
+doVariant: varChar=a
+doVariant: 'kRshm', 'a'
+doVariant: varChar=a
+doVariant: 'kRsH', 'na'
+doVariant: varChar=n
+doVariant: 'kRsHn', 'a'
+doVariant: varChar=a
+doVariant: 'kRsHM', 'a'
+doVariant: varChar=a
+doVariant: 'kRsHN', 'a'
+doVariant: varChar=a
+doVariant: 'kRsHJ', 'a'
+doVariant: varChar=a
+doVariant: 'kRsHG', 'a'
+doVariant: varChar=a
+doVariant: 'kRsHm', 'a'
+doVariant: varChar=a
+doVariant: 'kRz', 'na'
+doVariant: varChar=n
+doVariant: 'kRzn', 'a'
+doVariant: varChar=a
+doVariant: 'kRzM', 'a'
+doVariant: varChar=a
+doVariant: 'kRzN', 'a'
+doVariant: varChar=a
+doVariant: 'kRzJ', 'a'
+doVariant: varChar=a
+doVariant: 'kRzG', 'a'
+doVariant: varChar=a
+doVariant: 'kRzm', 'a'
+doVariant: varChar=a
+doVariant: 'kRS', 'na'
+doVariant: varChar=n
+doVariant: 'kRSn', 'a'
+doVariant: varChar=a
+doVariant: 'kRSM', 'a'
+doVariant: varChar=a
+doVariant: 'kRSN', 'a'
+doVariant: varChar=a
+doVariant: 'kRSJ', 'a'
+doVariant: varChar=a
+doVariant: 'kRSG', 'a'
+doVariant: varChar=a
+doVariant: 'kRSm', 'a'
+doVariant: varChar=a
+doVariant: 'kRs', 'na'
+doVariant: varChar=n
+doVariant: 'kRsn', 'a'
+doVariant: varChar=a
+doVariant: 'kRsM', 'a'
+doVariant: varChar=a
+doVariant: 'kRsN', 'a'
+doVariant: varChar=a
+doVariant: 'kRsJ', 'a'
+doVariant: varChar=a
+doVariant: 'kRsG', 'a'
+doVariant: varChar=a
+doVariant: 'kRsm', 'a'
+doVariant: varChar=a
+doVariant: 'kRSh', 'na'
+doVariant: varChar=n
+doVariant: 'kRShn', 'a'
+doVariant: varChar=a
+doVariant: 'kRShM', 'a'
+doVariant: varChar=a
+doVariant: 'kRShN', 'a'
+doVariant: varChar=a
+doVariant: 'kRShJ', 'a'
+doVariant: varChar=a
+doVariant: 'kRShG', 'a'
+doVariant: varChar=a
+doVariant: 'kRShm', 'a'
+doVariant: varChar=a
+doVariant: 'kRR', 'shna'
+doVariant: varChar=sh
+doVariant: 'kRRs', 'hna'
+doVariant: varChar=h
+doVariant: 'kRRsh', 'na'
+doVariant: varChar=n
+doVariant: 'kRRshn', 'a'
+doVariant: varChar=a
+doVariant: 'kRRshM', 'a'
+doVariant: varChar=a
+doVariant: 'kRRshN', 'a'
+doVariant: varChar=a
+doVariant: 'kRRshJ', 'a'
+doVariant: varChar=a
+doVariant: 'kRRshG', 'a'
+doVariant: varChar=a
+doVariant: 'kRRshm', 'a'
+doVariant: varChar=a
+doVariant: 'kRRsH', 'na'
+doVariant: varChar=n
+doVariant: 'kRRsHn', 'a'
+doVariant: varChar=a
+doVariant: 'kRRsHM', 'a'
+doVariant: varChar=a
+doVariant: 'kRRsHN', 'a'
+doVariant: varChar=a
+doVariant: 'kRRsHJ', 'a'
+doVariant: varChar=a
+doVariant: 'kRRsHG', 'a'
+doVariant: varChar=a
+doVariant: 'kRRsHm', 'a'
+doVariant: varChar=a
+doVariant: 'kRRz', 'na'
+doVariant: varChar=n
+doVariant: 'kRRzn', 'a'
+doVariant: varChar=a
+doVariant: 'kRRzM', 'a'
+doVariant: varChar=a
+doVariant: 'kRRzN', 'a'
+doVariant: varChar=a
+doVariant: 'kRRzJ', 'a'
+doVariant: varChar=a
+doVariant: 'kRRzG', 'a'
+doVariant: varChar=a
+doVariant: 'kRRzm', 'a'
+doVariant: varChar=a
+doVariant: 'kRRS', 'na'
+doVariant: varChar=n
+doVariant: 'kRRSn', 'a'
+doVariant: varChar=a
+doVariant: 'kRRSM', 'a'
+doVariant: varChar=a
+doVariant: 'kRRSN', 'a'
+doVariant: varChar=a
+doVariant: 'kRRSJ', 'a'
+doVariant: varChar=a
+doVariant: 'kRRSG', 'a'
+doVariant: varChar=a
+doVariant: 'kRRSm', 'a'
+doVariant: varChar=a
+doVariant: 'kRRs', 'na'
+doVariant: varChar=n
+doVariant: 'kRRsn', 'a'
+doVariant: varChar=a
+doVariant: 'kRRsM', 'a'
+doVariant: varChar=a
+doVariant: 'kRRsN', 'a'
+doVariant: varChar=a
+doVariant: 'kRRsJ', 'a'
+doVariant: varChar=a
+doVariant: 'kRRsG', 'a'
+doVariant: varChar=a
+doVariant: 'kRRsm', 'a'
+doVariant: varChar=a
+doVariant: 'kRRSh', 'na'
+doVariant: varChar=n
+doVariant: 'kRRShn', 'a'
+doVariant: varChar=a
+doVariant: 'kRRShM', 'a'
+doVariant: varChar=a
+doVariant: 'kRRShN', 'a'
+doVariant: varChar=a
+doVariant: 'kRRShJ', 'a'
+doVariant: varChar=a
+doVariant: 'kRRShG', 'a'
+doVariant: varChar=a
+doVariant: 'kRRShm', 'a'
+doVariant: varChar=a
+doVariant: 'kh', 'rishna'
+doVariant: varChar=ri
+doVariant: 'khr', 'ishna'
+doVariant: varChar=i
+doVariant: 'khri', 'shna'
+doVariant: varChar=sh
+doVariant: 'khris', 'hna'
+doVariant: varChar=h
+doVariant: 'khrish', 'na'
+doVariant: varChar=n
+doVariant: 'khrishn', 'a'
+doVariant: varChar=a
+doVariant: 'khrishM', 'a'
+doVariant: varChar=a
+doVariant: 'khrishN', 'a'
+doVariant: varChar=a
+doVariant: 'khrishJ', 'a'
+doVariant: varChar=a
+doVariant: 'khrishG', 'a'
+doVariant: varChar=a
+doVariant: 'khrishm', 'a'
+doVariant: varChar=a
+doVariant: 'khrisH', 'na'
+doVariant: varChar=n
+doVariant: 'khrisHn', 'a'
+doVariant: varChar=a
+doVariant: 'khrisHM', 'a'
+doVariant: varChar=a
+doVariant: 'khrisHN', 'a'
+doVariant: varChar=a
+doVariant: 'khrisHJ', 'a'
+doVariant: varChar=a
+doVariant: 'khrisHG', 'a'
+doVariant: varChar=a
+doVariant: 'khrisHm', 'a'
+doVariant: varChar=a
+doVariant: 'khriz', 'na'
+doVariant: varChar=n
+doVariant: 'khrizn', 'a'
+doVariant: varChar=a
+doVariant: 'khrizM', 'a'
+doVariant: varChar=a
+doVariant: 'khrizN', 'a'
+doVariant: varChar=a
+doVariant: 'khrizJ', 'a'
+doVariant: varChar=a
+doVariant: 'khrizG', 'a'
+doVariant: varChar=a
+doVariant: 'khrizm', 'a'
+doVariant: varChar=a
+doVariant: 'khriS', 'na'
+doVariant: varChar=n
+doVariant: 'khriSn', 'a'
+doVariant: varChar=a
+doVariant: 'khriSM', 'a'
+doVariant: varChar=a
+doVariant: 'khriSN', 'a'
+doVariant: varChar=a
+doVariant: 'khriSJ', 'a'
+doVariant: varChar=a
+doVariant: 'khriSG', 'a'
+doVariant: varChar=a
+doVariant: 'khriSm', 'a'
+doVariant: varChar=a
+doVariant: 'khris', 'na'
+doVariant: varChar=n
+doVariant: 'khrisn', 'a'
+doVariant: varChar=a
+doVariant: 'khrisM', 'a'
+doVariant: varChar=a
+doVariant: 'khrisN', 'a'
+doVariant: varChar=a
+doVariant: 'khrisJ', 'a'
+doVariant: varChar=a
+doVariant: 'khrisG', 'a'
+doVariant: varChar=a
+doVariant: 'khrism', 'a'
+doVariant: varChar=a
+doVariant: 'khriSh', 'na'
+doVariant: varChar=n
+doVariant: 'khriShn', 'a'
+doVariant: varChar=a
+doVariant: 'khriShM', 'a'
+doVariant: varChar=a
+doVariant: 'khriShN', 'a'
+doVariant: varChar=a
+doVariant: 'khriShJ', 'a'
+doVariant: varChar=a
+doVariant: 'khriShG', 'a'
+doVariant: varChar=a
+doVariant: 'khriShm', 'a'
+doVariant: varChar=a
+doVariant: 'khrI', 'shna'
+doVariant: varChar=sh
+doVariant: 'khrIs', 'hna'
+doVariant: varChar=h
+doVariant: 'khrIsh', 'na'
+doVariant: varChar=n
+doVariant: 'khrIshn', 'a'
+doVariant: varChar=a
+doVariant: 'khrIshM', 'a'
+doVariant: varChar=a
+doVariant: 'khrIshN', 'a'
+doVariant: varChar=a
+doVariant: 'khrIshJ', 'a'
+doVariant: varChar=a
+doVariant: 'khrIshG', 'a'
+doVariant: varChar=a
+doVariant: 'khrIshm', 'a'
+doVariant: varChar=a
+doVariant: 'khrIsH', 'na'
+doVariant: varChar=n
+doVariant: 'khrIsHn', 'a'
+doVariant: varChar=a
+doVariant: 'khrIsHM', 'a'
+doVariant: varChar=a
+doVariant: 'khrIsHN', 'a'
+doVariant: varChar=a
+doVariant: 'khrIsHJ', 'a'
+doVariant: varChar=a
+doVariant: 'khrIsHG', 'a'
+doVariant: varChar=a
+doVariant: 'khrIsHm', 'a'
+doVariant: varChar=a
+doVariant: 'khrIz', 'na'
+doVariant: varChar=n
+doVariant: 'khrIzn', 'a'
+doVariant: varChar=a
+doVariant: 'khrIzM', 'a'
+doVariant: varChar=a
+doVariant: 'khrIzN', 'a'
+doVariant: varChar=a
+doVariant: 'khrIzJ', 'a'
+doVariant: varChar=a
+doVariant: 'khrIzG', 'a'
+doVariant: varChar=a
+doVariant: 'khrIzm', 'a'
+doVariant: varChar=a
+doVariant: 'khrIS', 'na'
+doVariant: varChar=n
+doVariant: 'khrISn', 'a'
+doVariant: varChar=a
+doVariant: 'khrISM', 'a'
+doVariant: varChar=a
+doVariant: 'khrISN', 'a'
+doVariant: varChar=a
+doVariant: 'khrISJ', 'a'
+doVariant: varChar=a
+doVariant: 'khrISG', 'a'
+doVariant: varChar=a
+doVariant: 'khrISm', 'a'
+doVariant: varChar=a
+doVariant: 'khrIs', 'na'
+doVariant: varChar=n
+doVariant: 'khrIsn', 'a'
+doVariant: varChar=a
+doVariant: 'khrIsM', 'a'
+doVariant: varChar=a
+doVariant: 'khrIsN', 'a'
+doVariant: varChar=a
+doVariant: 'khrIsJ', 'a'
+doVariant: varChar=a
+doVariant: 'khrIsG', 'a'
+doVariant: varChar=a
+doVariant: 'khrIsm', 'a'
+doVariant: varChar=a
+doVariant: 'khrISh', 'na'
+doVariant: varChar=n
+doVariant: 'khrIShn', 'a'
+doVariant: varChar=a
+doVariant: 'khrIShM', 'a'
+doVariant: varChar=a
+doVariant: 'khrIShN', 'a'
+doVariant: varChar=a
+doVariant: 'khrIShJ', 'a'
+doVariant: varChar=a
+doVariant: 'khrIShG', 'a'
+doVariant: varChar=a
+doVariant: 'khrIShm', 'a'
+doVariant: varChar=a
+doVariant: 'khr', 'shna'
+doVariant: varChar=sh
+doVariant: 'khrs', 'hna'
+doVariant: varChar=h
+doVariant: 'khrsh', 'na'
+doVariant: varChar=n
+doVariant: 'khrshn', 'a'
+doVariant: varChar=a
+doVariant: 'khrshM', 'a'
+doVariant: varChar=a
+doVariant: 'khrshN', 'a'
+doVariant: varChar=a
+doVariant: 'khrshJ', 'a'
+doVariant: varChar=a
+doVariant: 'khrshG', 'a'
+doVariant: varChar=a
+doVariant: 'khrshm', 'a'
+doVariant: varChar=a
+doVariant: 'khrsH', 'na'
+doVariant: varChar=n
+doVariant: 'khrsHn', 'a'
+doVariant: varChar=a
+doVariant: 'khrsHM', 'a'
+doVariant: varChar=a
+doVariant: 'khrsHN', 'a'
+doVariant: varChar=a
+doVariant: 'khrsHJ', 'a'
+doVariant: varChar=a
+doVariant: 'khrsHG', 'a'
+doVariant: varChar=a
+doVariant: 'khrsHm', 'a'
+doVariant: varChar=a
+doVariant: 'khrz', 'na'
+doVariant: varChar=n
+doVariant: 'khrzn', 'a'
+doVariant: varChar=a
+doVariant: 'khrzM', 'a'
+doVariant: varChar=a
+doVariant: 'khrzN', 'a'
+doVariant: varChar=a
+doVariant: 'khrzJ', 'a'
+doVariant: varChar=a
+doVariant: 'khrzG', 'a'
+doVariant: varChar=a
+doVariant: 'khrzm', 'a'
+doVariant: varChar=a
+doVariant: 'khrS', 'na'
+doVariant: varChar=n
+doVariant: 'khrSn', 'a'
+doVariant: varChar=a
+doVariant: 'khrSM', 'a'
+doVariant: varChar=a
+doVariant: 'khrSN', 'a'
+doVariant: varChar=a
+doVariant: 'khrSJ', 'a'
+doVariant: varChar=a
+doVariant: 'khrSG', 'a'
+doVariant: varChar=a
+doVariant: 'khrSm', 'a'
+doVariant: varChar=a
+doVariant: 'khrs', 'na'
+doVariant: varChar=n
+doVariant: 'khrsn', 'a'
+doVariant: varChar=a
+doVariant: 'khrsM', 'a'
+doVariant: varChar=a
+doVariant: 'khrsN', 'a'
+doVariant: varChar=a
+doVariant: 'khrsJ', 'a'
+doVariant: varChar=a
+doVariant: 'khrsG', 'a'
+doVariant: varChar=a
+doVariant: 'khrsm', 'a'
+doVariant: varChar=a
+doVariant: 'khrSh', 'na'
+doVariant: varChar=n
+doVariant: 'khrShn', 'a'
+doVariant: varChar=a
+doVariant: 'khrShM', 'a'
+doVariant: varChar=a
+doVariant: 'khrShN', 'a'
+doVariant: varChar=a
+doVariant: 'khrShJ', 'a'
+doVariant: varChar=a
+doVariant: 'khrShG', 'a'
+doVariant: varChar=a
+doVariant: 'khrShm', 'a'
+doVariant: varChar=a
+doVariant: 'khR', 'shna'
+doVariant: varChar=sh
+doVariant: 'khRs', 'hna'
+doVariant: varChar=h
+doVariant: 'khRsh', 'na'
+doVariant: varChar=n
+doVariant: 'khRshn', 'a'
+doVariant: varChar=a
+doVariant: 'khRshM', 'a'
+doVariant: varChar=a
+doVariant: 'khRshN', 'a'
+doVariant: varChar=a
+doVariant: 'khRshJ', 'a'
+doVariant: varChar=a
+doVariant: 'khRshG', 'a'
+doVariant: varChar=a
+doVariant: 'khRshm', 'a'
+doVariant: varChar=a
+doVariant: 'khRsH', 'na'
+doVariant: varChar=n
+doVariant: 'khRsHn', 'a'
+doVariant: varChar=a
+doVariant: 'khRsHM', 'a'
+doVariant: varChar=a
+doVariant: 'khRsHN', 'a'
+doVariant: varChar=a
+doVariant: 'khRsHJ', 'a'
+doVariant: varChar=a
+doVariant: 'khRsHG', 'a'
+doVariant: varChar=a
+doVariant: 'khRsHm', 'a'
+doVariant: varChar=a
+doVariant: 'khRz', 'na'
+doVariant: varChar=n
+doVariant: 'khRzn', 'a'
+doVariant: varChar=a
+doVariant: 'khRzM', 'a'
+doVariant: varChar=a
+doVariant: 'khRzN', 'a'
+doVariant: varChar=a
+doVariant: 'khRzJ', 'a'
+doVariant: varChar=a
+doVariant: 'khRzG', 'a'
+doVariant: varChar=a
+doVariant: 'khRzm', 'a'
+doVariant: varChar=a
+doVariant: 'khRS', 'na'
+doVariant: varChar=n
+doVariant: 'khRSn', 'a'
+doVariant: varChar=a
+doVariant: 'khRSM', 'a'
+doVariant: varChar=a
+doVariant: 'khRSN', 'a'
+doVariant: varChar=a
+doVariant: 'khRSJ', 'a'
+doVariant: varChar=a
+doVariant: 'khRSG', 'a'
+doVariant: varChar=a
+doVariant: 'khRSm', 'a'
+doVariant: varChar=a
+doVariant: 'khRs', 'na'
+doVariant: varChar=n
+doVariant: 'khRsn', 'a'
+doVariant: varChar=a
+doVariant: 'khRsM', 'a'
+doVariant: varChar=a
+doVariant: 'khRsN', 'a'
+doVariant: varChar=a
+doVariant: 'khRsJ', 'a'
+doVariant: varChar=a
+doVariant: 'khRsG', 'a'
+doVariant: varChar=a
+doVariant: 'khRsm', 'a'
+doVariant: varChar=a
+doVariant: 'khRSh', 'na'
+doVariant: varChar=n
+doVariant: 'khRShn', 'a'
+doVariant: varChar=a
+doVariant: 'khRShM', 'a'
+doVariant: varChar=a
+doVariant: 'khRShN', 'a'
+doVariant: varChar=a
+doVariant: 'khRShJ', 'a'
+doVariant: varChar=a
+doVariant: 'khRShG', 'a'
+doVariant: varChar=a
+doVariant: 'khRShm', 'a'
+doVariant: varChar=a
+doVariant: 'khRR', 'shna'
+doVariant: varChar=sh
+doVariant: 'khRRs', 'hna'
+doVariant: varChar=h
+doVariant: 'khRRsh', 'na'
+doVariant: varChar=n
+doVariant: 'khRRshn', 'a'
+doVariant: varChar=a
+doVariant: 'khRRshM', 'a'
+doVariant: varChar=a
+doVariant: 'khRRshN', 'a'
+doVariant: varChar=a
+doVariant: 'khRRshJ', 'a'
+doVariant: varChar=a
+doVariant: 'khRRshG', 'a'
+doVariant: varChar=a
+doVariant: 'khRRshm', 'a'
+doVariant: varChar=a
+doVariant: 'khRRsH', 'na'
+doVariant: varChar=n
+doVariant: 'khRRsHn', 'a'
+doVariant: varChar=a
+doVariant: 'khRRsHM', 'a'
+doVariant: varChar=a
+doVariant: 'khRRsHN', 'a'
+doVariant: varChar=a
+doVariant: 'khRRsHJ', 'a'
+doVariant: varChar=a
+doVariant: 'khRRsHG', 'a'
+doVariant: varChar=a
+doVariant: 'khRRsHm', 'a'
+doVariant: varChar=a
+doVariant: 'khRRz', 'na'
+doVariant: varChar=n
+doVariant: 'khRRzn', 'a'
+doVariant: varChar=a
+doVariant: 'khRRzM', 'a'
+doVariant: varChar=a
+doVariant: 'khRRzN', 'a'
+doVariant: varChar=a
+doVariant: 'khRRzJ', 'a'
+doVariant: varChar=a
+doVariant: 'khRRzG', 'a'
+doVariant: varChar=a
+doVariant: 'khRRzm', 'a'
+doVariant: varChar=a
+doVariant: 'khRRS', 'na'
+doVariant: varChar=n
+doVariant: 'khRRSn', 'a'
+doVariant: varChar=a
+doVariant: 'khRRSM', 'a'
+doVariant: varChar=a
+doVariant: 'khRRSN', 'a'
+doVariant: varChar=a
+doVariant: 'khRRSJ', 'a'
+doVariant: varChar=a
+doVariant: 'khRRSG', 'a'
+doVariant: varChar=a
+doVariant: 'khRRSm', 'a'
+doVariant: varChar=a
+doVariant: 'khRRs', 'na'
+doVariant: varChar=n
+doVariant: 'khRRsn', 'a'
+doVariant: varChar=a
+doVariant: 'khRRsM', 'a'
+doVariant: varChar=a
+doVariant: 'khRRsN', 'a'
+doVariant: varChar=a
+doVariant: 'khRRsJ', 'a'
+doVariant: varChar=a
+doVariant: 'khRRsG', 'a'
+doVariant: varChar=a
+doVariant: 'khRRsm', 'a'
+doVariant: varChar=a
+doVariant: 'khRRSh', 'na'
+doVariant: varChar=n
+doVariant: 'khRRShn', 'a'
+doVariant: varChar=a
+doVariant: 'khRRShM', 'a'
+doVariant: varChar=a
+doVariant: 'khRRShN', 'a'
+doVariant: varChar=a
+doVariant: 'khRRShJ', 'a'
+doVariant: varChar=a
+doVariant: 'khRRShG', 'a'
+doVariant: varChar=a
+doVariant: 'khRRShm', 'a'
+doVariant: varChar=a
+krishna has  alternates
+Length of transitionTable=17
+doVariant: '', 'guru'
+doVariant: varChar=g
+doVariant: 'g', 'uru'
+doVariant: varChar=u
+doVariant: 'gu', 'ru'
+doVariant: varChar=r
+doVariant: 'gur', 'u'
+doVariant: varChar=u
+doVariant: 'guR', 'u'
+doVariant: varChar=u
+doVariant: 'guRR', 'u'
+doVariant: varChar=u
+doVariant: 'guri', 'u'
+doVariant: varChar=u
+doVariant: 'gU', 'ru'
+doVariant: varChar=r
+doVariant: 'gUr', 'u'
+doVariant: varChar=u
+doVariant: 'gUR', 'u'
+doVariant: varChar=u
+doVariant: 'gURR', 'u'
+doVariant: varChar=u
+doVariant: 'gUri', 'u'
+doVariant: varChar=u
+doVariant: 'gh', 'uru'
+doVariant: varChar=u
+doVariant: 'ghu', 'ru'
+doVariant: varChar=r
+doVariant: 'ghur', 'u'
+doVariant: varChar=u
+doVariant: 'ghuR', 'u'
+doVariant: varChar=u
+doVariant: 'ghuRR', 'u'
+doVariant: varChar=u
+doVariant: 'ghuri', 'u'
+doVariant: varChar=u
+doVariant: 'ghU', 'ru'
+doVariant: varChar=r
+doVariant: 'ghUr', 'u'
+doVariant: varChar=u
+doVariant: 'ghUR', 'u'
+doVariant: varChar=u
+doVariant: 'ghURR', 'u'
+doVariant: varChar=u
+doVariant: 'ghUri', 'u'
+doVariant: varChar=u
+guru has  alternates
+Length of transitionTable=17
+doVariant: '', 'deva'
+doVariant: varChar=d
+doVariant: 'd', 'eva'
+doVariant: varChar=
+doVariant: 'de', 'va'
+doVariant: varChar=v
+doVariant: 'dev', 'a'
+doVariant: varChar=a
+doVariant: 'deb', 'a'
+doVariant: varChar=a
+doVariant: 'D', 'eva'
+doVariant: varChar=
+doVariant: 'De', 'va'
+doVariant: varChar=v
+doVariant: 'Dev', 'a'
+doVariant: varChar=a
+doVariant: 'Deb', 'a'
+doVariant: varChar=a
+doVariant: 'Dh', 'eva'
+doVariant: varChar=
+doVariant: 'Dhe', 'va'
+doVariant: varChar=v
+doVariant: 'Dhev', 'a'
+doVariant: varChar=a
+doVariant: 'Dheb', 'a'
+doVariant: varChar=a
+doVariant: 'dh', 'eva'
+doVariant: varChar=
+doVariant: 'dhe', 'va'
+doVariant: varChar=v
+doVariant: 'dhev', 'a'
+doVariant: varChar=a
+doVariant: 'dheb', 'a'
+doVariant: varChar=a
+deva has  alternates
+Length of transitionTable=17
+doVariant: '', 'deva'
+doVariant: varChar=d
+doVariant: 'd', 'eva'
+doVariant: varChar=
+doVariant: 'de', 'va'
+doVariant: varChar=v
+doVariant: 'dev', 'a'
+doVariant: varChar=a
+doVariant: 'deb', 'a'
+doVariant: varChar=a
+doVariant: 'D', 'eva'
+doVariant: varChar=
+doVariant: 'De', 'va'
+doVariant: varChar=v
+doVariant: 'Dev', 'a'
+doVariant: varChar=a
+doVariant: 'Deb', 'a'
+doVariant: varChar=a
+doVariant: 'Dh', 'eva'
+doVariant: varChar=
+doVariant: 'Dhe', 'va'
+doVariant: varChar=v
+doVariant: 'Dhev', 'a'
+doVariant: varChar=a
+doVariant: 'Dheb', 'a'
+doVariant: varChar=a
+doVariant: 'dh', 'eva'
+doVariant: varChar=
+doVariant: 'dhe', 'va'
+doVariant: varChar=v
+doVariant: 'dhev', 'a'
+doVariant: varChar=a
+doVariant: 'dheb', 'a'
+doVariant: varChar=a
+deva has  alternates
+Length of transitionTable=17
+doVariant: '', 'guru'
+doVariant: varChar=g
+doVariant: 'g', 'uru'
+doVariant: varChar=u
+doVariant: 'gu', 'ru'
+doVariant: varChar=r
+doVariant: 'gur', 'u'
+doVariant: varChar=u
+doVariant: 'guR', 'u'
+doVariant: varChar=u
+doVariant: 'guRR', 'u'
+doVariant: varChar=u
+doVariant: 'guri', 'u'
+doVariant: varChar=u
+doVariant: 'gU', 'ru'
+doVariant: varChar=r
+doVariant: 'gUr', 'u'
+doVariant: varChar=u
+doVariant: 'gUR', 'u'
+doVariant: varChar=u
+doVariant: 'gURR', 'u'
+doVariant: varChar=u
+doVariant: 'gUri', 'u'
+doVariant: varChar=u
+doVariant: 'gh', 'uru'
+doVariant: varChar=u
+doVariant: 'ghu', 'ru'
+doVariant: varChar=r
+doVariant: 'ghur', 'u'
+doVariant: varChar=u
+doVariant: 'ghuR', 'u'
+doVariant: varChar=u
+doVariant: 'ghuRR', 'u'
+doVariant: varChar=u
+doVariant: 'ghuri', 'u'
+doVariant: varChar=u
+doVariant: 'ghU', 'ru'
+doVariant: varChar=r
+doVariant: 'ghUr', 'u'
+doVariant: varChar=u
+doVariant: 'ghUR', 'u'
+doVariant: varChar=u
+doVariant: 'ghURR', 'u'
+doVariant: varChar=u
+doVariant: 'ghUri', 'u'
+doVariant: varChar=u
+guru has  alternates
+Length of transitionTable=17
+doVariant: '', 'guru'
+doVariant: varChar=g
+doVariant: 'g', 'uru'
+doVariant: varChar=u
+doVariant: 'gu', 'ru'
+doVariant: varChar=r
+doVariant: 'gur', 'u'
+doVariant: varChar=u
+doVariant: 'guR', 'u'
+doVariant: varChar=u
+doVariant: 'guRR', 'u'
+doVariant: varChar=u
+doVariant: 'guri', 'u'
+doVariant: varChar=u
+doVariant: 'gU', 'ru'
+doVariant: varChar=r
+doVariant: 'gUr', 'u'
+doVariant: varChar=u
+doVariant: 'gUR', 'u'
+doVariant: varChar=u
+doVariant: 'gURR', 'u'
+doVariant: varChar=u
+doVariant: 'gUri', 'u'
+doVariant: varChar=u
+doVariant: 'gh', 'uru'
+doVariant: varChar=u
+doVariant: 'ghu', 'ru'
+doVariant: varChar=r
+doVariant: 'ghur', 'u'
+doVariant: varChar=u
+doVariant: 'ghuR', 'u'
+doVariant: varChar=u
+doVariant: 'ghuRR', 'u'
+doVariant: varChar=u
+doVariant: 'ghuri', 'u'
+doVariant: varChar=u
+doVariant: 'ghU', 'ru'
+doVariant: varChar=r
+doVariant: 'ghUr', 'u'
+doVariant: varChar=u
+doVariant: 'ghUR', 'u'
+doVariant: varChar=u
+doVariant: 'ghURR', 'u'
+doVariant: varChar=u
+doVariant: 'ghUri', 'u'
+doVariant: varChar=u
+guru has  alternates
+Length of transitionTable=17
+doVariant: '', 'deva'
+doVariant: varChar=d
+doVariant: 'd', 'eva'
+doVariant: varChar=
+doVariant: 'de', 'va'
+doVariant: varChar=v
+doVariant: 'dev', 'a'
+doVariant: varChar=a
+doVariant: 'deb', 'a'
+doVariant: varChar=a
+doVariant: 'D', 'eva'
+doVariant: varChar=
+doVariant: 'De', 'va'
+doVariant: varChar=v
+doVariant: 'Dev', 'a'
+doVariant: varChar=a
+doVariant: 'Deb', 'a'
+doVariant: varChar=a
+doVariant: 'Dh', 'eva'
+doVariant: varChar=
+doVariant: 'Dhe', 'va'
+doVariant: varChar=v
+doVariant: 'Dhev', 'a'
+doVariant: varChar=a
+doVariant: 'Dheb', 'a'
+doVariant: varChar=a
+doVariant: 'dh', 'eva'
+doVariant: varChar=
+doVariant: 'dhe', 'va'
+doVariant: varChar=v
+doVariant: 'dhev', 'a'
+doVariant: varChar=a
+doVariant: 'dheb', 'a'
+doVariant: varChar=a
+deva has  alternates
+Length of transitionTable=17
+doVariant: '', 'guru'
+doVariant: varChar=g
+doVariant: 'g', 'uru'
+doVariant: varChar=u
+doVariant: 'gu', 'ru'
+doVariant: varChar=r
+doVariant: 'gur', 'u'
+doVariant: varChar=u
+doVariant: 'guR', 'u'
+doVariant: varChar=u
+doVariant: 'guRR', 'u'
+doVariant: varChar=u
+doVariant: 'guri', 'u'
+doVariant: varChar=u
+doVariant: 'gU', 'ru'
+doVariant: varChar=r
+doVariant: 'gUr', 'u'
+doVariant: varChar=u
+doVariant: 'gUR', 'u'
+doVariant: varChar=u
+doVariant: 'gURR', 'u'
+doVariant: varChar=u
+doVariant: 'gUri', 'u'
+doVariant: varChar=u
+doVariant: 'gh', 'uru'
+doVariant: varChar=u
+doVariant: 'ghu', 'ru'
+doVariant: varChar=r
+doVariant: 'ghur', 'u'
+doVariant: varChar=u
+doVariant: 'ghuR', 'u'
+doVariant: varChar=u
+doVariant: 'ghuRR', 'u'
+doVariant: varChar=u
+doVariant: 'ghuri', 'u'
+doVariant: varChar=u
+doVariant: 'ghU', 'ru'
+doVariant: varChar=r
+doVariant: 'ghUr', 'u'
+doVariant: varChar=u
+doVariant: 'ghUR', 'u'
+doVariant: varChar=u
+doVariant: 'ghURR', 'u'
+doVariant: varChar=u
+doVariant: 'ghUri', 'u'
+doVariant: varChar=u
+guru has  alternates
+Length of transitionTable=17
+doVariant: '', 'deva'
+doVariant: varChar=d
+doVariant: 'd', 'eva'
+doVariant: varChar=
+doVariant: 'de', 'va'
+doVariant: varChar=v
+doVariant: 'dev', 'a'
+doVariant: varChar=a
+doVariant: 'deb', 'a'
+doVariant: varChar=a
+doVariant: 'D', 'eva'
+doVariant: varChar=
+doVariant: 'De', 'va'
+doVariant: varChar=v
+doVariant: 'Dev', 'a'
+doVariant: varChar=a
+doVariant: 'Deb', 'a'
+doVariant: varChar=a
+doVariant: 'Dh', 'eva'
+doVariant: varChar=
+doVariant: 'Dhe', 'va'
+doVariant: varChar=v
+doVariant: 'Dhev', 'a'
+doVariant: varChar=a
+doVariant: 'Dheb', 'a'
+doVariant: varChar=a
+doVariant: 'dh', 'eva'
+doVariant: varChar=
+doVariant: 'dhe', 'va'
+doVariant: varChar=v
+doVariant: 'dhev', 'a'
+doVariant: varChar=a
+doVariant: 'dheb', 'a'
+doVariant: varChar=a
+deva has  alternates
+Length of transitionTable=17
+doVariant: '', 'guru'
+doVariant: varChar=g
+doVariant: 'g', 'uru'
+doVariant: varChar=u
+doVariant: 'gu', 'ru'
+doVariant: varChar=r
+doVariant: 'gur', 'u'
+doVariant: varChar=u
+doVariant: 'guR', 'u'
+doVariant: varChar=u
+doVariant: 'guRR', 'u'
+doVariant: varChar=u
+doVariant: 'guri', 'u'
+doVariant: varChar=u
+doVariant: 'gU', 'ru'
+doVariant: varChar=r
+doVariant: 'gUr', 'u'
+doVariant: varChar=u
+doVariant: 'gUR', 'u'
+doVariant: varChar=u
+doVariant: 'gURR', 'u'
+doVariant: varChar=u
+doVariant: 'gUri', 'u'
+doVariant: varChar=u
+doVariant: 'gh', 'uru'
+doVariant: varChar=u
+doVariant: 'ghu', 'ru'
+doVariant: varChar=r
+doVariant: 'ghur', 'u'
+doVariant: varChar=u
+doVariant: 'ghuR', 'u'
+doVariant: varChar=u
+doVariant: 'ghuRR', 'u'
+doVariant: varChar=u
+doVariant: 'ghuri', 'u'
+doVariant: varChar=u
+doVariant: 'ghU', 'ru'
+doVariant: varChar=r
+doVariant: 'ghUr', 'u'
+doVariant: varChar=u
+doVariant: 'ghUR', 'u'
+doVariant: varChar=u
+doVariant: 'ghURR', 'u'
+doVariant: varChar=u
+doVariant: 'ghUri', 'u'
+doVariant: varChar=u
+guru has  alternates
+Length of transitionTable=17
+doVariant: '', 'deva'
+doVariant: varChar=d
+doVariant: 'd', 'eva'
+doVariant: varChar=
+doVariant: 'de', 'va'
+doVariant: varChar=v
+doVariant: 'dev', 'a'
+doVariant: varChar=a
+doVariant: 'deb', 'a'
+doVariant: varChar=a
+doVariant: 'D', 'eva'
+doVariant: varChar=
+doVariant: 'De', 'va'
+doVariant: varChar=v
+doVariant: 'Dev', 'a'
+doVariant: varChar=a
+doVariant: 'Deb', 'a'
+doVariant: varChar=a
+doVariant: 'Dh', 'eva'
+doVariant: varChar=
+doVariant: 'Dhe', 'va'
+doVariant: varChar=v
+doVariant: 'Dhev', 'a'
+doVariant: varChar=a
+doVariant: 'Dheb', 'a'
+doVariant: varChar=a
+doVariant: 'dh', 'eva'
+doVariant: varChar=
+doVariant: 'dhe', 'va'
+doVariant: varChar=v
+doVariant: 'dhev', 'a'
+doVariant: varChar=a
+doVariant: 'dheb', 'a'
+doVariant: varChar=a
+deva has  alternates
+Length of transitionTable=17
+doVariant: '', 'guru'
+doVariant: varChar=g
+doVariant: 'g', 'uru'
+doVariant: varChar=u
+doVariant: 'gu', 'ru'
+doVariant: varChar=r
+doVariant: 'gur', 'u'
+doVariant: varChar=u
+doVariant: 'guR', 'u'
+doVariant: varChar=u
+doVariant: 'guRR', 'u'
+doVariant: varChar=u
+doVariant: 'guri', 'u'
+doVariant: varChar=u
+doVariant: 'gU', 'ru'
+doVariant: varChar=r
+doVariant: 'gUr', 'u'
+doVariant: varChar=u
+doVariant: 'gUR', 'u'
+doVariant: varChar=u
+doVariant: 'gURR', 'u'
+doVariant: varChar=u
+doVariant: 'gUri', 'u'
+doVariant: varChar=u
+doVariant: 'gh', 'uru'
+doVariant: varChar=u
+doVariant: 'ghu', 'ru'
+doVariant: varChar=r
+doVariant: 'ghur', 'u'
+doVariant: varChar=u
+doVariant: 'ghuR', 'u'
+doVariant: varChar=u
+doVariant: 'ghuRR', 'u'
+doVariant: varChar=u
+doVariant: 'ghuri', 'u'
+doVariant: varChar=u
+doVariant: 'ghU', 'ru'
+doVariant: varChar=r
+doVariant: 'ghUr', 'u'
+doVariant: varChar=u
+doVariant: 'ghUR', 'u'
+doVariant: varChar=u
+doVariant: 'ghURR', 'u'
+doVariant: varChar=u
+doVariant: 'ghUri', 'u'
+doVariant: varChar=u
+guru has  alternates
+Length of transitionTable=17
+doVariant: '', 'vishnu'
+doVariant: varChar=v
+doVariant: 'v', 'ishnu'
+doVariant: varChar=i
+doVariant: 'vi', 'shnu'
+doVariant: varChar=sh
+doVariant: 'vis', 'hnu'
+doVariant: varChar=h
+doVariant: 'vish', 'nu'
+doVariant: varChar=n
+doVariant: 'vishn', 'u'
+doVariant: varChar=u
+doVariant: 'vishM', 'u'
+doVariant: varChar=u
+doVariant: 'vishN', 'u'
+doVariant: varChar=u
+doVariant: 'vishJ', 'u'
+doVariant: varChar=u
+doVariant: 'vishG', 'u'
+doVariant: varChar=u
+doVariant: 'vishm', 'u'
+doVariant: varChar=u
+doVariant: 'visH', 'nu'
+doVariant: varChar=n
+doVariant: 'visHn', 'u'
+doVariant: varChar=u
+doVariant: 'visHM', 'u'
+doVariant: varChar=u
+doVariant: 'visHN', 'u'
+doVariant: varChar=u
+doVariant: 'visHJ', 'u'
+doVariant: varChar=u
+doVariant: 'visHG', 'u'
+doVariant: varChar=u
+doVariant: 'visHm', 'u'
+doVariant: varChar=u
+doVariant: 'viz', 'nu'
+doVariant: varChar=n
+doVariant: 'vizn', 'u'
+doVariant: varChar=u
+doVariant: 'vizM', 'u'
+doVariant: varChar=u
+doVariant: 'vizN', 'u'
+doVariant: varChar=u
+doVariant: 'vizJ', 'u'
+doVariant: varChar=u
+doVariant: 'vizG', 'u'
+doVariant: varChar=u
+doVariant: 'vizm', 'u'
+doVariant: varChar=u
+doVariant: 'viS', 'nu'
+doVariant: varChar=n
+doVariant: 'viSn', 'u'
+doVariant: varChar=u
+doVariant: 'viSM', 'u'
+doVariant: varChar=u
+doVariant: 'viSN', 'u'
+doVariant: varChar=u
+doVariant: 'viSJ', 'u'
+doVariant: varChar=u
+doVariant: 'viSG', 'u'
+doVariant: varChar=u
+doVariant: 'viSm', 'u'
+doVariant: varChar=u
+doVariant: 'vis', 'nu'
+doVariant: varChar=n
+doVariant: 'visn', 'u'
+doVariant: varChar=u
+doVariant: 'visM', 'u'
+doVariant: varChar=u
+doVariant: 'visN', 'u'
+doVariant: varChar=u
+doVariant: 'visJ', 'u'
+doVariant: varChar=u
+doVariant: 'visG', 'u'
+doVariant: varChar=u
+doVariant: 'vism', 'u'
+doVariant: varChar=u
+doVariant: 'viSh', 'nu'
+doVariant: varChar=n
+doVariant: 'viShn', 'u'
+doVariant: varChar=u
+doVariant: 'viShM', 'u'
+doVariant: varChar=u
+doVariant: 'viShN', 'u'
+doVariant: varChar=u
+doVariant: 'viShJ', 'u'
+doVariant: varChar=u
+doVariant: 'viShG', 'u'
+doVariant: varChar=u
+doVariant: 'viShm', 'u'
+doVariant: varChar=u
+doVariant: 'vI', 'shnu'
+doVariant: varChar=sh
+doVariant: 'vIs', 'hnu'
+doVariant: varChar=h
+doVariant: 'vIsh', 'nu'
+doVariant: varChar=n
+doVariant: 'vIshn', 'u'
+doVariant: varChar=u
+doVariant: 'vIshM', 'u'
+doVariant: varChar=u
+doVariant: 'vIshN', 'u'
+doVariant: varChar=u
+doVariant: 'vIshJ', 'u'
+doVariant: varChar=u
+doVariant: 'vIshG', 'u'
+doVariant: varChar=u
+doVariant: 'vIshm', 'u'
+doVariant: varChar=u
+doVariant: 'vIsH', 'nu'
+doVariant: varChar=n
+doVariant: 'vIsHn', 'u'
+doVariant: varChar=u
+doVariant: 'vIsHM', 'u'
+doVariant: varChar=u
+doVariant: 'vIsHN', 'u'
+doVariant: varChar=u
+doVariant: 'vIsHJ', 'u'
+doVariant: varChar=u
+doVariant: 'vIsHG', 'u'
+doVariant: varChar=u
+doVariant: 'vIsHm', 'u'
+doVariant: varChar=u
+doVariant: 'vIz', 'nu'
+doVariant: varChar=n
+doVariant: 'vIzn', 'u'
+doVariant: varChar=u
+doVariant: 'vIzM', 'u'
+doVariant: varChar=u
+doVariant: 'vIzN', 'u'
+doVariant: varChar=u
+doVariant: 'vIzJ', 'u'
+doVariant: varChar=u
+doVariant: 'vIzG', 'u'
+doVariant: varChar=u
+doVariant: 'vIzm', 'u'
+doVariant: varChar=u
+doVariant: 'vIS', 'nu'
+doVariant: varChar=n
+doVariant: 'vISn', 'u'
+doVariant: varChar=u
+doVariant: 'vISM', 'u'
+doVariant: varChar=u
+doVariant: 'vISN', 'u'
+doVariant: varChar=u
+doVariant: 'vISJ', 'u'
+doVariant: varChar=u
+doVariant: 'vISG', 'u'
+doVariant: varChar=u
+doVariant: 'vISm', 'u'
+doVariant: varChar=u
+doVariant: 'vIs', 'nu'
+doVariant: varChar=n
+doVariant: 'vIsn', 'u'
+doVariant: varChar=u
+doVariant: 'vIsM', 'u'
+doVariant: varChar=u
+doVariant: 'vIsN', 'u'
+doVariant: varChar=u
+doVariant: 'vIsJ', 'u'
+doVariant: varChar=u
+doVariant: 'vIsG', 'u'
+doVariant: varChar=u
+doVariant: 'vIsm', 'u'
+doVariant: varChar=u
+doVariant: 'vISh', 'nu'
+doVariant: varChar=n
+doVariant: 'vIShn', 'u'
+doVariant: varChar=u
+doVariant: 'vIShM', 'u'
+doVariant: varChar=u
+doVariant: 'vIShN', 'u'
+doVariant: varChar=u
+doVariant: 'vIShJ', 'u'
+doVariant: varChar=u
+doVariant: 'vIShG', 'u'
+doVariant: varChar=u
+doVariant: 'vIShm', 'u'
+doVariant: varChar=u
+doVariant: 'b', 'ishnu'
+doVariant: varChar=i
+doVariant: 'bi', 'shnu'
+doVariant: varChar=sh
+doVariant: 'bis', 'hnu'
+doVariant: varChar=h
+doVariant: 'bish', 'nu'
+doVariant: varChar=n
+doVariant: 'bishn', 'u'
+doVariant: varChar=u
+doVariant: 'bishM', 'u'
+doVariant: varChar=u
+doVariant: 'bishN', 'u'
+doVariant: varChar=u
+doVariant: 'bishJ', 'u'
+doVariant: varChar=u
+doVariant: 'bishG', 'u'
+doVariant: varChar=u
+doVariant: 'bishm', 'u'
+doVariant: varChar=u
+doVariant: 'bisH', 'nu'
+doVariant: varChar=n
+doVariant: 'bisHn', 'u'
+doVariant: varChar=u
+doVariant: 'bisHM', 'u'
+doVariant: varChar=u
+doVariant: 'bisHN', 'u'
+doVariant: varChar=u
+doVariant: 'bisHJ', 'u'
+doVariant: varChar=u
+doVariant: 'bisHG', 'u'
+doVariant: varChar=u
+doVariant: 'bisHm', 'u'
+doVariant: varChar=u
+doVariant: 'biz', 'nu'
+doVariant: varChar=n
+doVariant: 'bizn', 'u'
+doVariant: varChar=u
+doVariant: 'bizM', 'u'
+doVariant: varChar=u
+doVariant: 'bizN', 'u'
+doVariant: varChar=u
+doVariant: 'bizJ', 'u'
+doVariant: varChar=u
+doVariant: 'bizG', 'u'
+doVariant: varChar=u
+doVariant: 'bizm', 'u'
+doVariant: varChar=u
+doVariant: 'biS', 'nu'
+doVariant: varChar=n
+doVariant: 'biSn', 'u'
+doVariant: varChar=u
+doVariant: 'biSM', 'u'
+doVariant: varChar=u
+doVariant: 'biSN', 'u'
+doVariant: varChar=u
+doVariant: 'biSJ', 'u'
+doVariant: varChar=u
+doVariant: 'biSG', 'u'
+doVariant: varChar=u
+doVariant: 'biSm', 'u'
+doVariant: varChar=u
+doVariant: 'bis', 'nu'
+doVariant: varChar=n
+doVariant: 'bisn', 'u'
+doVariant: varChar=u
+doVariant: 'bisM', 'u'
+doVariant: varChar=u
+doVariant: 'bisN', 'u'
+doVariant: varChar=u
+doVariant: 'bisJ', 'u'
+doVariant: varChar=u
+doVariant: 'bisG', 'u'
+doVariant: varChar=u
+doVariant: 'bism', 'u'
+doVariant: varChar=u
+doVariant: 'biSh', 'nu'
+doVariant: varChar=n
+doVariant: 'biShn', 'u'
+doVariant: varChar=u
+doVariant: 'biShM', 'u'
+doVariant: varChar=u
+doVariant: 'biShN', 'u'
+doVariant: varChar=u
+doVariant: 'biShJ', 'u'
+doVariant: varChar=u
+doVariant: 'biShG', 'u'
+doVariant: varChar=u
+doVariant: 'biShm', 'u'
+doVariant: varChar=u
+doVariant: 'bI', 'shnu'
+doVariant: varChar=sh
+doVariant: 'bIs', 'hnu'
+doVariant: varChar=h
+doVariant: 'bIsh', 'nu'
+doVariant: varChar=n
+doVariant: 'bIshn', 'u'
+doVariant: varChar=u
+doVariant: 'bIshM', 'u'
+doVariant: varChar=u
+doVariant: 'bIshN', 'u'
+doVariant: varChar=u
+doVariant: 'bIshJ', 'u'
+doVariant: varChar=u
+doVariant: 'bIshG', 'u'
+doVariant: varChar=u
+doVariant: 'bIshm', 'u'
+doVariant: varChar=u
+doVariant: 'bIsH', 'nu'
+doVariant: varChar=n
+doVariant: 'bIsHn', 'u'
+doVariant: varChar=u
+doVariant: 'bIsHM', 'u'
+doVariant: varChar=u
+doVariant: 'bIsHN', 'u'
+doVariant: varChar=u
+doVariant: 'bIsHJ', 'u'
+doVariant: varChar=u
+doVariant: 'bIsHG', 'u'
+doVariant: varChar=u
+doVariant: 'bIsHm', 'u'
+doVariant: varChar=u
+doVariant: 'bIz', 'nu'
+doVariant: varChar=n
+doVariant: 'bIzn', 'u'
+doVariant: varChar=u
+doVariant: 'bIzM', 'u'
+doVariant: varChar=u
+doVariant: 'bIzN', 'u'
+doVariant: varChar=u
+doVariant: 'bIzJ', 'u'
+doVariant: varChar=u
+doVariant: 'bIzG', 'u'
+doVariant: varChar=u
+doVariant: 'bIzm', 'u'
+doVariant: varChar=u
+doVariant: 'bIS', 'nu'
+doVariant: varChar=n
+doVariant: 'bISn', 'u'
+doVariant: varChar=u
+doVariant: 'bISM', 'u'
+doVariant: varChar=u
+doVariant: 'bISN', 'u'
+doVariant: varChar=u
+doVariant: 'bISJ', 'u'
+doVariant: varChar=u
+doVariant: 'bISG', 'u'
+doVariant: varChar=u
+doVariant: 'bISm', 'u'
+doVariant: varChar=u
+doVariant: 'bIs', 'nu'
+doVariant: varChar=n
+doVariant: 'bIsn', 'u'
+doVariant: varChar=u
+doVariant: 'bIsM', 'u'
+doVariant: varChar=u
+doVariant: 'bIsN', 'u'
+doVariant: varChar=u
+doVariant: 'bIsJ', 'u'
+doVariant: varChar=u
+doVariant: 'bIsG', 'u'
+doVariant: varChar=u
+doVariant: 'bIsm', 'u'
+doVariant: varChar=u
+doVariant: 'bISh', 'nu'
+doVariant: varChar=n
+doVariant: 'bIShn', 'u'
+doVariant: varChar=u
+doVariant: 'bIShM', 'u'
+doVariant: varChar=u
+doVariant: 'bIShN', 'u'
+doVariant: varChar=u
+doVariant: 'bIShJ', 'u'
+doVariant: varChar=u
+doVariant: 'bIShG', 'u'
+doVariant: varChar=u
+doVariant: 'bIShm', 'u'
+doVariant: varChar=u
+vishnu has  alternates
+Length of transitionTable=17
+doVariant: '', 'matri'
+doVariant: varChar=m
+doVariant: 'm', 'atri'
+doVariant: varChar=a
+doVariant: 'ma', 'tri'
+doVariant: varChar=t
+doVariant: 'mat', 'ri'
+doVariant: varChar=ri
+doVariant: 'matr', 'i'
+doVariant: varChar=i
+doVariant: 'matr', ''
+doVariant: 'matR', ''
+doVariant: 'matRR', ''
+doVariant: 'maT', 'ri'
+doVariant: varChar=ri
+doVariant: 'maTr', 'i'
+doVariant: varChar=i
+doVariant: 'maTr', ''
+doVariant: 'maTR', ''
+doVariant: 'maTRR', ''
+doVariant: 'maTh', 'ri'
+doVariant: varChar=ri
+doVariant: 'maThr', 'i'
+doVariant: varChar=i
+doVariant: 'maThr', ''
+doVariant: 'maThR', ''
+doVariant: 'maThRR', ''
+doVariant: 'math', 'ri'
+doVariant: varChar=ri
+doVariant: 'mathr', 'i'
+doVariant: varChar=i
+doVariant: 'mathr', ''
+doVariant: 'mathR', ''
+doVariant: 'mathRR', ''
+doVariant: 'mA', 'tri'
+doVariant: varChar=t
+doVariant: 'mAt', 'ri'
+doVariant: varChar=ri
+doVariant: 'mAtr', 'i'
+doVariant: varChar=i
+doVariant: 'mAtr', ''
+doVariant: 'mAtR', ''
+doVariant: 'mAtRR', ''
+doVariant: 'mAT', 'ri'
+doVariant: varChar=ri
+doVariant: 'mATr', 'i'
+doVariant: varChar=i
+doVariant: 'mATr', ''
+doVariant: 'mATR', ''
+doVariant: 'mATRR', ''
+doVariant: 'mATh', 'ri'
+doVariant: varChar=ri
+doVariant: 'mAThr', 'i'
+doVariant: varChar=i
+doVariant: 'mAThr', ''
+doVariant: 'mAThR', ''
+doVariant: 'mAThRR', ''
+doVariant: 'mAth', 'ri'
+doVariant: varChar=ri
+doVariant: 'mAthr', 'i'
+doVariant: varChar=i
+doVariant: 'mAthr', ''
+doVariant: 'mAthR', ''
+doVariant: 'mAthRR', ''
+doVariant: 'M', 'atri'
+doVariant: varChar=a
+doVariant: 'Ma', 'tri'
+doVariant: varChar=t
+doVariant: 'Mat', 'ri'
+doVariant: varChar=ri
+doVariant: 'Matr', 'i'
+doVariant: varChar=i
+doVariant: 'Matr', ''
+doVariant: 'MatR', ''
+doVariant: 'MatRR', ''
+doVariant: 'MaT', 'ri'
+doVariant: varChar=ri
+doVariant: 'MaTr', 'i'
+doVariant: varChar=i
+doVariant: 'MaTr', ''
+doVariant: 'MaTR', ''
+doVariant: 'MaTRR', ''
+doVariant: 'MaTh', 'ri'
+doVariant: varChar=ri
+doVariant: 'MaThr', 'i'
+doVariant: varChar=i
+doVariant: 'MaThr', ''
+doVariant: 'MaThR', ''
+doVariant: 'MaThRR', ''
+doVariant: 'Math', 'ri'
+doVariant: varChar=ri
+doVariant: 'Mathr', 'i'
+doVariant: varChar=i
+doVariant: 'Mathr', ''
+doVariant: 'MathR', ''
+doVariant: 'MathRR', ''
+doVariant: 'MA', 'tri'
+doVariant: varChar=t
+doVariant: 'MAt', 'ri'
+doVariant: varChar=ri
+doVariant: 'MAtr', 'i'
+doVariant: varChar=i
+doVariant: 'MAtr', ''
+doVariant: 'MAtR', ''
+doVariant: 'MAtRR', ''
+doVariant: 'MAT', 'ri'
+doVariant: varChar=ri
+doVariant: 'MATr', 'i'
+doVariant: varChar=i
+doVariant: 'MATr', ''
+doVariant: 'MATR', ''
+doVariant: 'MATRR', ''
+doVariant: 'MATh', 'ri'
+doVariant: varChar=ri
+doVariant: 'MAThr', 'i'
+doVariant: varChar=i
+doVariant: 'MAThr', ''
+doVariant: 'MAThR', ''
+doVariant: 'MAThRR', ''
+doVariant: 'MAth', 'ri'
+doVariant: varChar=ri
+doVariant: 'MAthr', 'i'
+doVariant: varChar=i
+doVariant: 'MAthr', ''
+doVariant: 'MAthR', ''
+doVariant: 'MAthRR', ''
+doVariant: 'n', 'atri'
+doVariant: varChar=a
+doVariant: 'na', 'tri'
+doVariant: varChar=t
+doVariant: 'nat', 'ri'
+doVariant: varChar=ri
+doVariant: 'natr', 'i'
+doVariant: varChar=i
+doVariant: 'natr', ''
+doVariant: 'natR', ''
+doVariant: 'natRR', ''
+doVariant: 'naT', 'ri'
+doVariant: varChar=ri
+doVariant: 'naTr', 'i'
+doVariant: varChar=i
+doVariant: 'naTr', ''
+doVariant: 'naTR', ''
+doVariant: 'naTRR', ''
+doVariant: 'naTh', 'ri'
+doVariant: varChar=ri
+doVariant: 'naThr', 'i'
+doVariant: varChar=i
+doVariant: 'naThr', ''
+doVariant: 'naThR', ''
+doVariant: 'naThRR', ''
+doVariant: 'nath', 'ri'
+doVariant: varChar=ri
+doVariant: 'nathr', 'i'
+doVariant: varChar=i
+doVariant: 'nathr', ''
+doVariant: 'nathR', ''
+doVariant: 'nathRR', ''
+doVariant: 'nA', 'tri'
+doVariant: varChar=t
+doVariant: 'nAt', 'ri'
+doVariant: varChar=ri
+doVariant: 'nAtr', 'i'
+doVariant: varChar=i
+doVariant: 'nAtr', ''
+doVariant: 'nAtR', ''
+doVariant: 'nAtRR', ''
+doVariant: 'nAT', 'ri'
+doVariant: varChar=ri
+doVariant: 'nATr', 'i'
+doVariant: varChar=i
+doVariant: 'nATr', ''
+doVariant: 'nATR', ''
+doVariant: 'nATRR', ''
+doVariant: 'nATh', 'ri'
+doVariant: varChar=ri
+doVariant: 'nAThr', 'i'
+doVariant: varChar=i
+doVariant: 'nAThr', ''
+doVariant: 'nAThR', ''
+doVariant: 'nAThRR', ''
+doVariant: 'nAth', 'ri'
+doVariant: varChar=ri
+doVariant: 'nAthr', 'i'
+doVariant: varChar=i
+doVariant: 'nAthr', ''
+doVariant: 'nAthR', ''
+doVariant: 'nAthRR', ''
+doVariant: 'N', 'atri'
+doVariant: varChar=a
+doVariant: 'Na', 'tri'
+doVariant: varChar=t
+doVariant: 'Nat', 'ri'
+doVariant: varChar=ri
+doVariant: 'Natr', 'i'
+doVariant: varChar=i
+doVariant: 'Natr', ''
+doVariant: 'NatR', ''
+doVariant: 'NatRR', ''
+doVariant: 'NaT', 'ri'
+doVariant: varChar=ri
+doVariant: 'NaTr', 'i'
+doVariant: varChar=i
+doVariant: 'NaTr', ''
+doVariant: 'NaTR', ''
+doVariant: 'NaTRR', ''
+doVariant: 'NaTh', 'ri'
+doVariant: varChar=ri
+doVariant: 'NaThr', 'i'
+doVariant: varChar=i
+doVariant: 'NaThr', ''
+doVariant: 'NaThR', ''
+doVariant: 'NaThRR', ''
+doVariant: 'Nath', 'ri'
+doVariant: varChar=ri
+doVariant: 'Nathr', 'i'
+doVariant: varChar=i
+doVariant: 'Nathr', ''
+doVariant: 'NathR', ''
+doVariant: 'NathRR', ''
+doVariant: 'NA', 'tri'
+doVariant: varChar=t
+doVariant: 'NAt', 'ri'
+doVariant: varChar=ri
+doVariant: 'NAtr', 'i'
+doVariant: varChar=i
+doVariant: 'NAtr', ''
+doVariant: 'NAtR', ''
+doVariant: 'NAtRR', ''
+doVariant: 'NAT', 'ri'
+doVariant: varChar=ri
+doVariant: 'NATr', 'i'
+doVariant: varChar=i
+doVariant: 'NATr', ''
+doVariant: 'NATR', ''
+doVariant: 'NATRR', ''
+doVariant: 'NATh', 'ri'
+doVariant: varChar=ri
+doVariant: 'NAThr', 'i'
+doVariant: varChar=i
+doVariant: 'NAThr', ''
+doVariant: 'NAThR', ''
+doVariant: 'NAThRR', ''
+doVariant: 'NAth', 'ri'
+doVariant: varChar=ri
+doVariant: 'NAthr', 'i'
+doVariant: varChar=i
+doVariant: 'NAthr', ''
+doVariant: 'NAthR', ''
+doVariant: 'NAthRR', ''
+doVariant: 'J', 'atri'
+doVariant: varChar=a
+doVariant: 'Ja', 'tri'
+doVariant: varChar=t
+doVariant: 'Jat', 'ri'
+doVariant: varChar=ri
+doVariant: 'Jatr', 'i'
+doVariant: varChar=i
+doVariant: 'Jatr', ''
+doVariant: 'JatR', ''
+doVariant: 'JatRR', ''
+doVariant: 'JaT', 'ri'
+doVariant: varChar=ri
+doVariant: 'JaTr', 'i'
+doVariant: varChar=i
+doVariant: 'JaTr', ''
+doVariant: 'JaTR', ''
+doVariant: 'JaTRR', ''
+doVariant: 'JaTh', 'ri'
+doVariant: varChar=ri
+doVariant: 'JaThr', 'i'
+doVariant: varChar=i
+doVariant: 'JaThr', ''
+doVariant: 'JaThR', ''
+doVariant: 'JaThRR', ''
+doVariant: 'Jath', 'ri'
+doVariant: varChar=ri
+doVariant: 'Jathr', 'i'
+doVariant: varChar=i
+doVariant: 'Jathr', ''
+doVariant: 'JathR', ''
+doVariant: 'JathRR', ''
+doVariant: 'JA', 'tri'
+doVariant: varChar=t
+doVariant: 'JAt', 'ri'
+doVariant: varChar=ri
+doVariant: 'JAtr', 'i'
+doVariant: varChar=i
+doVariant: 'JAtr', ''
+doVariant: 'JAtR', ''
+doVariant: 'JAtRR', ''
+doVariant: 'JAT', 'ri'
+doVariant: varChar=ri
+doVariant: 'JATr', 'i'
+doVariant: varChar=i
+doVariant: 'JATr', ''
+doVariant: 'JATR', ''
+doVariant: 'JATRR', ''
+doVariant: 'JATh', 'ri'
+doVariant: varChar=ri
+doVariant: 'JAThr', 'i'
+doVariant: varChar=i
+doVariant: 'JAThr', ''
+doVariant: 'JAThR', ''
+doVariant: 'JAThRR', ''
+doVariant: 'JAth', 'ri'
+doVariant: varChar=ri
+doVariant: 'JAthr', 'i'
+doVariant: varChar=i
+doVariant: 'JAthr', ''
+doVariant: 'JAthR', ''
+doVariant: 'JAthRR', ''
+doVariant: 'G', 'atri'
+doVariant: varChar=a
+doVariant: 'Ga', 'tri'
+doVariant: varChar=t
+doVariant: 'Gat', 'ri'
+doVariant: varChar=ri
+doVariant: 'Gatr', 'i'
+doVariant: varChar=i
+doVariant: 'Gatr', ''
+doVariant: 'GatR', ''
+doVariant: 'GatRR', ''
+doVariant: 'GaT', 'ri'
+doVariant: varChar=ri
+doVariant: 'GaTr', 'i'
+doVariant: varChar=i
+doVariant: 'GaTr', ''
+doVariant: 'GaTR', ''
+doVariant: 'GaTRR', ''
+doVariant: 'GaTh', 'ri'
+doVariant: varChar=ri
+doVariant: 'GaThr', 'i'
+doVariant: varChar=i
+doVariant: 'GaThr', ''
+doVariant: 'GaThR', ''
+doVariant: 'GaThRR', ''
+doVariant: 'Gath', 'ri'
+doVariant: varChar=ri
+doVariant: 'Gathr', 'i'
+doVariant: varChar=i
+doVariant: 'Gathr', ''
+doVariant: 'GathR', ''
+doVariant: 'GathRR', ''
+doVariant: 'GA', 'tri'
+doVariant: varChar=t
+doVariant: 'GAt', 'ri'
+doVariant: varChar=ri
+doVariant: 'GAtr', 'i'
+doVariant: varChar=i
+doVariant: 'GAtr', ''
+doVariant: 'GAtR', ''
+doVariant: 'GAtRR', ''
+doVariant: 'GAT', 'ri'
+doVariant: varChar=ri
+doVariant: 'GATr', 'i'
+doVariant: varChar=i
+doVariant: 'GATr', ''
+doVariant: 'GATR', ''
+doVariant: 'GATRR', ''
+doVariant: 'GATh', 'ri'
+doVariant: varChar=ri
+doVariant: 'GAThr', 'i'
+doVariant: varChar=i
+doVariant: 'GAThr', ''
+doVariant: 'GAThR', ''
+doVariant: 'GAThRR', ''
+doVariant: 'GAth', 'ri'
+doVariant: varChar=ri
+doVariant: 'GAthr', 'i'
+doVariant: varChar=i
+doVariant: 'GAthr', ''
+doVariant: 'GAthR', ''
+doVariant: 'GAthRR', ''
+matri has  alternates
+Length of transitionTable=17
+doVariant: '', ''
+ has  alternates

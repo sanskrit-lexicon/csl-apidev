@@ -1,0 +1,25 @@
+readme.org for simple-search
+
+* word_frequency.txt and word_frequency_adj.txt
+See v0.1/readme.org
+* v1.0  : current version of simple-search
+* v1.0.0 : first good version of simple-search
+* v1.0d : current dev version of simple-search
+* wf0  directory:  08-17-2017  
+ wf0/wf.txt is used in v1.0 as of this date.
+ see wf0/readme.org for more details.
+ separates out word_frequency work, starting with work from v1.0.
+ word_frequency_adj.txt : copied from v0.1
+   slp1 spelling
+   duplicates removed
+ wf.txt is final result. 
+   normalized spelling.
+
+* ngram and hwnorm1c
+  When changes are made to hwnorm1c normalization algorithm, the
+  ngrams must be recomputed:
+  a)  https://github.com/sanskrit-lexicon/hwnorm1/tree/master/ejf/ngram/data
+   in ejf/ngram:  sh redo.sh
+   This recreates 4 files: data/2gram.txt, data/2gram_beg.txt and
+    similarly named data/3gram.txt, data/3gram_beg.txt
+  b) copy these files  to directory simple-search/ngram1

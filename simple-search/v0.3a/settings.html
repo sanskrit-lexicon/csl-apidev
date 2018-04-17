@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Settings</title>
+  </head>
+  <body>
+    <select id="url" onchange="urlOnChange(this.value)">
+      <!-- Sanskrit-English Dictionaries -->
+      <option value="http://www.sanskrit-lexicon.uni-koeln.de/scans/WILScan/2014/web/webtc/getword_phreebie.php">Wilson Sanskrit-English Dictionary</option>
+      <option value="http://www.sanskrit-lexicon.uni-koeln.de/scans/YATScan/2014/web/webtc/getword.php">Yates Sanskrit-English Dictionary</option>
+      <option value="http://www.sanskrit-lexicon.uni-koeln.de/scans/GSTScan/2014/web/webtc/getword.php">Goldstücker Sanskrit-English Dictionary</option>
+      <option value="http://www.sanskrit-lexicon.uni-koeln.de/scans/BENScan/2014/web/webtc/getword.php">Benfey Sanskrit-English Dictionary</option>
+      <option value="http://www.sanskrit-lexicon.uni-koeln.de/scans/MW72Scan/2014/web/webtc/getword.php">Monier-Williams Sanskrit-English Dictionary</option>
+      <option value="http://www.sanskrit-lexicon.uni-koeln.de/scans/AP90Scan/2014/web/webtc/getword.php">Apte Practical Sanskrit-English Dictionary</option>
+      <option value="http://www.sanskrit-lexicon.uni-koeln.de/scans/CAEScan/2014/web/webtc/getword.php">Cappeller Sanskrit-English Dictionary</option>
+      <option value="http://www.sanskrit-lexicon.uni-koeln.de/scans/MDScan/2014/web/webtc/getword.php">Macdonell Sanskrit-English Dictionary</option>
+      <option value="http://www.sanskrit-lexicon.uni-koeln.de/scans/MWScan/2014/web/webtc/getword.php">Monier-Williams Sanskrit-English Dictionary</option>
+      <option value="http://www.sanskrit-lexicon.uni-koeln.de/scans/SHSScan/2014/web/webtc/getword.php">Shabda-Sagara Sanskrit-English Dictionary</option>
+      <option value="http://www.sanskrit-lexicon.uni-koeln.de/scans/BHSScan/2014/web/webtc/getword.php">Edgerton Buddhist Hybrid Sanskrit Dictionary</option>
+      <!-- English-Sanskrit Dictionaries -->
+      <option value="http://www.sanskrit-lexicon.uni-koeln.de/scans/MWEScan/2013/web/webtc/getword.php">Monier-Williams English-Sanskrit Dictionary</option>
+      <option value="http://www.sanskrit-lexicon.uni-koeln.de/scans/BORScan/2014/web/webtc/getword.php">Borooah English-Sanskrit Dictionary</option>
+      <option value="http://www.sanskrit-lexicon.uni-koeln.de/scans/AEScan/2014/web/webtc/getword.php">Apte Student &apos; s English-Sanskrit Dictionary</option>
+      <!-- Sanskrit-French Dictionaries -->
+      <option value="http://www.sanskrit-lexicon.uni-koeln.de/scans/BURScan/2013/web/webtc/getword.php">Burnouf Dictionnaire Sanscrit-Français</option>
+      <option value="http://www.sanskrit-lexicon.uni-koeln.de/scans/STCScan/2013/web/webtc/getword.php">Dictionnaire sanscrit-français Stchoupak</option>
+      <!-- Sanskrit-German Dictionaries -->
+      <option value="http://www.sanskrit-lexicon.uni-koeln.de/scans/PWGScan/2013/web/webtc/getword.php">Böhtlingk and Roth Grosses Petersburger Wörterbuch</option>
+      <option value="http://www.sanskrit-lexicon.uni-koeln.de/scans/GRAScan/2014/web/webtc/getword.php">Grassman Wörterbuch zum Rig Veda</option>
+      <option value="http://www.sanskrit-lexicon.uni-koeln.de/scans/PWScan/2014/web/webtc/getword.php">Böhtlingk Sanskrit-Wörterbuch in kürzerer Fassung</option>
+      <option value="http://www.sanskrit-lexicon.uni-koeln.de/scans/CCSScan/2014/web/webtc/getword.php">Cappeller Sanskrit Wörterbuch</option>
+      <option value="http://www.sanskrit-lexicon.uni-koeln.de/scans/SCHScan/2014/web/webtc/getword.php">Schmidt Nachträge zum Sanskrit-Wörterbuch</option>
+      <option value="http://www.sanskrit-lexicon.uni-koeln.de/scans/BOPScan/2014/web/webtc/getword.php">Bopp Glossarium Sanscritum</option>
+      <!-- Sanskrit-Sanskrit Dictionaries -->
+      <option value="http://www.sanskrit-lexicon.uni-koeln.de/scans/SKDScan/2013/web/webtc/getword.php">Sabda-kalpadruma</option>
+      <option value="http://www.sanskrit-lexicon.uni-koeln.de/scans/VCPScan/2013/web/webtc/getword.php">Vacaspatyam</option>
+      <!-- Specialized Dictionaries -->
+      <option value="http://www.sanskrit-lexicon.uni-koeln.de/scans/INMScan/2013/web/webtc/getword.php">Index to the Names in the Mahabharata</option>
+      <option value="http://www.sanskrit-lexicon.uni-koeln.de/scans/VEIScan/2014/web/webtc/getword.php">The Vedic Index of Names and Subjects</option>
+      <option value="http://www.sanskrit-lexicon.uni-koeln.de/scans/PUIScan/2014/web/webtc/getword.php">The Purana Index</option>
+      <option value="http://www.sanskrit-lexicon.uni-koeln.de/scans/ACCScan/2014/web/webtc/getword.php">Aufrecht Catalogus Catalogorum</option>
+      <option value="http://www.sanskrit-lexicon.uni-koeln.de/scans/KRMScan/2014/web/webtc/getword.php">Kṛdantarūpamālā</option>
+      <option value="http://www.sanskrit-lexicon.uni-koeln.de/scans/IEGScan/2014/web/webtc/getword.php">Indian Epigraphical Glossary</option>
+      <option value="http://www.sanskrit-lexicon.uni-koeln.de/scans/SNPScan/2014/web/webtc/getword.php">Meulenbeld Sanskrit Names of Plants</option>
+      <option value="http://www.sanskrit-lexicon.uni-koeln.de/scans/PEScan/2014/web/webtc/getword.php">Puranic Encyclopedia</option>
+      <option value="http://www.sanskrit-lexicon.uni-koeln.de/scans/PGNScan/2014/web/webtc/getword.php">Personal and Geographical Names in the Gupta Inscriptions</option>
+      <option value="http://www.sanskrit-lexicon.uni-koeln.de/scans/MCIScan/2014/web/webtc/getword.php">Mehendale Mahabharata Cultural Index</option>
+    </select>
+    :
+    <select id="transLit" onchange="translitOnChange(this.value)">
+      <option value="hk">Kyoto-Harvard</option>
+      <option value="slp1">SLP1</option>
+      <option value="itrans">ITRANS</option>
+    </select>
+    >
+    <select id="filter" onchange="filterOnChange(this.value)">
+      <option value="deva">Devanagari Unicode</option>
+      <option value="hk">Kyoto-Harvard</option>
+      <option value="slp1">SLP1</option>
+      <option value="itrans">ITRANS</option>
+      <option value="roman">Roman Unicode</option>
+    </select>
+, Lit:
+    <select id="noLit" onchange="noLitOnChange(this.value)">
+      <option value="on">on</option>
+      <option value="off">off</option>
+    </select>
+
+
+
+    <script type="text/javascript">
+      function urlOnChange(value) {
+        localStorage.setItem('settings.url', value);
+        console.log('settings.url = ' + value);
+      }
+
+      function noLitOnChange(value) {
+        localStorage.setItem('settings.noLit', value);
+        console.log('settings.noLit = ' + value);
+      }
+
+      function translitOnChange(value) {
+        localStorage.setItem('settings.transLit', value);
+        console.log('settings.transLit = ' + value);
+      }
+
+      function filterOnChange(value){
+          localStorage.setItem('settings.filter', value);
+          console.log('settings.filter = ' + value);
+      }
+
+
+      window.onload = function() {
+
+        url_value = localStorage.getItem('settings.url');
+        if (url_value == null) {
+          url_value = document.getElementById("url").options[0].value;
+          urlOnChange(url_value);
+        }
+        document.getElementById('url').value=url_value;
+
+        filter_value = localStorage.getItem('settings.filter');
+        if (filter_value == null) {
+          filter_value = document.getElementById("filter").options[0].value;
+          filterOnChange(filter_value);
+        }
+        document.getElementById('filter').value=filter_value;
+
+        transLit_value = localStorage.getItem('settings.transLit');
+        if (transLit_value == null) {
+          transLit_value = document.getElementById("transLit").options[0].value;
+          transLitOnChange(transLit_value);
+        }
+        document.getElementById('transLit').value=transLit_value;
+
+        noLit_value = localStorage.getItem('settings.noLit');
+        if (noLit_value == null) {
+          noLit_value = document.getElementById("noLit").options[0].value;
+          noLitOnChange(noLit_value);
+        }
+        document.getElementById('noLit').value=noLit_value;
+
+      }
+    </script>
+
+  </body>
+</html>

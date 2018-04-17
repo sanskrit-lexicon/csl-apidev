@@ -1,0 +1,364 @@
+BEGIN redoall ACC
+NOT doing genhtml for ACC
+ACC xml Fri Jan 22 02:05:34 2016 ../../../ACCScan/2014/pywork/acc.xml
+ACC html Sat Jan 23 01:02:34 2016 ../../../ACCScan/2014/pywork/html/acchtml.sqlite
+redohtml not required for ACC
+END redoall ACC
+
+BEGIN redoall AE
+NOT doing genhtml for AE
+AE xml Sun May 3 21:59:45 2015 ../../../AEScan/2014/pywork/ae.xml
+AE html Sun Jun 7 00:17:15 2015 ../../../AEScan/2014/pywork/html/aehtml.sqlite
+redohtml not required for AE
+END redoall AE
+
+BEGIN redoall AP
+NOT doing genhtml for AP
+AP xml Tue Jan 26 00:48:21 2016 ../../../APScan/2014/pywork/ap.xml
+AP html Sat Feb 6 03:00:09 2016 ../../../APScan/2014/pywork/html/aphtml.sqlite
+redohtml not required for AP
+END redoall AP
+
+BEGIN redoall AP90
+NOT doing genhtml for AP90
+AP90 xml Wed Jan 27 03:43:25 2016 ../../../AP90Scan/2014/pywork/ap90.xml
+AP90 html Sat Feb 6 03:01:40 2016 ../../../AP90Scan/2014/pywork/html/ap90html.sqlite
+redohtml not required for AP90
+END redoall AP90
+
+BEGIN redoall BEN
+NOT doing genhtml for BEN
+BEN xml Fri Jan 22 02:37:21 2016 ../../../BENScan/2014/pywork/ben.xml
+BEN html Sat Jan 23 01:09:00 2016 ../../../BENScan/2014/pywork/html/benhtml.sqlite
+redohtml not required for BEN
+END redoall BEN
+
+BEGIN redoall BHS
+NOT doing genhtml for BHS
+BHS xml Thu Jan 28 02:52:33 2016 ../../../BHSScan/2014/pywork/bhs.xml
+BHS html Sat Feb 6 03:03:06 2016 ../../../BHSScan/2014/pywork/html/bhshtml.sqlite
+redohtml not required for BHS
+END redoall BHS
+
+BEGIN redoall BOP
+NOT doing genhtml for BOP
+BOP xml Fri Jan 22 03:00:23 2016 ../../../BOPScan/2014/pywork/bop.xml
+BOP html Sat Jan 23 01:11:44 2016 ../../../BOPScan/2014/pywork/html/bophtml.sqlite
+redohtml not required for BOP
+END redoall BOP
+
+BEGIN redoall BOR
+NOT doing genhtml for BOR
+BOR xml Sun Aug 30 01:07:19 2015 ../../../BORScan/2014/pywork/bor.xml
+BOR html Mon Sep 28 22:49:23 2015 ../../../BORScan/2014/pywork/html/borhtml.sqlite
+redohtml not required for BOR
+END redoall BOR
+
+BEGIN redoall BUR
+NOT doing genhtml for BUR
+BUR xml Fri Jan 22 03:07:57 2016 ../../../BURScan/2013/pywork/bur.xml
+BUR html Sat Jan 23 01:12:58 2016 ../../../BURScan/2013/pywork/html/burhtml.sqlite
+redohtml not required for BUR
+END redoall BUR
+
+BEGIN redoall CAE
+NOT doing genhtml for CAE
+CAE xml Fri Jan 22 03:17:07 2016 ../../../CAEScan/2014/pywork/cae.xml
+CAE html Sat Jan 23 01:13:56 2016 ../../../CAEScan/2014/pywork/html/caehtml.sqlite
+redohtml not required for CAE
+END redoall CAE
+
+BEGIN redoall CCS
+NOT doing genhtml for CCS
+CCS xml Thu Jan 28 22:40:01 2016 ../../../CCSScan/2014/pywork/ccs.xml
+CCS html Sat Feb 6 03:03:38 2016 ../../../CCSScan/2014/pywork/html/ccshtml.sqlite
+redohtml not required for CCS
+END redoall CCS
+
+BEGIN redoall GRA
+NOT doing genhtml for GRA
+GRA xml Wed Dec 16 22:53:42 2015 ../../../GRAScan/2014/pywork/gra.xml
+GRA html Wed Dec 30 02:37:37 2015 ../../../GRAScan/2014/pywork/html/grahtml.sqlite
+redohtml not required for GRA
+END redoall GRA
+
+BEGIN redoall GST
+NOT doing genhtml for GST
+GST xml Wed Nov 5 01:59:08 2014 ../../../GSTScan/2014/pywork/gst.xml
+GST html Sun Jun 7 00:28:52 2015 ../../../GSTScan/2014/pywork/html/gsthtml.sqlite
+redohtml not required for GST
+END redoall GST
+
+BEGIN redoall IEG
+NOT doing genhtml for IEG
+IEG xml Fri Jan 22 03:36:08 2016 ../../../IEGScan/2014/pywork/ieg.xml
+IEG html Sat Jan 23 01:15:16 2016 ../../../IEGScan/2014/pywork/html/ieghtml.sqlite
+redohtml not required for IEG
+END redoall IEG
+
+BEGIN redoall INM
+NOT doing genhtml for INM
+INM xml Fri Jan 22 03:40:45 2016 ../../../INMScan/2013/pywork/inm.xml
+INM html Sat Jan 23 01:17:35 2016 ../../../INMScan/2013/pywork/html/inmhtml.sqlite
+redohtml not required for INM
+END redoall INM
+
+BEGIN redoall KRM
+NOT doing genhtml for KRM
+KRM xml Fri Jan 22 03:44:30 2016 ../../../KRMScan/2014/pywork/krm.xml
+KRM html Sat Jan 23 01:17:43 2016 ../../../KRMScan/2014/pywork/html/krmhtml.sqlite
+redohtml not required for KRM
+END redoall KRM
+
+BEGIN redoall MCI
+NOT doing genhtml for MCI
+MCI xml Thu May 14 22:48:14 2015 ../../../MCIScan/2014/pywork/mci.xml
+MCI html Sun Jun 7 00:32:22 2015 ../../../MCIScan/2014/pywork/html/mcihtml.sqlite
+redohtml not required for MCI
+END redoall MCI
+
+BEGIN redoall MD
+NOT doing genhtml for MD
+MD xml Sun Jan 10 22:26:46 2016 ../../../MDScan/2014/pywork/md.xml
+MD html Tue Jan 12 03:43:58 2016 ../../../MDScan/2014/pywork/html/mdhtml.sqlite
+redohtml not required for MD
+END redoall MD
+
+BEGIN redoall MW
+NOT doing genhtml for MW
+MW xml Fri Feb 19 03:19:12 2016 ../../../MWScan/2014/pywork/mw.xml
+MW html Fri Feb 12 01:10:14 2016 ../../../MWScan/2014/pywork/html/mwhtml.sqlite
+DOING redohtml for MW
+/afs/rrz.uni-koeln.de/vol/www/projekt/sanskrit-lexicon/http/docs/scans/MWScan/2014/pywork/html
+Fr 19. Feb 04:04:48 CET 2016
+remaking input.txt...
+At antarhan,8312
+At alpaka,16931
+At AyurjYAna,25881
+At upanadDa,34889
+At karaja,44062
+At kuSalI,53414
+At gadya,62949
+At caritaguRatva,72308
+At taRqi,81739
+At daSArRa,91016
+At DarmaSIla,100293
+At nirAkartf,109324
+At parimaT,118218
+At pUyavaha,127540.1
+At pravapaRa,136763
+At bfQa,146035
+At madasTala,155410
+At mIQa,164586
+At rajata,173898
+At lokavisargika,183412
+At vikuja,192906
+At vizu,202161.1
+At SaNKatIrTa,211578
+At SElAwa,221150
+At satataka,230456
+At saveSa,239628
+At suvarcas,248898
+At svopaDi,258466
+286809 records processed
+remaking sqlite table...
+0	key	VARCHAR(100)	1		0
+1	lnum	DECIMAL(10,2)	0		0
+2	data	TEXT	1		0
+286809
+In production, remove input.txt for mw
+Fr 19. Feb 04:21:57 CET 2016
+Volume Name                    Quota       Used %Used   Partition
+v.www.p.sans.h.d.MWS         8000000    5609597   70%         30%  
+END redoall MW
+
+BEGIN redoall MW72
+NOT doing genhtml for MW72
+MW72 xml Fri Feb 19 03:31:56 2016 ../../../MW72Scan/2014/pywork/mw72.xml
+MW72 html Sat Jan 23 01:45:06 2016 ../../../MW72Scan/2014/pywork/html/mw72html.sqlite
+DOING redohtml for MW72
+/afs/rrz.uni-koeln.de/vol/www/projekt/sanskrit-lexicon/http/docs/scans/MW72Scan/2014/pywork/html
+remaking input.txt...
+55380 records processed
+remaking sqlite table...
+0	key	VARCHAR(100)	1		0
+1	lnum	DECIMAL(10,2)	0		0
+2	data	TEXT	1		0
+55380
+In production, remove input.txt for mw72
+END redoall MW72
+
+BEGIN redoall MWE
+NOT doing genhtml for MWE
+MWE xml Sun Jan 10 23:14:33 2016 ../../../MWEScan/2013/pywork/mwe.xml
+MWE html Tue Jan 12 04:04:55 2016 ../../../MWEScan/2013/pywork/html/mwehtml.sqlite
+redohtml not required for MWE
+END redoall MWE
+
+BEGIN redoall PD
+NOT doing genhtml for PD
+PD xml Fri Jan 22 04:14:20 2016 ../../../PDScan/2014/pywork/pd.xml
+PD html Sat Jan 23 01:51:45 2016 ../../../PDScan/2014/pywork/html/pdhtml.sqlite
+redohtml not required for PD
+END redoall PD
+
+BEGIN redoall PE
+NOT doing genhtml for PE
+PE xml Wed Jan 13 04:20:52 2016 ../../../PEScan/2014/pywork/pe.xml
+PE html Sat Jan 23 01:54:04 2016 ../../../PEScan/2014/pywork/html/pehtml.sqlite
+redohtml not required for PE
+END redoall PE
+
+BEGIN redoall PGN
+NOT doing genhtml for PGN
+PGN xml Tue May 5 22:25:39 2015 ../../../PGNScan/2014/pywork/pgn.xml
+PGN html Sun Jun 7 00:36:04 2015 ../../../PGNScan/2014/pywork/html/pgnhtml.sqlite
+redohtml not required for PGN
+END redoall PGN
+
+BEGIN redoall PUI
+NOT doing genhtml for PUI
+PUI xml Fri Jan 22 04:41:03 2016 ../../../PUIScan/2014/pywork/pui.xml
+PUI html Sat Jan 23 01:54:59 2016 ../../../PUIScan/2014/pywork/html/puihtml.sqlite
+redohtml not required for PUI
+END redoall PUI
+
+BEGIN redoall PW
+NOT doing genhtml for PW
+PW xml Fri Feb 19 03:08:51 2016 ../../../PWScan/2014/pywork/pw.xml
+PW html Sat Jan 23 01:58:22 2016 ../../../PWScan/2014/pywork/html/pwhtml.sqlite
+DOING redohtml for PW
+/afs/rrz.uni-koeln.de/vol/www/projekt/sanskrit-lexicon/http/docs/scans/PWScan/2014/pywork/html
+Fr 19. Feb 04:25:47 CET 2016
+remaking input.txt...
+135787 records processed
+remaking sqlite table...
+0	key	VARCHAR(100)	1		0
+1	lnum	DECIMAL(10,2)	0		0
+2	data	TEXT	1		0
+135787
+In production, remove input.txt for pw
+Fr 19. Feb 04:28:24 CET 2016
+Volume Name                    Quota       Used %Used   Partition
+v.www.p.sans.h.d.PWS        10000000    7006650   70%         30%  
+END redoall PW
+
+BEGIN redoall PWG
+NOT doing genhtml for PWG
+PWG xml Thu Jan 28 02:32:04 2016 ../../../PWGScan/2013/pywork/pwg.xml
+PWG html Sat Feb 6 03:33:30 2016 ../../../PWGScan/2013/pywork/html/pwghtml.sqlite
+redohtml not required for PWG
+END redoall PWG
+
+BEGIN redoall SCH
+NOT doing genhtml for SCH
+SCH xml Fri Jan 22 23:15:57 2016 ../../../SCHScan/2014/pywork/sch.xml
+SCH html Sat Jan 23 02:05:56 2016 ../../../SCHScan/2014/pywork/html/schhtml.sqlite
+redohtml not required for SCH
+END redoall SCH
+
+BEGIN redoall SHS
+NOT doing genhtml for SHS
+SHS xml Wed Dec 16 00:51:26 2015 ../../../SHSScan/2014/pywork/shs.xml
+SHS html Sat Dec 19 12:39:32 2015 ../../../SHSScan/2014/pywork/html/shshtml.sqlite
+redohtml not required for SHS
+END redoall SHS
+
+BEGIN redoall SKD
+NOT doing genhtml for SKD
+SKD xml Mon Jan 11 03:06:35 2016 ../../../SKDScan/2013/pywork/skd.xml
+SKD html Tue Jan 12 04:16:54 2016 ../../../SKDScan/2013/pywork/html/skdhtml.sqlite
+redohtml not required for SKD
+END redoall SKD
+
+BEGIN redoall SNP
+NOT doing genhtml for SNP
+SNP xml Sat Jul 18 22:32:08 2015 ../../../SNPScan/2014/pywork/snp.xml
+SNP html Sun Jul 19 00:29:51 2015 ../../../SNPScan/2014/pywork/html/snphtml.sqlite
+redohtml not required for SNP
+END redoall SNP
+
+BEGIN redoall STC
+NOT doing genhtml for STC
+STC xml Fri Feb 19 03:48:02 2016 ../../../STCScan/2013/pywork/stc.xml
+STC html Sat Jan 23 02:07:08 2016 ../../../STCScan/2013/pywork/html/stchtml.sqlite
+DOING redohtml for STC
+/afs/rrz.uni-koeln.de/vol/www/projekt/sanskrit-lexicon/http/docs/scans/STCScan/2013/pywork/html
+Fr 19. Feb 04:28:24 CET 2016
+remaking input.txt...
+24574 records processed
+remaking sqlite table...
+0	key	VARCHAR(100)	1		0
+1	lnum	DECIMAL(10,2)	0		0
+2	data	TEXT	1		0
+24574
+In production, remove input.txt for stc
+Fr 19. Feb 04:29:19 CET 2016
+Volume Name                    Quota       Used %Used   Partition
+v.www.p.sans.h.d.STC         1500000    1112639   74%         30%  
+END redoall STC
+
+BEGIN redoall VCP
+NOT doing genhtml for VCP
+VCP xml Fri Jan 22 23:32:27 2016 ../../../VCPScan/2013/pywork/vcp.xml
+VCP html Sat Jan 23 02:07:42 2016 ../../../VCPScan/2013/pywork/html/vcphtml.sqlite
+redohtml not required for VCP
+END redoall VCP
+
+BEGIN redoall VEI
+NOT doing genhtml for VEI
+VEI xml Fri Jan 22 23:44:48 2016 ../../../VEIScan/2014/pywork/vei.xml
+VEI html Sat Jan 23 02:08:33 2016 ../../../VEIScan/2014/pywork/html/veihtml.sqlite
+redohtml not required for VEI
+END redoall VEI
+
+BEGIN redoall WIL
+NOT doing genhtml for WIL
+WIL xml Wed Jan 13 23:29:09 2016 ../../../WILScan/2014/pywork/wil.xml
+WIL html Sat Jan 23 02:10:19 2016 ../../../WILScan/2014/pywork/html/wilhtml.sqlite
+redohtml not required for WIL
+END redoall WIL
+
+BEGIN redoall YAT
+NOT doing genhtml for YAT
+YAT xml Fri Jan 22 23:49:21 2016 ../../../YATScan/2014/pywork/yat.xml
+YAT html Sat Jan 23 02:11:05 2016 ../../../YATScan/2014/pywork/html/yathtml.sqlite
+redohtml not required for YAT
+END redoall YAT
+
+../../../ACCScan/2014/pywork directory exists
+../../../AEScan/2014/pywork directory exists
+../../../APScan/2014/pywork directory exists
+../../../AP90Scan/2014/pywork directory exists
+../../../BENScan/2014/pywork directory exists
+../../../BHSScan/2014/pywork directory exists
+../../../BOPScan/2014/pywork directory exists
+../../../BORScan/2014/pywork directory exists
+../../../BURScan/2013/pywork directory exists
+../../../CAEScan/2014/pywork directory exists
+../../../CCSScan/2014/pywork directory exists
+../../../GRAScan/2014/pywork directory exists
+../../../GSTScan/2014/pywork directory exists
+../../../IEGScan/2014/pywork directory exists
+../../../INMScan/2013/pywork directory exists
+../../../KRMScan/2014/pywork directory exists
+../../../MCIScan/2014/pywork directory exists
+../../../MDScan/2014/pywork directory exists
+../../../MWScan/2014/pywork directory exists
+../../../MW72Scan/2014/pywork directory exists
+../../../MWEScan/2013/pywork directory exists
+../../../PDScan/2014/pywork directory exists
+../../../PEScan/2014/pywork directory exists
+../../../PGNScan/2014/pywork directory exists
+../../../PUIScan/2014/pywork directory exists
+../../../PWScan/2014/pywork directory exists
+../../../PWGScan/2013/pywork directory exists
+../../../SCHScan/2014/pywork directory exists
+../../../SHSScan/2014/pywork directory exists
+../../../SKDScan/2013/pywork directory exists
+../../../SNPScan/2014/pywork directory exists
+../../../STCScan/2013/pywork directory exists
+../../../VCPScan/2013/pywork directory exists
+../../../VEIScan/2014/pywork directory exists
+../../../WILScan/2014/pywork directory exists
+../../../YATScan/2014/pywork directory exists

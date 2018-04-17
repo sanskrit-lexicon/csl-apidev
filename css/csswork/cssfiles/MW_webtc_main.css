@@ -1,0 +1,202 @@
+/* July 8, 2014
+ Same as for PWG, except that old_standard is not used.
+ Uses siddhanta for devanagari
+*/
+body {
+	color: black; background-color: #DBE4ED;
+         /*
+         #ABC5D2; pleasing darker blue
+         #C0D0DD; slightly paler blue
+	
+         #bcee68;  green
+         rgb(64, 96, 144); dark blue
+         white; gray; #333;
+         */
+        /* Dec 5, 2013.  This font-family specification
+           interacts unfavorably with the combining characters
+           used to display devanagari and roman unicode
+	font-family: verdana,arial,helvetica,sansserif;
+        */
+	font-size: 12pt;  /* was 14pt */ /* Jul 8, 2014 */
+}
+/* Jul 8, 2014  
+  Without this line-height, Devanagari does not align properly with non-deva
+  A line-height of  150% and 130% both seem to work for alignment 
+*/
+
+ td {line-height: 130%;}  
+
+.greek {
+ font-family: Gentium, Palatino Linotype, Arial Unicode MS;
+ font-size: 12pt;
+}
+.g {font-size:smaller;font-style:italic;}
+.lang {font-size:smaller;font-style:italic;}
+.hrefdata {font-size:smaller;}
+.lnum {font-size:smaller;}
+/*.sdata {color:black;font-size:larger;} */ /* for devanagari */
+.sdata {
+ color:blue;  /* was teal */
+ /* font-size:larger; */  /* sdata is used for Roman or other, not deva */
+ font-family: '';
+}
+
+@font-face { 
+ src: url(../fonts/praja.ttf);
+ font-family: praja_deva;
+}
+.sdata_praja {
+ color:blue;  /* was teal */
+ font-size:larger;
+ font-family: praja_deva;
+}
+@font-face { 
+ src: url(../fonts/sanskrit2003.ttf);
+ font-family: sanskrit2003_deva;
+}
+.sdata_sanskrit2003 {
+ color:blue;  /* was teal */
+ font-size:larger;
+ font-family: sanskrit2003_deva;
+}
+@font-face { 
+ src: url(../fonts/siddhanta.ttf);
+ font-family: siddhanta_deva;
+}
+.sdata_siddhanta {
+ color:blue;  /* was teal */
+ font-size:larger;
+ font-family: siddhanta_deva;
+}
+.sdata_system {
+ color:blue;  /* was teal */
+ font-size:larger;
+ font-family: '';
+}
+@font-face { /* for normal text in pwg */
+ src: url(../fonts/oldstandard.otf);
+ font-family: oldstandard;
+}
+@font-face { 
+ src: url(../fonts/oldstandarditalic.otf);
+ font-family: oldstandard_i;
+ 
+}
+@font-face { /* for 'ls' text in pwg */
+ src: url(../fonts/CharterIndoCapital.otf);
+ font-family: charterindocapital;
+}
+
+i {
+ /*font-family: oldstandard_i; */
+}
+.asdata {color:blue;font-size:larger;}
+.pb {font-size:smaller; }
+.hom {color:red;}
+.footnote {font-size:smaller;}
+.ls {
+color:gray; 
+font-size:smaller;
+font-family:charterindocapital;
+/* text-transform:capitalize; */
+}
+.gram {font-weight:bold;}
+.divm {font-weight:bold;}
+.wide {font-stretch:wider;}
+.key {font-size:larger; color:black;}
+p {
+	padding-left: 15pt;
+	padding-right: 15pt;
+}
+#disp {
+  position:absolute;
+  left: 1%;
+  width: 98%;
+ background-color: white;
+ /* 
+ overflow: auto; 
+ */
+ overflow-y:auto;
+ overflow-x:hidden;
+ height: 400px;
+/* border: thin; */
+}
+
+.display {
+  /* font-family: oldstandard; */
+}
+table.display {
+  /*width: 100%; */
+  /* width: 600px;  July 18, 2014 */
+  max-width: 600px; /* July 25, 2014 */
+  margin-left:     5px;
+  /* margin-right:    5px;*/
+
+  margin-top: 10px; /* 20px; Dec 5, 2013 */
+  /*font-family: oldstandard; */
+/*
+  font-size:       larger;
+  border-style: solid;
+  border: 2px;
+  padding: 15px;
+*/
+}
+td, th {
+  padding:         5px;
+  text-align:      left;
+/*  background-color: #DBE4ED;  */
+}
+td.display {
+ /* font-weight: normal; */
+  /*font-family: oldstandard;*/
+}
+plex {
+	color: black;
+	background-color: #36648b;
+	/*font-family: verdana,arial,helvetica,sansserif; */ /*Dec 5, 2013*/
+	font-size: 12pt;
+}
+
+h1 {
+	font-size: 24pt;
+}
+
+h2 {
+	font-size: 20pt;
+	padding-left: 15pt;
+	padding-top: 20pt;
+}
+
+h3 {
+	font-size: 18pt;
+	padding-left: 30pt;
+	padding-top: 20pt;
+}
+
+.red {
+ color:red;
+}
+.blue { color:blue; }
+.smaller {
+ font-size:smaller;
+}
+.lightgreen {
+ color: #004400;
+}
+a:link {
+        color:blue; /* color: black; */
+	/* color: #00008b; */
+}
+
+a:visited {
+	color:blue;/* color: #36648b; */
+}
+
+a:active {
+	color:blue;/* color: #4876ff; */
+}
+
+a:hover {
+	background-color: #ffffcc;
+	color:blue;/* color: #000033; */
+}

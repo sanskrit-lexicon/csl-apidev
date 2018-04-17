@@ -1,0 +1,215 @@
+<!DOCTYPE html> <!-- html5 -->
+<html>
+<head>
+<META charset="UTF-8">
+<title>testmw-0.1 Cologne</title>
+
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.css">
+
+<!-- links to jquery, using CDNs -->
+<script type="text/javascript" src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+<!-- jquery-ui is used -->
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+<script type="text/javascript" src="dictnames.js"></script>
+<script type="text/javascript" src="cookieUpdate.js"></script>
+<style>
+body {
+ color: black; background-color:#DBE4ED;
+ /*font-size: 14pt; */
+}
+#dataframe {
+ position: absolute;
+ color: black; background-color: white;
+ left:10px;
+ width: 600px;
+ height: 400px;
+ /* resize doesn't work on Firefox. 
+  On Chrome, the size may be increased, but not decreased*/
+ resize: both;
+ overflow: auto;
+}
+#dataframe1 {
+ position: absolute;
+ color: black; background-color: white;
+ left:620px;
+ width: 600px;
+ height: 400px;
+ /* resize doesn't work on Firefox. 
+  On Chrome, the size may be increased, but not decreased*/
+ resize: both;
+ overflow: auto;
+}
+
+#accentdiv,#outputdiv,#inputdiv,#dictionary input,label {display:block;}
+
+#preferences {
+ position:absolute;
+ left:100px;
+ top: 15px;
+}
+#preferences td {
+ background-color:white;
+ padding-left:5px;
+ padding-right:5px;
+ text-align:center;
+}
+#citationdiv{
+ padding-bottom:5px;
+}
+</style>
+<script> 
+$(document).ready(function() {
+ $('#key').keypress(function (e) {
+  if(e.which == 13)  // the enter key code
+   {e.preventDefault();
+    basicDisplay();
+   }
+ }); // end keypress
+ $('#input,#output,#dict,#accent').change(function(event) {
+  cookieUpdate(true);   
+ });
+ 
+ basicDisplay = function () {
+  var key = $('#key').val();
+  var dict = $('#dict').val();
+  var input = $('#input').val();
+  var output = $('#output').val();
+  var accent = $('#accent').val();
+  // dataframe uses new improved
+  var urlbase="http://www.sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/getword.php";
+  var url =  urlbase +  
+   "?key=" +escape(key) + 
+   "&output=" +escape(output) +
+   "&dict=" + escape(dict) +
+   "&accent=" + escape(accent) +
+   "&input=" + escape(input);
+  jQuery("#dataframe").attr("src",url);
+  // dataframe1 uses previous
+  var urlbase="http://www.sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/getword_prev.php";
+  var url =  urlbase +  
+   "?key=" +escape(key) + 
+   "&output=" +escape(output) +
+   "&dict=" + escape(dict) +
+   "&accent=" + escape(accent) +
+   "&input=" + escape(input);
+  jQuery("#dataframe1").attr("src",url);
+ 
+ }; // basicDisplay
+cookieUpdate = CologneDisplays.dictionaries.cookieUpdate;
+cookieUpdate(false);  // for initializing cookie
+$("#dict").val("MW");
+cookieUpdate(true);
+/*
+$("#dict").autocomplete( { 
+  source : CologneDisplays.dictionaries.dictshow,
+  autoFocus: true,
+ }); // end autocomplete dictionary
+*/
+
+/* This is based on the example at
+https://jqueryui.com/autocomplete/#remote-jsonp
+and is required to avoid cross-domain problems.  The server program also
+requires some code for this purpose.
+*/
+$("#key").autocomplete({
+  source: function(request,response) {
+   $.ajax({
+   url:"http://www.sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/getsuggest.php",
+   datatype:"jsonp",
+   data: {
+    //q: request.term
+    term: request.term,
+    dict: $('#dict').val(),
+    input: $('#input').val()
+   },
+   success: function(data) {
+    response(data);  // 'response' is passed in as source argument
+   }
+   }); // ajax
+  },
+  delay : 500, // 500 ms delay
+  minLength : 2, // user must type at least 2 characters
+  select: function(event,ui) {
+   if (ui.item) {
+   $("#key").val(ui.item.value);
+    basicDisplay();
+   }
+  },
+  autoFocus: true,
+}); //key-autocomplete
+
+}); // end ready
+ </script>
+<script> // see MWScan/2014/web/webtcdev/main_webtc.js
+</script>
+</head>
+<body>
+ <div id="logo">
+     <a href="http://www.sanskrit-lexicon.uni-koeln.de/">
+      <img id="unilogo" src="http://www.sanskrit-lexicon.uni-koeln.de/images/cologne_univ_seal.gif"
+           alt="University of Cologne" width="60" height="60" 
+           title="Cologne Sanskrit Lexicon"/>
+      </a>
+ </div>
+
+<table id="preferences">
+<tr><td>
+ <div id="dictionary">
+ <label for="dictcode">dictionary</label>
+ <input type="text" name="dictcode" size="4" id="dict" value="MW" readonly/>
+ </div>
+
+</td><td>
+ <div id="inputdiv">
+  <label for="input">input</label>
+  <select name="input" id="input">
+   <option value='hk' selected='selected'>KH <!--Kyoto-Harvard--></option>
+   <option value='slp1'>SLP1</option>
+   <option value='itrans'>ITRANS</option>
+   <option value='deva'>Devanagari</option>
+   <option value='roman'>IAST</option>
+  </select>
+ </div>
+</td><td>
+ <div id="outputdiv">
+  <label for="output">output</label>
+  <select name="output" id="output">
+   <option value='deva'>Devanagari</option>
+   <option value='hk'>KH <!--Kyoto-Harvard--></option>
+   <option value='slp1'>SLP1</option>
+   <option value='itrans'>ITRANS</option>
+   <option value='roman' selected='selected'>IAST</option>
+  </select>
+ </div>
+</td><td>
+ <div id="accentdiv">  <!-- possibly should be per dictionary -->
+  <label for="accent">accent?</label>
+ <select name="accent" id="accent">
+  <option value="yes">Show</option>
+  <option value="no" selected="selected">Hide</option>
+ </select>
+ </div>
+</td></tr>
+</table> <!-- preferences -->
+ <div id="citationdiv">
+  citation:&nbsp;
+  <input type="text" name="key" size="20" id="key" value="" style="height:1.4em;"/>
+    <span style="padding-left:100px;">New</span>
+  <span style="padding-left:300px;">Old</span>
+
+ </div>
+ 
+ <div id="disp">
+  <!-- Requesting data will change the src attribute of this iframe -->
+  <iframe id="dataframe">  
+   <p>Your browser does not support iframes.</p>
+  </iframe>
+  <iframe id="dataframe1">  
+   <p>Your browser does not support iframes.</p>
+  </iframe>
+ </div>
+</body>
+</html>
