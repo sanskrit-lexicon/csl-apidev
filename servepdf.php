@@ -14,6 +14,7 @@ Parameters:
 */
 $dict = $_GET['dict'];
 $page = $_GET['page'];
+// redirect to Cologne server
 $key =  $_GET['key']; // optional
 $dbg=False;
 if ($dbg &&(!$dict)) {
@@ -61,7 +62,9 @@ if ((!$page)&&$key) {// Try to get $page from 'key' parm
 }
 
 list($filename,$pageprev,$pagenext)=getfiles($webpath,$page,$dictupper);
-$dir = "$webpath/pdfpages"; // location of pdf files
+// 04-17-2018. Use The cologne images
+// $dir = "$webpath/pdfpages"; // location of pdf files
+$dir = "{$dictinfo->get_cologne_webPath()}/pdfpages";
 $pdf = "$dir/$filename";
 if ($dbg) { 
  echo "dict=$dict, year=$year<br/>";

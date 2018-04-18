@@ -26,6 +26,11 @@ class DictInfo {
  public function __construct($dict) {
   $this->scanpath_server = realpath(preg_replace('|/awork/apidev|','',__DIR__));
   $this->scanpath = "../..";
+  /* 04-17-2018 restate for XAMPP configuration */
+  $this->scanpath_server = dirname(__DIR__);
+  #echo "scanpath_server={$this->scanpath_server}<br/>";
+  $this->scanpath = $this->scanpath_server; //"../..";
+  
   /*
   $this->scanpath = preg_replace('|[.]rrz|','rrz',$this->scanpath); // test?
   //$this->scanpath = preg_replace('|[.]rrz|','rrz',$this->scanpath);
@@ -47,23 +52,40 @@ class DictInfo {
  public function get_year() {
   return $this->year;
  }
-
+ public function get_cologne_webPath() {
+  // 04-17-2018
+  // used by servepdf.php
+  // Cologne scan directory 
+  $cologne_scandir = "http://www.sanskrit-lexicon.uni-koeln.de/scans";
+  $path = $cologne_scandir . "/{$this->dictupper}Scan/{$this->year}/web";
+  return $path;
+ }
  public function get_webPath() {
   // $path = self::$scanpath . "/{$this->dictupper}Scan/{$this->year}/web";
-  $path = $this->scanpath . "/{$this->dictupper}Scan/{$this->year}/web";
+  #$path = $this->scanpath . "/{$this->dictupper}Scan/{$this->year}/web";
+  /* 04-17-2018  reconstruct for XAMPP */
+  $path = $this->scanpath . "/{$this->dict}/web";
+  $path = realpath($path); 
+  #echo "webPath=$path<br/>";
   //dbgprint(true,"get_webPath: $path\n");
   return $path;
  }
  public function get_serverPath() {
   /* For other php functions to access file system */
   // $path = self::$scanpath . "/{$this->dictupper}Scan/{$this->year}/web";
-  $path = $this->scanpath_server . "/{$this->dictupper}Scan/{$this->year}/web";
+  #$path = $this->scanpath_server . "/{$this->dictupper}Scan/{$this->year}/web";
+  // 04-17-2018  for XAMPP
+  $path = $this->get_webPath();
   //dbgprint(true,"get_webPath: $path\n");
   return $path;
  }
  public function get_htmlPath() {
   //$path = self::$scanpath . "/{$this->dictupper}Scan/{$this->year}/pywork/html";
-    $path = $this->scanpath . "/{$this->dictupper}Scan/{$this->year}/pywork/html";
+    #$path = $this->scanpath . "/{$this->dictupper}Scan/{$this->year}/pywork/html";
+  // 04-17-2018  for XAMPP
+  $path = $this->scanpath . "/{$this->dict}/pywork/html";
+  $path = realpath($path);
+  #echo "htmlPath=$path</br>";
   return $path;
  }
   

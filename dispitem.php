@@ -42,6 +42,7 @@ class DispItem { // info to construct a row of the display table
  public function keyshow() {
   $dictup=$this->dictup;
   $english = in_array($dictup,array("AE","MWE","BOR")); // boolean flag
+  $dbg=false;
   if ($english) {
     return $this->key;
   }
@@ -52,8 +53,9 @@ class DispItem { // info to construct a row of the display table
   }
   // Special handling for MW
   dbgprint($dbg,"this->info before keyshow_MW(): {$this->info}\n");
-
-  return $this->keyshow_MW();
+  $ans = $this->keyshow_MW();
+  dbgprint($dbg,"this->info after keyshow_MW(): {$this->info}\n");
+  return $ans;
  } //keyshow
 
  public function keyshow_MW() {
@@ -66,6 +68,13 @@ class DispItem { // info to construct a row of the display table
   }
   */
   $hshow = "($hcode)";  //H1, H2a, etc
+  //04-17-2018
+  // don't show key and homonym, which is what the rest of this
+  // function is devoted to.
+  // In the current revision of web/webtc/disp.php, these values are
+  // printed elsewhere when needed, so showing them here is duplicative.
+  return $hshow;
+  // rest of this function not applicable as of 04-17-2018
   $homshow = "";
   if ($hom && ($hom!='')) {
    $homshow = "<span class='hom'>$hom</span>";
@@ -129,6 +138,7 @@ dbgprint($dbg,"dispitem. key2=$key2\n");
   return $ans; 
  }
  public function basicRow1DefaultParts($prev) {
+  
   if($prev) {	 
    $hrefdata_prev = $prev->hrefdata;
    $keyshow_prev = $prev->keyshow;
