@@ -107,7 +107,7 @@ $(document).ready(function() {
  changeCorrectionHref = function () {
   console.log('changeCorrectionHref: dict=',$('#dict').val());
   var dict = $('#dict').val();
-  var url = "/php/correction_form.php?dict=" + dict;
+  var url = "http://sanskrit-lexicon.uni-koeln.de/php/correction_form.php?dict=" + dict;
   $('#correction').attr('href',url);
  };
  changeActions = function () {
@@ -190,7 +190,10 @@ simpleFunction = function(){
   var test ={}; // Javascript object to pass as parameters
   //console.log('test: find_word=',find_word);
   test.key = find_word;
-  test.url = "http://localhost/cologne/apidev/simple-search/v1.0d/getword_list_1.0.php";
+  // 04-18/2018. change from v1.0d to v1.0
+  // Currenlty getword_list_1.0.php same in both locations.
+  test.url = "http://localhost/cologne/apidev/simple-search/v1.0/getword_list_1.0.php";
+  console.log('simpleFunction test.url=',test.url);
   test.input = 'hk';
   test.output = $('#output').val(); //'deva';
   test.dict = $('#dict').val();; 
