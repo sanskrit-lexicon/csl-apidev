@@ -2,7 +2,7 @@
 <html>
 <head>
 <META charset="UTF-8">
-<title>list-0.2 Cologne</title>
+<title>list-0.2 XAMPP</title>
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.css">
 <!-- links to jquery, using CDNs -->
 <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
@@ -10,8 +10,8 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
 <!-- jquery-ui is used -->
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
-<script type="text/javascript" src="http://localhost/cologne/apidev/sample/dictnames.js"></script>
-<script type="text/javascript" src="http://localhost/cologne/apidev/sample/cookieUpdate.js"></script>
+<script type="text/javascript" src="http://localhost/cologne/apidev1/sample/dictnames.js"></script>
+<script type="text/javascript" src="http://localhost/cologne/apidev1/sample/cookieUpdate.js"></script>
 
 <style>
 body {
@@ -79,7 +79,7 @@ $(document).ready(function() {
   var output = $('#output').val();
   var accent = $('#accent').val();
   // TODO: check for valid inputs before ajax call
-  var urlbase="http://localhost/cologne/apidev/listview.php";
+  var urlbase="http://localhost/cologne/apidev1/listview.php";
   var url =  urlbase +  
    "?key=" +escape(key) + 
    "&output=" +escape(output) +
@@ -133,7 +133,7 @@ requires some code for this purpose.
 $("#key").autocomplete({
   source: function(request,response) {
    $.ajax({
-   url:"http://localhost/cologne/apidev/getsuggest.php",
+   url:"http://localhost/cologne/apidev1/getsuggest.php",
    datatype:"jsonp",
    data: {
     //q: request.term

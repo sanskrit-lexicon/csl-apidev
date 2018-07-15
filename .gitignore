@@ -2,3 +2,7 @@
 *~
 # temp files
 temp*
+# old files and directories
+old*
+# test files
+test*

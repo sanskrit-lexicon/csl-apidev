@@ -1,5 +1,5 @@
 <?php
-/* apidev/listhiermw.php
+/* apidev1/listhier.php
   June 2015
  For MW, there may be (for homophones) calls from the basic
  display to alternate lists.
@@ -8,11 +8,12 @@
  When initially called, the parameter will be 'key'
  ANother approach would be to use just 'key' parameter, but
  interpret key as lnum  when all characters are numbers of period.
+ 07-11-2018. revised to use dalRaw for certain dicts
 */
 
 require_once('utilities/transcoder.php');
 //require_once('displistCommon.php');
-require_once('dal.php');
+require_once('dalwhich.php');
 require_once('dictinfo.php');
 //require_once('getCommon.php');
 require_once('parm.php');
@@ -37,7 +38,7 @@ if (($direction != 'UP') && ($direction != 'DOWN')) {
 }
 $getParms->direction = $direction;
 $dict = $getParms->dict;
-$dal = new Dal($dict);
+$dal = dalwhich($dict);
 $key = $getParms->key;
 
 
@@ -81,6 +82,18 @@ while($i < count($listmatches)) {
   $table .= $out1;
  }
  $i++;
+ $filter = $getParms->filter;
+ if ($filter == "deva") {
+ /* use $filterin to generate the class to use for Sanskrit (<s>) text 
+    This was previously done in main_webtc.js.
+    This let's us use siddhanta font for Devanagari.
+ */
+  $sdata = "sdata_siddhanta"; // consistent with font.css
+  $class = " class='$sdata'";
+ } else {
+  #$sdata = "sdata"; // default.
+  $class ="";
+ }
  if ($code == 0) {$c="color:teal";}
  else {$c="color:black";}
  // Apr 7, 2013.  Color Supplement records 
@@ -109,7 +122,8 @@ while($i < count($listmatches)) {
  if (!$getParms->english) {
   $key2show ="<SA>$key2show</SA>";
  }
- $key2show = "<span style='$c'>$key2show</span>";
+ #$key2show = "<span style='$c'>$key2show</span>";
+ $key2show = "<span style='$c' $class>$key2show</span>";
  /* In MWE, we have key2 = cat-o'-nine-tails
     And the apostrophe causes a problem - we need to escape it. 
     However, just escaping doesn't solve the problem.  We removed

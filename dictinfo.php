@@ -4,6 +4,7 @@
  This code depends on the organization of files on the server,
  and specifically depends on the orgranization at Cologne sanskrit-lexicon.
 */
+require_once('dbgprint.php');
 class DictInfo {
  static public $dictyear=
    array("ACC"=>"2014" , "AE"=>"2014" , "AP"=>"2014" , "AP90"=>"2014",
@@ -17,42 +18,33 @@ class DictInfo {
        "VCP"=>"2013" , "VEI"=>"2014" , "WIL"=>"2014" , "YAT"=>"2014");
  //static public $scanpath = "../..";  // scan dir.depends on loc of this file!
  //static public $scanpath = preg_replace('|/awork/apidev|','',__DIR__);
- public $scanpath;
- public $scanpath_server;
+ #public $scanpath;
+ #public $scanpath_server;
  public $dict;
  public $dictupper;
  public $year;  
  public $english;
+ public $sqlitedir;  // 07-10-2018 for Dalraw
  public function __construct($dict) {
-  $this->scanpath_server = realpath(preg_replace('|/awork/apidev|','',__DIR__));
-  $this->scanpath = "../..";
+  #$this->scanpath_server = realpath(preg_replace('|/awork/apidev|','',__DIR__));
+  #$this->scanpath = "../..";
   /* 04-17-2018 restate for XAMPP configuration */
-  $this->scanpath_server = dirname(__DIR__);
+  #$this->scanpath_server = dirname(__DIR__);
   #echo "scanpath_server={$this->scanpath_server}<br/>";
-  $this->scanpath = $this->scanpath_server; //"../..";
-  
-  /*
-  $this->scanpath = preg_replace('|[.]rrz|','rrz',$this->scanpath); // test?
-  //$this->scanpath = preg_replace('|[.]rrz|','rrz',$this->scanpath);
-  require_once('dbgprint.php');
-  dbgprint(true,"__DIR__= {__DIR__}\n");
-  dbgprint(true,"scanpath now = {$this->scanpath}\n");
-  $temp = dirname(__FILE__);
-  dbgprint(true,"temp=$temp\n");
-  $temp1 = realpath("../..");
-  dbgprint(true,"temp1=$temp1\n");
-  //$this->scanpath = "../..";
-  */
+  #$this->scanpath = $this->scanpath_server; //"../..";
   $this->dict=strtolower($dict);
   $this->dictupper=strtoupper($dict);
   $this->year = self::$dictyear[$this->dictupper];
   $this->english = in_array($this->dictupper,array("AE","MWE","BOR")); // boolean flag
- }
+  #$webpath = $this->get_serverPath();
+  $webpath = $this->get_webPath();
+  $this->sqlitedir = "$webpath/sqlite";
+  }
  
  public function get_year() {
   return $this->year;
  }
- public function get_cologne_webPath() {
+ public function get_cologne_weburl() {
   // 04-17-2018
   // used by servepdf.php
   // Cologne scan directory 
@@ -61,30 +53,52 @@ class DictInfo {
   return $path;
  }
  public function get_webPath() {
+  include("dictinfowhich.php");
+
   // $path = self::$scanpath . "/{$this->dictupper}Scan/{$this->year}/web";
   #$path = $this->scanpath . "/{$this->dictupper}Scan/{$this->year}/web";
-  /* 04-17-2018  reconstruct for XAMPP */
-  $path = $this->scanpath . "/{$this->dict}/web";
-  $path = realpath($path); 
-  #echo "webPath=$path<br/>";
+  $dbg=false;
+  dbgprint($dbg,"dictinfo.get_webPath: dictinfowhich=$dictinfowhich\n");
+  if ($dictinfowhich == "xampp") {
+   /* 04-17-2018  reconstruct for XAMPP 
+    This makes an assumption regarding location of the directory of this
+    file, namely that it is a sibling of the dictionary directories.
+   */
+   $path =  "../{$this->dict}/web";
+   dbgprint($dbg,"dictinfo.get_webPath. 1 path = $path\n");
+   $path = realpath($path); 
+   dbgprint($dbg,"dictinfo.get_webPath. 2 path = $path\n");
+  }else {
+   // assume ($dictinfowhich == "cologne")
+   $path =  "../../{$this->dictupper}Scan/{$this->year}/web";
+  }
   //dbgprint(true,"get_webPath: $path\n");
   return $path;
  }
- public function get_serverPath() {
+ public function unused_get_serverPath() {
   /* For other php functions to access file system */
   // $path = self::$scanpath . "/{$this->dictupper}Scan/{$this->year}/web";
   #$path = $this->scanpath_server . "/{$this->dictupper}Scan/{$this->year}/web";
   // 04-17-2018  for XAMPP
   $path = $this->get_webPath();
-  //dbgprint(true,"get_webPath: $path\n");
+  //dbgprint(true,"get_serverPath: $path\n");
   return $path;
  }
  public function get_htmlPath() {
   //$path = self::$scanpath . "/{$this->dictupper}Scan/{$this->year}/pywork/html";
     #$path = $this->scanpath . "/{$this->dictupper}Scan/{$this->year}/pywork/html";
   // 04-17-2018  for XAMPP
-  $path = $this->scanpath . "/{$this->dict}/pywork/html";
+  #$path = $this->scanpath . "/{$this->dict}/pywork/html";
+  #// 07-10-2018. For revised work which uses doesn't use precomputed html
+  #$path = $this->scanpath . "/{$this->dict}/web/sqlite";
+  # 07-12-2018. Change to use webpath
+  $webpath = $this->get_webPath();
+  $dbg=false;
+  dbgprint($dbg,"dictinfo. get_htmlPath. webpath=$webpath\n");
+  $path = $webpath . "/../pywork/html";
+  dbgprint($dbg,"dictinfo. get_htmlPath. 1 path=$path\n");  
   $path = realpath($path);
+  dbgprint($dbg,"dictinfo. get_htmlPath. 2 path=$path\n");  
   #echo "htmlPath=$path</br>";
   return $path;
  }

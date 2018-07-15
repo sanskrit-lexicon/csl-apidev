@@ -8,7 +8,7 @@
 // Nov 10, 2014. Modified to show Arabic text
 // Jul 19, 2015 move DispItem class into dispitem.php
 require_once('dispitem.php');
-
+require_once('dbgprint.php');
 function basicDisplay($parms,$matches) {
  // June 4, 2015 -- assume $matches is filled with records of form:
  //   $matches[$i] == array(key,lnum,rec) -
@@ -92,8 +92,13 @@ EOT;
  $table .= "<table class='display'>\n";
  $ntot = count($matches);
  $dispItems=array();
+ $dbg=false;
  for($i=0;$i<$ntot;$i++) {
   $dbrec = $matches[$i];
+  dbgprint($dbg,"disp.php. matches[$i] = \n");
+  for ($j=0;$j<count($dbrec);$j++) {
+   dbgprint($dbg,"  [$j] = {$dbrec[$j]}\n");
+  }
   //echo "<p>DEBUGa: $i,$ntot " . $dbrec[0] . "</p>\n";
   $dispItem = new DispItem($dict,$dbrec);
   //echo "<p>DEBUGb: $i,$ntot " . $dbrec[0] . "</p>\n";

@@ -17,11 +17,14 @@ class Dal {
   $this->dictinfo = new DictInfo($dict);
   $year = $this->dictinfo->get_year();
   // 2017-06-02: Change webpath to use get_serverPath
-  //$webpath = $this->dictinfo->get_webPath();
-  $webpath = $this->dictinfo->get_serverPath();
+  $webpath = $this->dictinfo->get_webPath();
+  #$webpath = $this->dictinfo->get_serverPath();
   $this->sqlitefile_xml = "$webpath/sqlite/{$this->dict}.sqlite";
   $htmlpath = $this->dictinfo->get_htmlPath();
+  $dbg=false;
+  dbgprint($dbg,"dal.construct htmlpath = $htmlpath\n");
   $this->sqlitefile = "$htmlpath/{$this->dict}html.sqlite";
+  dbgprint($dbg,"dal.construct sqlitefile = {$this->sqlitefile}\n");
   // connection to sqlitefile
   try {
    $this->file_db = new PDO('sqlite:' .$this->sqlitefile);

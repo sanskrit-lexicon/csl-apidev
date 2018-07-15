@@ -11,31 +11,39 @@ Parameters:
  key: a headword, in SLP1.  
   Only one of 'page' and 'key' should be used.  If both are present, then
   'key' parameter is ignored and 'page' parameter prevails.
+ July 11, 2018. Modify to work with 'raw' data or html data
 */
-$dict = $_GET['dict'];
-$page = $_GET['page'];
-// redirect to Cologne server
-$key =  $_GET['key']; // optional
-$dbg=False;
-if ($dbg &&(!$dict)) {
- $dict = $argv[1];
- $key = $argv[2];
-}
+require_once('dbgprint.php');
+require_once('parm.php');
 require_once('dictinfo.php');
+$getParms = new Parm();
+# addional paramaters
+$page = $_REQUEST['page'];
+#$dict = $_REQUEST['dict'];
+#$key =  $_REQUEST['key']; // optional
+$dbg=False;
+$dict = $getParms->dict;
+
 $dictinfo = new DictInfo($dict);
 $year = $dictinfo->get_year();
 $webpath = $dictinfo->get_webPath();
 $dictupper = $dictinfo->dictupper;
 if ((!$page)&&$key) {// Try to get $page from 'key' parm
- require_once('dal.php');
- $dal = new Dal($dict);
- $recs = $dal->get1($key); // Assume $key is in SLP1
+ require_once('dalwhich.php');
+ require_once('getword_data.php');
+ $dal = dalwhich($dict);
+ $rawflag = $dal->rawflag;
+ if ($rawflag) {
+  $recs = getword_html_data_raw($getParms,$dal);
+ } else {
+  $recs = getword_html_data($getParms,$dal);
+ }
+ #$recs = $dal->get1($key); // Assume $key is in SLP1
  if ($dbg) {
   echo "<br/><br/><br/><br/>" . count($recs). "  records for $key<br/>\n";
   echo "<br>page=$page<br/>";
  }
  if (count($recs) > 0) { 
-  # Repeat some of the logic from dispitemp.php
   $dbrec = $recs[0];
   $rec= $dbrec[2];  # $rec['data'];
   if ($dbg) {print "first record data = \n$rec";}
@@ -51,10 +59,6 @@ if ((!$page)&&$key) {// Try to get $page from 'key' parm
    if(count($lnums)>0) {
     $page = $lnums[0];
    }
-   if ($dbg) {
-    echo "<br/><br/><br/><br/>" . count($recs). "  records for $key<br/>\n";
-    echo "<br>page=$page<br/>";
-   }
   }
  }
  // In any case, close this database connection
@@ -64,19 +68,15 @@ if ((!$page)&&$key) {// Try to get $page from 'key' parm
 list($filename,$pageprev,$pagenext)=getfiles($webpath,$page,$dictupper);
 // 04-17-2018. Use The cologne images
 // $dir = "$webpath/pdfpages"; // location of pdf files
-$dir = "{$dictinfo->get_cologne_webPath()}/pdfpages";
+$dir = "{$dictinfo->get_cologne_weburl()}/pdfpages";
 $pdf = "$dir/$filename";
-if ($dbg) { 
- echo "dict=$dict, year=$year<br/>";
- echo "webpath={$webpath}<br/>";
- echo "scanpath =".DictInfo::$scanpath."<br/>";
- echo "page=$page, $filename,$pageprev,$pagenext<br/>";
-}
+
 
 ?>
+<!DOCTYPE html>
 <html>
 <head>
-<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
+ <meta charset="UTF-8" />
 <title><?= $dictupper?> Cologne Scan</title>
 <link rel='stylesheet' type='text/css' href='http://www.sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/css/serveimg.css' />
 </head>

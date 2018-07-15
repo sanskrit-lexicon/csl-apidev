@@ -153,7 +153,12 @@ dbgprint($dbg,"dispitem. key2=$key2\n");
   if ($keyshow == $keyshow_prev) {
    $keyshow = ""; // Don't reshow same key on subsequent records
   }
-  $lnumshow = "<span class='lnum'> [<span title='Cologne record ID'>L=</span>$lnum]</span>";
+  #$lnumshow = "<span class='lnum'> [<span title='Cologne record ID'>L=</span>$lnum]</span>";
+  if (in_array($this->dictup,['GRA','STC'])) {
+   $lnumshow = "<span class='lnum' '> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;[<span title='Cologne record ID'>L=</span>$lnum]</span>";
+  }else {
+   $lnumshow = "<span class='lnum'> [<span title='Cologne record ID'>L=</span>$lnum]</span>";
+  }
   $pageshow = "<span class='hrefdata'> [<span title='Printed book page-column'>p=</span> $hrefdata]</span>";
   if ($hrefdata == $hrefdata_prev) {
    $pageshow="";

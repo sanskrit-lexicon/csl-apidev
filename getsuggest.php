@@ -1,13 +1,12 @@
 <?php
-//getsuggest.php
+//getsuggest.php 07-10-2018. Change to Dalraw for selected dictionaries
 // Jul 11, 2015
 // Jul 21, 2015  return list sorted in alphabetical order
 header('content-type: application/json; charset=utf-8');
 header("Access-Control-Allow-Origin: *");
 require_once('utilities/transcoder.php'); // initializes transcoder
-require_once("dal.php");  
 require_once("dbgprint.php");
-
+require_once("dalwhich.php");
 require_once('parm.php');
 $getParms = new Parm();
 
@@ -21,7 +20,8 @@ $keyin = trim($keyin); // remove leading and trailing whitespace
 $english = $getParms->english;
 $filterin = $getParms->filterin;
 $dict = $getParms->dict;
-$dal = new Dal($dict);
+dbgprint($dbg,"getsuggest: dict=$dict\n");
+$dal = dalwhich($dict);
 $keyprobFlag=false;
 if ($english) {
  $keyin1 = $keyin;
@@ -29,7 +29,7 @@ if ($english) {
 }else {
  $keyin1 = preprocess_unicode_input($keyin,$filterin);
  $key = transcoder_processString($keyin1,$filterin,"slp1");
- dbgprint($dbg,"keyin=$keyin, keyin1=$keyin1, key=$key, filterin=$filterin\n");
+ dbgprint($dbg,"getsuggest.php: keyin=$keyin, keyin1=$keyin1, key=$key, filterin=$filterin\n");
  if ($filterin == 'hk') {
   // for cases like 'gaN'
   $keychk = transcoder_processString($key,"slp1",$filterin);
