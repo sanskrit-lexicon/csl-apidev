@@ -7,7 +7,7 @@ require_once("dal.php");
 require_once('dbgprint.php');
 function dalwhich($dict) {
  $dbg=false;
- $rawdicts =array('cae','bur','stc','gra','pwg');
+ $rawdicts =array('cae','bur','stc','gra','pwg','mw');
  if (in_array($dict,$rawdicts)) {
   $dal = new Dalraw($dict);
  }else {

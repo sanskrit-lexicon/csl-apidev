@@ -14,6 +14,7 @@ class Dalraw {
  public $dbg=false;
  public $dbname; 
  public $tabname;  # name of table in sqlitefile. 
+ public $tabid;    # name of 'id' key used by getgeneral
  public $rawflag;  # used by apidev1
  // dbname is assumed to be for auxiliary sqlite data, such as
  // abbreviations  xab.sqlite, xath.sqlite -- new Dal('mw','mwab')
@@ -29,20 +30,27 @@ class Dalraw {
   if ($dbname == null) {
    $this->sqlitefile = "$sqlitedir/{$this->dict}.sqlite";
    $this->tabname = $this->dict;
+   $this->tabid = 'key';
    dbgprint($this->dbg,"Dalraw construct. sqlitefile={$this->sqlitefile}, tabname={$this->tabname}\n");
   }else if ($dbname == "ab") {
    $this->tabname = $this->dict . "ab";
    $this->sqlitefile = "$sqlitedir/{$this->tabname}.sqlite";
+   $this->tabid = 'id';
   }else if ($dbname == "bib") {  // author file for pwg, pw
    $this->tabname = $this->dict . "bib";
    $this->sqlitefile = "$sqlitedir/{$this->tabname}.sqlite";
+   $this->tabid = 'id';
+  }else if ($dbname == "authtooltips") {  // author file for mw
+   $this->tabname = $this->dict . "authtooltips";
+   $this->sqlitefile = "$sqlitedir/{$this->tabname}.sqlite";
+   $this->tabid = 'key';
   }else { // unknown $dbname
    $this->file_db = null;
    $this->status=false;
    return;
   }
   // connection to sqlitefile
-  $dbg=true;
+  $dbg=false;
   try {
    $this->file_db = new PDO('sqlite:' .$this->sqlitefile);
    $this->file_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -72,6 +80,9 @@ class Dalraw {
    return $ansarr;
   }
   $result = $this->file_db->query($sql);
+  if ($result == false) {
+   return $ansarr;
+  }
   foreach($result as $m) {
    $rec = array($m['key'],$m['lnum'],$m['data']);
    $ansarr[]=$rec;
@@ -103,29 +114,25 @@ class Dalraw {
   dbgprint($this->dbg, "get1_xml, sql=$sql\n");
   return $this->get_xml($sql);
  }
- // get1_basic is form normally used for basic display
- // It handles special details for mw
- // Also, in case $key is not matched exactly, it does a search for
- // the longest initial part of $key that has a match
  public function get1_basic($key) {
+  /*
+  get1_basic is form normally used for basic display
+  It handles special details for mw
+  Also, in case $key is not matched exactly, it does a search for
+  the longest initial part of $key that has a match
+  07-15-2018. REQUIRE EXACT MATCH.
+ */
   $dict = $this->dict;
   $more = True;
   $origkey = $key;
   while ($more) {
-   /*
-   if (strtolower($dict) == 'mw') {
-    $matches = $this->get1_mwalt($key); // Jul 19, 2015
-   }else if (strtolower($dict) == 'gra') {
-    $matches = $this->get1_mwalt($key); // Jul 03, 2018 -- for testing.
-   }else {
-    $matches= $this->get1($key); 
-   }
-   */
+ 
    $matches = $this->get1_mwalt($key); // Jul 5, 2018. Use for all dictionaries
    $dbg=false;
-   dbgprint($dbg,"dal.php: # matches for $key = " . count($matches) . "\n");
+   dbgprint($dbg,"dal.php get1_basic: # matches for $key = " . count($matches) . "\n");
    $nmatches = count($matches);
    if($nmatches > 0) {$more=False;break;}
+   $more=False;break;  # 07-15-2018
    // try next shorter key
    $n = strlen($key);
    if ($n > 1) {
@@ -188,6 +195,10 @@ $dbg=False;
 # first step is to call the original dal_mw1_get1
 $recs = $this->get1($key);
 $nrecs = count($recs);
+// 07-15-2018. When no recs found, return $recs
+if ($nrecs == 0) {
+ return $recs;
+}
 // Step 1: fill in forward gaps in $recs
 $newitems=array();
 for($i=0;$i<$nrecs-1;$i++) {
@@ -380,7 +391,8 @@ public function getgeneral($key,$table) {
    //if (True) {echo "file_db is null\n"; echo $this->sqlitefile."\n";}
    return array();
   }
-$sql = "select * from $table where id='$key'";
+#$sql = "select * from $table where id='$key'";
+$sql = "select * from $table where {$this->tabid}='$key'";
 $result = $this->file_db->query($sql);
 $ansarr = array();
 foreach($result as $m) {

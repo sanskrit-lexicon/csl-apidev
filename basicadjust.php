@@ -17,18 +17,22 @@ class BasicAdjust {
  public $adjxmlrecs;
  public $dal_ab, $dal_auth; // 
  public $accent;
+ public $dbg;
  public function __construct($getParms,$xmlrecs) {
   $this->accent = $getParms->accent;
-  #dbgprint(true,"basicadjust: accent={$this->accent}\n");
   $dict = $getParms->dict;
   $key = $getParms->key;
+  $this->dbg=false;
   $this->dal_ab = new Dalraw($dict,"ab");
   if ($dict == 'pwg') {
-   $this->dal_auth = new Dalraw($dict,"bib");  # pwgbib
+   $this->dal_auth = new Dalraw($dict,"bib");  # powgbib
    dbgprint(false,"basicadjust: bib file open? " . $this->dal_auth->status ."\n");
+  }else if ($dict == 'mw'){
+   $this->dal_auth = new Dalraw($dict,"authtooltips");
   }else {
-   $this->dal_auth = new Dalraw($dict,"auth");
+   $this->dal_auth = null;
   }
+ 
   $this->getParms = $getParms;
   $adjxmlrecs = array();
   #$i = 0;
@@ -36,7 +40,7 @@ class BasicAdjust {
    $line1 = $this->line_adjust($line);
    $this->adjxmlrecs[] = $line1;
    #$i = $i + 1;
-   #dbgprint(true,"adjline[$i]=$line1\n");
+   dbgprint($this->dbg,"basicadjust: line=\n$line\n\nadjline=$line1\n");
   }
   
  }
@@ -61,9 +65,13 @@ class BasicAdjust {
  /*  Replace the 'title' part of a known ls with its capitalized form
      This is probably particular to pwg and/or pw 
  */
- if (in_array($this->getParms ->dict,array('pw','pwg'))) {
+ if (in_array($this->getParms->dict,array('pw','pwg'))) {
   $line = preg_replace_callback('|<ls n="(.*?)">(.*?)</ls>|',
-      "BasicAdjust::ls_callback",$line);
+      "BasicAdjust::ls_callback_pwg",$line);
+ }else if (in_array($this->getParms->dict,array('mw'))){
+  $line = preg_replace_callback('|<ls>([A-ZĀĪŚṚṢṬ][A-Za-zÂáâêîñôĀāĪīŚśūûḍḥṃṅṇṉṚṛṢṣṬṭ.]*[.])(.*?)</ls>|', "BasicAdjust::ls_callback_mw",$line);  
+  // handle the frequent <ls>ib.xxx</ls> by marking ib. as abbreviation
+  $line = preg_replace('|<ls>ib[.]|','<ls><ab>ib.</ab>',$line);    
  }
  /* 12-14-2017
   'local' abbreviation handled here. Generate an n attribute if one
@@ -84,17 +92,24 @@ class BasicAdjust {
  //$line = preg_replace('|<br/>|',' ',$line);
  // 2018-07-07  Handle lex tag.  
  $line = preg_replace_callback('|<lex(.*?)>(.*?)</lex>|',"BasicAdjust::add_lex_markup",$line);
+ 
+  if ($this->getParms->dict == "mw") {
+   $line = $this->move_L_mw($line);
+   # remove <hom>X</hom> within head portion
+   $line = preg_replace("|<key2>(.*?)<hom>.*?</hom>(.*?<body>)|","<key2>$1$2",$line);
+   
+  }
  return $line;
 }
  
- public function ls_callback($matches) {
+ public function ls_callback_pwg($matches) {
  // for pw, pwg
  // <ls n="$n">$data</ls>
  $ans = $matches[0];
  $n = $matches[1];
  $data = $matches[2];
  $dbg=false;
- dbgprint($dbg,"ls_callback: n=$n, data=$data\n");
+ dbgprint($dbg,"ls_callback_pwg: n=$n, data=$data\n");
  if (!$this->dal_auth->status) {
   return $ans;
  }
@@ -106,22 +121,52 @@ class BasicAdjust {
  if ($this->getParms->dict == 'pwg') {
   $rec = $result[0];
   list($n0,$code,$codecap,$text) = $rec;
-  dbgprint($dbg," ls_callback code=$code,  codecap=$codecap, text=\n$text\n");
+  dbgprint($dbg," ls_callback_pwg code=$code,  codecap=$codecap, text=\n$text\n");
   #$datanew = preg_replace("/^$code/",$codecap,$data);
   #$ans = "<ls n='$n'>$datanew</ls>";
   # 12-26-2017. pwg. Add lshead, so as to be able to style
   $datanew = preg_replace("/^$code/","<lshead>$codecap</lshead>",$data);
   # be sure there is no xml in the text
   $text = preg_replace('/<.*?>/',' ',$text);
-  dbgprint($dbg," ls_callback. text after removing tags: \n$text\n");
+  dbgprint($dbg," ls_callback_pwg. text after removing tags: \n$text\n");
   # convert special characters to html entities
   # for instance, this handles cases when $tran has single (or double) quotes
   $tooltip = htmlspecialchars($text,ENT_QUOTES);
   $ans = "<ls n='$tooltip'>$datanew</ls>";
-  dbgprint($dbg,"ls_callback: ans=$ans\n");
+  dbgprint($dbg,"ls_callback_pwg: ans=$ans\n");
  }
  return $ans;
 }
+public function ls_callback_mw($matches) {
+ /* <ls>AR</ls>  A = $abbrv, R = $rest */
+ $ans = $matches[0];
+ $abbrv = $matches[1];
+ $rest = $matches[2];
+ $dbg=false;
+ dbgprint($dbg,"ls_callback: abbrv=$abbrv, rest=$rest\n");
+ if (!$this->dal_auth->status) {
+  return $ans;
+ }
+ $table = $this->dal_auth->tabname;
+ $result = $this->dal_auth->getgeneral($abbrv,$table);
+ if (count($result) != 1) { // unknown abbreviation
+  $title = "Unknown literary source";
+  $type = "Unknown type";
+ } else {
+  $rec = $result[0];
+  list($cid,$abbrv1,$title,$type) = $rec;
+ }
+ $text = "$title ($type)";
+ // The tooltip might be malformed for an html attribute. Try to fix
+ $tooltip = htmlspecialchars($text,ENT_QUOTES);
+
+ # reconstruct the ls element with an n attribute
+ $ans = "<ls n='$tooltip'><lshead>$abbrv</lshead>$rest</ls>";
+ dbgprint($dbg,"  lsnew=$ans\n");
+  dbgprint($dbg,"ls_callback_mw: ans=$ans\n");
+ return $ans;
+}
+
  public function abbrv_callback($matches) {
  /* <ab n="{tran>}">{data}</ab>
   <ab{attrib}>{data)</ab>
@@ -177,9 +222,12 @@ class BasicAdjust {
  /* <lex{attrib}|>{data}</lex> ignore attrib
    Turn it into an abbreviation.
    This function current just for cae dictionary.
-   Something more complex required for MW.
  */
- $x = $matches[0]; // full string
+ if ($this->getParms->dict == "mw") {
+  //Something more complex required for MW.
+  return  $this->add_lex_markup_mw($matches);
+ }
+ $x = $matches[0]; // full <lex>X</lex> string
  $a = $matches[1]; # attributes
  $data = $matches[2]; # {data}
  $dbg=false;
@@ -199,19 +247,40 @@ class BasicAdjust {
   $ans = "<ab n='$tran'>$data</ab>";
   dbgprint($dbg," add_lex_markup case 2\n");
  }
- dbgprint($dbg," abbrv_callback returns $ans\n");
+ dbgprint($dbg," add_lex_markup returns $ans\n");
+ return $ans;
+}
+ public function add_lex_markup_mw($matches) {
+ /* <lex{attrib}>{data}</lex> ignore attrib
+   For mw, {data} is more complex. For display purposes, we want
+   to identify the genders and mark as abbreviations.
+   This is originally done in BasicDisplay class with an XML Parser.
+   That seems to be the only way to do it here.
+   So we make a special LexParser class for this purpose
+ */
+ $dbg=false;
+ 
+ $x = $matches[0]; // full <lex>X</lex> string
+ $lexparser = new BasicAdjustLexParser($x,$this);
+ if ($lexparser->status) {
+  $ans = $lexparser->result;
+ } else {
+  dbgprint($dbg,"basicadjust error in BasicAdjustLexParser\n");
+  $ans = $x;
+ }
+ dbgprint($dbg," add_lex_markup_mw returns $ans\n");
  return $ans;
 }
 
  public function s_callback($matches) {
 /* remove accent if needed
+   remove <srs/>
 */
  $x = $matches[0];
  if ($this->accent != "yes") {
   // remove accent characters from slp1 text:  /,^,\
-  // Assume no closing xml tag within text.
   $y = $matches[1];    // $x = <s>$y</s>
-  $y = preg_replace('|[\/\^\\\]|','',$y);
+  $y = $this->remove_slp1_accent($y);
   $x = "<s>$y</s>";
  }
  return $x;
@@ -224,10 +293,23 @@ public function key2_callback($matches) {
   // remove accent characters from slp1 text:  /,^,\
   // Assume no closing xml tag within text.
   $y = $matches[1];    // $x = <key2>$y</key2>
-  $y = preg_replace('|[\/\^\\\]|','',$y);
+  $y = $this->remove_slp1_accent($y);
   $x = "<key2>$y</key2>";
  }
  return $x;
+}
+public function remove_slp1_accent($y) {
+  #$y = preg_replace('|[\/\^\\\]|','',$y);
+  # udatta accent is '/'.  But '/' also used in xml tags (empty or closing)
+  # preadjust $y to replace these instances of '/' with '_'
+  #  assumes no tag name starts with '_', a safe assumption in this xml
+  $y = preg_replace('|</|','<_',$y);  
+  $y = preg_replace('|/>|','_>',$y);
+  $y = preg_replace('|[\/\^\\\]|','',$y);
+  # restore the '/' used in xml tags
+  $y = preg_replace('|<_|','</',$y);
+  $y = preg_replace('|_>|','/>',$y);
+  return $y;
 }
  public function rgveda_verse_modern($gra) {
  /*Github user SergeA
@@ -271,18 +353,120 @@ public function key2_callback($matches) {
  $x = " $x";
  return $x;
 }
-/*
- public function monierSetNoLit($value) {
- // This function has no effect now (May 4, 2017)
- $this->noLit = $value;
-}
- public function basicDisplaySetAccent($accentin){
- if ($accentin == 'yes') {
-  $this->accent = True;
- }else {
-  $this->accent = False;
+public function move_L_mw($line) {
+ /* 04-12-2018. For MW. Logic to place Cologne record ID at END
+  of displays for <H1X> records. This acomplished by changing the
+  name of the <L> tag to <L1>
+ */
+ $dbg=false;
+ dbgprint($dbg,"basicadjust.move_L_mw enter: line=\n$line\n");
+ if (preg_match('|<(H[1-4].)>.*(<L>.*?</L>)|',$line,$matches)) {
+  $H = $matches[1];
+  $Ltag = $matches[2];
+  // remove L element
+  $line = preg_replace("|$Ltag|","",$line);
+  // construct L1 tag
+  $L1tag = preg_replace("|L>|","L1>",$Ltag);
+  #dbgprintdisp(true,"Ltag=$Ltag,  L1tag=$L1tag\n");
+  // Insert L1tag before end of tail -- so at end of display
+  $line = preg_replace("|</tail>|","$L1tag</tail>",$line);
  }
+ dbgprint($dbg,"basicadjust.move_L_mw leave: line=\n$line\n");
+ return $line;
 }
-*/
+
+}
+
+class BasicAdjustLexParser{
+ public $parentEl, $row, $status, $result, $dbg, $basicadj;
+ public $parents; # array, treated as stack of elements
+ public function __construct($line,$basicadj) {
+ // $line is a <lex>X</lex> string
+ // $basicadj is the calling instance of Basicadjust class;
+ //    used to call getABdata
+ $this->basicadj = $basicadj;
+ $dbg=false;
+ $this->dbg=false;
+ dbgprint($dbg,"BasicAdjustLexParser: line=$line\n");
+  $p = xml_parser_create('UTF-8');
+  xml_set_element_handler($p,array($this,'sthndl'),array($this,'endhndl'));
+  xml_set_character_data_handler($p,array($this,'chrhndl'));
+  xml_parser_set_option($p,XML_OPTION_CASE_FOLDING,FALSE);
+  $this->row="";
+  $this->parents=array();
+  if (!xml_parse($p,$line)) {
+   dbgprint(true,"BasicAdjustLexParser: xml parse error\n");
+   $this->result = $line;
+   $this->status = false;
+   return;
+  }
+  $this->status = true;
+  $this->result = $this->row;
+  dbgprint($dbg,"BasicAdjustLexParser: result={$this->result}\n");
+ }
+ public function sthndl($xp,$el,$attribs) {
+  if ($el == "lex") {
+   // nothing.  don't output the lex tag to html
+  }else {
+   // output the element tag and its attributes
+   $this->row .= "<$el";
+   foreach($attribs as $name=>$value) {
+    $this->row .= " $name='$value'";
+   }
+   $this->row .= ">";
+  }
+  $this->parentEl = $el;
+  $this->parents[] = $el;  
+ }
+ public function endhndl($xp,$el) {
+  #$this->parentEl = "";
+  array_pop($this->parents);
+  if ($el == "lex") {
+   // nothing.  don't output the ending lex tag to html
+  }else {
+   // close the tag
+   $this->row .= "</$el>";
+  }
+ }
+ public function chrhndl($xp,$data) {
+  // get parent from top of stack
+  $this->parentEl = array_pop($this->parents);
+  // restore top of stack
+  $this->parents[]=$this->parentEl;
+  if ($this->parentEl == "lex") {
+   // $data is a text node within lex convert to abbreviation if possible
+   $tran = $this->basicadj->getABdata($data);  
+   // try some adjustments if abbreviation not found 
+   if ($tran == "") {
+    $data1 = trim($data); // remove spaces at ends
+    $data1 = preg_replace('|[.]|','',$data1);
+    $data1 = preg_replace('|\(.*$|','',$data1);
+    $data1 = "$data1."; # add period
+    $tran = $this->basicadj->getABdata($data1);
+   }
+   if ($tran == "") {
+    $data1 = trim($data); // remove spaces at ends
+    $data1 = preg_replace('|[.]|','',$data1);
+    $data1 = preg_replace('|^.*\)|','',$data1);
+    $data1 = "$data1."; //add period at end 
+    $tran = $this->basicadj->getABdata($data1);
+   }
+   dbgprint($this->dbg,"BasicAdjustLexParser. lex chrhndl. data=$data, tran=$tran\n");
+   if ($tran == "")  {
+    // No translation found
+    $this->row .= $data;
+   }else {
+    # convert special characters to html entities
+    # for instance, this handles cases when $tran has single (or double) quotes
+    $tran = htmlspecialchars($tran,ENT_QUOTES);  
+    $this->row .= "<ab n='$tran'>$data</ab>";
+   }
+  }else {
+   // some other tag. just return $data unchanged
+   $this->row .= $data;
+   dbgprint($this->dbg,"BasicAdjustLexParser. lex chrhndl. parent={$this->parentEl}, data=$data\n");
+  }
+
+ }
 }
 ?>

@@ -54,6 +54,12 @@ function getword_html_data_raw($getParms,$dal){
   $html = getword_html_data_raw_adapter($key0,$lnum0,$data0,$dict,$getParms);
   $matches[] = array($key0,$lnum0,$html);
  }
+ if ($dbg) {
+  dbgprint($dbg,"getword_html_data_raw returns:\n");
+  for($i=0;$i<count($matches);$i++) {
+   dbgprint($dbg,"record $i = {$matches[$i][2]}\n"); #[0] $matches[$i][1] $matches[$i][2] \n");
+  }
+ }
  return $matches;
 }
 function getword_html_data_raw_adapter($key,$lnum,$data,$dict,$getParms)
@@ -67,29 +73,101 @@ function getword_html_data_raw_adapter($key,$lnum,$data,$dict,$getParms)
  $adjxml = new BasicAdjust($getParms,$matches1);
  $matches = $adjxml->adjxmlrecs;
  $filter = $getParms->filter;
- dbgprint(tru,"getword. filter=$filter\n");
+ #dbgprint(true,"getword. filter=$filter\n");
  $display = new BasicDisplay($key,$matches,$filter,$dict);
  $table = $display->table;
  #$table = basicDisplay($key,$matches,$filter);
  # expect table has 6 lines.
  $tablines = explode("\n",$table); 
- if (count($tablines) != 6) {
-  echo "html ERROR 1: actual # lines in table = " . count($tablines) ."\n";
+ $ntablines = count($tablines);
+ // In MW revision, there may be 7 lines.
+ if (($ntablines != 6)&& ($ntablines != 7)){
+  echo "html ERROR 1: actual # lines in table = $ntablines\n";
+  for ($i=0;$i<$ntablines;$i++) {
+   echo "tablines[$i]=" .$tablines[$i]."\n";
+  }
   exit(1);
  }
+
  $info = $tablines[2];
- $body = $tablines[3];
+ #dbgprint(true,"getword_data: info=$info\n");
+ #$body = $tablines[3];
+ if ($ntablines == 6) {
+  $body = $tablines[3];
+ }else {  //$ntablines == 7
+  $body = $tablines[3] . $tablines[4];
+ }
+
  # adjust body
  $body = preg_replace('|<td.*?>|','',$body);
  $body = preg_replace('|</td></tr>|','',$body);
+ if ($dict == 'mw') {
+  // in case of MW, we remove [ID=...]</span>
+  $body = preg_replace('|<span class=\'lnum\'.*?\[ID=.*?\]</span>|','',$body);
+ }
  # adjust $info - keep only the displayed page
- if(!preg_match('|>([^<]*?)</a>|',$info,$matches)) {
-  echo "html ERROR 2: \n" . $info . "\n";
+ if ($dict == 'mw') {
+  if(!preg_match('|>([^<]*?)</a>,(.*?)\]|',$info,$matches)) {
+   echo "html ERROR 2: \n" . $info . "\n";
+   exit(1);
+  }
+  $page=$matches[1];
+  $col = $matches[2];
+  $pageref = "$page,$col";
+ }else {
+  if(!preg_match('|>([^<]*?)</a>|',$info,$matches)) {
+   echo "html ERROR 2: \n" . $info . "\n";
+   exit(1);
+  }
+  $pageref=$matches[1];
+ }
+ if ($dict == 'mw') {
+  list($hcode,$key2,$hom) = adjust_info_mw($data); 
+  # construct return value as colon-separated values
+  $infoval = "$pageref:$hcode:$key2:$hom";
+  $ans = "<info>$infoval</info><body>$body</body>";
+ }else {
+  # construct return value
+  $ans = "<info>$pageref</info><body>$body</body>";
+ }
+ return $ans;
+}
+function adjust_info_mw($data) {
+ # In case of MW, also retrieve Hcode and hom from head of $data
+ $hom='';
+ if (preg_match('|</key2><hom>(.*?)</hom>|',$data,$matches)) {
+  $hom = $matches[1];
+ }
+ $hcode='';
+ if (preg_match('|^<(H.*?)>|',$data,$matches)) { // always matches
+  $hcode=$matches[1];
+ }
+ $key2='';
+ if (preg_match('|<key2>(.*?)</key2>|',$data,$matches)) {
+  $key2 = $matches[1];
+ }
+ $key2a = adjust_key2_mw($key2);
+ return array($hcode,$key2a,$hom);
+}
+function adjust_key2_mw($key2) {
+ $ans = preg_replace('|--+|','-',$key2);  // only 1 dash
+ $ans = preg_replace('|<sr1?/>|','~',$ans); # ~ not in key1 for MW (?)
+ $ans = preg_replace('|<srs1?/>|','@',$ans); # @ not in SLP1
+ // Leave some xml in place:
+ // <root>kf</root>
+ // <root/>daMh
+ // dA<hom>1</hom>
+ // <shortlong/>
+ $ans1 = preg_replace('|</?root/?>|','',$ans);
+ $ans1 = preg_replace('|</?hom>|','',$ans1);
+ $ans1 = preg_replace('|<shortlong/>|','',$ans1);
+ if (preg_match('|<|',$ans1)) {
+  echo "adjust_key2: $ans1\n";
   exit(1);
  }
- $pageref=$matches[1];
- # construct return value
- $ans = "<info>$pageref</info><body>$body</body>";
+ return $ans;
+ $ans = preg_replace('||','',$ans);
+ $ans = preg_replace('||','',$ans);
  return $ans;
 }
 

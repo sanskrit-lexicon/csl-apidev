@@ -27,8 +27,10 @@ class BasicDisplay {
  public $table;
  public $dict;
  public $sdata; // class to use for Sanskrit
+ public $filterin; // transcoding for output
 public function __construct($key,$matches,$filterin,$dict) {
  $this->dict = $dict;
+ $this->filterin = $filterin;
  $this->pagecol="";
  $this->dbg=false;
  $this->inSanskrit=false;
@@ -50,15 +52,16 @@ public function __construct($key,$matches,$filterin,$dict) {
  while($i<$ntot) {
   $linein=$matches[$i];
   $line=$linein;
-  #dbgprint(true,"disp: line[$i+1]=$line\n");
+  dbgprint($this->dbg,"disp: line[$i+1]=$line\n");
   $line=trim($line);
   $l0=strlen($line);
-  #dbgprint($this->dbg,"call line_adjust: $line\n");
-  #$line=$this->line_adjust($line);
-  #dbgprint($this->dbg,"back from line_adjust: $line\n");
   $this->row = "";
   $this->row1 = "";
-  
+  if ($dict == 'mw') {
+   $row1x = $this->mw_extra_line($line);
+  }else {
+   $row1x = "";
+  }
   $this->inSanskrit=false;
   $this->inkey2 = false;
   $p = xml_parser_create('UTF-8');
@@ -67,13 +70,13 @@ public function __construct($key,$matches,$filterin,$dict) {
   xml_parser_set_option($p,XML_OPTION_CASE_FOLDING,FALSE);
   dbgprint($this->dbg,"chk 1\n");
   if (!xml_parse($p,$line)) {
-   dbgprint(true,"disp.php: xml parse error\n");
+   dbgprint(true,"disp.php: xml parse error\nline=$line\n");
    $row = $line;
    return;
   }
   dbgprint($this->dbg,"chk 2\n");
   xml_parser_free($p);
-  dbgprint($this->dbg,"chk 2\n");
+  dbgprint($this->dbg,"chk 3\n");
   /* May 4, 2017
   $this->table .= "<tr><td class='display' valign=\"top\">$row1</td>\n";
   $this->table .= "<td class='display' valign=\"top\">$row</td></tr>\n";
@@ -81,8 +84,23 @@ public function __construct($key,$matches,$filterin,$dict) {
   $this->table .= "<tr>";
   $this->table .= "<td>";
   $style = "background-color:beige";
-  $row1a = "<span style='$style'>{$this->row1}</span>";
-  $this->table .= "$row1a\n<br/>{$this->row}\n";
+  if ($this->dict == 'mw') {
+   $row1a = "";
+   if ($this->row1 != "") {
+    $row1a = "<span style='$style'>{$this->row1}</span>";
+   }
+   if ($row1x != "") {
+    $row1a = "$row1a<br/>\n$row1x";
+   }
+   if ($row1a != "") {
+    $this->table .= "$row1a<br/>\n{$this->row}\n";
+   }else {
+    $this->table .= "{$this->row}\n";
+   }
+  } else {
+   $row1a = "<span style='$style'>{$this->row1}</span>";
+   $this->table .= "$row1a\n<br/>{$this->row}\n";
+  }
   $this->table .= "</td>";
   // This is so that there will be no need for a horizontal scroll. 12-14-2017
   $this->table .= "<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>";
@@ -135,16 +153,29 @@ public function __construct($key,$matches,$filterin,$dict) {
      $ans = "<br/><span style='$style'>";
      return $ans;
    }else { // default
-    // currently applies to : 
+    // currently applies to:
     // cae with <div n="p"/>
-    return "<br/>";
+    // mw 
+    #$style="position:relative; top:1.0em";
+    #$ans = "<br/><span>";
+    $style="margin-top:0.6em;";
+    $ans = "<div style='$style'></div><span>";
+    return $ans;
    }
  }
  public function sthndl($xp,$el,$attribs) {
 
   if (preg_match('/^H.+$/',$el)) {
-   // don't display 'H1'
-   // $row1 .= "($el)";
+   // In general, don't display 'H1'. But MW has different
+   if ($this->dict == 'mw') {
+    // For mw, do display
+    // However, don't display HxA, HxB, HxC (? see 'agre')
+    if (preg_match('|^H[1-4]$|',$el)) {
+     $this->row1 .= "($el)";
+    }
+   }else {
+    // for other dictionaries, don't display 
+   }
   } else if ($el == "s")  {
    $this->inSanskrit = true;
   } else if ($el == "key2"){
@@ -163,11 +194,30 @@ public function __construct($key,$matches,$filterin,$dict) {
   } else if ($el == "body"){
   } else if ($el == "tail"){
   } else if ($el == "L"){
+  } else if ($el == "L1"){
+   // for MW only, work done in chrhndl 
+  } else if ($el == "s1") {
+   // currently only MW.  This has an 'slp1' attribute which could be
+   // used to replace the IAST text with Devanagari. However currently
+   // we just display the IAST text, so do nothing with this element
+  } else if ($el == "etym") {
+    $this->row .= "<i>";
+  } else if ($el == "info") { // mw no action
   } else if ($el == "pc"){
+  } else if ($el == "info") { // mw no action
+  } else if ($el == "to") { // mw no action
+  } else if ($el == "ns") { // mw no action
+  } else if ($el == "shortlong") { // mw no action
+  } else if ($el == "srs") { // mw no action. Different from previous version.
+  } else if ($el == "pcol") { // mw no action. Different from previous version.
   } else if ($el == "pb"){
-   $this->row .= "<br/>";
+   if ($this->dict == "mw") {
+    # do nothing.
+   }else {
+    $this->row .= "<br/>";
+   }
   } else if ($el == "key1"){
-  } else if ($el == "hom"){
+  } else if ($el == "hom"){ // handled wholly in chrhndl
   } else if ($el == "F"){
    $this->row .= "<br/>&nbsp;<span class='footnote'>[Footnote: ";
   } else if ($el == "symbol") {
@@ -205,8 +255,8 @@ public function __construct($key,$matches,$filterin,$dict) {
   } else if ($el == "ls") {
    if (isset($attribs['n'])) {
     $tooltip = $attribs['n'];
-    #$this->row .= "<span class='ls' title='$tooltip'>";   
-    $this->row .= "<span class='ls' title=\"$tooltip\">";   
+    $this->row .= "<span class='ls' title='$tooltip'>";   
+    #$this->row .= "<span class='ls' title=\"$tooltip\">";   
    }else {
     $this->row .= "&nbsp;<span class='ls'>";   
    }
@@ -219,6 +269,8 @@ public function __construct($key,$matches,$filterin,$dict) {
    #$this->row .= "<span style='font-style: normal; color:teal'>";
    $this->row .= "<span style='letter-spacing:2px;'>"; # this is more like the text
   } else if ($el == "bot") {
+   $this->row .= "<span style='color: brown'>";
+  } else if ($el == "bio") {
    $this->row .= "<span style='color: brown'>";
   } else if ($el == "sic") {
    // no rendering
@@ -238,11 +290,11 @@ public function __construct($key,$matches,$filterin,$dict) {
     $this->row .= "<br/>&lt;$el&gt;";
   }
 
-  $this->$parentEl = $el;
+  $this->parentEl = $el;
 }
 
  public function endhndl($xp,$el) {
-  $this->$parentEl = "";
+  $this->parentEl = "";
   if ($el == "s") {
    $this->inSanskrit = false;
   } else if ($el == "F") {
@@ -256,7 +308,11 @@ public function __construct($key,$matches,$filterin,$dict) {
   } else if ($el == "i"){
    $this->row .= "</i>"; 
   } else if ($el == "pb"){
-   $this->row .= "<br/>"; 
+   if ($this->dict == "mw") {
+    # do nothing.
+   }else {
+    $this->row .= "<br/>";
+   }
   } else if ($el == "key2") {
    $this->inkey2 = false;
   } else if ($el == "symbol") {
@@ -275,10 +331,14 @@ public function __construct($key,$matches,$filterin,$dict) {
    $this->row .= "</span>";
   } else if ($el == "bot") {
    $this->row .= "</span>";
- } else if ($el == "lshead") {
+  } else if ($el == "io") {
    $this->row .= "</span>";
- } else if ($el == "ab") {
+  } else if ($el == "lshead") {
    $this->row .= "</span>";
+  } else if ($el == "ab") {
+   $this->row .= "</span>";
+  } else if ($el == "etym") {
+    $this->row .= "</i>";
  }
 }
 
@@ -286,46 +346,47 @@ public function __construct($key,$matches,$filterin,$dict) {
   $sdata = $this->sdata;
   if ($this->inkey2) {
    //$data = strtolower($data);
-   /* now handled in basicadjust
-   if (! $this->accent) {
-    $data = preg_replace('|[\/\^\\\]|','',$data);
+   if ($this->dict == 'mw') {
+    // don't show
+   }else {
+    $this->row1 .= "&nbsp;<span class='$sdata'><SA>$data</SA></span>";
    }
-   */
-   $this->row1 .= "&nbsp;<span class='$sdata'><SA>$data</SA></span>";
    //$this->row1 .= "&nbsp;<span class='$sdata'>$data</span>";
-  } else if ($this->$parentEl == "key1"){ // nothing printed
-  } else if ($this->$parentEl == "pc") {
+  } else if ($this->parentEl == "key1"){ // nothing printed
+  } else if ($this->parentEl == "pc") {
    $hrefdata = $this->getHrefPage($data);
    //$this->row1 .= "<span class='hrefdata'> [p= $hrefdata]</span>";
    $this->row1 .= "<span class='hrefdata'> [Printed book page $hrefdata]</span>";
-  } else if ($this->$parentEl == "L") {
+  } else if ($this->parentEl == "L") {
    $this->row1 .= "<span class='lnum'> [Cologne record ID=$data]</span>";
    //$this->row1 .= "<span class='lnum'> [L=$data]</span>";
-  } else if ($this->$parentEl == 's') {
-   /* assume handled in basicadjust
-   if (! $this->accent) {
-    $data = preg_replace('|[\/\^\\\]|','',$data);
-   }
-   */
+  } else if ($this->parentEl == "L1") {
+    // only applies to MW. L1 tag generated in basicadjust.
+   $this->row .= "<span class='lnum' style='background-color:beige;'> [ID=$data]</span>";
+  } else if ($this->parentEl == 's') {
    $this->row .= "<span class='$sdata'><SA>$data</SA></span>";
   } else if ($this->inSanskrit) {
+   // probably not needed
    $this->row .= "<span class='$sdata'><SA>$data</SA></span>";
-  } else if ($this->$parentEl == "hom") {
+  } else if ($this->parentEl == "hom") {
    /* For stc, we omit showing 'hom'. It is already printed as part of
       The first entry.
    */
-   //$this->row .= "<span class='hom'>$data</span>&nbsp;";
-  } else if ($this->$parentEl == 'div') { 
+   if ($this->dict == "mw") {
+    /* For mw, we show 'hom'. */
+    $this->row .= "<span class='hom' title='Homonym'>$data</span>";
+   }
+  } else if ($this->parentEl == 'div') { 
    $this->row .= $data;
-  } else if ($this->$parentEl == 'pb') { 
+  } else if ($this->parentEl == 'pb') { 
    $this->row .= $data;
-  } else if ($this->$parentEl == "alt") {
+  } else if ($this->parentEl == "alt") {
    $this->row .= $data ;
-  } else if ($this->$parentEl == "lang") {
+  } else if ($this->parentEl == "lang") {
    // Greek typically uncoded
    //$data = $data . ' (greek)';
    $this->row .= $data;
-  } else if ($this->$parentEl == "ab") {
+  } else if ($this->parentEl == "ab") {
    $this->row .= "$data";
    /* not used 12-14-2017
    $tran = getABdata($data);
@@ -339,7 +400,7 @@ public function __construct($key,$matches,$filterin,$dict) {
    $this->row .= "</span>";
    }
    */
-  }else if ($this->$parentEl == "ls") { 
+  }else if ($this->parentEl == "ls") { 
    #$data1 = format_ls($data);
    #$this->row .= $data1;
    $this->row .= $data;
@@ -368,13 +429,67 @@ public function getHrefPage($data) {
   $page = $lnum; # this may be dictionary specific.
   if ($ans == "") {
    $args = "page=$page";
-   $ans = "<a href='$serve?$args' target='_Blank'>$lnum</a>";
+   #$ans = "<a href='$serve?$args' target='_Blank'>$lnum</a>";
+   $dictup = strtoupper($this->dict);
+   $ans = "<a href='$serve?$args' target='_$dictup'>$lnum</a>";
   }else {
    $ans .= ",$lnum";
   }
  }
  return $ans;
 }
-
+public function mw_extra_line($line) {
+ /* Currently only used in mw for links to Whitney and Westergaard.
+  Based on <info whitneyroots="X"/> or <info westergaard="X"/>
+ */
+ $ans1=""; // whitney
+ $ans2=""; // westergaard
+ if (preg_match('|<info whitneyroots="(.*?)"/>|',$line,$matches)) {
+  $x = $matches[1];
+  $href0="http://www.sanskrit-lexicon.uni-koeln.de/scans/KALEScan/WRScan/disp2/index.php";
+  $results = preg_split("|;|",$x);
+  $elts=array();
+  foreach ($results as $rec) {
+   list($whitkey,$whitpage) = preg_split("|,|",$rec);
+   $href = "$href0" . "?page=$whitpage";
+   $whitkey1 = $whitkey; 
+   $whitkey2 = "";
+   if (preg_match('|^([^1-9]*)([1-9]*)$|',$whitkey,$matches)) {
+    $whitkey1 = $matches[1];
+    $whitkey2 = $matches[2];
+   }
+   $sdata = $this->sdata;
+   $elt = "<a href='$href' target='_Whitney'><span class='$sdata'><SA>$whitkey1</SA></span>$whitkey2</a>";
+   $elts[] = $elt;
+  }
+  $ans1a = join(", ",$elts);
+  $ans1 = "<em>Whitney Roots links:</em> " . $ans1a;
+  #$ans1 = $ans1 . '  <br/>'; # dbg
+  #dbgprint($dbg,"disp.php mw_extra_line: ans1=$ans1\n");
+ }
+ if (preg_match('|<info westergaard="(.*?)"/>|',$line,$matches)) {
+  $x = $matches[1];
+  $href0="http://www.sanskrit-lexicon.uni-koeln.de/scans/MWScan/Westergaard/disp/index.php";
+  $results = preg_split("|;|",$x);
+  $elts=array();
+  foreach ($results as $rec) {
+   list($westkey,$westsutra,$madhaviyasutra) = preg_split("|,|",$rec);
+   // westsutra is of form (section.rootnum)
+   // our links require the section
+   list($westsection,$westrootnum) = preg_split("|[.]|",$westsutra);
+   $href = "$href0" . "?section=$westsection";
+   $elt = "<a href='$href' target='_Westergaard'>$westsutra</a>";
+   $elts[] = $elt;
+  }
+  $ans2a = join(", ",$elts);
+  $ans2 = "<em>Westergaard Dhatupatha links:</em> " . $ans2a;
+ }
+ if (($ans1 != "") && ($ans2 != "")) {
+  $ans = "$ans1&nbsp;&nbsp;&nbsp;&amp;&nbsp;$ans2";
+ }else {
+  $ans = "$ans1$ans2";
+ }
+ return $ans;
+}
 } ## end of class 
 ?>

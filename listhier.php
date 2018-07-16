@@ -12,27 +12,18 @@
 */
 
 require_once('utilities/transcoder.php');
-//require_once('displistCommon.php');
 require_once('dalwhich.php');
 require_once('dictinfo.php');
-//require_once('getCommon.php');
 require_once('parm.php');
+require_once('dbgprint.php');
 $getParms = new Parm();
 /* extensions for listhier parameters */
 $dbg=False;
-if ($dbg) {
- require_once('dbgprint.php');
- $outar=array();
- $outar[] = "listhier: filter={$getParms->filter}";
- $out = join(' ',$outar);
- dbgPrint($dbg,"$out\n");
-}
-$lnumin = $_GET['lnum'];  
+$lnumin = $_REQUEST['lnum'];  
 $getParms->lnumin=$lnumin;
 
-//echo "<p>listhiermw.php</p>\n";
 // direction: either 'UP', 'DOWN', or 'CENTER' (default)
-$direction = $_GET['direction'];
+$direction = $_REQUEST['direction'];
 if (($direction != 'UP') && ($direction != 'DOWN')) {
  $direction = 'CENTER';
 }
@@ -375,8 +366,10 @@ while($i < $nmatches2) {
 return $listmatches;
 }
 function construct_rec1($key1,$lnum1,$data1){
+ // assume this is for mw. 07-15-2018
  if (!preg_match('|<info>(.*?)</info><body>(.*?)</body>|',$data1,$matchrec))   {
-   $data2="";
+   $data2 = $data1;
+   #$data2="";
    $rec1 = array($key1,$lnum1,$data2);
    return $rec1;
   }
