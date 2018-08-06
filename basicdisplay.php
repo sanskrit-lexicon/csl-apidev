@@ -32,7 +32,7 @@ public function __construct($key,$matches,$filterin,$dict) {
  $this->dict = $dict;
  $this->filterin = $filterin;
  $this->pagecol="";
- $this->dbg=false;
+ $this->dbg=false; #false;
  $this->inSanskrit=false;
  if ($filterin == "deva") {
  /* use $filterin to generate the class to use for Sanskrit (<s>) text 
@@ -44,8 +44,12 @@ public function __construct($key,$matches,$filterin,$dict) {
   $this->sdata = "sdata"; // default.
  }
  $sdata = $this->sdata;
- $this->table = "<h1 class='$sdata'>&nbsp;<SA>$key</SA></h1>\n";
-
+ if (in_array($this->dict,array('ae','mwe','bor'))) {
+  // no transliteration of $key for English headword
+  $this->table = "<h1>&nbsp;$key</h1>\n";
+ }else {
+  $this->table = "<h1 class='$sdata'>&nbsp;<SA>$key</SA></h1>\n";
+ }
  $this->table .= "<table class='display'>\n";
  $ntot = count($matches);
  $i = 0;
@@ -136,7 +140,7 @@ public function __construct($key,$matches,$filterin,$dict) {
      $ans = "<br/><span style='$style'>";
     }
     return $ans;
-    }else if ($this->dict == 'stc') {
+   }else if ($this->dict == 'stc') {
      if (($n == 'P')) {
       $style="position:relative; left:1.5em;";
      }else {
@@ -144,7 +148,7 @@ public function __construct($key,$matches,$filterin,$dict) {
      }
      $ans = "<br/><span style='$style'>";
      return $ans;
-    }else if ($this->dict == 'pwg') {
+   }else if ($this->dict == 'pwg') {
      if ($n == '1') {$indent = "1.0em";}
      else if ($n == '2') {$indent = "2.0em"; }
      else if ($n == '3') {$indent = "3.0em";}
@@ -152,10 +156,154 @@ public function __construct($key,$matches,$filterin,$dict) {
      $style="position:relative; left:$indent;";
      $ans = "<br/><span style='$style'>";
      return $ans;
-   }else { // default
+   }else if ($this->dict == 'skd') {
+    // for skd (only for n="F", 5 cases as of 8/23/2017)
+    // also endhndl
+    // Treat the same as "<F>"
+    $ans = "<br/>";
+    if ($n == "F") {
+     #$ans .= "<strong>Footnote: ";
+     $ans .= "<br/>&nbsp;<span class='footnote'>[Footnote: ";
+    }
+    return $ans; 
+   }else if ($this->dict == 'krm') {
+    if ($n == "F") {
+     $ans = "<br/><b>Footnote </b> <span>";
+    }else {
+     // krm: n=lb, NI, P
+     $ans = "<br/><span>";
+    }
+    return $ans; 
+   }else if ($this->dict == 'pw') {
+    //  n = 1 (number div), n = 2 (English letter), n = 3 (Greek letter)
+    //  n = p (prefixed form, in verbs
+    if ($n == '1') {$indent = "1.5em";}
+    else if ($n == '2') {$indent = "3.0em";}
+    else if ($n == '3') {$indent = "4.5em";}
+    else {$indent = "";}
+    $style = "position:relative; left:$indent;";
+    $ans = "<br/><span style='$style'>";
+    return $ans;
+   }else if ($this->dict == 'ap') {
+    // line break, and 
+    // indent, whether 'n' is '2' or 'P' (only values allowed) 05-04-2017
+    // also, n='3' 05-21-2017 
+    //  Examples: n=2: akulAgamatantra
+    //  n=P paRqitasvAmin
+    //  n=3 agastyasaMhitA
+    if ($n == '3') {
+     $style="position:relative; left:2em;";
+    }else if ($n == '2') {
+     $style="position:relative; left:1em;";
+    }else {
+     $style="";
+    }
+    $ans = "<br/><span style='$style'>";
+    return $ans;
+   }else if (in_array($this->dict,array('pd','bhs','mwe','mw72','sch','snp','vei'))) {
+    //  n = lb (line break)
+    //  But for 'sch', there is no n attribute  (so $n is null or undefined).
+    // snp has n=lb, P, HI.  Currently all are rendered as line break.
+    // vei has n=lb, P.  Both are rendered as line break.
+    $ans = "<br/><span>";
+    return $ans;
+   }else if (in_array($this->dict,array('wil','shs'))) {
+    // line break, and 
+    // indent, indent if 'n' is '2'
+    // no indent if n='1' , 'E', 'lex' (for wil)
+    //              n='1' , 'E', 'Poem' (for wil)
+    if ($n == '2') {
+     $style="position:relative; left:1.5em;";
+    } else {
+     $style="";
+    }
+     $ans = "<br/><span style='$style'>";
+    return $ans;
+   }else if (in_array($this->dict,array('gst','ieg','inm','mci'))) {
+    if ($n == 'P') {$indent = "1.0em";}
+    #else if ($n == 'lb') {$indent = "0.0em"; }
+    else {$indent = "0.0em"; }
+    $style="position:relative; left:$indent;";
+    $ans = "<br/><span style='$style'>";
+    return $ans;
+   }else if (in_array($this->dict,array('ben','pui'))) {
+    // in ben, this div is an empty div. The display
+    // should begin a new indented paragraph.
+    // Example under dIkz and garj.
+    if ($n == 'P') {
+     $ans = "<br/>&nbsp;&nbsp;&nbsp;<span>";
+    } else { // doesn't occur for ben
+     $ans = "<br/><span>";
+    } 
+    return $ans;
+   }else if ($this->dict == 'vcp') {
+    if ($n == 'Picture') {
+     $ans = "<br/> &nbsp;<span style='font-size:smaller;'>(Picture)";
+    } else { //P, H, HI
+     $ans = "<br/> <span>";
+    }
+    return $ans;  
+   }else if ($this->dict == 'bop') {
+    // n = "lb" or "pfx".  Currently always a line break
+    $ans = "<br/> <span>";
+    return $ans;  
+   }else if ($this->dict == 'bor') {
+    if ($n == "lb") {  // 
+     $ans = "<br/> <span>";   
+    } else {
+     $ans = "<span>";
+    }
+    return $ans;  
+   }else if ($this->dict == 'pe') {
+    // the div tag is empty for pe.
+    // hence, indentation doesn't work using the position:relative trick.
+    if ($n == 'P') {
+     // line break plus indent. Since div is empty tag, it has no
+     // content. Thus, position:relative; left:3.0em  doesn't indent.
+     // Instead, use several &nbsp;
+     $ans= "<br/><span>&nbsp;&nbsp;&nbsp;"; 
+    }else if ($n == 'NI') {
+     // two line breaks, no indent
+     $ans = "<br/><br/><span>";
+    }else { 
+     // $n == "lb" . line break, no indent
+     $ans = "<br/><span>";
+    }
+    return $ans;  
+    } else if ($this->dict == 'pgn') {
+    // the div tag is empty for pgn.
+    // hence, indentation doesn't work using the position:relative trick.
+    if ($n == 'P') {
+     // line break plus indent. Since div is empty tag, it has no
+     // content. Thus, position:relative; left:3.0em  doesn't indent.
+     // Instead, use several &nbsp;
+     $ans= "<br/><span>&nbsp;&nbsp;&nbsp;"; 
+    }else { 
+     // $n == "lb" . line break, no indent
+     $ans = "<br/><span>";
+    }
+    return $ans;  
+    } else if ($this->dict == 'acc') {
+     // line break, and 
+     // indent, whether 'n' is '2' or 'P' (only values allowed) 05-04-2017
+     // also, n='3' 05-21-2017 
+     //  Examples: n=2: akulAgamatantra
+     //  n=P paRqitasvAmin
+     //  n=3 agastyasaMhitA
+     if (($n == '2') || ($n=='P')) {
+      $style="position:relative; left:1.5em;";
+      $ans = "<br/><span style='$style'>";
+     } else {
+     // e.g. n="3"
+     $style="";
+     $ans = "<br/><span style='$style'>";
+   }
+    return $ans;  
+  }else { // default
     // currently applies to:
     // cae with <div n="p"/>
     // mw 
+    // ap90 with <div n="1"/> or <div n="P"/>. See basicadjust
     #$style="position:relative; top:1.0em";
     #$ans = "<br/><span>";
     $style="margin-top:0.6em;";
@@ -180,7 +328,7 @@ public function __construct($key,$matches,$filterin,$dict) {
    $this->inSanskrit = true;
   } else if ($el == "key2"){
    $this->inkey2 = true;
-  } else if ($el == "b"){ // bold
+  } else if ($el == "b"){ 
    $this->row .= "<strong>"; 
   } else if ($el == "graverse") {
    $this->row .= "<span style='font-size:smaller; font-weight:100'>";
@@ -210,6 +358,7 @@ public function __construct($key,$matches,$filterin,$dict) {
   } else if ($el == "shortlong") { // mw no action
   } else if ($el == "srs") { // mw no action. Different from previous version.
   } else if ($el == "pcol") { // mw no action. Different from previous version.
+  } else if ($el == "nsi") { // mw72 no action
   } else if ($el == "pb"){
    if ($this->dict == "mw") {
     # do nothing.
@@ -219,7 +368,9 @@ public function __construct($key,$matches,$filterin,$dict) {
   } else if ($el == "key1"){
   } else if ($el == "hom"){ // handled wholly in chrhndl
   } else if ($el == "F"){
-   $this->row .= "<br/>&nbsp;<span class='footnote'>[Footnote: ";
+   #$this->row .= "<br/>&nbsp;<span class='footnote'>[Footnote: ";
+   $style = "font-weight:bold;";
+   $this->row .= "<br/>[<span style='$style'>Footnote: </span><span>";
   } else if ($el == "symbol") {
   } else if ($el == "div") {
    $this->row .= $this->sthndl_div($attribs);
@@ -230,26 +381,42 @@ public function __construct($key,$matches,$filterin,$dict) {
   } else if ($el == "hwtype") {
    // Ignore
   } else if ($el == "sup") {
-   $this->row .= "<sup>";
+   if (in_array($this->dict,array('gst','krm','mci'))) {
+    $this->row .= '<sup style="font-weight:bold;">';
+   } else {
+    $this->row .= "<sup>";
+   }
   } else if ($el == "lbinfo") {
     // empty tag.
   } else if ($el == "lang") {
     // nothing special here  Greek remains to be filled in
     // Depends on whether the text is filled in
-    if (in_array($this->dict,array('pwg','mw'))) {
-     # nothing to do.
+    $n = $attribs['n'];
+    if (in_array($this->dict,array('pwg','mw','pw','wil','md'))) {
+     # nothing to do.  Greek (and other) unicode has been provided.
+    }else if ($this->dict == 'mw72') {
+     $empty = $attribs['empty'];
+     if ($empty == 'yes') {
+      # placeholder required
+      $this->row .= " ($n) ";
+     }else {
+       # no placeholder required. nothing to do
+     }
     }else {
-     $this->row .= " (greek) ";
+     # put a placeholder where the greek, arabic, etc. needs to be provided.
+     $this->row .= " ($n) ";
     }
   } else if ($el == "lb") {
     $this->row .= "<br/>";
   } else if ($el == "C") {
-   // vcp specific
    $n = $attribs['n'];
-   if ($n == '1') {
-    $this->row .= "<br/>";
+   if ($this->dict == "vcp") {
+    // vcp specific
+    if ($n == '1') {
+     $this->row .= "<br/>";
+    }
    }
-   $this->row .= "<strong>(C$n)</strong>";
+   $this->row .= "<strong>(C$n)</strong>"; // any dictionary
   } else if ($el == "edit"){ // vcp
     // no display
   } else if ($el == "ls") {
@@ -261,11 +428,11 @@ public function __construct($key,$matches,$filterin,$dict) {
     $this->row .= "&nbsp;<span class='ls'>";   
    }
   } else if ($el == "lshead") {
-   // pwg
+   // pwg, pw
    $style = "color:blue; border-bottom: 1px dotted #000; text-decoration: none;";
    $this->row  .= "<span style='$style'>";
   } else if ($el == "is") {
-    //pwg
+    //pwg, pw
    #$this->row .= "<span style='font-style: normal; color:teal'>";
    $this->row .= "<span style='letter-spacing:2px;'>"; # this is more like the text
   } else if ($el == "bot") {
@@ -286,6 +453,28 @@ public function __construct($key,$matches,$filterin,$dict) {
      $this->row .= "<span>";
     }
   } else if ($el == "vlex"){ // no display
+  } else if ($el == "mark"){ 
+   // skd. n = H,P
+   $n = $attribs['n'];
+   $row .= "<strong>($n) </strong>";   
+  } else if ( ($el == "g")&&($this->dict == "yat")) {
+   # no markup.  Should remove when yat.txt changes to "<lang>" markup
+  } else if ( ($el == "pic")&&($this->dict == "ben")) {
+   $filename = $attribs['name'];
+   $path = "../../web/images/$filename";
+   $this->row .= "<img src='$path'/>";   
+  } else if ($el == "note") {
+   // no action currently. For krm.   
+  } else if ($el == "Poem") {
+   if ($this->dict == 'pe') {
+    $style = "position:relative; left:3.0em;";
+    $this->row .= "<br/><div style='$style'>";
+   }else {
+    // For krm.   
+    $this->row .= "<br/>";    
+   }
+  } else if ($el == "type") {
+    // displayed in chrhndl
   } else {
     $this->row .= "<br/>&lt;$el&gt;";
   }
@@ -299,7 +488,7 @@ public function __construct($key,$matches,$filterin,$dict) {
    $this->inSanskrit = false;
   } else if ($el == "F") {
    $this->row .= "]</span>&nbsp;<br/>";
-  } else if ($el == "b"){
+  } else if ($el == "b"){ 
    $this->row .= "</strong>"; 
   } else if ($el == "graverse") {
    $this->row .= "</span>";
@@ -317,9 +506,13 @@ public function __construct($key,$matches,$filterin,$dict) {
    $this->inkey2 = false;
   } else if ($el == "symbol") {
   } else if ($el == "div") {
+   if ($this->dict == "skd") {
+    #$this->row .= " ( Footnote End)</strong>";
+    $this->row .= "]</span>&nbsp;<br/>";
+   }else {
    // close the div span
     $this->row .= "</span>";
-   
+   }
   } else if ($el == "alt") {
    // close the span, and introduce line break
    $this->row .= ")</span><br/>";
@@ -349,7 +542,12 @@ public function __construct($key,$matches,$filterin,$dict) {
    if ($this->dict == 'mw') {
     // don't show
    }else {
-    $this->row1 .= "&nbsp;<span class='$sdata'><SA>$data</SA></span>";
+    if (in_array($this->dict,array('ae','mwe','bor'))) {
+     // no transliteration of $key for English headword
+     $this->row1 .= "&nbsp;<span class='$sdata'>$data</span>";
+    }else {
+     $this->row1 .= "&nbsp;<span class='$sdata'><SA>$data</SA></span>";
+    }
    }
    //$this->row1 .= "&nbsp;<span class='$sdata'>$data</span>";
   } else if ($this->parentEl == "key1"){ // nothing printed
@@ -404,6 +602,9 @@ public function __construct($key,$matches,$filterin,$dict) {
    #$data1 = format_ls($data);
    #$this->row .= $data1;
    $this->row .= $data;
+  } else if ($this->parentEl == "type") {
+    // prepend to $row1, so it precedes key2
+    $this->row1 = "<strong>$data</strong> " . $row1;
   } else { // Arbitrary other text
    $this->row .= $data;
   }

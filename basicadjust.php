@@ -24,7 +24,7 @@ class BasicAdjust {
   $key = $getParms->key;
   $this->dbg=false;
   $this->dal_ab = new Dalraw($dict,"ab");
-  if ($dict == 'pwg') {
+  if (in_array($dict,array('pwg','pw'))) {
    $this->dal_auth = new Dalraw($dict,"bib");  # powgbib
    dbgprint(false,"basicadjust: bib file open? " . $this->dal_auth->status ."\n");
   }else if ($dict == 'mw'){
@@ -96,8 +96,73 @@ class BasicAdjust {
   if ($this->getParms->dict == "mw") {
    $line = $this->move_L_mw($line);
    # remove <hom>X</hom> within head portion
-   $line = preg_replace("|<key2>(.*?)<hom>.*?</hom>(.*?<body>)|","<key2>$1$2",$line);
-   
+   $line = preg_replace("|<key2>(.*?)<hom>.*?</hom>(.*?<body>)|","<key2>$1$2",$line); 
+  }
+  else if ($this->getParms->dict == "ap90") {
+   /*  ap90.xml has a line break '<lb/>' according to the printed edition.
+     In the display, these are not recognized.
+     Further, the display attempts to rejoin hyphenation due to line breaks.
+     Finally, the pattern '<b>--X</b>' is treated as a division that generates
+     a line break
+   */
+   #dbgprint(true,"line before <lb> changes\n$line\n");
+   $line = preg_replace('|- *<lb/>|','',$line);
+   $line = preg_replace('|-</s> <lb/><s>|','',$line);
+   $line = preg_replace('|<lb/>|','',$line);
+   # now reintroduce some line breaks, and replace '--' with '&mdash;'
+   # tech note on php:  when html entity &mdash; is used, then there is
+   # an error in the xml parser in disp.php.  However, when we use 
+   # the numerical code, '&#x2014;', the error disappears.
+   # It might be better to do this logic (including the em-dash) in
+   # make_xml.py or even in ap90.txt. E.g., change
+   # <b>--X</b> to <div n="1"/><b>—X</b>
+   #$line = preg_replace('|<b>--|','<lb/><b>&mdash;',$line);
+   $line = preg_replace('|<b>--|','<div n="1"/><b>&#x2014; ',$line);
+   # also, there are seven instances of "<P/>". Replace with a div
+   $line = preg_replace('|<P/>|','<div n="P"/>',$line);
+   #dbgprint(true,"line after <lb> changes\n$line\n");
+  }
+  else if ($this->getParms->dict == "ap") {
+   // replace -- with mdash : perhaps should be part of ap.txt
+   $line = preg_replace('/--/','&#8212;',$line);
+   // 03-12-2017.  Put 'b' (bold) tag around the first word of a div
+   $line = preg_replace('|(<div[^>]*>)(\(<i>.</i>\))|','\\1<b>\\2</b>',$line);
+   $line = preg_replace('|(<div[^>]*>)([0-9]+)|','\\1<b>\\2</b>',$line);
+   // Remove <root/> tag -- it plays no part in display
+   $line = preg_replace('|<root/>|','',$line);
+  }
+  else if ($this->getParms->dict == "yat") {
+   $line = preg_replace('|- <br/>|','',$line);
+   $line = preg_replace('|<br/>|',' ',$line);
+   $line = preg_replace('/--/','&#8212;',$line);  # emdash
+  }
+  else if ($this->getParms->dict == "shs") {
+   $line = preg_replace('|- <lb/>|','',$line);
+   $line = preg_replace('|<lb/>|',' ',$line);
+   $line = preg_replace('/--/','&#8212;',$line);  # emdash
+  } else if ($this->getParms->dict == "ben") {
+   $line = preg_replace('/--/','&#8212;',$line);  # emdash
+   $line = preg_replace('|<g></g>|','<lang n="greek"></lang>',$line);
+   $line = preg_replace('|<P/>|','<div n="P"/>',$line);
+  } else if ($this->getParms->dict == "bor") {
+   /* Put bold tag around first word of <div n="1"> or <div n="I"> 
+      Sometimes there is no space character in the div. Remedy this by always
+      putting a space before a closing div </div>.
+   */
+   $line = preg_replace('|</div>|',' </div>',$line);
+   $line = preg_replace('|<div n="([1I])">([^ ]*)|','<div n="\1"><b>\2</b>',$line);
+  } else if ($this->getParms->dict == "mw72") {
+   $line = preg_replace('|></lang>|'," empty='yes'></lang>",$line);
+  } else if ($this->getParms->dict == "sch") {
+   # this should have been done in sch.txt or sch.xml
+   $line = preg_replace('|\^(.)|',"<sup>\\1</sup>",$line);
+  } else if ($this->getParms->dict == "acc") {
+   # this should have been done in acc.txt or acc.xml
+   $line = preg_replace('|\^([a-d02th]+)|',"<sup>\\1</sup>",$line);
+   $line = preg_replace('/--/','&#8212;',$line);  # emdash
+   # also, remove breaks.  This is a display choice, maybe not for acc.txt,xml
+   $line = preg_replace('|- <br/>|','',$line);
+   $line = preg_replace('|<br/>|',' ',$line);
   }
  return $line;
 }
@@ -118,7 +183,9 @@ class BasicAdjust {
  if (count($result) != 1) {
   return $ans; // failure
  }
- if ($this->getParms->dict == 'pwg') {
+ if (in_array($this->getParms->dict,array('pwg','pw'))) {
+  // This if is currently redundant, as ls_callback_pwg only called
+  // when this is true. However, it does no harm.
   $rec = $result[0];
   list($n0,$code,$codecap,$text) = $rec;
   dbgprint($dbg," ls_callback_pwg code=$code,  codecap=$codecap, text=\n$text\n");
