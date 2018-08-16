@@ -70,7 +70,11 @@ EOT;
 <html>
 <head>
 <meta charset="UTF-8">
+<!--
 <link rel='stylesheet' type='text/css' href='http://www.sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/css/basic.css' />
+-->
+<link rel='stylesheet' type='text/css' href='css/basic.css' />
+
 $winls_script
 </head>
 <body>

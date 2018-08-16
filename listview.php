@@ -1,4 +1,5 @@
 <?php
+error_reporting( error_reporting() & ~E_NOTICE );
 if (isset($_GET['callback'])) {
  header('content-type: application/json; charset=utf-8');
  header("Access-Control-Allow-Origin: *");
@@ -9,8 +10,13 @@ if (isset($_GET['callback'])) {
 <html>
  <head>
   <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
+ <!--
   <title>Monier-Williams Dictionary</title>
   <link rel="stylesheet" type="text/css" href="http://www.sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/css/listview.css" />
+ -->
+  <title>Cologne apidev/Listview </title>
+  <link rel="stylesheet" type="text/css" href="css/listview.css" />
+
   <script src="js/jquery.min.js"></script>
   <script src="js/listview.js"> </script>
  </head>
@@ -39,7 +45,14 @@ if (isset($_GET['callback'])) {
 </div>
 </div>
 
-<script src="http://www.sanskrit-lexicon.uni-koeln.de/js/piwik_analytics.js"></script> 
+<?php 
+ $piwik = 
+'<script src="http://www.sanskrit-lexicon.uni-koeln.de/js/piwik_analytics.js"></script>';
+ require_once('dictinfowhich.php');
+ if ($dictinfowhich == "cologne") {
+  echo "$piwik\n";
+ }
+?>
 
 </body>
 </html>
