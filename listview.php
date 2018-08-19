@@ -5,6 +5,20 @@ if (isset($_GET['callback'])) {
  header("Access-Control-Allow-Origin: *");
 }
 ?>
+<?php 
+/* Set cookies so JS can read them when listhier clicks on things
+  Technical note: From http://php.net/manual/en/features.cookies.php,
+  "Cookies are part of the HTTP header, so setcookie() must be called before any output is sent to the browser."
+  This is why this cookie setting code appears before the rest of the
+  display generation.
+  Aug 17, 2015. Remove 'options' from cookienames
+*/
+ $cookienames = array('dict','accent','input','output');
+ foreach($cookienames as $name) {
+  setcookie($name,$_GET[$name]);
+ }
+
+?>
 
 <!DOCTYPE html>
 <html>
@@ -21,20 +35,6 @@ if (isset($_GET['callback'])) {
   <script src="js/listview.js"> </script>
  </head>
  <body>
-<?php 
-/* Set cookies so JS can read them when listhier clicks on things
-  Technical note: From http://php.net/manual/en/features.cookies.php,
-  "Cookies are part of the HTTP header, so setcookie() must be called before any output is sent to the browser."
-  This is why this cookie setting code appears before the rest of the
-  display generation.
-  Aug 17, 2015. Remove 'options' from cookienames
-*/
- $cookienames = array('dict','accent','input','output');
- foreach($cookienames as $name) {
-  setcookie($name,$_GET[$name]);
- }
-
-?>
 <div id="CologneListview">
 <div class="dispdiv">
  <?php include "disphier.php";?>
