@@ -12,7 +12,10 @@ if (isset($_GET['callback'])) {
   This is why this cookie setting code appears before the rest of the
   display generation.
   Aug 17, 2015. Remove 'options' from cookienames
+  Aug 18, 2018. add error reporting to remove warnings; Peter's MacBookPro shows warning messages
+    for the calls to setcookie. Hopefully this will suppress those warning messages.
 */
+error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
  $cookienames = array('dict','accent','input','output');
  foreach($cookienames as $name) {
   setcookie($name,$_GET[$name]);
