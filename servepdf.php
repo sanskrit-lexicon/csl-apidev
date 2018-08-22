@@ -68,9 +68,17 @@ if ((!$page)&&$key) {// Try to get $page from 'key' parm
 list($filename,$pageprev,$pagenext)=getfiles($webpath,$page,$dictupper);
 // 04-17-2018. Use The cologne images
 // $dir = "$webpath/pdfpages"; // location of pdf files
+// 08-21-2018. Use local version if available. Otherwise use cologne server
+//  This local version assumes the file structure of xampp
+#$pdffile = "$webpath/pdfpages/$filename";
+$dictlower = $dictinfo->dict;
+$pdffile = "../$dictlower/web/pdfpages/$filename";
+if(file_exists($pdffile)) {
+ $pdf = $pdffile;
+}else { // Use the cologne images
 $dir = "{$dictinfo->get_cologne_weburl()}/pdfpages";
 $pdf = "$dir/$filename";
-
+}
 
 ?>
 <!DOCTYPE html>
@@ -133,6 +141,7 @@ function getfiles($webpath,$pagestr_in0,$dictupper) {
  $pagehash=array(); // hash
  $n=0;
  foreach($lines as $line) {
+  $line = trim($line);  // 08-21-2018 Removes end of line chars, and white spc
   list($pagestr,$pagefile,$pagetitle) = preg_split('|:|',$line);
   # pagetitle currently unused
   $n++;
