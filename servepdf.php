@@ -12,10 +12,16 @@ Parameters:
   Only one of 'page' and 'key' should be used.  If both are present, then
   'key' parameter is ignored and 'page' parameter prevails.
  July 11, 2018. Modify to work with 'raw' data or html data
+ Add dictinfowhich logic, so if this servepdf code is on Cologne server,
+  then we get the images from the Cologne server.
+ This will allow remote programs accessing the Cologne apidev to get
+ images, while preserving use of local images from local versions of
+ this apidev.
 */
 require_once('dbgprint.php');
 require_once('parm.php');
 require_once('dictinfo.php');
+require_once('dictinfowhich.php');  
 $getParms = new Parm();
 # addional paramaters
 $page = $_REQUEST['page'];
@@ -72,12 +78,18 @@ list($filename,$pageprev,$pagenext)=getfiles($webpath,$page,$dictupper);
 //  This local version assumes the file structure of xampp
 #$pdffile = "$webpath/pdfpages/$filename";
 $dictlower = $dictinfo->dict;
-$pdffile = "../$dictlower/web/pdfpages/$filename";
-if(file_exists($pdffile)) {
- $pdf = $pdffile;
-}else { // Use the cologne images
-$dir = "{$dictinfo->get_cologne_weburl()}/pdfpages";
-$pdf = "$dir/$filename";
+if ($dictinfowhich == "cologne") {
+ // Use the cologne images
+ $dir = "{$dictinfo->get_cologne_weburl()}/pdfpages";
+ $pdf = "$dir/$filename";
+}else {
+ $pdffile = "../$dictlower/web/pdfpages/$filename";
+ if(file_exists($pdffile)) {
+  $pdf = $pdffile;
+ }else { // Use the cologne images
+ $dir = "{$dictinfo->get_cologne_weburl()}/pdfpages";
+ $pdf = "$dir/$filename";
+ }
 }
 
 ?>

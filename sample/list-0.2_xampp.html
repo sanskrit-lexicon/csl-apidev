@@ -10,8 +10,8 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
 <!-- jquery-ui is used -->
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
-<script type="text/javascript" src="http://localhost/cologne/apidev1/sample/dictnames.js"></script>
-<script type="text/javascript" src="http://localhost/cologne/apidev1/sample/cookieUpdate.js"></script>
+<script type="text/javascript" src="dictnames.js"></script>
+<script type="text/javascript" src="cookieUpdate.js"></script>
 
 <style>
 body {
@@ -79,7 +79,8 @@ $(document).ready(function() {
   var output = $('#output').val();
   var accent = $('#accent').val();
   // TODO: check for valid inputs before ajax call
-  var urlbase="http://localhost/cologne/apidev1/listview.php";
+  //var urlbase="http://localhost/cologne/apidev1/listview.php";
+  var urlbase="../listview.php";
   var url =  urlbase +  
    "?key=" +escape(key) + 
    "&output=" +escape(output) +
@@ -133,7 +134,8 @@ requires some code for this purpose.
 $("#key").autocomplete({
   source: function(request,response) {
    $.ajax({
-   url:"http://localhost/cologne/apidev1/getsuggest.php",
+   //url:"http://localhost/cologne/apidev1/getsuggest.php",
+   url:"../getsuggest.php",
    datatype:"jsonp",
    data: {
     //q: request.term
