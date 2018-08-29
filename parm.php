@@ -36,6 +36,8 @@ class Parm {
   $this->keyin = $_REQUEST['key'];
   $this->keyin = trim($this->keyin); // remove leading and trailing whitespace
   $this->dict = $_REQUEST['dict'];
+  // some places expect dict to be lower case.
+  $this->dict = strtolower($this->dict);
   $this->accent = $_REQUEST['accent']; 
 
   if(!$this->accent) {$this->accent="no";}

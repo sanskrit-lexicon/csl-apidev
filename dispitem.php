@@ -223,11 +223,17 @@ http://stackoverflow.com/questions/925734/whats-this-in-javascript-onclick
    return $ans;
 } // basicDisplayRecord2
 public function getHrefPage() {
+include('dictinfowhich.php');  
+
  $ans="";
  $data = $this->pginfo;
  $dict = $this->dict;
  $lnums = preg_split('/[,]/',$data);  
  $serve = "servepdf.php";
+ if ($dictinfowhich == "cologne") {
+  $serve = "http://www.sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/$serve";
+ }
+ #dbgprint(true,"dispitem.getHrefPage: serve=$serve\n");
  foreach($lnums as $lnum) {
   if ($ans == "") {
    $args = "dict=$dict&page=$lnum"; #"page=$page";
