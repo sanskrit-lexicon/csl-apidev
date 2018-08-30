@@ -406,17 +406,44 @@ public function remove_slp1_accent($y) {
  }
  return "?"; // algorithm failed
 }
+public function rgveda_link($gra1,$gra2) {
+ /* gra1 = mandala.hymn, gra2 = verse
+ */ 
+ $dbg=false;
+ dbgprint($dbg,"rgveda_link: gra1=$gra1, gra2=$gra2\n");
+ list($mandala,$hymn) = explode(".",$gra1);
+ $imandala = (int)$mandala;
+ $ihymn = (int)$hymn;
+ $hymnfilepfx = sprintf("rv%02d.%03d",$imandala,$ihymn);
+ $hymnfile = "$hymnfilepfx.html";
+ $iverse = (int)$gra2;
+ $versesfx = sprintf("%02d",$iverse);
+ $anchor = "$hymnfilepfx.$versesfx";
+ dbgprint($dbg,"rgveda_link: hymnfile=$hymnfile, anchor=$anchor\n");
+ return array($hymnfile,$anchor);
+}
  public function rgveda_verse_callback($matches) {
 /* no special coding for Sanskrit in <s>X</s> form.
     So, just remove the <s>,</s> elements
+    Adds 'gralink' and 'graverse' elements to xml. These need
+    to be converted to html in disp.php
 */
  $x0 = $matches[0];
  $gra1 = $matches[1];
  $gra2 = $matches[2];
  $modern = $this->rgveda_verse_modern((int)$gra1);
  #$x = "<ab n='Standard hymn reference=$modern'>$gra1</ab>,$gra2";
- $x = "<ab n='=$modern (mandala,hymn)'>$gra1</ab>,<graverse>$gra2</graverse>";
- # restore the initial space
+ #$x = "<ab n='=$modern (mandala,hymn)'>$gra1</ab>,<graverse>$gra2</graverse>";
+ # This version provides a link
+ list($rvfile,$rvanchor) = $this->rgveda_link($modern,$gra2);
+ #$dir = "../sqlite/rvhymns";
+ # 2018-08-30  use github location
+ $dir = "https://sanskrit-lexicon.github.io/rvlinks/rvhymns";
+ $href = "$dir/$rvfile#$rvanchor";
+ $modern1 = "$modern.$gra2";
+ $tooltip = "=$modern1 (mandala,hymn,verse)";
+ $x = "<gralink href='$href' n='$tooltip'>$gra1,<graverse>$gra2</graverse></gralink>";
+# restore the initial space
  $x = " $x";
  return $x;
 }
@@ -434,7 +461,7 @@ public function move_L_mw($line) {
   $line = preg_replace("|$Ltag|","",$line);
   // construct L1 tag
   $L1tag = preg_replace("|L>|","L1>",$Ltag);
-  #dbgprintdisp(true,"Ltag=$Ltag,  L1tag=$L1tag\n");
+  #dbgprint(true,"Ltag=$Ltag,  L1tag=$L1tag\n");
   // Insert L1tag before end of tail -- so at end of display
   $line = preg_replace("|</tail>|","$L1tag</tail>",$line);
  }

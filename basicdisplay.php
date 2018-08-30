@@ -332,6 +332,11 @@ public function __construct($key,$matches,$filterin,$dict) {
    $this->row .= "<strong>"; 
   } else if ($el == "graverse") {
    $this->row .= "<span style='font-size:smaller; font-weight:100'>";
+  } else if ($el == "gralink") {
+    $href = $attribs['href'];
+    $tooltip = $attribs['n'];
+    $style = '';
+    $this->row .= "<a href='$href' title='$tooltip' target='_rvlink'>";
   } else if ($el == "lex"){ // m. f., etc.
    $this->row .= "<strong>"; 
   } else if ($el == "i"){
@@ -492,6 +497,8 @@ public function __construct($key,$matches,$filterin,$dict) {
    $this->row .= "</strong>"; 
   } else if ($el == "graverse") {
    $this->row .= "</span>";
+  } else if ($el == "gralink") {
+   $this->row .= "</a>";
   } else if ($el == "lex"){
    $this->row .= "</strong>"; 
   } else if ($el == "i"){
