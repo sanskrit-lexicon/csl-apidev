@@ -76,11 +76,41 @@ function getword_html_data_raw_adapter($key,$lnum,$data,$dict,$getParms)
  #dbgprint(true,"getword. filter=$filter\n");
  $display = new BasicDisplay($key,$matches,$filter,$dict);
  $table = $display->table;
- #$table = basicDisplay($key,$matches,$filter);
- # expect table has 6 lines.
  $tablines = explode("\n",$table); 
  $ntablines = count($tablines);
- // In MW revision, there may be 7 lines.
+ /* $table is a string with 6 lines, or 7 lines when dict==mw
+  Only indices 2,3,4 of $tablines are used here.
+  The exact structure of these lines is complicated.
+  STRUCTURE FOR MW
+  $idx  $tablines[$idx] description
+   0    <h1 class='$sdata'>&nbsp;<SA>$key2</SA></h1>
+   1   <table class='display'>
+   2  <tr><td>Hx and link to scan<br> (but for Hxy cases no Hxy)
+   a) When there are Whitney links or Westegaard links,
+   3   The Whitney/Westergaard links<br>
+   4   html for the body of the entry
+   5   </td><td>spaces</td></tr></table>
+   6   empty line
+   b) When there are no links
+   3   html for the body of the entry
+   4   </td><td>spaces</td></tr></table>
+   5   empty line
+  STRUCTURE FOR non-mw, and non-English headwords (i.e., not ae,mwe, bor, mw)
+   0    <h1 class='$sdata'>&nbsp;<SA>$key2</SA></h1>
+   1   <table class='display'>
+   2  <tr><td>{KEY} {link to scan}  (but for Hxy cases no Hxy)
+   3  <br> html for the body of the entry
+   4  </td><td>spaces</td></tr></table>
+   5   empty line
+
+  STRUCTURE FOR  ae,mwe, bor,
+   0    <h1>&nbsp;$key2</h1>
+   1   <table class='display'>
+   2  <tr><td>{KEY} {link to scan}  (but for Hxy cases no Hxy)
+   3  <br> html for the body of the entry
+   4  </td><td>spaces</td></tr></table>
+   5   empty line
+ */
  if (($ntablines != 6)&& ($ntablines != 7)){
   echo "html ERROR 1: actual # lines in table = $ntablines\n";
   for ($i=0;$i<$ntablines;$i++) {
