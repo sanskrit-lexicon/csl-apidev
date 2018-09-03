@@ -11,6 +11,9 @@
   input == transLit
   output == filter
  Jun 2, 2017. changed $_GET to $_REQUEST
+ Sep 2, 2018. Add 'dispcss' optional parm. If value = 'no', then
+   disp.php does NOT output a <link> css statement.
+   Default value is 'yes', meaning this link is included.
 */
 require_once('utilities/transcoder.php'); // initializes transcoder
 require_once('dictinfo.php');
@@ -54,6 +57,12 @@ class Parm {
   }else {
    $this->keyin1 = preprocess_unicode_input($this->keyin,$this->filterin);
    $this->key = transcoder_processString($this->keyin1,$this->filterin,"slp1");
+  }
+  $this->dispcss = $_REQUEST['dispcss'];
+  if (!$this->dispcss) {
+   $this->dispcss = 'yes';
+  }else if ($this->dispcss != 'no') {
+   $this->dispcss = 'yes';
   }
  dbgprint($dbg,"parm construct keyin = {$this->keyin}\n");
  dbgprint($dbg,"parm construct keyin1 = {$this->keyin1}\n");

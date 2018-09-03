@@ -33,9 +33,13 @@ function basicDisplay($parms,$matches) {
  */
  /* Aug 6, 2016.  Now the winls is needed for also PW
     Mar 6, 2017.  Now the winls is needed for also PWG
+    Sep 2, 2018.  Remove winls entirely.  It has been replaced
+     by tooltips generated in basicadjust.php
+    Sep 2, 2018. output link to basic.css depending on $parms->dispcss.
  */
  $dictinfo = $parms->dictinfo;
  $webpath =  $dictinfo->get_webPath();
+/* begin removed code
  if ($parms->dict == 'mw') {
   $winlsurl = ($parms->dict) . 'auth_' . ($parms->filter) . '.html';
  }else if ($parms->dict == 'pw') {
@@ -65,15 +69,19 @@ function winls(url,anchor) {
 </script>
 EOT;
  }
+END REMOVED CODE */
+ $winls_script=""; 
+ if (isset($parms->dispcss) && ($parms->dispcss == 'no')) {
+  $linkcss = "";
+ }else {
+  $linkcss = "<link rel='stylesheet' type='text/css' href='css/basic.css' />";
+ }
  $output = <<<EOT
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<!--
-<link rel='stylesheet' type='text/css' href='http://www.sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/css/basic.css' />
--->
-<link rel='stylesheet' type='text/css' href='css/basic.css' />
+$linkcss
 
 $winls_script
 </head>
