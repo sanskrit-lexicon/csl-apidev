@@ -10,8 +10,9 @@ error_reporting(E_ALL & ~E_NOTICE );
 
 if (isset($_GET['callback'])) {
  header('content-type: application/json; charset=utf-8');
- header("Access-Control-Allow-Origin: *");
+ #header("Access-Control-Allow-Origin: *");
 }
+header("Access-Control-Allow-Origin: *");
 require_once('utilities/transcoder.php'); // initializes transcoder
 require_once("dalwhich.php");  
 require_once('dbgprint.php');
