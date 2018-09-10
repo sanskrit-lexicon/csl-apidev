@@ -403,7 +403,8 @@ function transcoder_standardize_filter($filter) {
   "HKT2HKT" => "hkt",
   "TAMIL" => "tamil",
   "ROMAN" => "roman",
-  "DEVA" => "deva"
+  "DEVA" => "deva",
+  "IAST" => "roman"
  );
 $filter = strtoupper($filter);
 $result=$standard_hash[$filter];
