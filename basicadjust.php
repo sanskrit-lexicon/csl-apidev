@@ -198,7 +198,7 @@ class BasicAdjust {
   dbgprint($dbg," ls_callback_pwg. text after removing tags: \n$text\n");
   # convert special characters to html entities
   # for instance, this handles cases when $tran has single (or double) quotes
-  $tooltip = htmlspecialchars($text,ENT_QUOTES);
+  $tooltip = $this->htmlspecial($text);
   $ans = "<ls n='$tooltip'>$datanew</ls>";
   dbgprint($dbg,"ls_callback_pwg: ans=$ans\n");
  }
@@ -225,8 +225,7 @@ public function ls_callback_mw($matches) {
  }
  $text = "$title ($type)";
  // The tooltip might be malformed for an html attribute. Try to fix
- $tooltip = htmlspecialchars($text,ENT_QUOTES);
-
+ $tooltip = $this->htmlspecial($text);
  # reconstruct the ls element with an n attribute
  $ans = "<ls n='$tooltip'><lshead>$abbrv</lshead>$rest</ls>";
  dbgprint($dbg,"  lsnew=$ans\n");
@@ -468,7 +467,20 @@ public function move_L_mw($line) {
  dbgprint($dbg,"basicadjust.move_L_mw leave: line=\n$line\n");
  return $line;
 }
-
+public function htmlspecial($text) {
+ // First, use the php function to convert quotes to html entities:
+ // This converts single quote to &#039;
+ $tooltip = htmlspecialchars($text,ENT_QUOTES);
+ // since the result is parsed again with xml_parser, and xml_parser
+ // autoconverts (apparently) &#039; back to single quote,
+ // and then generates a parse error if this single quote occurs
+ //  within an atribute value expresses as <x attr='y'>  (i.e. y has a
+ //  single quote).
+ // Because of this we change &#039; to &#8217;  -- which xml_parser
+ // apparently leaves unchanged, and generates no error.
+ $tooltip = preg_replace('/&#039;/','&#8217;',$tooltip);
+ return $tooltip;
+}
 }
 
 class BasicAdjustLexParser{
@@ -487,8 +499,15 @@ class BasicAdjustLexParser{
   xml_set_character_data_handler($p,array($this,'chrhndl'));
   xml_parser_set_option($p,XML_OPTION_CASE_FOLDING,FALSE);
   $this->row="";
+  # 09-27-2018. Due to error in 'double-parsing' of '&amp;'
+  #   This parser for adding abbreviations in <lex> markup
+  #   Also converts &amp; to &.   Since the result is parsed a 
+  #   second time (in disp.php) the naked '&' causes a parsing error.
+  #   This rare even was noticed in hw=caRqa (L=70905) and
+  #   in hw=aruRa (L=15417).
   $this->parents=array();
-  if (!xml_parse($p,$line)) {
+  $line1 = preg_replace("/&amp;/","<amp/>",$line); # 09-27-2018
+  if (!xml_parse($p,$line1)) {
    dbgprint(true,"BasicAdjustLexParser: xml parse error\n");
    $this->result = $line;
    $this->status = false;
@@ -501,6 +520,8 @@ class BasicAdjustLexParser{
  public function sthndl($xp,$el,$attribs) {
   if ($el == "lex") {
    // nothing.  don't output the lex tag to html
+  }else if ($el == "amp") {
+   // nothing
   }else {
    // output the element tag and its attributes
    $this->row .= "<$el";
@@ -517,6 +538,8 @@ class BasicAdjustLexParser{
   array_pop($this->parents);
   if ($el == "lex") {
    // nothing.  don't output the ending lex tag to html
+  }else if ($el == "amp") {
+   // nothing
   }else {
    // close the tag
    $this->row .= "</$el>";
@@ -562,5 +585,20 @@ class BasicAdjustLexParser{
   }
 
  }
+public function htmlspecial($text) {
+ // we need this function in this class also
+ // First, use the php function to convert quotes to html entities:
+ // This converts single quote to &#039;
+ $tooltip = htmlspecialchars($text,ENT_QUOTES);
+ // since the result is parsed again with xml_parser, and xml_parser
+ // autoconverts (apparently) &#039; back to single quote,
+ // and then generates a parse error if this single quote occurs
+ //  within an atribute value expresses as <x attr='y'>  (i.e. y has a
+ //  single quote).
+ // Because of this we change &#039; to &#8217;  -- which xml_parser
+ // apparently leaves unchanged, and generates no error.
+ $tooltip = preg_replace('/&#039;/','&#8217;',$tooltip);
+ return $tooltip;
+}
 }
 ?>
