@@ -147,6 +147,16 @@ class Dal {
   $sql = "select * from {$this->dict} where ('$lnum0' < lnum) order by lnum LIMIT $max";
   return $this->get($sql);
  }
+/* get key by lnum 09-14-2018 */
+ public function get5($lnum0) {
+  // in mw, with L=99930.1, $lnum0 appears as if L=99930.1000000001
+  // To guard against this, we round lnum0 to 3 decimal places.
+  //  [This is consistent with the schema definition]
+  $lnum0 = round($lnum0,3);
+  $lnum1 = $lnum0 + 0.001;
+  $sql = "select * from {$this->dict} where ('$lnum0' < lnum)and(lnum<'$lnum1') order by lnum LIMIT $max";
+  return $this->get($sql);
+ }
 
 }
 
