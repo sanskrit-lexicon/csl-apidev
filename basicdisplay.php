@@ -28,7 +28,9 @@ class BasicDisplay {
  public $dict;
  public $sdata; // class to use for Sanskrit
  public $filterin; // transcoding for output
+ public $key; // the original key being searched for
 public function __construct($key,$matches,$filterin,$dict) {
+ $this->key = $key;
  $this->dict = $dict;
  $this->filterin = $filterin;
  $this->pagecol="";
@@ -56,7 +58,9 @@ public function __construct($key,$matches,$filterin,$dict) {
  while($i<$ntot) {
   $linein=$matches[$i];
   $line=$linein;
+  
   dbgprint($this->dbg,"disp: line[$i+1]=$line\n");
+  dbgprint(true,"disp: line[$i+1]=$line\n");
   $line=trim($line);
   $l0=strlen($line);
   $this->row = "";
@@ -87,8 +91,11 @@ public function __construct($key,$matches,$filterin,$dict) {
   */
   $this->table .= "<tr>";
   $this->table .= "<td>";
-  $style = "background-color:beige";
+  // $style = "background-color:beige";
+  $style = ""; #none
   if ($this->dict == 'mw') {
+   /* adjust $this->row */
+   $this->mw_row_key_adjust($line);
    $row1a = "";
    if ($this->row1 != "") {
     $row1a = "<span style='$style'>{$this->row1}</span>";
@@ -117,6 +124,26 @@ public function __construct($key,$matches,$filterin,$dict) {
  #return $this->table;
 }
 
+ public function getline_key1($line) {
+  if (preg_match('|<key1>(.*?)</key1>|',$line,$matches)) {
+   $key1 = $matches[1];
+   return $key1;
+  }else {
+   return $this->key;
+  }
+ }
+ public function mw_row_key_adjust($line){
+  $keyline = $this->getline_key1($line);
+  if ($keyline == $this->key) {
+   return; // no adjustment
+  }
+  //Do something to visually distinguish (exclude) this line.
+  // modify $this->row
+  $row = $this->row;
+  $style = "background-color:rgb(235,235,235)";
+  $this->row = "<span style='$style'>$row</span>";
+  return;  // not implemented
+ }
  public function sthndl_div($attribs) {
   // 07-05-2018. This function is still dictionary specific
    $n=$attribs['n'];
@@ -567,7 +594,8 @@ public function __construct($key,$matches,$filterin,$dict) {
    //$this->row1 .= "<span class='lnum'> [L=$data]</span>";
   } else if ($this->parentEl == "L1") {
     // only applies to MW. L1 tag generated in basicadjust.
-   $this->row .= "<span class='lnum' style='background-color:beige;'> [ID=$data]</span>";
+   $style = "";  # background-color:rgb(255,255,255)";
+   $this->row .= "<span class='lnum' style='$style'> [ID=$data]</span>";
   } else if ($this->parentEl == 's') {
    $this->row .= "<span class='$sdata'><SA>$data</SA></span>";
   } else if ($this->inSanskrit) {

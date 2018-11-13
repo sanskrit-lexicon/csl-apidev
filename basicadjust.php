@@ -164,6 +164,11 @@ class BasicAdjust {
    $line = preg_replace('|- <br/>|','',$line);
    $line = preg_replace('|<br/>|',' ',$line);
   }
+  if ($this->getParms->dict == "mw")  {
+   /* 11-13-2018 make bold abbreviations following <div n="vp">
+   */
+  $line = preg_replace('|(<div n="vp"/> *)(<ab.*?</ab>)|',"\\1<b>\\2</b>",$line);
+  }
  return $line;
 }
  

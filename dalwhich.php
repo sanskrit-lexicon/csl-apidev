@@ -5,7 +5,7 @@
  the xxxhtml.sqlite files (created in pywork/html) are no longer needed.
 */
 require_once("dalraw.php");  
-require_once("dal.php");  
+##require_once("dal.php");  
 require_once('dbgprint.php');
 function dalwhich($dict) {
  $dbg=false;
