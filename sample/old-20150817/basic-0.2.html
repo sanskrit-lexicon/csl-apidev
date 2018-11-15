@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="display.css" type="text/css">
 -->
 <!-- links to jquery, using CDNs -->
-<script type="text/javascript" src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" src="//code.jquery.com/jquery-2.1.4.min.js"></script>
 <!-- firefox dev tool note on next two:
 This site makes use of a SHA-1 Certificate; it's recommended you use certificates with signature algorithms that use hash functions stronger than SHA-1.
 -->
@@ -56,7 +56,7 @@ body {
 </style>
 <script> 
 // cross origin error
-//Cross-Origin Request Blocked: The Same Origin Policy disallows reading the remote resource at http://www.sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/getword.php?key=guru&filter=deva&dict=WIL&accent=no&transLit=slp1. (Reason: CORS header 'Access-Control-Allow-Origin' missing).
+//Cross-Origin Request Blocked: The Same Origin Policy disallows reading the remote resource at //www.sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/getword.php?key=guru&filter=deva&dict=WIL&accent=no&transLit=slp1. (Reason: CORS header 'Access-Control-Allow-Origin' missing).
  // Jquery
 $(document).ready(function() {
  $('#key').keypress(function (e) {
@@ -79,7 +79,7 @@ $(document).ready(function() {
   //console.log('key=',key,', dict=',dict,', input=',input,
   //  ', output=',output,' accent=',accent);
   // TODO: check for valid inputs before ajax call
-  var urlbase="http://www.sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/getword.php";
+  var urlbase="//www.sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/getword.php";
   var url =  urlbase +  
    "?key=" +escape(key) + 
    "&filter=" +escape(output) +
@@ -133,8 +133,8 @@ cookieUpdate(false);  // for initializing cookie
 </head>
 <body>
  <div id="logo">
-     <a href="http://www.sanskrit-lexicon.uni-koeln.de/">
-      <img id="unilogo" src="http://www.sanskrit-lexicon.uni-koeln.de/images/cologne_univ_seal.gif"
+     <a href="//www.sanskrit-lexicon.uni-koeln.de/">
+      <img id="unilogo" src="//www.sanskrit-lexicon.uni-koeln.de/images/cologne_univ_seal.gif"
            alt="University of Cologne" width="60" height="60" 
            title="Cologne Sanskrit Lexicon"/>
       </a>

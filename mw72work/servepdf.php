@@ -7,9 +7,9 @@ if (!$page) {$page = $argv[1];}
 list($filename,$pageprev,$pagenext)=getfiles($page);
 
 $HEADER='<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">';
+   "//www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">';
 $HEADER .= 
-  '<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">';
+  '<html xmlns="//www.w3.org/1999/xhtml" lang="en" xml:lang="en">';
 $HEADER .= '<head>';
 $HEADER .= '<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">' . "\n";
 $HEADER .= '<title>Cologne Scan</title>';

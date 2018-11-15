@@ -48,7 +48,7 @@ class DictInfo {
   // 04-17-2018
   // used by servepdf.php
   // Cologne scan directory 
-  $cologne_scandir = "http://www.sanskrit-lexicon.uni-koeln.de/scans";
+  $cologne_scandir = "//www.sanskrit-lexicon.uni-koeln.de/scans";
   $path = $cologne_scandir . "/{$this->dictupper}Scan/{$this->year}/web";
   return $path;
  }

@@ -67,7 +67,7 @@ class Dalraw {
  }
  public function close() {
   if ($this->file_db) {
-   $this->file_db = null;  //ref: http://php.net/manual/en/pdo.connections.php
+   $this->file_db = null;  //ref: //php.net/manual/en/pdo.connections.php
   }
   if ($this->file_db_xml) { // not sure of usage here
    $this->file_db_xml = null;  

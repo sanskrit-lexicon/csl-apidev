@@ -6,13 +6,13 @@
 <link rel="stylesheet" href="display.css" type="text/css">
 -->
 <!-- links to jquery, using CDNs -->
-<script type="text/javascript" src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" src="//code.jquery.com/jquery-2.1.4.min.js"></script>
 <script> 
  // Jquery
 $(document).ready(function() {
  var testrequest = function(request) {
   jQuery.ajax({
-   url:"http://www.sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/easyspell.php",
+   url:"//www.sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/easyspell.php",
    datatype:"jsonp",
    data:request,
    success: function(response) {

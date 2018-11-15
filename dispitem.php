@@ -207,7 +207,7 @@ dbgprint($dbg,"dispitem. key2=$key2\n");
     $class='listlink listlinkCurrent';
    }
    /* for use of 'this', refer
-http://stackoverflow.com/questions/925734/whats-this-in-javascript-onclick
+//stackoverflow.com/questions/925734/whats-this-in-javascript-onclick
    */
    $a = "<a class='$class' onclick='listhier_lnum(\"$lnum\",this);'>$symbol</a>&nbsp;\n";
    $pre = $a . $pre;
@@ -231,7 +231,7 @@ include('dictinfowhich.php');
  $lnums = preg_split('/[,]/',$data);  
  $serve = "servepdf.php";
  if ($dictinfowhich == "cologne") {
-  $serve = "http://www.sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/$serve";
+  $serve = "//www.sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/$serve";
  }
  #dbgprint(true,"dispitem.getHrefPage: serve=$serve\n");
  foreach($lnums as $lnum) {

@@ -682,7 +682,7 @@ public function mw_extra_line($line) {
  $ans2=""; // westergaard
  if (preg_match('|<info whitneyroots="(.*?)"/>|',$line,$matches)) {
   $x = $matches[1];
-  $href0="http://www.sanskrit-lexicon.uni-koeln.de/scans/KALEScan/WRScan/disp2/index.php";
+  $href0="//www.sanskrit-lexicon.uni-koeln.de/scans/KALEScan/WRScan/disp2/index.php";
   $results = preg_split("|;|",$x);
   $elts=array();
   foreach ($results as $rec) {
@@ -705,7 +705,7 @@ public function mw_extra_line($line) {
  }
  if (preg_match('|<info westergaard="(.*?)"/>|',$line,$matches)) {
   $x = $matches[1];
-  $href0="http://www.sanskrit-lexicon.uni-koeln.de/scans/MWScan/Westergaard/disp/index.php";
+  $href0="//www.sanskrit-lexicon.uni-koeln.de/scans/MWScan/Westergaard/disp/index.php";
   $results = preg_split("|;|",$x);
   $elts=array();
   foreach ($results as $rec) {

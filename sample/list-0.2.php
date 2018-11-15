@@ -19,13 +19,13 @@ error_reporting(E_ALL & ~E_NOTICE);
 <title>list-0.2 Cologne</title>
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.css">
 <!-- links to jquery, using CDNs -->
-<script type="text/javascript" src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" src="//code.jquery.com/jquery-2.1.4.min.js"></script>
 
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
 <!-- jquery-ui is used -->
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
-<script type="text/javascript" src="http://www.sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/sample/dictnames.js"></script>
-<script type="text/javascript" src="http://www.sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/sample/cookieUpdate.js"></script>
+<script type="text/javascript" src="//www.sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/sample/dictnames.js"></script>
+<script type="text/javascript" src="//www.sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/sample/cookieUpdate.js"></script>
 
 <style>
 body {
@@ -94,7 +94,7 @@ $(document).ready(function() {
   console.log('listDisplay: accent value=',accent);
 
   // TODO: check for valid inputs before ajax call
-  var urlbase="http://www.sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/listview.php";
+  var urlbase="//www.sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/listview.php";
   var url =  urlbase +  
    "?key=" +escape(key) + 
    "&output=" +escape(output) +
@@ -123,7 +123,7 @@ requires some code for this purpose.
 $("#key").autocomplete({
   source: function(request,response) {
    $.ajax({
-   url:"http://www.sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/getsuggest.php",
+   url:"//www.sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/getsuggest.php",
    datatype:"jsonp",
    data: {
     //q: request.term
@@ -182,8 +182,8 @@ $("#key").autocomplete({
 </head>
 <body>
  <div id="logo">
-     <a href="http://www.sanskrit-lexicon.uni-koeln.de/">
-      <img id="unilogo" src="http://www.sanskrit-lexicon.uni-koeln.de/images/cologne_univ_seal.gif"
+     <a href="//www.sanskrit-lexicon.uni-koeln.de/">
+      <img id="unilogo" src="//www.sanskrit-lexicon.uni-koeln.de/images/cologne_univ_seal.gif"
            alt="University of Cologne" width="60" height="60" 
            title="Cologne Sanskrit Lexicon"/>
       </a>

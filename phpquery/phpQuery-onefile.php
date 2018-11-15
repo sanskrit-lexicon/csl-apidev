@@ -4,11 +4,11 @@
  * Document Object Model (DOM) API based on jQuery JavaScript Library.
  *
  * @version 0.9.5
- * @link http://code.google.com/p/phpquery/
- * @link http://phpquery-library.blogspot.com/
- * @link http://jquery.com/
+ * @link //code.google.com/p/phpquery/
+ * @link //phpquery-library.blogspot.com/
+ * @link //jquery.com/
  * @author Tobiasz Cudnik <tobiasz.cudnik/gmail.com>
- * @license http://www.opensource.org/licenses/mit-license.php MIT License
+ * @license //www.opensource.org/licenses/mit-license.php MIT License
  * @package phpQuery
  */
 
@@ -23,7 +23,7 @@ define('DOMNODE', 'DOMNode');
  * DOMEvent class.
  *
  * Based on
- * @link http://developer.mozilla.org/En/DOM:event
+ * @link //developer.mozilla.org/En/DOM:event
  * @author Tobiasz Cudnik <tobiasz.cudnik/gmail.com>
  * @package phpQuery
  * @todo implement ArrayAccess ?
@@ -51,7 +51,7 @@ class DOMEvent {
 	 * Returns detail about the event, depending on the type of event.
 	 *
 	 * @var unknown_type
-	 * @link http://developer.mozilla.org/en/DOM/event.detail
+	 * @link //developer.mozilla.org/en/DOM/event.detail
 	 */
 	public $detail;	// ???
 	/**
@@ -60,7 +60,7 @@ class DOMEvent {
 	 * NOT IMPLEMENTED
 	 *
 	 * @var unknown_type
-	 * @link http://developer.mozilla.org/en/DOM/event.eventPhase
+	 * @link //developer.mozilla.org/en/DOM/event.eventPhase
 	 */
 	public $eventPhase;	// ???
 	/**
@@ -156,7 +156,7 @@ class DOMDocumentWrapper {
 	public $eventsNodes = array();
 	public $eventsGlobal = array();
 	/**
-	 * @TODO iframes support http://code.google.com/p/phpquery/issues/detail?id=28
+	 * @TODO iframes support //code.google.com/p/phpquery/issues/detail?id=28
 	 * @var unknown_type
 	 */
 	public $frames = array();
@@ -203,7 +203,7 @@ class DOMDocumentWrapper {
 	}
 	protected function afterMarkupLoad() {
 		if ($this->isXHTML) {
-			$this->xpath->registerNamespace("html", "http://www.w3.org/1999/xhtml");
+			$this->xpath->registerNamespace("html", "//www.w3.org/1999/xhtml");
 		}
 	}
 	protected function loadMarkup($markup) {
@@ -277,7 +277,7 @@ class DOMDocumentWrapper {
 		if (! $charset)
 			$charset = phpQuery::$defaultCharset;
 		// HTTP 1.1 says that the default charset is ISO-8859-1
-		// @see http://www.w3.org/International/O-HTTP-charset
+		// @see //www.w3.org/International/O-HTTP-charset
 		if (! $documentCharset) {
 			$documentCharset = 'ISO-8859-1';
 			$addDocumentCharset = true;	
@@ -290,7 +290,7 @@ class DOMDocumentWrapper {
 		if ($requestedCharset && $documentCharset && $requestedCharset !== $documentCharset) {
 			phpQuery::debug("CHARSET CONVERT");
 			// Document Encoding Conversion
-			// http://code.google.com/p/phpquery/issues/detail?id=86
+			// //code.google.com/p/phpquery/issues/detail?id=86
 			if (function_exists('mb_detect_encoding')) {
 				$possibleCharsets = array($documentCharset, $requestedCharset, 'AUTO');
 				$docEncoding = mb_detect_encoding($markup, implode(', ', $possibleCharsets));
@@ -388,7 +388,7 @@ class DOMDocumentWrapper {
 				phpQuery::debug("Full markup load (XML), appending charset '$charset'");
 				$markup = $this->charsetAppendToXML($markup, $charset);
 			}
-			// see http://pl2.php.net/manual/en/book.dom.php#78929
+			// see //pl2.php.net/manual/en/book.dom.php#78929
 			// LIBXML_DTDLOAD (>= PHP 5.1)
 			// does XML ctalogues works with LIBXML_NONET
 	//		$this->document->resolveExternals = true;
@@ -401,7 +401,7 @@ class DOMDocumentWrapper {
 					? $this->document->loadXML($markup)
 					: @$this->document->loadXML($markup);
 			} else {
-				/** @link http://pl2.php.net/manual/en/libxml.constants.php */
+				/** @link //pl2.php.net/manual/en/libxml.constants.php */
 				$libxmlStatic = phpQuery::$debug === 2
 					? LIBXML_DTDLOAD|LIBXML_DTDATTR|LIBXML_NONET
 					: LIBXML_DTDLOAD|LIBXML_DTDATTR|LIBXML_NONET|LIBXML_NOWARNING|LIBXML_NOERROR;
@@ -487,7 +487,7 @@ class DOMDocumentWrapper {
 	/**
 	 * Repositions meta[type=charset] at the start of head. Bypasses DOMDocument bug.
 	 *
-	 * @link http://code.google.com/p/phpquery/issues/detail?id=80
+	 * @link //code.google.com/p/phpquery/issues/detail?id=80
 	 * @param $html
 	 */
 	protected function charsetFixHTML($markup) {
@@ -646,8 +646,8 @@ class DOMDocumentWrapper {
 				// add FAKE element to set default namespace
 				$fragment->loadMarkupXML('<?xml version="1.0" encoding="'.$charset.'"?>'
 					.'<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" '
-					.'"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'
-					.'<fake xmlns="http://www.w3.org/1999/xhtml">'.$markup.'</fake>');
+					.'"//www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'
+					.'<fake xmlns="//www.w3.org/1999/xhtml">'.$markup.'</fake>');
 				$fragment->root = $fragment->document->firstChild->nextSibling;
 			} else {
 				$fragment->loadMarkupXML('<?xml version="1.0" encoding="'.$charset.'"?><fake>'.$markup.'</fake>');
@@ -785,7 +785,7 @@ class DOMDocumentWrapper {
 	 * @param $xml
 	 * @return unknown_type
 	 * @author mjaque at ilkebenson dot com
-	 * @link http://php.net/manual/en/domdocument.savehtml.php#81256
+	 * @link //php.net/manual/en/domdocument.savehtml.php#81256
 	 */
 	public static function expandEmptyTag($tag, $xml){
         $indice = 0;
@@ -984,7 +984,7 @@ interface ICallbackNamed {
  * 
  * Callback class is supported in all phpQuery methods which accepts callbacks. 
  *
- * @link http://code.google.com/p/phpquery/wiki/Callbacks#Param_Structures
+ * @link //code.google.com/p/phpquery/wiki/Callbacks#Param_Structures
  * @author Tobiasz Cudnik <tobiasz.cudnik/gmail.com>
  * 
  * @TODO??? return fake forwarding function created via create_function
@@ -1343,7 +1343,7 @@ class phpQueryObject
 	/**
 	 * Enter description here...
 	 *
-	 * @link http://docs.jquery.com/Ajax/serialize
+	 * @link //docs.jquery.com/Ajax/serialize
 	 * @return string
 	 */
 	public function serialize() {
@@ -1352,7 +1352,7 @@ class phpQueryObject
 	/**
 	 * Enter description here...
 	 *
-	 * @link http://docs.jquery.com/Ajax/serializeArray
+	 * @link //docs.jquery.com/Ajax/serializeArray
 	 * @return array
 	 */
 	public function serializeArray($submit = null) {
@@ -1444,7 +1444,7 @@ class phpQueryObject
 		$pseudoChars = array('-');
 		$tagChars = array('*', '|', '-');
 		// split multibyte string
-		// http://code.google.com/p/phpquery/issues/detail?id=76
+		// //code.google.com/p/phpquery/issues/detail?id=76
 		$_query = array();
 		for ($i=0; $i<$strlen; $i++)
 			$_query[] = mb_substr($query, $i, 1);
@@ -2264,7 +2264,7 @@ class phpQueryObject
 	 * - $node DOMNode
 	 *
 	 * @return phpQueryObject|QueryTemplatesSource|QueryTemplatesParse|QueryTemplatesSourceQuery
-	 * @link http://docs.jquery.com/Traversing/filter
+	 * @link //docs.jquery.com/Traversing/filter
 	 */
 	public function filterCallback($callback, $_skipHistory = false) {
 		if (! $_skipHistory) {
@@ -2286,7 +2286,7 @@ class phpQueryObject
 	 * Enter description here...
 	 *
 	 * @return phpQueryObject|QueryTemplatesSource|QueryTemplatesParse|QueryTemplatesSourceQuery
-	 * @link http://docs.jquery.com/Traversing/filter
+	 * @link //docs.jquery.com/Traversing/filter
 	 */
 	public function filter($selectors, $_skipHistory = false) {
 		if ($selectors instanceof Callback OR $selectors instanceof Closure)
@@ -2348,7 +2348,7 @@ class phpQueryObject
 									// switch last character
 									switch( substr($attr, -1)) {
 										// quotemeta used insted of preg_quote
-										// http://code.google.com/p/phpquery/issues/detail?id=76
+										// //code.google.com/p/phpquery/issues/detail?id=76
 										case '^':
 											$pattern = '^'.$val;
 											break;
@@ -2431,7 +2431,7 @@ class phpQueryObject
 	/**
 	 * Enter description here...
 	 *
-	 * @link http://docs.jquery.com/Ajax/load
+	 * @link //docs.jquery.com/Ajax/load
 	 * @return phpQuery|QueryTemplatesSource|QueryTemplatesParse|QueryTemplatesSourceQuery
 	 * @todo Support $selector
 	 */
@@ -2706,7 +2706,7 @@ class phpQueryObject
 	public function contents() {
 		$stack = array();
 		foreach($this->stack(1) as $el) {
-			// FIXME (fixed) http://code.google.com/p/phpquery/issues/detail?id=56
+			// FIXME (fixed) //code.google.com/p/phpquery/issues/detail?id=56
 //			if (! isset($el->childNodes))
 //				continue;
 			foreach($el->childNodes as $node) {
@@ -2830,7 +2830,7 @@ class phpQueryObject
 	 * Enter description here...
 	 *
 	 * @param String|phpQuery $content
-	 * @link http://docs.jquery.com/Manipulation/replaceWith#content
+	 * @link //docs.jquery.com/Manipulation/replaceWith#content
 	 * @return phpQueryObject|QueryTemplatesSource|QueryTemplatesParse|QueryTemplatesSourceQuery
 	 */
 	public function replaceWith($content) {
@@ -3765,7 +3765,7 @@ class phpQueryObject
 		if (! is_null($code)) {
 			$value = '<'.'?php '.$code.' ?'.'>';
 			// TODO tempolary solution
-			// http://code.google.com/p/phpquery/issues/detail?id=17
+			// //code.google.com/p/phpquery/issues/detail?id=17
 //			if (function_exists('mb_detect_encoding') && mb_detect_encoding($value) == 'ASCII')
 //				$value	= mb_convert_encoding($value, 'UTF-8', 'HTML-ENTITIES');
 		}
@@ -3845,7 +3845,7 @@ class phpQueryObject
 						$option = pq($option, $this->getDocumentID());
 						$selected = false;
 						// XXX: workaround for string comparsion, see issue #96
-						// http://code.google.com/p/phpquery/issues/detail?id=96
+						// //code.google.com/p/phpquery/issues/detail?id=96
 						$selected = is_null($option->attr('value'))
 							? in_array($option->markup(), $_val)
 							: in_array($option->attr('value'), $_val);
@@ -4297,7 +4297,7 @@ class phpQueryObject
 
 
 // -- Multibyte Compatibility functions ---------------------------------------
-// http://svn.iphonewebdev.com/lace/lib/mb_compat.php
+// //svn.iphonewebdev.com/lace/lib/mb_compat.php
 
 /**
  *  mb_internal_encoding()
@@ -4400,14 +4400,14 @@ abstract class phpQuery {
 	public static $debug = false;
 	public static $documents = array();
 	public static $defaultDocumentID = null;
-//	public static $defaultDoctype = 'html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"';
+//	public static $defaultDoctype = 'html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "//www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"';
 	/**
 	 * Applies only to HTML.
 	 *
 	 * @var unknown_type
 	 */
 	public static $defaultDoctype = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-"http://www.w3.org/TR/html4/loose.dtd">';
+"//www.w3.org/TR/html4/loose.dtd">';
 	public static $defaultCharset = 'UTF-8';
 	/**
 	 * Static namespace for plugins.
@@ -5014,13 +5014,13 @@ abstract class phpQuery {
 	/**
 	 * Make an AJAX request.
 	 *
-	 * @param array See $options http://docs.jquery.com/Ajax/jQuery.ajax#toptions
+	 * @param array See $options //docs.jquery.com/Ajax/jQuery.ajax#toptions
 	 * Additional options are:
 	 * 'document' - document for global events, @see phpQuery::getDocumentID()
 	 * 'referer' - implemented
 	 * 'requested_with' - TODO; not implemented (X-Requested-With)
 	 * @return Zend_Http_Client
-	 * @link http://docs.jquery.com/Ajax/jQuery.ajax
+	 * @link //docs.jquery.com/Ajax/jQuery.ajax
 	 *
 	 * @TODO $options['cache']
 	 * @TODO $options['processData']
@@ -5349,12 +5349,12 @@ abstract class phpQuery {
 	}
 
 	// UTILITIES
-	// http://docs.jquery.com/Utilities
+	// //docs.jquery.com/Utilities
 
 	/**
 	 *
 	 * @return unknown_type
-	 * @link http://docs.jquery.com/Utilities/jQuery.makeArray
+	 * @link //docs.jquery.com/Utilities/jQuery.makeArray
 	 */
 	public static function makeArray($obj) {
 		$array = array();
@@ -5378,7 +5378,7 @@ abstract class phpQuery {
 	 * @param $object
 	 * @param $callback
 	 * @return unknown_type
-	 * @link http://docs.jquery.com/Utilities/jQuery.each
+	 * @link //docs.jquery.com/Utilities/jQuery.each
 	 */
 	public static function each($object, $callback, $param1 = null, $param2 = null, $param3 = null) {
 		$paramStructure = null;
@@ -5396,7 +5396,7 @@ abstract class phpQuery {
 	}
 	/**
 	 *
-	 * @link http://docs.jquery.com/Utilities/jQuery.map
+	 * @link //docs.jquery.com/Utilities/jQuery.map
 	 */
 	public static function map($array, $callback, $param1 = null, $param2 = null, $param3 = null) {
 		$result = array();
@@ -5482,7 +5482,7 @@ abstract class phpQuery {
 	 * @param $callback
 	 * @param $invert
 	 * @return unknown_type
-	 * @link http://docs.jquery.com/Utilities/jQuery.grep
+	 * @link //docs.jquery.com/Utilities/jQuery.grep
 	 */
 	public static function grep($array, $callback, $invert = false) {
 		$result = array();

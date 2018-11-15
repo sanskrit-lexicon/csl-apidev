@@ -5,7 +5,7 @@
 // Jim Funderburk recoding into php of Java code developed by
 // Ralph Bunker.
 // This software is made available under the Creative Commons
-// Creative Commons Attribution Non-Commercial Share Alike license available in full at <ptr target="http://creativecommons.org/licenses/by-nc-sa/3.0/legalcode"/>, and summarized at <ptr target="http://creativecommons.org/licenses/by-nc-sa/3.0/"/>.  Permission is granted to build upon this work non-commercially, as long as credit is explicitly acknowledged exactly as described herein and derivative work is distributed under the same license.
+// Creative Commons Attribution Non-Commercial Share Alike license available in full at <ptr target="//creativecommons.org/licenses/by-nc-sa/3.0/legalcode"/>, and summarized at <ptr target="//creativecommons.org/licenses/by-nc-sa/3.0/"/>.  Permission is granted to build upon this work non-commercially, as long as credit is explicitly acknowledged exactly as described herein and derivative work is distributed under the same license.
 // Assume transcoder xml files are in directory ../data/transcoder,
 // relative to the directory containing this transcoder.php file
 // Aug 5, 2012.  embedded spaces are improperly rendered in slp1_deva.

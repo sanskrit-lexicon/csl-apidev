@@ -7,7 +7,7 @@
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.css">
 
 <!-- links to jquery, using CDNs -->
-<script type="text/javascript" src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" src="//code.jquery.com/jquery-2.1.4.min.js"></script>
 
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
 <!-- jquery-ui is used -->
@@ -26,7 +26,7 @@ body {
 }
 @font-face { 
  /*src: url(../fonts/siddhanta.ttf);*/
- src: url(http://www.sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/fonts/siddhanta.ttf);
+ src: url(//www.sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/fonts/siddhanta.ttf);
  font-family: siddhanta_deva;
 }
 .ui-widget {
@@ -80,7 +80,7 @@ $(document).ready(function() {
   var accent = $('#accent').val();
   var options = $('#options').val();
   // TODO: check for valid inputs before ajax call
-  var urlbase="http://www.sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/getword.php";
+  var urlbase="//www.sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/getword.php";
   var url =  urlbase +  
    "?key=" +escape(key) + 
    "&output=" +escape(output) +
@@ -106,7 +106,7 @@ requires some code for this purpose.
 $("#key").autocomplete({
   source: function(request,response) {
    $.ajax({
-   url:"http://www.sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/getsuggest.php",
+   url:"//www.sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/getsuggest.php",
    datatype:"jsonp",
    data: {
     //q: request.term
@@ -137,8 +137,8 @@ $("#key").autocomplete({
 </head>
 <body>
  <div id="logo">
-     <a href="http://www.sanskrit-lexicon.uni-koeln.de/">
-      <img id="unilogo" src="http://www.sanskrit-lexicon.uni-koeln.de/images/cologne_univ_seal.gif"
+     <a href="//www.sanskrit-lexicon.uni-koeln.de/">
+      <img id="unilogo" src="//www.sanskrit-lexicon.uni-koeln.de/images/cologne_univ_seal.gif"
            alt="University of Cologne" width="60" height="60" 
            title="Cologne Sanskrit Lexicon"/>
       </a>

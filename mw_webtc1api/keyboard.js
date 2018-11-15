@@ -1,20 +1,20 @@
-//http://java.sun.com/products/java-media/jai/forDevelopers/jai-imageio-1_0-rc-docs/index.html
-//http://www.webdeveloper.com/forum/showthread.php?t=74982
-//http://www.webreference.com/js/column12/trmethods.html (*** documentation for IE's TextRange)
-//http://javascript.about.com/library/bladdjs.htm
-//http://blog.vishalon.net/index.php/javascript-getting-and-setting-caret-position-in-textarea/
-//http://coolwebdeveloper.com/2009/03/fantastic-new-javascript-debugging-tool-with-ie-8-and-its-list-of-features-hard-to-live-without/
-//http://www.java2s.com/Code/JavaScriptReference/Javascript-Objects/TextRangeJavaScriptMethods.htm
-//http://markitup.jaysalvat.com/downloads/demo.php?id=releases/latest (demo of textarea markup)
-//http://www.reynoldsftw.com/2009/03/7-jquery-plugins-to-manipulate-textareas/ (blog for textarea manipulation)
-//http://www.gate2home.com/?language=dev (another devanagari keyboard, (but more intrusive)
-//http://en.wikipedia.org/wiki/Devanagari (descriptions of non-phonetic devanagari keyboards)
-//http://tdil.mit.gov.in/isciichart.pdf (various INSCRIPT keyboard overlays)
-//http://ascii-table.com/keyboard.php/473 (Telegu keyboard layout)
-//http://h3g3m0n.wordpress.com/2007/08/16/stop-javascript-disabling-location-bar-in-firefox/ (how to disable location bar in firefox)
-//http://stackoverflow.com/questions/480360/problem-getting-selected-text-in-ie-using-selection-createrange
-//http://sanskrit.jnu.ac.in/amara/viewdata.jsp (decent devanagari display)
-//http://tomcat.apache.org/tomcat-5.5-doc/config/http.html (Tomcat cookie path of session cookie)
+////java.sun.com/products/java-media/jai/forDevelopers/jai-imageio-1_0-rc-docs/index.html
+////www.webdeveloper.com/forum/showthread.php?t=74982
+////www.webreference.com/js/column12/trmethods.html (*** documentation for IE's TextRange)
+////javascript.about.com/library/bladdjs.htm
+////blog.vishalon.net/index.php/javascript-getting-and-setting-caret-position-in-textarea/
+////coolwebdeveloper.com/2009/03/fantastic-new-javascript-debugging-tool-with-ie-8-and-its-list-of-features-hard-to-live-without/
+////www.java2s.com/Code/JavaScriptReference/Javascript-Objects/TextRangeJavaScriptMethods.htm
+////markitup.jaysalvat.com/downloads/demo.php?id=releases/latest (demo of textarea markup)
+////www.reynoldsftw.com/2009/03/7-jquery-plugins-to-manipulate-textareas/ (blog for textarea manipulation)
+////www.gate2home.com/?language=dev (another devanagari keyboard, (but more intrusive)
+////en.wikipedia.org/wiki/Devanagari (descriptions of non-phonetic devanagari keyboards)
+////tdil.mit.gov.in/isciichart.pdf (various INSCRIPT keyboard overlays)
+////ascii-table.com/keyboard.php/473 (Telegu keyboard layout)
+////h3g3m0n.wordpress.com/2007/08/16/stop-javascript-disabling-location-bar-in-firefox/ (how to disable location bar in firefox)
+////stackoverflow.com/questions/480360/problem-getting-selected-text-in-ie-using-selection-createrange
+////sanskrit.jnu.ac.in/amara/viewdata.jsp (decent devanagari display)
+////tomcat.apache.org/tomcat-5.5-doc/config/http.html (Tomcat cookie path of session cookie)
 /* ********************************************************************
  *?? Why use false for non-boolean variables, e.g. VKI_deadKey. Why not use null instead?
  *?? It appears that dead keys are independant of the virtual keyboard, e.g. ^ does the same thing no matter which virtual keyboard is current.
@@ -23,19 +23,19 @@
  * Copyright (c) 2009 - GreyWyvern
  *
  * - Licenced for free distribution under the BSDL
- * http://www.opensource.org/licenses/bsd-license.php
+ * //www.opensource.org/licenses/bsd-license.php
  *
  * Add a script-driven keyboard interface to text fields, password
  * fields and textareas.
  *
- * See http://www.greywyvern.com/code/javascript/keyboard for examples
+ * See //www.greywyvern.com/code/javascript/keyboard for examples
  * and usage instructions.
  *
  * Version 1.27 - June 11, 2009
  * - Danish keyboard layout added
  *
  * See full changelog at:
- * http://www.greywyvern.com/code/javascript/keyboard.changelog.txt
+ * //www.greywyvern.com/code/javascript/keyboard.changelog.txt
  */
  /* ejf Oct 8, 2012
   1. Change to have one global variable, 'VKI'. This minimizes the clutter of global namespace.
@@ -88,8 +88,8 @@ VKI.topbar = null; // used for the sanskrit grid.
 VKI.closer = null; // used for the sanskrit grid.
 VKI.kt = "devInscript"; // Default keyboard layout
 VKI.clearPasswords = false; // Clear password fields on focus
-//VKI.imageURI = "http://www.language.brown.edu/Sanskrit/software/keyboard/keyboard.png";
-//VKI.imageURI = "http://sanskrit1.ccv.brown.edu/tomcat/sl/keyboard.png"; // Aug 19, 2012 from Ralph Bunker
+//VKI.imageURI = "//www.language.brown.edu/Sanskrit/software/keyboard/keyboard.png";
+//VKI.imageURI = "//sanskrit1.ccv.brown.edu/tomcat/sl/keyboard.png"; // Aug 19, 2012 from Ralph Bunker
 VKI.imageURI = "keyboard.png"; // This is a copy of the above on the Cologne system.
 VKI.clickless = false; // if set to true then if mouse if over key for VKI.clicklessDelay milliseconds, key will fire
 VKI.clicklessDelay = 500; // see comment on VKI.clickless above
@@ -101,7 +101,7 @@ VKI.isIE = /*@cc_on!@*/false;
 VKI.isIE6 = /*@if(@_jscript_version == 5.6)!@end@*/false;
 VKI.isIElt8 = /*@if(@_jscript_version < 5.8)!@end@*/false;
 VKI.isMoz = (navigator.product == "Gecko");
-VKI.isWebKit = RegExp("KHTML").test(navigator.userAgent); // Safari uses WebKit Open Source project http://webkit.org/
+VKI.isWebKit = RegExp("KHTML").test(navigator.userAgent); // Safari uses WebKit Open Source project //webkit.org/
 /* ***** Create keyboards ************************************** */
 VKI.layout = {}; // an associative array containing keyboard layouts
 VKI.layoutParameters = {}; // an associative array containing parameters for a layout. The current parameters are
@@ -3661,7 +3661,7 @@ Vedatype.prototype.getLayout = function()
  return s;
  }
 
-// findPosX and findPosY are from http://www.sitepoint.com/forums/showthread.php?t=620402
+// findPosX and findPosY are from //www.sitepoint.com/forums/showthread.php?t=620402
  function findPosX(obj) 
  {
  var curleft = 0;
@@ -3698,7 +3698,7 @@ Vedatype.prototype.getLayout = function()
  return curtop;
  }
 
-// Cookie functions from http://www.quirksmode.org/js/cookies.html
+// Cookie functions from //www.quirksmode.org/js/cookies.html
  function createCookie(name,value,days) 
  {
  var expires = null;
@@ -3984,7 +3984,7 @@ VKI.initializeViewState = function()        //REB20101126 moved from VKI.load so
  alert((event.x - x) + ", " + (event.y - y));
  }
  
-// findPosX and findPosY are from http://www.sitepoint.com/forums/showthread.php?t=620402
+// findPosX and findPosY are from //www.sitepoint.com/forums/showthread.php?t=620402
  function findPosX(obj) 
  {
  var curleft = 0;

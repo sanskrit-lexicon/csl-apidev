@@ -16,7 +16,7 @@
  </head>
  <body>
  <div id="dictid">
-     <a href="http://www.sanskrit-lexicon.uni-koeln.de/">
+     <a href="//www.sanskrit-lexicon.uni-koeln.de/">
      <img id="unilogo" src="../images/cologne_univ_seal.gif"
            alt="University of Cologne" width="60" height="60"
 	  title="Cologne Sanskrit-Lexicon"/>
@@ -31,7 +31,7 @@
 
    <li class="nav">
     &nbsp;
-    <a class="nav" href="http://www.sanskrit-lexicon.uni-koeln.de/index.html" target="_top">Home</a>
+    <a class="nav" href="//www.sanskrit-lexicon.uni-koeln.de/index.html" target="_top">Home</a>
    </li> 
  </ul>
  </div>

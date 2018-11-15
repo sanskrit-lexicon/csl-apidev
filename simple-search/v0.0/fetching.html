@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <title>Test fetching</title>
-    <script type = "text/javascript" src = "http://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script type = "text/javascript" src = "//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
   </head>
   <body>
     <script>
@@ -193,7 +193,7 @@ function onGetDataTimeout() {
     Test data
     */
         var test ={}
-        test.url = "http://www.sanskrit-lexicon.uni-koeln.de/scans/WILScan/2014/web/webtc/getword.php";
+        test.url = "//www.sanskrit-lexicon.uni-koeln.de/scans/WILScan/2014/web/webtc/getword.php";
         test.key = "om";
         test.filter = "roman";
         test.noLit = "off";
@@ -391,7 +391,7 @@ function getVariants(word){
       Test data
       */
           var test ={}
-          //test.url = "http://www.sanskrit-lexicon.uni-koeln.de/scans/WILScan/2014/web/webtc/getword.php";
+          //test.url = "//www.sanskrit-lexicon.uni-koeln.de/scans/WILScan/2014/web/webtc/getword.php";
           test.key = "om";
           //test.filter = "roman";
           //test.noLit = "off";
@@ -402,7 +402,7 @@ function getVariants(word){
           test.filter = localStorage.getItem('settings.filter');
           test.url = localStorage.getItem('settings.url');
           // ejf reset test.url
-          test.url = "http://www.sanskrit-lexicon.uni-koeln.de/scans/WILScan/2014/web/webtc/getword_phreebie.php";
+          test.url = "//www.sanskrit-lexicon.uni-koeln.de/scans/WILScan/2014/web/webtc/getword_phreebie.php";
           test.transLit = 'hk';
           test.filter = 'deva';
       let dm = new DataModel(test);

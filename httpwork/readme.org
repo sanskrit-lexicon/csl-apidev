@@ -1,0 +1,19 @@
+
+* Preparation for https at Cologne
+Internal http:// links might fail when the hosting server uses https protocol.
+ The reason is that, for security, a secure protocol (https) is prohibited (by browsers)
+ from calling an insecure protocol (http).
+ One solution is to change 'http://' to '//' in links.  This is said to be a 'relative'
+ protocol.  It should work when the target has either protocol.
+ Reference: https://yoast.com/moving-your-website-to-https-ssl-tips-tricks/
+   Confirmed by Patrick Holz at Cologne.
+ But it might be better, once the https is installed at Cologne,
+ to change all the relative links '//' to 'https://'.
+
+ python http_adjust.py http_files.txt http_adjust_log.txt
+ This changes the files in http_files.txt in place from 'http://' to '//'
+** http_files.txt 
+ The files in makotemplates that have 'http://'. There are 27 such files.
+  Many of these 'http://' appear only in comments. But we change them too, as no harm.
+** http_adjust_log.txt
+ Contains each line changed.

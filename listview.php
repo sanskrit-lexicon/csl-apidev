@@ -7,7 +7,7 @@ if (isset($_GET['callback'])) {
 ?>
 <?php 
 /* Set cookies so JS can read them when listhier clicks on things
-  Technical note: From http://php.net/manual/en/features.cookies.php,
+  Technical note: From //php.net/manual/en/features.cookies.php,
   "Cookies are part of the HTTP header, so setcookie() must be called before any output is sent to the browser."
   This is why this cookie setting code appears before the rest of the
   display generation.
@@ -29,7 +29,7 @@ error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
   <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
  <!--
   <title>Monier-Williams Dictionary</title>
-  <link rel="stylesheet" type="text/css" href="http://www.sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/css/listview.css" />
+  <link rel="stylesheet" type="text/css" href="//www.sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/css/listview.css" />
  -->
   <title>Cologne apidev/Listview </title>
   <link rel="stylesheet" type="text/css" href="css/listview.css" />
@@ -50,7 +50,7 @@ error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
 
 <?php 
  $piwik = 
-'<script src="http://www.sanskrit-lexicon.uni-koeln.de/js/piwik_analytics.js"></script>';
+'<script src="//www.sanskrit-lexicon.uni-koeln.de/js/piwik_analytics.js"></script>';
  require_once('dictinfowhich.php');
  if ($dictinfowhich == "cologne") {
   echo "$piwik\n";
