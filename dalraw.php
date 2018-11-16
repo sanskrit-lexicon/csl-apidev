@@ -209,7 +209,7 @@ for($i=0;$i<$nrecs-1;$i++) {
  while(True) {
   $lnum0 = $item0[1];
   $hcode0 = $this->dal_mw1_hcode($item0[2]); // data = <Hx>{rest} ==> Hx
-  $item00 = item0[0];
+  $item00 = $item0[0];
   dbgprint($dbg,"Chk 1: $lnum0, $hcode0, $item00\n");
   $temprecs = $this->get4b($lnum0,1);
   if(count($temprecs) != 1) { // only at last record in database
@@ -238,7 +238,7 @@ $newitems[] = $item0;
 if ($dbg) {
  $lnum0 = $item0[1];
  $hcode0 = $this->dal_mw1_hcode($item0[2]); // data = <Hx>{rest} ==> Hx
- $item00 = item0[0];
+ $item00 = $item0[0];
  dbgprint($dbg,"Chk 1-LAST: $lnum0, $hcode0, $item00\n");
 }
 // Add any records after last record of $dispItems
@@ -268,7 +268,7 @@ if ($dbg) {
   if ($dbg) {
    $lnum0 = $item0[1];
    $hcode0 = $this->dal_mw1_hcode($item0[2]); // data = <Hx>{rest} ==> Hx
-   $item00 = item0[0];
+   $item00 = $item0[0];
    dbgprint($dbg,"Chk 1-extra: $lnum0, $hcode0, $item00\n");
   }
  } // end while
@@ -287,7 +287,7 @@ for($i=$nrecs-1;$i>0;$i--) {
   $lnum0 = $item0[1];
   $hcode0 = $this->dal_mw1_hcode($item0[2]); // data = <Hx>{rest} ==> Hx
   dbgprint($dbg,"Chk 2: $lnum0, $hcode0, $item00\n");
-  $item00 = item0[0];
+  $item00 = $item0[0];
   $temprecs = $this->get4a($lnum0,1);
   if(count($temprecs) != 1) { // only at last record in database
    break;
@@ -319,14 +319,14 @@ $newitems[] = $item0;
 if ($dbg) {
  $lnum0 = $item0[1];
  $hcode0 = $this->dal_mw1_hcode($item0[2]); // data = <Hx>{rest} ==> Hx
- $item00 = item0[0];
+ $item00 = $item0[0];
  dbgprint($dbg,"Chk 2-LAST: $lnum0, $hcode0, $item00\n");
 }
 
  while(True){
   $lnum0 = $item0[1];
   $hcode0 = $this->dal_mw1_hcode($item0[2]); // data = <Hx>{rest} ==> Hx
-  $item00 = item0[0];
+  $item00 = $item0[0];
   dbgprint($dbg,"Chk 2a: $lnum0, $hcode0, $item00\n");
   $temprecs = $this->get4a($lnum0,1);
   if(count($temprecs) != 1) { // only at last record in database
@@ -357,7 +357,7 @@ if ($dbg) {
   if ($dbg) {
    $lnum0 = $item0[1];
    $hcode0 = $this->dal_mw1_hcode($item0[2]); // data = <Hx>{rest} ==> Hx
-   $item00 = item0[0];
+   $item00 = $item0[0];
    dbgprint($dbg,"Chk 2-extra: $lnum0, $hcode0, $item00\n");
   }
  }
@@ -371,7 +371,7 @@ for($i=$nitems-1;$i>=0;$i--) {
   $item0 = $newitems1[$i];
   $lnum0 = $item0[1];
   $hcode0 = $this->dal_mw1_hcode($item0[2]); // data = <Hx>{rest} ==> Hx  
-  $item00 = item0[0];
+  $item00 = $item0[0];
   dbgprint($dbg,"Chk 3: $lnum0, $hcode0, $item00\n");
  }
 }
