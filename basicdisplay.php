@@ -60,7 +60,6 @@ public function __construct($key,$matches,$filterin,$dict) {
   $line=$linein;
   
   dbgprint($this->dbg,"disp: line[$i+1]=$line\n");
-  dbgprint(true,"disp: line[$i+1]=$line\n");
   $line=trim($line);
   $l0=strlen($line);
   $this->row = "";
