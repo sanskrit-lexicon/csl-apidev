@@ -19,4 +19,4 @@ php -S localhost:8000
   type CTRL-c
 
 
-http://localhost:8000/mwweb1d/webtc1/api_listview.php?key=%u0905%u0915%u094D%u0930&keyboard=yes&inputType=phonetic&unicodeInput=devInscript&phoneticInput=slp1&serverOptions=deva&viewAs=deva
+//localhost:8000/mwweb1d/webtc1/api_listview.php?key=%u0905%u0915%u094D%u0930&keyboard=yes&inputType=phonetic&unicodeInput=devInscript&phoneticInput=slp1&serverOptions=deva&viewAs=deva

@@ -10,7 +10,7 @@ __program_name__ = 'transcoder.py'
 __author__ = 'Jim Funderburk'
 __email__ = 'funderburk1@verizon.net'
 __copyright__ = 'Copyright 2011, Jim Funderburk'
-__license__ = 'GPL http://www.gnu.org/licenses/gpl.txt'
+__license__ = 'GPL //www.gnu.org/licenses/gpl.txt'
 __date__ = '2011-12'
 
 

@@ -68,7 +68,7 @@ var TranscoderField = function(id,returnCallback) {
  // keys, which the keypress event does not pass.
  // This routine handles many events, but will not handle some events,
  // such as changing the insertion point, selecting and clearing, etc.
- // See http://www.javascripter.net/faq/keycodes.htm for keycode information
+ // See //www.javascripter.net/faq/keycodes.htm for keycode information
  
  var ch = String.fromCharCode(evt.keyCode);
  var keynum = evt.which;

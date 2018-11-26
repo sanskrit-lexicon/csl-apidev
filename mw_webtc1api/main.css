@@ -69,7 +69,7 @@ td {line-height: 130%;}
  right: 5px;
  top: 155px;
  height: 500px;
- overflow: hidden;  /* http://stackoverflow.com/questions/16670931/hide-scroll-bar-but-still-being-able-to-scroll */
+ overflow: hidden;  /* //stackoverflow.com/questions/16670931/hide-scroll-bar-but-still-being-able-to-scroll */
  /*border: 2px solid red;*/
 
 }

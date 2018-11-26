@@ -30,7 +30,7 @@ class Dal {
  }
  public function close() {
   if ($this->file_db) {
-   $this->file_db = null;  //ref: http://php.net/manual/en/pdo.connections.php
+   $this->file_db = null;  //ref: //php.net/manual/en/pdo.connections.php
   }
  }
  public function get1($key) {

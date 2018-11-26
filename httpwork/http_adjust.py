@@ -1,6 +1,6 @@
 """http_adjust.py
   11-15-2018
-  change 'http://' to '//' in all relevant inventory files.
+  change '//' to '//' in all relevant inventory files.
   This is in preparation for conversion of Cologne server
   to 'https'.
   python http_adjust.py http_files.txt http_adjust_log.txt
@@ -11,8 +11,8 @@
 import codecs,sys
 
 def adjust_file(filename):
- ## change http:// to protocol-relative '//'
- old = 'http://'
+ ## change // to protocol-relative '//'
+ old = '//'
  new = '//'
  changes = [] # list of changed line (old,new)
  with codecs.open(filename,"r","utf-8") as f:

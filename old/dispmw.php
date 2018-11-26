@@ -164,7 +164,7 @@ class DispItem { // info to construct a row of the display table
     $class='listlink listlinkCurrent';
    }
    /* for use of 'this', refer
-http://stackoverflow.com/questions/925734/whats-this-in-javascript-onclick
+//stackoverflow.com/questions/925734/whats-this-in-javascript-onclick
    */
    $a = "<a class='$class' onclick='listhier_lnum(\"$lnum\",this);'>$symbol</a>&nbsp;\n";
    $pre = $a . $pre;
@@ -206,7 +206,7 @@ function basicDisplay($key,$matches,$dictin,$options) {
 <script type="text/javascript">
 function winls(url,anchor) { 
 // Called by a link made by disp.php for MW only. Not used elsewhere
- var base = "http://www.sanskrit-lexicon.uni-koeln.de/scans/MWScan/2014/web";
+ var base = "//www.sanskrit-lexicon.uni-koeln.de/scans/MWScan/2014/web";
  var url1 = base + '/sqlite/'+url+'#'+anchor;
  
  win_ls = window.open(url1,

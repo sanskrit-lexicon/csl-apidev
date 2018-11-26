@@ -184,7 +184,7 @@ function basicDisplay($key,$matches,$dictin,$options) {
 <script type="text/javascript">
 function winls(url,anchor) { 
 // Called by a link made by disp.php for MW only. Not used elsewhere
- var base = "http://www.sanskrit-lexicon.uni-koeln.de/scans/MWScan/2014/web";
+ var base = "//www.sanskrit-lexicon.uni-koeln.de/scans/MWScan/2014/web";
  var url1 = base + '/sqlite/'+url+'#'+anchor;
  
  win_ls = window.open(url1,

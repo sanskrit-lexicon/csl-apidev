@@ -37,14 +37,14 @@ function basicDisplay($parms,$matches) {
 <html>
 <head>
 <meta charset="UTF-8">
-<link rel='stylesheet' type='text/css' href='http://www.sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/css/basic.css' />
+<link rel='stylesheet' type='text/css' href='//www.sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/css/basic.css' />
 <script type="text/javascript">
 function winls(url,anchor) { 
 // Called by a link made by disp.php for MW only. Not used elsewhere
 // July 27, 2016. url has the form 'mwauth_slp1.html'. We want to
 // replace it with, say, 'mwauth_itrans.html' if the user has chosen
 // itrans as the output
- var base = "http://www.sanskrit-lexicon.uni-koeln.de/scans/MWScan/2014/web";
+ var base = "//www.sanskrit-lexicon.uni-koeln.de/scans/MWScan/2014/web";
  //var url1 = base + '/sqlite/'+url+'#'+anchor;
  var url1 = base + '/sqlite/'+'$winlsurl'+'#'+anchor;
  

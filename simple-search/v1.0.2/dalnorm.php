@@ -29,10 +29,10 @@ class Dalnorm {
  }
  public function close() {
   if ($this->file_db) {
-   $this->file_db = null;  //ref: http://php.net/manual/en/pdo.connections.php
+   $this->file_db = null;  //ref: //php.net/manual/en/pdo.connections.php
   }
   if ($this->file_db_xml) {
-   $this->file_db_xml = null;  //ref: http://php.net/manual/en/pdo.connections.php
+   $this->file_db_xml = null;  //ref: //php.net/manual/en/pdo.connections.php
   }
  }
  public function get($sql) {

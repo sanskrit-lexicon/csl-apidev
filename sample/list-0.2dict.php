@@ -1,6 +1,6 @@
 <?php
  /* Similar to list-0.2.php, but TWO dictionaries
-   //sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/sample/list-0.2dict.php?dict1=pwg&key1=darh&dict2=mw&key2=dfh&input=iast&output=iast
+   //www.sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/sample/list-0.2dict.php?dict1=pwg&key1=darh&dict2=mw&key2=dfh&input=iast&output=iast
  */
 // Report all errors except E_NOTICE  (also E_WARNING?)
 error_reporting(E_ALL & ~E_NOTICE);

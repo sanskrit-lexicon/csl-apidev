@@ -60,7 +60,7 @@ def genhtml(code):
  print "Copying %s to %s" %(inpath,outpath)
  copyfile(inpath,outpath)
  # 2. Using string template to create redo.sh for this dict
- # ref: http://stackoverflow.com/questions/6385686/python-technique-or-simple-templating-system-for-plain-text-output
+ # ref: //stackoverflow.com/questions/6385686/python-technique-or-simple-templating-system-for-plain-text-output
  inpath = "makeassets/template_redo.sh"
  outpath = "%s/redo.sh" % htmldir
  with open(inpath,"r") as f:

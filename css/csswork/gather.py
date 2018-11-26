@@ -36,7 +36,7 @@ def css(cssdir):
   # Take into account relative location of this program file
   dirbase = dirin = "../../../../" + dirmain + "/web/" + cssdir
   #print dirbase
-  # ref http://stackoverflow.com/questions/3207219/how-to-list-all-files-of-a-directory-in-python
+  # ref //stackoverflow.com/questions/3207219/how-to-list-all-files-of-a-directory-in-python
   cssfiles = []
   for root, dirs, files in os.walk(dirbase):
    cssfiles = [f for f in files if f.endswith('.css')]

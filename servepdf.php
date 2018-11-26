@@ -98,7 +98,7 @@ if ($dictinfowhich == "cologne") {
 <head>
  <meta charset="UTF-8" />
 <title><?= $dictupper?> Cologne Scan</title>
-<link rel='stylesheet' type='text/css' href='http://www.sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/css/serveimg.css' />
+<link rel='stylesheet' type='text/css' href='//www.sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/css/serveimg.css' />
 </head>
 <body>
 <?php  

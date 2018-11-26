@@ -99,7 +99,7 @@ if ($keyprobFlag or ($nmatches==0)) {
 // convert to Json array
 $json = json_encode($matches);
 /* Next for JSONP
-  Ref: http://www.geekality.net/2010/06/27/php-how-to-easily-provide-json-and-jsonp/
+  Ref: //www.geekality.net/2010/06/27/php-how-to-easily-provide-json-and-jsonp/
 */
 if (isset($_GET['callback'])) {
  echo "{$_GET['callback']}($json)";

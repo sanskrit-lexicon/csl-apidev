@@ -191,7 +191,7 @@ dbgprint($dbg,"dispitem. key2=$key2\n");
     $class='listlink listlinkCurrent';
    }
    /* for use of 'this', refer
-http://stackoverflow.com/questions/925734/whats-this-in-javascript-onclick
+//stackoverflow.com/questions/925734/whats-this-in-javascript-onclick
    */
    $a = "<a class='$class' onclick='listhier_lnum(\"$lnum\",this);'>$symbol</a>&nbsp;\n";
    $pre = $a . $pre;

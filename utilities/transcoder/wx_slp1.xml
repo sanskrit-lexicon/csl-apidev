@@ -1,5 +1,5 @@
 <fsm inputType='UTF-8' outputType='slp1' version='2' testBlanks='n' start='INIT'>
-<!-- http://indology.info/email/members/wujastyk/#x1-120005.2 -->
+<!-- //indology.info/email/members/wujastyk/#x1-120005.2 -->
 <!-- ejf: Oct  10, 2012
  modifies bunker's coding  to be consistent with ejf's older form of transcoder.
  1 - put start='INIT' attrib on 'fsm' element above
