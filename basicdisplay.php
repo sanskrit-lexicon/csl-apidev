@@ -139,7 +139,7 @@ public function __construct($key,$matches,$filterin,$dict) {
   //Do something to visually distinguish (exclude) this line.
   // modify $this->row
   $row = $this->row;
-  $style = "background-color:rgb(235,235,235)";
+  $style = "background-color:rgb(235,235,235)"; # 235
   $this->row = "<span style='$style'>$row</span>";
   return;  // not implemented
  }
@@ -586,14 +586,15 @@ public function __construct($key,$matches,$filterin,$dict) {
   } else if ($this->parentEl == "key1"){ // nothing printed
   } else if ($this->parentEl == "pc") {
    $hrefdata = $this->getHrefPage($data);
-   //$this->row1 .= "<span class='hrefdata'> [p= $hrefdata]</span>";
-   $this->row1 .= "<span class='hrefdata'> [Printed book page $hrefdata]</span>";
+   $style = "font-size:normal; color:rgb(160,160,160);";
+   $this->row1 .= "<span style='$style'> [Printed book page $hrefdata]</span>";
   } else if ($this->parentEl == "L") {
-   $this->row1 .= "<span class='lnum'> [Cologne record ID=$data]</span>";
-   //$this->row1 .= "<span class='lnum'> [L=$data]</span>";
+   //$this->row1 .= "<span class='lnum'> [Cologne record ID=$data]</span>";
+   $style = "font-size:normal; color:rgb(160,160,160);";
+   $this->row1 .= "<span style='$style'> [Cologne record ID=$data]</span>";
   } else if ($this->parentEl == "L1") {
-    // only applies to MW. L1 tag generated in basicadjust.
-   $style = "";  # background-color:rgb(255,255,255)";
+    // only applies to MW. L1 tag generated in basicadjust. 
+   $style = "font-size:normal; color:rgb(160,160,160);";
    $this->row .= "<span class='lnum' style='$style'> [ID=$data]</span>";
   } else if ($this->parentEl == 's') {
    $this->row .= "<span class='$sdata'><SA>$data</SA></span>";
@@ -666,7 +667,8 @@ public function getHrefPage($data) {
    $args = "page=$page";
    #$ans = "<a href='$serve?$args' target='_Blank'>$lnum</a>";
    $dictup = strtoupper($this->dict);
-   $ans = "<a href='$serve?$args' target='_$dictup'>$lnum</a>";
+   $style = "color:rgb(130,130,130);";
+   $ans = "<a href='$serve?$args' target='_$dictup' style='$style'>$lnum</a>";
   }else {
    $ans .= ",$lnum";
   }
