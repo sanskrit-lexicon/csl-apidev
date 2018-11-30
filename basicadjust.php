@@ -120,7 +120,8 @@ class BasicAdjust {
    $line = preg_replace('|<b>--|','<div n="1"/><b>&#x2014; ',$line);
    # also, there are seven instances of "<P/>". Replace with a div
    $line = preg_replace('|<P/>|','<div n="P"/>',$line);
-   $line = preg_replace('|<s>--|','<div n="1"/><s>&#x2014; ',$line);
+   # $line = preg_replace('|<s>--|','<div n="1"/><s>&#x2014;',$line);
+   $line = preg_replace('|<s>--|','<div n="1"/><b>&#x2014;</b> <s>-',$line);
    #dbgprint(true,"line after <lb> changes\n$line\n");
   }
   else if ($this->getParms->dict == "ap") {
