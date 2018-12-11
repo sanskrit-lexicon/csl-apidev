@@ -105,7 +105,7 @@ $(document).ready(function() {
  });
 
  changeCorrectionHref = function () {
-  console.log('changeCorrectionHref: dict=',$('#dict').val());
+  //console.log('changeCorrectionHref: dict=',$('#dict').val());
   var dict = $('#dict').val();
   var url = "//www.sanskrit-lexicon.uni-koeln.de/php/correction_form.php?dict=" + dict;
   $('#correction').attr('href',url);
@@ -141,7 +141,7 @@ $(document).ready(function() {
    "&accent=" + escape(accent) +
    "&input=" + escape(input);
     //jQuery("#disp").html(""); // clear output
-  console.log('listDisplay: url=',url);
+  //console.log('listDisplay: url=',url);
   jQuery("#dataframe").attr("src",url);
     
  }; // listDisplay
@@ -177,7 +177,7 @@ $("#dict").focus(function() {
     $(this).change();  
    }
   }).change(function(event) {
-  console.log('dict change: dict=',$('#dict').val());
+  //console.log('dict change: dict=',$('#dict').val());
   cookieUpdate(true);   
   $('#simpleinfo').html("");
   changeActions();
@@ -193,11 +193,11 @@ simpleFunction = function(){
   // 04-18/2018. change from v1.0d to v1.0
   // Currenlty getword_list_1.0.php same in both locations.
   test.url = "//localhost/cologne/apidev/simple-search/v1.0/getword_list_1.0.php";
-  console.log('simpleFunction test.url=',test.url);
+  //console.log('simpleFunction test.url=',test.url);
   test.input = 'hk';
   test.output = $('#output').val(); //'deva';
   test.dict = $('#dict').val();; 
-  console.log('list-0.2s.html calling url=',test.url);
+  //console.log('list-0.2s.html calling url=',test.url);
   //$('#outputdiv').html("<p>Accessing server for alternates of " + test.key + "  ...</p>");
   // Blank out result area
   $('#simpleinfo').html(" working...")
@@ -235,7 +235,7 @@ displayOption2Helper = function(dicthw,index,nresults) {
 
 displayOption2 = function(json) {
    //console.log('json = ',json);
- console.log('outputparm =',json['output']);
+ //console.log('outputparm =',json['output']);
  var results = json['result'];
  var dict = json['dict'];
  var nresults = results.length;
@@ -256,7 +256,7 @@ displayOption2 = function(json) {
    var dicthw,dicthwoutput,dicthwFlag;
    dicthw = result['dicthw'];
    dicthwFlag = result['user_key_flag']
-   console.log('dicthw:',dicthw,dicthwFlag);
+   //console.log('dicthw:',dicthw,dicthwFlag);
    if (index == 0) {
     dicthwfirst = dicthw;
    }
@@ -264,18 +264,18 @@ displayOption2 = function(json) {
    if (dicthwFlag) { 
     // 11-01-2017. Bold when this is user input
     dicthwoutput = "<strong>" + dicthwoutput + "</strong>";
-    console.log('dicthwoutput =',dicthwoutput);
+    //console.log('dicthwoutput =',dicthwoutput);
    }
    var classattr = '';
    if (json['output'] == 'deva') {
     classattr = ' class="sdata"'; // control font for Devanagari
    }
-   console.log("classattr=",classattr)
+   //console.log("classattr=",classattr);
    var x = "<a class='hwlinks' id='hwlink_" + 
         index + "' onclick='displayOption2Helper(" +
         '"' + dicthw + '"' + "," + index + "," + nresults + ");'>" +
     "<span" + classattr + ">" + dicthwoutput + "</span></a>";
-   console.log('x=',x);
+   //console.log('x=',x);
    htmlarr.push('<li style="display:inline; padding:5px;" >' +x + '</li>');
   });
   htmlarr.push('</ol>')
@@ -368,8 +368,8 @@ $("#key").autocomplete({
   }else {
    flag = 'enable';
   }
-  $('#key').autocomplete(flag)
-  console.log('keyAutocompleteActivation:',dictlo,input,flag);
+  $('#key').autocomplete(flag);
+  //console.log('keyAutocompleteActivation:',dictlo,input,flag);
  };
 
 /* ----------------------------------------------------------

@@ -1,8 +1,8 @@
 <?php
 error_reporting( error_reporting() & ~E_NOTICE );
+ header("Access-Control-Allow-Origin: *");
 if (isset($_GET['callback'])) {
  header('content-type: application/json; charset=utf-8');
- header("Access-Control-Allow-Origin: *");
 }
 ?>
 <?php 
@@ -27,10 +27,6 @@ error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
 <html>
  <head>
   <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
- <!--
-  <title>Monier-Williams Dictionary</title>
-  <link rel="stylesheet" type="text/css" href="//www.sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/css/listview.css" />
- -->
   <title>Cologne apidev/Listview </title>
   <link rel="stylesheet" type="text/css" href="css/listview.css" />
 
@@ -56,6 +52,33 @@ error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
   echo "$piwik\n";
  }
 ?>
+ <script type="text/javascript" src="js/orphus.customized.js"></script>
+
+<script type="text/javascript">
+  //console.log('listview: window=',window);
+  $(window).load(function() {
+  var correctionsUrl = 'https://www.sanskrit-lexicon.uni-koeln.de/php/correction_form_response.php';
+  <?php
+   $dict = $getParms->dict;
+   $key = $getParms->key;
+  ?>
+  var key = <?php echo "'$key'";?>;
+  var dict = <?php echo "'$dict'";?>;
+  //console.log('listview.php script: key=',key,'dict=',dict);
+  orphus.init({
+    correctionsUrl: correctionsUrl,
+    params: {
+      entry_hw: key,
+      entry_new: '',
+      entry_old: '',
+      entry_email: '',
+      entry_L: '',
+      entry_dict: dict,
+      entry_comment: '',
+    }
+  });
+ });
+</script>
 
 </body>
 </html>
