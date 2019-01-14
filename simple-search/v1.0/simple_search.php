@@ -60,6 +60,8 @@ class Simple_Search{
   // the 'generate_hkalternates' makes certain 'correction' or adjustments
   // to this spelling.
   $alternates = $this->generate_hkalternates($keyin0);
+  // Add alternates by removing certain last letters
+  $alternates = $this->generate_alternate_endings($alternates);
   dbgprint($this->dbg,"Simple_construct: alternates=" . join(',',$alternates)."\n");
   // Generate variants for each of the HK alternates.
   //  The spelling of the alternates is in SLP1.
@@ -267,6 +269,17 @@ class Simple_Search{
   $ans=[];
   $wordin = $this->correcthk($wordin);
   return [$wordin];  // expect a list
+ }
+ public function generate_alternate_endings($alternates) {
+  $ans = [];
+  foreach($alternates as $alt) {
+   $ans[] = $alt; 
+   $alt1 = preg_replace('/^(.*)[msH]$/','\1',$alt);
+   if (! in_array($alt1,$ans)){
+    $ans[] = $alt1;
+   }
+  }
+  return $ans;
  }
  public function grammar_variants($word) {
   // $word in SLP1 spelling. Return array, including $word and maybe
