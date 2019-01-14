@@ -18,7 +18,7 @@ class Simple_Search{
    ["a","A"],
    ["i","I"],
    ["u","U"],
-   ["r","f","F","ri","ar","ru"],
+   ["r","f","F","ri","ar","ru","rI"],
    ["l","x","X","lri",],
    ["h","H"],
    ["M","n","R","Y","N","m"],
