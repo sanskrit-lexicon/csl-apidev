@@ -511,18 +511,21 @@ class BasicAdjustLexParser{
   #   This parser for adding abbreviations in <lex> markup
   #   Also converts &amp; to &.   Since the result is parsed a 
   #   second time (in disp.php) the naked '&' causes a parsing error.
-  #   This rare even was noticed in hw=caRqa (L=70905) and
+  #   This rare event was noticed in hw=caRqa (L=70905) and
   #   in hw=aruRa (L=15417).
   $this->parents=array();
   $line1 = preg_replace("/&amp;/","<amp/>",$line); # 09-27-2018
+  #$line1 = preg_replace("/&amp;/","XAMPX",$line); # 09-27-2018
+  #$line1 = $line;
   if (!xml_parse($p,$line1)) {
-   dbgprint(true,"BasicAdjustLexParser: xml parse error\n");
+   dbgprint(true,"BasicAdjustLexParser: xml parse error\n$line1");
    $this->result = $line;
    $this->status = false;
    return;
   }
   $this->status = true;
   $this->result = $this->row;
+  #$this->row = preg_replace('/XAMPX/','&amp;',$this->row);
   dbgprint($dbg,"BasicAdjustLexParser: result={$this->result}\n");
  }
  public function sthndl($xp,$el,$attribs) {
