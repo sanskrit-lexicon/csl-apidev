@@ -557,6 +557,8 @@ public function __construct($key,$matches,$filterin,$dict) {
    $this->row .= "</span>";
   } else if ($el == "bot") {
    $this->row .= "</span>";
+  } else if ($el == "bio") {
+   $this->row .= "</span>";
   } else if ($el == "io") {
    $this->row .= "</span>";
   } else if ($el == "lshead") {
