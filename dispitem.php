@@ -1,9 +1,16 @@
 <?php
+/*
 // dispitem.php  Contains class DispItem, which
 // parses a records from a dictionary's html database.
 // Jul 20, 2015 cssshade
 // 11-09-2017. Add tooltips for p= and L=
+// 01-17-2019. 
+   1) Change L= to ID= (for consistency with Basic display)
+   2) Add line break after non-empty pageshow.
+   3) For IAST output, italicize text.
+*/
 require_once('dbgprint.php');
+require_once('parm.php');
 class DispItem { // info to construct a row of the display table
  public $dict,$dictup,$key,$lnum,$info,$html;
  public $pginfo,$hcode,$key2,$hom;
@@ -160,7 +167,7 @@ dbgprint($dbg,"dispitem. key2=$key2\n");
    // is used to indent text.
    $lnumshow = "<span class='lnum' '> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;[<span title='Cologne record ID'>ID=</span>$lnum]</span>";
   }else {
-   $lnumshow = "<span class='lnum'> [<span title='Cologne record ID'>L=</span>$lnum]</span>";
+   $lnumshow = "<span class='lnum'> [<span title='Cologne record ID'>ID=</span>$lnum]</span>";
   }
   $pageshow = "<span class='hrefdata'> [<span title='Printed book page-column'>p=</span> $hrefdata]</span>";
   if ($hrefdata == $hrefdata_prev) {
@@ -190,6 +197,14 @@ dbgprint($dbg,"dispitem. key2=$key2\n");
  public function basicDisplayRecord2($prev) {
   list($keyshow,$lnumshow,$pageshow) = $this->basicRow1DefaultParts($prev);
   $row = $this->html;
+  // 01-17-2019. for MW, when user requests IAST output, make this output italic
+  if ($this->dictup == 'MW') {
+   $getParms = new Parm();
+   if ($getParms->filter == "roman") {
+    $row = preg_replace('|<SA>|','<i><SA>',$row);
+    $row = preg_replace('|</SA>|','</SA></i>',$row);
+   }
+  }
   if ($this->hom) { // for MW
    $pre1 = ""; // incomplete  need a link with onclick
    $hrefdata = $this->hrefdata;
@@ -199,7 +214,7 @@ dbgprint($dbg,"dispitem. key2=$key2\n");
   }else if (($keyshow == "") and ($pageshow == "")) {
    $pre = "";
   }else {
-   $pre="<span style='font-weight:bold'>$keyshow $pageshow</span> :";
+   $pre="<span style='font-weight:bold'>$keyshow $pageshow</span>";
   }
   if (($this->dictup == 'MW') and ($this->hom)) {
    // make a link to change list view to be centered at this lnum
@@ -214,6 +229,10 @@ dbgprint($dbg,"dispitem. key2=$key2\n");
    */
    $a = "<a class='$class' onclick='listhier_lnum(\"$lnum\",this);'>$symbol</a>&nbsp;\n";
    $pre = $a . $pre;
+  }
+  # 01-17-2019
+  if ($pageshow != "") {
+   $pre = $pre . "<br>";
   }
   $class = "display";
   if ($this->cssshade) {

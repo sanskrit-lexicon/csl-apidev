@@ -20,7 +20,7 @@ require_once('dictinfo.php');
 require_once('dbgprint.php');
 class Parm {
  public $filter0,$filterin0,$keyin,$dict,$accent;
- public $filter,$filerin;
+ public $filter,$filterin;
  public $dictinfo,$english;
  public $keyin1,$key;
  public function __construct() {
