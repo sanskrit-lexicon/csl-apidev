@@ -7,7 +7,7 @@
 // 01-17-2019. 
    1) Change L= to ID= (for consistency with Basic display)
    2) Add line break after non-empty pageshow.
-   3) For IAST output, italicize text.
+   3) For IAST output in MW, italicize text.
 */
 require_once('dbgprint.php');
 require_once('parm.php');
@@ -161,7 +161,7 @@ dbgprint($dbg,"dispitem. key2=$key2\n");
    $keyshow = ""; // Don't reshow same key on subsequent records
   }
   #$lnumshow = "<span class='lnum'> [<span title='Cologne record ID'>L=</span>$lnum]</span>";
-  if (in_array($this->dictup,['GRA','STC','AP','AP90','PWG'])) {
+  if (in_array($this->dictup,['GRA','STC','AP','AP90','PWG','BUR'])) {
    // Add extra spaces so preceding text will not be overwritten.
    // This applies to dictionaries where a 'position:relative' css style 
    // is used to indent text.
