@@ -26,7 +26,7 @@ $getParms = new Parm();
 # addional paramaters
 $page = $_REQUEST['page'];
 #$dict = $_REQUEST['dict'];
-#$key =  $_REQUEST['key']; // optional
+$key =  $_REQUEST['key']; // optional.  Uncommented 01-23-2019
 $dbg=False;
 $dict = $getParms->dict;
 
