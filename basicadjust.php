@@ -25,7 +25,7 @@ class BasicAdjust {
   $this->dbg=false;
   $this->dal_ab = new Dalraw($dict,"ab");
   if (in_array($dict,array('pwg','pw'))) {
-   $this->dal_auth = new Dalraw($dict,"bib");  # powgbib
+   $this->dal_auth = new Dalraw($dict,"bib");  # pwgbib
    dbgprint(false,"basicadjust: bib file open? " . $this->dal_auth->status ."\n");
   }else if ($dict == 'mw'){
    $this->dal_auth = new Dalraw($dict,"authtooltips");
@@ -511,21 +511,18 @@ class BasicAdjustLexParser{
   #   This parser for adding abbreviations in <lex> markup
   #   Also converts &amp; to &.   Since the result is parsed a 
   #   second time (in disp.php) the naked '&' causes a parsing error.
-  #   This rare event was noticed in hw=caRqa (L=70905) and
+  #   This rare even was noticed in hw=caRqa (L=70905) and
   #   in hw=aruRa (L=15417).
   $this->parents=array();
   $line1 = preg_replace("/&amp;/","<amp/>",$line); # 09-27-2018
-  #$line1 = preg_replace("/&amp;/","XAMPX",$line); # 09-27-2018
-  #$line1 = $line;
   if (!xml_parse($p,$line1)) {
-   dbgprint(true,"BasicAdjustLexParser: xml parse error\n$line1");
+   dbgprint(true,"BasicAdjustLexParser: xml parse error\n");
    $this->result = $line;
    $this->status = false;
    return;
   }
   $this->status = true;
   $this->result = $this->row;
-  #$this->row = preg_replace('/XAMPX/','&amp;',$this->row);
   dbgprint($dbg,"BasicAdjustLexParser: result={$this->result}\n");
  }
  public function sthndl($xp,$el,$attribs) {

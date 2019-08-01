@@ -51,6 +51,7 @@ class Dalraw {
   }
   // connection to sqlitefile
   $dbg=false;
+  if (file_exists($this->sqlitefile)) {
   try {
    $this->file_db = new PDO('sqlite:' .$this->sqlitefile);
    $this->file_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -64,6 +65,11 @@ class Dalraw {
    #dbgprint($dbg,"dal.php: Cannot open " . $this->sqlitefile . "\n");
    $this->status=false;
   }
+ } else {
+   $this->file_db = null;
+   dbgprint($dbg,"dal.php: File does not exist. Cannot open " . $this->sqlitefile . "\n");
+   $this->status=false;
+ }
  }
  public function close() {
   if ($this->file_db) {
