@@ -47,7 +47,7 @@ error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
 <?php 
  $piwik = 
 '<script src="//www.sanskrit-lexicon.uni-koeln.de/js/piwik_analytics.js"></script>';
- require_once('dictinfowhich.php');
+ include('dictinfowhich.php');
  if ($dictinfowhich == "cologne") {
   echo "$piwik\n";
  }
