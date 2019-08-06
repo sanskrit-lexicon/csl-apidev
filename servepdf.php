@@ -11,7 +11,6 @@ Parameters:
  key: a headword, in SLP1.  
   Only one of 'page' and 'key' should be used.  If both are present, then
   'key' parameter is ignored and 'page' parameter prevails.
- July 11, 2018. Modify to work with 'raw' data or html data
  Add dictinfowhich logic, so if this servepdf code is on Cologne server,
   then we get the images from the Cologne server.
  This will allow remote programs accessing the Cologne apidev to get
@@ -35,15 +34,11 @@ $year = $dictinfo->get_year();
 $webpath = $dictinfo->get_webPath();
 $dictupper = $dictinfo->dictupper;
 if ((!$page)&&$key) {// Try to get $page from 'key' parm
- require_once('dalwhich.php');
+ require_once('dal.php');
  require_once('getword_data.php');
- $dal = dalwhich($dict);
- $rawflag = $dal->rawflag;
- if ($rawflag) {
-  $recs = getword_html_data_raw($getParms,$dal);
- } else {
-  $recs = getword_html_data($getParms,$dal);
- }
+ $dal = new Dal($dict);
+ $recs = getword_html_data_raw($getParms,$dal);
+ 
  #$recs = $dal->get1($key); // Assume $key is in SLP1
  if ($dbg) {
   echo "<br/><br/><br/><br/>" . count($recs). "  records for $key<br/>\n";

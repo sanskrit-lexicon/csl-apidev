@@ -6,7 +6,7 @@ header('content-type: application/json; charset=utf-8');
 header("Access-Control-Allow-Origin: *");
 require_once('utilities/transcoder.php'); // initializes transcoder
 require_once("dbgprint.php");
-require_once("dalwhich.php");
+require_once("dal.php");
 require_once('parm.php');
 $getParms = new Parm();
 
@@ -21,7 +21,7 @@ $english = $getParms->english;
 $filterin = $getParms->filterin;
 $dict = $getParms->dict;
 dbgprint($dbg,"getsuggest: dict=$dict\n");
-$dal = dalwhich($dict);
+$dal = new Dal($dict);
 $keyprobFlag=false;
 if ($english) {
  $keyin1 = $keyin;

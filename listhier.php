@@ -8,11 +8,10 @@
  When initially called, the parameter will be 'key'
  ANother approach would be to use just 'key' parameter, but
  interpret key as lnum  when all characters are numbers of period.
- 07-11-2018. revised to use dalRaw for certain dicts
 */
 
 require_once('utilities/transcoder.php');
-require_once('dalwhich.php');
+require_once('dal.php');
 require_once('dictinfo.php');
 require_once('parm.php');
 require_once('dbgprint.php');
@@ -29,7 +28,7 @@ if (($direction != 'UP') && ($direction != 'DOWN')) {
 }
 $getParms->direction = $direction;
 $dict = $getParms->dict;
-$dal = dalwhich($dict);
+$dal = new Dal($dict);
 $key = $getParms->key;
 
 

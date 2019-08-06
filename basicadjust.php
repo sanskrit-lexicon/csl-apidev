@@ -10,7 +10,7 @@ BasicAdjust class  Takes a parameter object
    The hope is to have dictionary specific code in this BasicAdjust class,
    and to have the BasicDisplay class to be identical for all dictionaries.
 */
-require_once('dalraw.php');
+require_once('dal.php');
 require_once('dbgprint.php');
 class BasicAdjust {
  public $getParms;
@@ -23,12 +23,12 @@ class BasicAdjust {
   $dict = $getParms->dict;
   $key = $getParms->key;
   $this->dbg=false;
-  $this->dal_ab = new Dalraw($dict,"ab");
+  $this->dal_ab = new Dal($dict,"ab");
   if (in_array($dict,array('pwg','pw'))) {
-   $this->dal_auth = new Dalraw($dict,"bib");  # pwgbib
+   $this->dal_auth = new Dal($dict,"bib");  # pwgbib
    dbgprint(false,"basicadjust: bib file open? " . $this->dal_auth->status ."\n");
   }else if ($dict == 'mw'){
-   $this->dal_auth = new Dalraw($dict,"authtooltips");
+   $this->dal_auth = new Dal($dict,"authtooltips");
   }else {
    $this->dal_auth = null;
   }
