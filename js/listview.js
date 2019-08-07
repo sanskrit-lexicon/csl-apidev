@@ -106,7 +106,7 @@ function keyboard_parms(keyserver,listurlFlag) {
     if (listurlFlag) {
      url = "listhier.php";
     }else { 
-     url = "disphier.php";
+     url = "getword.php"; 
     }
    var accent = readCookie("accent");
 
