@@ -36,7 +36,7 @@ error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
  <body>
 <div id="CologneListview">
 <div class="dispdiv">
- <?php include "disphier.php";?>
+ <?php include "getword.php";?>
 </div>
 <div class="dispgutter"></div>
 <div class="dispdivlist" class="displist">

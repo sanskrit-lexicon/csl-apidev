@@ -1,5 +1,5 @@
 <?php
-/* apidev1/listhier.php
+/* apidev/listhier.php
   June 2015
  For MW, there may be (for homophones) calls from the basic
  display to alternate lists.
