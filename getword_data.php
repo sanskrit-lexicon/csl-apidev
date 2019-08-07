@@ -6,28 +6,6 @@ error_reporting(E_ALL & ~E_NOTICE );
  functions to get the html data for getword.php
 */
 require_once('dbgprint.php');
-function getword_html_data($getParms,$dal) {
- 
- /* $matches is array. each element is 3-element array
-   list($key1,$lnum1,$data1)
- */
- $key = $getParms->key;
- dbgprint($dbg,"getword.php #2: key=$key, dict=$dict \n");
- if (strtolower($dict) == 'mw') {
-  $matches = $dal->get1_mwalt($key); // Jul 19, 2015
- }else {
-  $matches= $dal->get1($key); 
- }
- # accent-adjustment
- require_once("accent_adjust.php");
- $dictinfo = $getParms->dictinfo;
- $dictup = $dictinfo->dictupper;
- $accent = $getParms->accent;
- for($i=0;$i<count($matches);$i++) {
-  $matches[$i] = accent_adjust($matches[$i],$accent,$dictup);
- }
- return $matches;
-}
 
 function getword_html_data_raw($getParms,$dal){
  $dbg=false;
