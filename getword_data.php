@@ -7,10 +7,10 @@ error_reporting(E_ALL & ~E_NOTICE );
 */
 require_once('dbgprint.php');
 
-function getword_html_data($getParms,$dal){
+function getword_data_html($getParms,$dal){
  $dbg=false;
  $dict = $getParms->dict;
- dbgprint($dbg,"getword.php #1 getword_html_data\n");
+ dbgprint($dbg,"getword.php #1 getword_data_html\n");
  
  
  /* $matches0 is array. each element is 3-element array
@@ -29,18 +29,18 @@ function getword_html_data($getParms,$dal){
  $matches = array();
  foreach($matches0 as $match0){
   list($key0,$lnum0,$data0) = $match0;
-  $html = getword_html_data_adapter($key0,$lnum0,$data0,$dict,$getParms);
+  $html = getword_data_html_adapter($key0,$lnum0,$data0,$dict,$getParms);
   $matches[] = array($key0,$lnum0,$html);
  }
  if ($dbg) {
-  dbgprint($dbg,"getword_html_data returns:\n");
+  dbgprint($dbg,"getword_data_html returns:\n");
   for($i=0;$i<count($matches);$i++) {
    dbgprint($dbg,"record $i = {$matches[$i][2]}\n"); #[0] $matches[$i][1] $matches[$i][2] \n");
   }
  }
  return $matches;
 }
-function getword_html_data_adapter($key,$lnum,$data,$dict,$getParms)
+function getword_data_html_adapter($key,$lnum,$data,$dict,$getParms)
 {
  require_once('basicadjust.php');
  require_once('basicdisplay.php');

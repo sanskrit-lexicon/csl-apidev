@@ -21,7 +21,7 @@ $getParms = new Parm();
 
 $dict = $getParms->dict;
 $dal = new Dal($dict);
-$html_data = getword_html_data($getParms,$dal); // in getword_data.php
+$html_data = getword_data_html($getParms,$dal); // in getword_data.php
 
 $dal->close();
 getword_html($getParms,$html_data);
