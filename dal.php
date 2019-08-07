@@ -119,36 +119,6 @@ class Dal {
   dbgprint($this->dbg, "get1_xml, sql=$sql\n");
   return $this->get_xml($sql);
  }
- public function get1_basic($key) {
-  /*
-  get1_basic is form normally used for basic display
-  It handles special details for mw
-  Also, in case $key is not matched exactly, it does a search for
-  the longest initial part of $key that has a match
-  07-15-2018. REQUIRE EXACT MATCH.
- */
-  $dict = $this->dict;
-  $more = True;
-  $origkey = $key;
-  while ($more) {
- 
-   $matches = $this->get1_mwalt($key); // Jul 5, 2018. Use for all dictionaries
-   $dbg=false;
-   dbgprint($dbg,"dal.php get1_basic: # matches for $key = " . count($matches) . "\n");
-   $nmatches = count($matches);
-   if($nmatches > 0) {$more=False;break;}
-   $more=False;break;  # 07-15-2018
-   // try next shorter key
-   $n = strlen($key);
-   if ($n > 1) {
-    $key = substr($key,0,-1); // remove last character
-   } else {
-    $more=False; 
-    break;
-   }
-  }  
-  return $matches;
- }
 
  public function get2($L1,$L2) {
   //  Used in listhier
