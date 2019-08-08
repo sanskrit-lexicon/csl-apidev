@@ -3,7 +3,6 @@
  June 4, 2015 - use pywork/html/Xhtml.sqlite
  May 10, 2015 - also allow use of web/sqlite/X.sqlite
  June 29, 2018. Recode as a class.
- Aug 5, 2019.  Constructor now called Dal
 */
 require_once('dictinfo.php');
 require_once('dbgprint.php');
@@ -17,7 +16,7 @@ class Dal {
  public $tabname;  # name of table in sqlitefile. 
  public $tabid;    # name of 'id' key used by getgeneral
  // dbname is assumed to be for auxiliary sqlite data, such as
- // abbreviations  xab.sqlite, xauth.sqlite -- new Dal('mw','mwab')
+ // abbreviations  xab.sqlite, xath.sqlite -- new Dal('mw','mwab')
  // Not yet implemented.  Would need to modify dictinfo for filenames also.
  // 
  public function __construct($dict,$dbname=null) {
