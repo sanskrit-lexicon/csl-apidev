@@ -111,7 +111,7 @@ class BasicAdjust {
    $line = preg_replace('|<lb/>|','',$line);
    # now reintroduce some line breaks, and replace '--' with '&mdash;'
    # tech note on php:  when html entity &mdash; is used, then there is
-   # an error in the xml parser in disp.php.  However, when we use 
+   # an error in the xml parser in basicdisplay.php.  However, when we use 
    # the numerical code, '&#x2014;', the error disappears.
    # It might be better to do this logic (including the em-dash) in
    # make_xml.py or even in ap90.txt. E.g., change
@@ -433,7 +433,7 @@ public function rgveda_link($gra1,$gra2) {
 /* no special coding for Sanskrit in <s>X</s> form.
     So, just remove the <s>,</s> elements
     Adds 'gralink' and 'graverse' elements to xml. These need
-    to be converted to html in disp.php
+    to be converted to html in basicdisplay.php
 */
  $x0 = $matches[0];
  $gra1 = $matches[1];
@@ -510,7 +510,7 @@ class BasicAdjustLexParser{
   # 09-27-2018. Due to error in 'double-parsing' of '&amp;'
   #   This parser for adding abbreviations in <lex> markup
   #   Also converts &amp; to &.   Since the result is parsed a 
-  #   second time (in disp.php) the naked '&' causes a parsing error.
+  #   second time (in basicdisplay.php) the naked '&' causes a parsing error.
   #   This rare even was noticed in hw=caRqa (L=70905) and
   #   in hw=aruRa (L=15417).
   $this->parents=array();

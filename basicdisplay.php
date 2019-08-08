@@ -3,7 +3,7 @@ error_reporting( error_reporting() & ~E_NOTICE );
 ?>
 <?php
 /*
-// web/webtc/disp.php
+// web/webtc/basicdisplay.php
 // The main function basicDisplay constructs an HTML table from
 // an array of data elements.
 // Each of the  data elements is a string which is valid XML.
@@ -77,7 +77,7 @@ public function __construct($key,$matches,$filterin,$dict) {
   xml_parser_set_option($p,XML_OPTION_CASE_FOLDING,FALSE);
   dbgprint($this->dbg,"chk 1\n");
   if (!xml_parse($p,$line)) {
-   dbgprint(true,"disp.php: xml parse error\nline=$line\n");
+   dbgprint(true,"basicdisplay.php: xml parse error\nline=$line\n");
    $row = $line;
    return;
   }
@@ -704,7 +704,7 @@ public function mw_extra_line($line) {
   $ans1a = join(", ",$elts);
   $ans1 = "<em>Whitney Roots links:</em> " . $ans1a;
   #$ans1 = $ans1 . '  <br/>'; # dbg
-  #dbgprint($dbg,"disp.php mw_extra_line: ans1=$ans1\n");
+  #dbgprint($dbg,"basicdisplay.php mw_extra_line: ans1=$ans1\n");
  }
  if (preg_match('|<info westergaard="(.*?)"/>|',$line,$matches)) {
   $x = $matches[1];
