@@ -1,5 +1,5 @@
 <?php
-//getsuggest.php 07-10-2018. Change to Dalraw for selected dictionaries
+//getsuggest.php 07-10-2018. 
 // Jul 11, 2015
 // Jul 21, 2015  return list sorted in alphabetical order
 header('content-type: application/json; charset=utf-8');
