@@ -1,7 +1,6 @@
 <?php
-// disp.php  - based on disp.php, but for MW.
 // The main function basicDisplay constructs an HTML table from
-// an array of data elements.
+// an array ($matches) of data elements.
 // Each of the  data elements is a string which is valid XML.
 // The XML is processed using the XML Parser routines (see PHP documentation)
 // This XML string is further assumed to be in UTF-8 encoding.
@@ -21,56 +20,13 @@ function basicDisplay($parms,$matches) {
  $options = '2'; // $parms->options;
  
  #output = returned string of html for basic display
- /* July 27, 2016
-  In the 'winls' program, the 'url' is actually of a very specific form:
-   mwauth_x.html, where x is one of the transcoder values (slp1, itrans, etc)
-   corresponding to what the user is using for output.
-   In the current context of the basicDisplay function, this value is
-   $parms->filter.
-  We make the $winlsurl to use in the next $output template
-  We also generalize the 'mwauth' to use the current $parms->dict in
-  place of 'mw'
- */
- /* Aug 6, 2016.  Now the winls is needed for also PW
-    Mar 6, 2017.  Now the winls is needed for also PWG
-    Sep 2, 2018.  Remove winls entirely.  It has been replaced
-     by tooltips generated in basicadjust.php
+ 
+ /* 
     Sep 2, 2018. output link to basic.css depending on $parms->dispcss.
  */
  $dictinfo = $parms->dictinfo;
  $webpath =  $dictinfo->get_webPath();
-/* begin removed code
- if ($parms->dict == 'mw') {
-  $winlsurl = ($parms->dict) . 'auth_' . ($parms->filter) . '.html';
- }else if ($parms->dict == 'pw') {
-  $winlsurl = ($parms->dict) . 'auth.html';
- }else if ($parms->dict == 'pwg') {
-  $winlsurl = ($parms->dict) . 'auth.html';
- }else {
-  $winlsurl = "";
-  $winls_script="";
- }
- if ($winlsurl) {
-  $windowname = "winls_" . ($parms->dict);
- $winls_script = <<<EOT
-<script type="text/javascript">
-function winls(url,anchor) { 
-// Called by a link made by disp.php for MW only. Not used elsewhere
-// July 27, 2016. url has the form 'mwauth_slp1.html'. We want to
-// replace it with, say, 'mwauth_itrans.html' if the user has chosen
-// itrans as the output
- var base = '$webpath'; 
- var url1 = base + '/sqlite/'+'$winlsurl'+'#'+anchor;
- //alert('url1='+url1);
- win_ls = window.open(url1,
-    "$windowname", "width=920,height=210,scrollbars=yes");
- win_ls.focus();
-}
-</script>
-EOT;
- }
-END REMOVED CODE */
- $winls_script=""; 
+
  if (isset($parms->dispcss) && ($parms->dispcss == 'no')) {
   $linkcss = "";
  }else {
@@ -82,8 +38,6 @@ END REMOVED CODE */
 <head>
 <meta charset="UTF-8">
 $linkcss
-
-$winls_script
 </head>
 <body>
 EOT;
@@ -111,9 +65,7 @@ EOT;
   for ($j=0;$j<count($dbrec);$j++) {
    dbgprint($dbg,"  [$j] = {$dbrec[$j]}\n");
   }
-  //echo "<p>DEBUGa: $i,$ntot " . $dbrec[0] . "</p>\n";
   $dispItem = new DispItem($dict,$dbrec);
-  //echo "<p>DEBUGb: $i,$ntot " . $dbrec[0] . "</p>\n";
   if ($dispItem->err) {
    //return "<p>Internal error in basicDisplay for $dict, $key</p>";
    $keyin = $parms->keyin;
