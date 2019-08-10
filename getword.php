@@ -17,17 +17,28 @@ require_once('parm.php');
 require_once('getword_data.php');
 require_once("disp.php");
 
-$getParms = new Parm();
+// Put code into a class, to minimize namespace clutter
+$getword_obj = new Getword();
+// Generate output
+$getword_obj->getword_html();
 
-$dict = $getParms->dict;
-$dal = new Dal($dict);
-$html_data = getword_data_html($getParms,$dal); // in getword_data.php
+class Getword {
+ public $getParms,$html_data;
+ public function __construct() {
+  $getParms = new Parm();
+  $this->getParms = $getParms;
+  $dict = $getParms->dict;
+  $dal = new Dal($dict);
+  $this->html_data = getword_data_html($getParms,$dal); // in getword_data.php
 
-$dal->close();
-getword_html($getParms,$html_data);
+  $dal->close();
+}
+//getword_html($getParms,$html_data);
 
 
-function getword_html($getParms,$matches) {
+ public function getword_html() {
+ $getParms = $this->getParms;
+ $matches  = $this->html_data;
  $dbg=false;
  $nmatches = count($matches);
  dbgprint($dbg,"getword.php #3: nmatches=$nmatches\n");
@@ -53,7 +64,7 @@ function getword_html($getParms,$matches) {
  }
  dbgprint($dbg,"getword.php.  END\n");
 }
-
+}
 
 ?>
  

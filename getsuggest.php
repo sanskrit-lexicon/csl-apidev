@@ -2,8 +2,8 @@
 //getsuggest.php 07-10-2018. 
 // Jul 11, 2015
 // Jul 21, 2015  return list sorted in alphabetical order
-header('content-type: application/json; charset=utf-8');
 header("Access-Control-Allow-Origin: *");
+header('content-type: application/json; charset=utf-8');
 require_once('utilities/transcoder.php'); // initializes transcoder
 require_once("dbgprint.php");
 require_once("dal.php");
