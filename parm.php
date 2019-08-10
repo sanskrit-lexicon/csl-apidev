@@ -1,19 +1,24 @@
 <?php
 /* parm.php  Jul 10, 2015  Contains Parm class, which
-  converts various $_GET parameters into member attributes. 
-  $_GET   Parm attribute   Related attribute
-  filter  filter0          filter
-  transLit filterin0       filterin
-  key     keyin            keyin1, key
-  dict    dict             dictinfo
-  accent  accent
- Aug 4, 2015 - synonym for $_GET:
-  input == transLit
-  output == filter
- Jun 2, 2017. changed $_GET to $_REQUEST
- Sep 2, 2018. Add 'dispcss' optional parm. If value = 'no', then
-   disp.php does NOT output a <link> css statement.
-   Default value is 'yes', meaning this link is included.
+  converts various $_REQUEST parameters into class attributes. 
+  $_REQUEST   Parm attribute 
+  filter,output  filter0     
+  transLit,input filterin0    
+  key     keyin (trimmed)     
+  dict    dict  (lowercase)  
+  accent  accent (values are 'yes' or 'no')
+  dispcss dispcss (values are 'yes' or 'no'):
+      Sep 2, 2018. Add 'dispcss' optional parm. If value = 'no', then
+      disp.php does NOT output a <link> css statement.
+      Default value is 'yes', meaning this link is included.
+  Additional Parm attributes:
+  filter   standardized from filter0
+  filterin standardized from filterin0
+  dictinfo instance of DictInfo class
+  english  copy of dictinfo's english attribute
+  keyin1   from keyin   
+  key      from keyin1 
+ 
 */
 require_once('utilities/transcoder.php'); // initializes transcoder
 require_once('dictinfo.php');
