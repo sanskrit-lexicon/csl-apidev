@@ -11,7 +11,6 @@ if (isset($_GET['callback'])) {
   "Cookies are part of the HTTP header, so setcookie() must be called before any output is sent to the browser."
   This is why this cookie setting code appears before the rest of the
   display generation.
-  Aug 17, 2015. Remove 'options' from cookienames
   Aug 18, 2018. add error reporting to remove warnings; Peter's MacBookPro shows warning messages
     for the calls to setcookie. Hopefully this will suppress those warning messages.
 */
@@ -55,10 +54,10 @@ error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
  <script type="text/javascript" src="js/orphus.customized.js"></script>
 
 <script type="text/javascript">
-  //console.log('listview: window=',window);
   $(window).load(function() {
   var correctionsUrl = 'https://www.sanskrit-lexicon.uni-koeln.de/php/correction_form_response.php';
-  <?php
+  <?php 
+   // $getParms variable set in getword.php (and listhier.php), included above
    $dict = $getParms->dict;
    $key = $getParms->key;
   ?>
