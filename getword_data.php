@@ -3,33 +3,35 @@ error_reporting(E_ALL & ~E_NOTICE );
 ?>
 <?php 
 /* getword_data.php
- functions to get the html data for getword.php
+ class to get the html data for getword.php
 */
 require_once('dbgprint.php');
 
-function getword_data_html($getParms,$dal){
+class Getword_data {
+ public $matches;  // the computed array of html
+ public function __construct($getParms,$dal) {
  $dbg=false;
  $dict = $getParms->dict;
- dbgprint($dbg,"getword.php #1 getword_data_html\n");
- 
+ dbgprint($dbg,"getword_data.php #1 getword_data_html\n");
  
  /* $matches0 is array. each element is 3-element array
    list($key1,$lnum1,$data1)
  */
  $key = $getParms->key;
- dbgprint($dbg,"getword.php #2: key=$key, dict=$dict \n");
+ dbgprint($dbg,"getword_data.php #2: key=$key, dict=$dict \n");
+ // Can we use get1_mwalt for ALL dictionaries? (8-10-2019)
  if (strtolower($dict) == 'mw') {
   $matches0 = $dal->get1_mwalt($key); // Jul 19, 2015
  }else {
   $matches0= $dal->get1($key); 
  }
  $nmatches = count($matches0);
- dbgprint($dbg,"getword.php #3: nmatches=$nmatches\n");
+ dbgprint($dbg,"getword_data.php #3: nmatches=$nmatches\n");
  // adjust xml
  $matches = array();
  foreach($matches0 as $match0){
   list($key0,$lnum0,$data0) = $match0;
-  $html = getword_data_html_adapter($key0,$lnum0,$data0,$dict,$getParms);
+  $html = $this->getword_data_html_adapter($key0,$lnum0,$data0,$dict,$getParms);
   $matches[] = array($key0,$lnum0,$html);
  }
  if ($dbg) {
@@ -38,16 +40,13 @@ function getword_data_html($getParms,$dal){
    dbgprint($dbg,"record $i = {$matches[$i][2]}\n"); #[0] $matches[$i][1] $matches[$i][2] \n");
   }
  }
- return $matches;
+ $this->matches = $matches;
 }
-function getword_data_html_adapter($key,$lnum,$data,$dict,$getParms)
+public function getword_data_html_adapter($key,$lnum,$data,$dict,$getParms)
 {
  require_once('basicadjust.php');
  require_once('basicdisplay.php');
- //global $pagecol;
- //$pagecol = ""; // otherwise, not all pc data is reported in $info below
  $matches1=array($data);
- # note $filter is undefined
  $adjxml = new BasicAdjust($getParms,$matches1);
  $matches = $adjxml->adjxmlrecs;
  $filter = $getParms->filter;
@@ -130,7 +129,7 @@ function getword_data_html_adapter($key,$lnum,$data,$dict,$getParms)
   $pageref=$matches[1];
  }
  if ($dict == 'mw') {
-  list($hcode,$key2,$hom) = adjust_info_mw($data); 
+  list($hcode,$key2,$hom) = $this->adjust_info_mw($data); 
   # construct return value as colon-separated values
   $infoval = "$pageref:$hcode:$key2:$hom";
   $ans = "<info>$infoval</info><body>$body</body>";
@@ -140,7 +139,7 @@ function getword_data_html_adapter($key,$lnum,$data,$dict,$getParms)
  }
  return $ans;
 }
-function adjust_info_mw($data) {
+public function adjust_info_mw($data) {
  # In case of MW, also retrieve Hcode and hom from head of $data
  $hom='';
  if (preg_match('|</key2><hom>(.*?)</hom>|',$data,$matches)) {
@@ -154,10 +153,10 @@ function adjust_info_mw($data) {
  if (preg_match('|<key2>(.*?)</key2>|',$data,$matches)) {
   $key2 = $matches[1];
  }
- $key2a = adjust_key2_mw($key2);
+ $key2a = $this->adjust_key2_mw($key2);
  return array($hcode,$key2a,$hom);
 }
-function adjust_key2_mw($key2) {
+public function adjust_key2_mw($key2) {
  $ans = preg_replace('|--+|','-',$key2);  // only 1 dash
  $ans = preg_replace('|<sr1?/>|','~',$ans); # ~ not in key1 for MW (?)
  $ans = preg_replace('|<srs1?/>|','@',$ans); # @ not in SLP1
@@ -178,5 +177,5 @@ function adjust_key2_mw($key2) {
  $ans = preg_replace('||','',$ans);
  return $ans;
 }
-
+}
 ?>

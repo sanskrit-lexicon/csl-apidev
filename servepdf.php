@@ -37,7 +37,8 @@ if ((!$page)&&$key) {// Try to get $page from 'key' parm
  require_once('dal.php');
  require_once('getword_data.php');
  $dal = new Dal($dict);
- $recs = getword_data_html($getParms,$dal);
+ $temp = new Getword_data($getParms,$dal);
+ $recs = $temp->matches;
  
  #$recs = $dal->get1($key); // Assume $key is in SLP1
  if ($dbg) {

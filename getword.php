@@ -23,22 +23,21 @@ $getword_obj = new Getword();
 $getword_obj->getword_html();
 
 class Getword {
- public $getParms,$html_data;
+ public $getParms,$matches;
  public function __construct() {
   $getParms = new Parm();
   $this->getParms = $getParms;
   $dict = $getParms->dict;
   $dal = new Dal($dict);
-  $this->html_data = getword_data_html($getParms,$dal); // in getword_data.php
-
+  $temp = new Getword_data($getParms,$dal);
+  $this->matches = $temp->matches; 
   $dal->close();
 }
-//getword_html($getParms,$html_data);
 
 
  public function getword_html() {
  $getParms = $this->getParms;
- $matches  = $this->html_data;
+ $matches  = $this->matches;
  $dbg=false;
  $nmatches = count($matches);
  dbgprint($dbg,"getword.php #3: nmatches=$nmatches\n");
