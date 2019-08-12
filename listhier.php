@@ -56,7 +56,7 @@ class Listhier {
   }else if ($direction == 'DOWN') {
    $listmatches = $this->list_center($key1,$lnum1,$data1,0,$nprev+$nnext,$dal);
   }else {
-   $listmatches = list_center($key1,$lnum1,$data1,$nprev,$nnext,$dal);
+   $listmatches = $this->list_center($key1,$lnum1,$data1,$nprev,$nnext,$dal);
   }
 
   // step 3 format listmatches
