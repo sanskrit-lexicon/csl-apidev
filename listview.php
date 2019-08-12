@@ -39,7 +39,11 @@ error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
 </div>
 <div class="dispgutter"></div>
 <div class="dispdivlist" class="displist">
- <?php include "listhier.php";?>
+ <?php require_once("listhier.php");
+  $temp_listhier = new Listhier();
+  $temp_table1 = $temp_listhier->$table1;
+  echo($temp_table1);
+ ?>
 </div>
 </div>
 
