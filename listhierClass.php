@@ -90,10 +90,11 @@ class ListhierClass {
    if ($code == 0) {$c="color:teal";}
    else {$c="color:black";}
    // Apr 7, 2013.  Color Supplement records 
-   if (preg_match('/<L supL="/',$data2,$matches)) {
+   // Aug 13, 2019. Changed test
+   if (preg_match('/<info n="sup"/',$data2,$matches)) {
     $c = "color:red";
    }
-   if (preg_match('/<L revL="/',$data2,$matches)) {
+   if (preg_match('/<info n="rev"/',$data2,$matches)) {
     $c = "color:green";
    }
 
