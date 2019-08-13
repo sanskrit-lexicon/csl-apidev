@@ -40,13 +40,10 @@ error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
 <div class="dispgutter"></div>
 <div class="dispdivlist" class="displist">
  <?php require_once("listhier.php");
-  $temp_listhier = new Listhier();
-  $temp_table1 = $temp_listhier->$table1;
-  echo($temp_table1);
  ?>
 </div>
 </div>
-
+!
 <?php 
  $piwik = 
 '<script src="//www.sanskrit-lexicon.uni-koeln.de/js/piwik_analytics.js"></script>';
