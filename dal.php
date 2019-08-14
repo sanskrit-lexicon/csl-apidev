@@ -22,7 +22,6 @@ class Dal {
  public function __construct($dict,$dbname=null) {
   $this->dict=strtolower($dict);
   $this->dbname = $dbname;
-  #echo "<p>Dal: dict={$this->dict}</p>\n";
   $this->dictinfo = new DictInfo($dict);
   $sqlitedir = $this->dictinfo->sqlitedir;
   if ($dbname == null) {
@@ -53,13 +52,10 @@ class Dal {
   try {
    $this->file_db = new PDO('sqlite:' .$this->sqlitefile);
    $this->file_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-   #echo "Dal: opened " . $this->sqlitefile . "\n";
    #dbgprint($dbg,"dal.php: opened " . $this->sqlitefile . "\n");
    $this->status=true;
   } catch (PDOException $e) {
    $this->file_db = null;
-   #echo "PDO exception=".$e."<br/>\n";
-   #echo "<p>Dal ERROR. Cannot open sqlitefile for dictionary $dict </p>\n";
    #dbgprint($dbg,"dal.php: Cannot open " . $this->sqlitefile . "\n");
    $this->status=false;
   }
@@ -80,7 +76,7 @@ class Dal {
  public function get($sql) {
   $ansarr = array();
   if (!$this->file_db) {
-   //if (True) {echo "file_db is null\n"; echo $this->sqlitefile."\n";}
+   //"file_db is null for $this->sqlitefile.
    return $ansarr;
   }
   $result = $this->file_db->query($sql);
@@ -109,7 +105,6 @@ class Dal {
  public function get1($key) {
   // Returns associative array for the records in dictionary with this key
   $sql = "select * from {$this->dict} where key='$key' order by lnum";
-  #echo "<p>DAL get1: sql=$sql</p>\n";
   return $this->get($sql);
  }
  public function get1_xml($key) {
@@ -362,7 +357,7 @@ public function dal_mw1_hcode($data){
 } 
 public function getgeneral($key,$table) {
   if (!$this->file_db) {
-   //if (True) {echo "file_db is null\n"; echo $this->sqlitefile."\n";}
+   //"file_db is null for $this->sqlitefile.
    return array();
   }
 #$sql = "select * from $table where id='$key'";
