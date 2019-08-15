@@ -24,8 +24,7 @@ require_once('dictinfowhich.php');
 $getParms = new Parm();
 # addional paramaters
 $page = $_REQUEST['page'];
-#$dict = $_REQUEST['dict'];
-$key =  $_REQUEST['key']; // optional.  Uncommented 01-23-2019
+$key =  $_REQUEST['key']; // optional.  Uncommented 01-23-2019. Why?
 $dbg=False;
 $dict = $getParms->dict;
 
@@ -42,8 +41,7 @@ if ((!$page)&&$key) {// Try to get $page from 'key' parm
  
  #$recs = $dal->get1($key); // Assume $key is in SLP1
  if ($dbg) {
-  echo "<br/><br/><br/><br/>" . count($recs). "  records for $key<br/>\n";
-  echo "<br>page=$page<br/>";
+  dbgprint($dbg,count($recs). "  records for $key. page=$page\n");
  }
  if (count($recs) > 0) { 
   $dbrec = $recs[0];
@@ -140,8 +138,6 @@ function getfiles($webpath,$pagestr_in0,$dictupper) {
  }
 
  $pagestr_in = preg_replace('/^0+/','',$pagestr_in);
- // echo "{$pagestr_in0}  -> {$pagestr_in}\n";
- //exit(1);
  $dir = "$webpath/webtc";
  $filename="$dir/pdffiles.txt";
  $lines = file($filename);
@@ -187,8 +183,6 @@ function getfiles($webpath,$pagestr_in0,$dictupper) {
    $pagestr = sprintf('%d',$ipage);
    $ncur = $pagehash[$pagestr]; 
   }
-  //echo "check GRA: $pagestr_in, $ipage, $ncur<br/>\n";
-  //exit(1);
  }
  if(!$ncur) {
   $ncur=1;
@@ -198,11 +192,8 @@ function getfiles($webpath,$pagestr_in0,$dictupper) {
  if ($nnext > $n) {$nnext = 1;}
  $nprev = $ncur - 1;
  if ($nprev < 1) {$nprev = $n;}
- //echo "nprev,ncur,nnext = $nprev,$ncur,$nnext\n";
  list($pagenext,$dummy) = $pagearr[$nnext];
  list($pageprev,$dummy) = $pagearr[$nprev];
- //echo "($filecur,$pageprev,$pagenext)";
- //exit(1);
  return array($filecur,$pageprev,$pagenext);
 }
 

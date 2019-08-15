@@ -44,8 +44,7 @@ class Getword {
  $key = $getParms->key;
  $keyin = $getParms->keyin1;
  if ($nmatches == 0) {
-  //echo "DBG: cmd1 = $cmd1\n";
- $meta = '<meta charset="UTF-8">';
+  $meta = '<meta charset="UTF-8">';
   echo "$meta\n";
   echo "<h2>not found: '$keyin' (slp1 = $key)</h2>\n";
   return;

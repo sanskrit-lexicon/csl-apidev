@@ -10,10 +10,6 @@ function accent_adjust($line,$accent,$dict) {
  }else {
   $new = preg_replace_callback("|<span class='sdata'><SA>(.*?)</SA></span>|",
          "accent_no",$data);
-  //echo "<p>accent_no ends</p>";
-  //$newx = preg_replace("|<|","&lt;",$new);
-  //$newx = preg_replace("|>|","&gt;",$newx);
-  //echo "<p>$newx</p>";
  }
  return array($key,$lnum,$new);
 }

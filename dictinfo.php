@@ -30,7 +30,6 @@ class DictInfo {
   #$this->scanpath = "../..";
   /* 04-17-2018 restate for XAMPP configuration */
   #$this->scanpath_server = dirname(__DIR__);
-  #echo "scanpath_server={$this->scanpath_server}<br/>";
   #$this->scanpath = $this->scanpath_server; //"../..";
   $this->dict=strtolower($dict);
   $this->dictupper=strtoupper($dict);
@@ -99,7 +98,6 @@ class DictInfo {
   dbgprint($dbg,"dictinfo. get_htmlPath. 1 path=$path\n");  
   $path = realpath($path);
   dbgprint($dbg,"dictinfo. get_htmlPath. 2 path=$path\n");  
-  #echo "htmlPath=$path</br>";
   return $path;
  }
   

@@ -124,7 +124,6 @@ dbgprint($dbg,"dispitem. key2=$key2\n");
     $outpart = "";
    }else { // Should just be text, to be considered devanagari
     $outpart = "<span class='sdata'><SA>$part</SA></span>";
-    //echo "<p>debug: part=$part</p>\n";
    }
    $outarr[]=$outpart;
    dbgprint($dbg,"dispitem: part=$part  => $outpart\n");
