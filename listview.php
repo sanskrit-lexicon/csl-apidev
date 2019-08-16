@@ -1,9 +1,11 @@
 <?php
 error_reporting( error_reporting() & ~E_NOTICE );
  header("Access-Control-Allow-Origin: *");
+/* removed 08-15-2019.
 if (isset($_GET['callback'])) {
  header('content-type: application/json; charset=utf-8');
 }
+*/
 ?>
 <?php 
 /* Set cookies so JS can read them when listhier clicks on things
@@ -35,7 +37,7 @@ error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
  <body>
 <div id="CologneListview">
 <div class="dispdiv">
- <?php include "getword.php";?>
+ <?php require_once("getword.php");?>
 </div>
 <div class="dispgutter"></div>
 <div class="dispdivlist" class="displist">
@@ -43,7 +45,7 @@ error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
  ?>
 </div>
 </div>
-!
+
 <?php 
  $piwik = 
 '<script src="//www.sanskrit-lexicon.uni-koeln.de/js/piwik_analytics.js"></script>';
