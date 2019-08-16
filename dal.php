@@ -69,9 +69,6 @@ class Dal {
   if ($this->file_db) {
    $this->file_db = null;  //ref: //php.net/manual/en/pdo.connections.php
   }
-  if ($this->file_db_xml) { // not sure of usage here
-   $this->file_db_xml = null;  
-  }
  }
  public function get($sql) {
   $ansarr = array();
@@ -91,11 +88,11 @@ class Dal {
  }
  public function get_xml($sql) {
   $ansarr = array();
-  if (!$this->file_db_xml) {
-   dbgprint($this->dbg, "file_db_xml is null. sqlitefile={$this->sqlitefile}\n");
+  if (!$this->file_db) {
+   dbgprint($this->dbg, "file_db is null. sqlitefile={$this->sqlitefile}\n");
    return $ansarr;
   }
-  $result = $this->file_db_xml->query($sql);
+  $result = $this->file_db->query($sql);
   foreach($result as $m) {
    $rec = array($m['key'],$m['lnum'],$m['data']);
    $ansarr[]=$rec;
