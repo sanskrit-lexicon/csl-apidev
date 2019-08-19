@@ -19,7 +19,8 @@ if (isset($_GET['callback'])) {
 error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
  $cookienames = array('dict','accent','input','output');
  foreach($cookienames as $name) {
-  setcookie($name,$_GET[$name]);
+  // use $_REQUEST, which includes $_GET and $_POST
+  setcookie($name,$_REQUEST[$name]);
  }
 
 ?>
