@@ -151,7 +151,7 @@ class ListhierClass {
   // this function 'guaranteed' to return an array with one entry
   $matches = $this->list1a($key,$dal);
   $nmatches = count($matches);
-  $dbg=true;
+  $dbg=false;
   dbgprint($dbg,"Listhier match_key chk1: $key, $nmatches\n");
   if ($nmatches != 1) {
    $key1 = $key;
@@ -185,7 +185,7 @@ class ListhierClass {
   $recarr = $dal->get1($key);
   $matches=array();
   $nmatches=0;
-  $more=True;
+  $more=false;
   foreach($recarr as $rec) {
    if ($more) {
     list($key1,$lnum1,$data1) = $rec;
@@ -201,7 +201,7 @@ class ListhierClass {
   $matches=array();
   $nmatches=0;
   $keylen = strlen($key);
-  $more=true;
+  $more=false;
   foreach($recarr as $rec) {
    if ($more) {
     list($key1,$lnum1,$data1) = $rec;
@@ -218,7 +218,7 @@ class ListhierClass {
 
  public function list_prev($key0,$lnum0,$nprev,$dal) {
   $ans = array();
-  $dbg=true;
+  $dbg=false;
   if ($nprev <= 0) {return $ans;}
   $max = 5 * $nprev;  // 5 is somewhat arbitrary.
   $recarr = $dal->get4a($lnum0,$max);
