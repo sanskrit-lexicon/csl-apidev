@@ -20,7 +20,7 @@ class ListhierClass {
  public function __construct() {
   $getParms = new Parm();
   /* extensions for listhier parameters */
-  $dbg=true;
+  $dbg=false;
   $lnumin = $_REQUEST['lnum'];  
   $getParms->lnumin=$lnumin;
 
