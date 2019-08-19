@@ -28,7 +28,7 @@ class GetsuggestClass {
    $keyin1 = $keyin;
    $key = $keyin1;  
   }else {
-   $keyin1 = preprocess_unicode_input($keyin,$filterin);
+   $keyin1 = $getParms -> preprocess_unicode_input($keyin,$filterin);
    $key = transcoder_processString($keyin1,$filterin,"slp1");
    dbgprint($dbg,"getsuggest.php: keyin=$keyin, keyin1=$keyin1, key=$key, filterin=$filterin\n");
    if ($filterin == 'hk') {

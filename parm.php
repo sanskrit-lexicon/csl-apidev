@@ -60,7 +60,7 @@ class Parm {
    $this->keyin1 = $this->keyin;
    $this->key = $this->keyin1;  
   }else {
-   $this->keyin1 = preprocess_unicode_input($this->keyin,$this->filterin);
+   $this->keyin1 = $this -> preprocess_unicode_input($this->keyin,$this->filterin);
    $this->key = transcoder_processString($this->keyin1,$this->filterin,"slp1");
   }
   $this->dispcss = $_REQUEST['dispcss'];
@@ -75,28 +75,29 @@ class Parm {
  dbgprint($dbg,"leave parm construct\n");
 
  }  
-}
-function preprocess_unicode_input($x,$filterin) {
- // when a unicode form is input in the citation field, for instance
- // rAma (where the unicode roman for 'A' is used), then,
- // the value present as 'keyin' is 'r%u0101ma' (a string with 9 characters!).
- // The transcoder functions assume a true unicode string, so keyin must be
- // altered.  This is what this function aims to accomplish.
- /* June 15, 2015 - try php urldecode */
-// return urldecode($x);
- $hex = "0123456789abcdefABCDEF";
- $x1 = $x;
- if ($filterin == 'roman') {
-  $x1 = preg_replace("/\xf1/","%u00f1",$x);
- }
- $ans = preg_replace_callback("/(%u)([$hex][$hex][$hex][$hex])/",
-     "preprocess_unicode_callback_hex",$x1);
- return $ans;
-}
-function preprocess_unicode_callback_hex($matches) {
- $x = $matches[2]; // 4 hex digits
- $y = unichr(hexdec($x));
- return $y;
-}
 
+ public function preprocess_unicode_input($x,$filterin) {
+  // when a unicode form is input in the citation field, for instance
+  // rAma (where the unicode roman for 'A' is used), then,
+  // the value present as 'keyin' is 'r%u0101ma' (a string with 9 characters!).
+  // The transcoder functions assume a true unicode string, so keyin must be
+  // altered.  This is what this function aims to accomplish.
+  /* June 15, 2015 - try php urldecode */
+ // return urldecode($x);
+  $hex = "0123456789abcdefABCDEF";
+  $x1 = $x;
+  if ($filterin == 'roman') {
+   $x1 = preg_replace("/\xf1/","%u00f1",$x);
+  }
+  $ans = preg_replace_callback("/(%u)([$hex][$hex][$hex][$hex])/",
+      "Parm::preprocess_unicode_callback_hex",$x1);
+  return $ans;
+ }
+ public function preprocess_unicode_callback_hex($matches) {
+  $x = $matches[2]; // 4 hex digits
+  $y = unichr(hexdec($x));
+  return $y;
+ }
+} 
 ?>
+ 
