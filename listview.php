@@ -60,7 +60,7 @@ error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
   $(window).load(function() {
   var correctionsUrl = 'https://www.sanskrit-lexicon.uni-koeln.de/php/correction_form_response.php';
   <?php 
-   // $getParms variable set in getword.php (and listhier.php), included above
+   $getParms = new Parm();
    $dict = $getParms->dict;
    $key = $getParms->key;
   ?>
