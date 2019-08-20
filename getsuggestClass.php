@@ -15,9 +15,9 @@ class GetsuggestClass {
   /* Jquery autosuggest uses parameter 'term' 
     We use logic similar to that in the Parm constructor to adjust this keyin
   */
+  list($keyin,$keyin1,$key) = $getParms->getsuggestParms();
   $english = $getParms->english;
   $filterin = $getParms->filterin;
-  list($keyin,$keyin1,$key) = $getParms->compute_text('term');
   $dbg=false;
 
   $keyprobFlag=false;

@@ -18,6 +18,8 @@
   english  copy of dictinfo's english attribute
   keyin1   from keyin   
   key      from keyin1 
+  
+  lnumin, direction  Computed upon request by listhierParm method
  
 */
 require_once('utilities/transcoder.php'); // initializes transcoder
@@ -54,7 +56,7 @@ class Parm {
 
   $this->dictinfo = new DictInfo($this->dict);
   $this->english = $this->dictinfo->english;
-  list($this->keyin,$this->keyin1,$this->key) = $this->compute_text('key');
+  list($this->keyin,$this->keyin1,$this->key) = $this->compute_text($_REQUEST['key']);
   
   $this->compute_dispcss(); 
 
@@ -62,15 +64,25 @@ class Parm {
   dbgprint($dbg,"parm construct keyin1 = {$this->keyin1}\n");
   dbgprint($dbg,"parm construct key = {$this->key}\n");
   dbgprint($dbg,"leave parm construct\n");
- }  
+ }
 
- public function compute_text($code) {
+ public function getsuggestParms() {
+  return $this->compute_text($_REQUEST['term']);
+ }
+
+ public function servepdfParms() {
+  $page = $_REQUEST['page'];
+  return array($page,$this->keyin);
+ }
+
+ public function compute_text($request_value) {
   // uses public variables $this->english, $this->filterin
+  // Computes and returns three forms from $request_value
   // Known usages: 
   // $_REQUEST['key'] (from Parm constructor)
   // $_REQUEST['term'] (from GetsuggestClass constructor)
 
-  $keyin = $_REQUEST[$code];
+  $keyin = $request_value;
   $keyin = trim($keyin); // remove leading and trailing whitespace
   if ($this->english) {
    $keyin1 = $keyin;
@@ -89,6 +101,18 @@ class Parm {
   }else if ($this->dispcss != 'no') {
    $this->dispcss = 'yes';
   }
+ }
+ public function listhierParms() {
+  /* extensions for listhier parameters. See listhierClass*/
+  $lnumin = $_REQUEST['lnum'];  
+  $this->lnumin=$lnumin;
+
+  // direction: either 'UP', 'DOWN', or 'CENTER' (default)
+  $direction = $_REQUEST['direction'];
+  if (($direction != 'UP') && ($direction != 'DOWN')) {
+   $direction = 'CENTER';
+  }
+  $this->direction = $direction;
  }
  public function preprocess_unicode_input($x,$filterin) {
   // when a unicode form is input in the citation field, for instance

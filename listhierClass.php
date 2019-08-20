@@ -19,17 +19,12 @@ class ListhierClass {
  public $table,$table1;
  public function __construct() {
   $getParms = new Parm();
-  /* extensions for listhier parameters */
-  $dbg=false;
-  $lnumin = $_REQUEST['lnum'];  
-  $getParms->lnumin=$lnumin;
+  // Get $getParms->lnumin and $getParms->direction
+  $getParms -> listhierParms(); 
+  $lnumin = $getParms->lnumin;
+  $direction = $getParms->direction;
 
-  // direction: either 'UP', 'DOWN', or 'CENTER' (default)
-  $direction = $_REQUEST['direction'];
-  if (($direction != 'UP') && ($direction != 'DOWN')) {
-   $direction = 'CENTER';
-  }
-  $getParms->direction = $direction;
+  $dbg=false;
   $dict = $getParms->dict;
   $dal = new Dal($dict);
   $key = $getParms->key;

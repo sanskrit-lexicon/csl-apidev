@@ -23,8 +23,7 @@ require_once('dictinfo.php');
 require_once('dictinfowhich.php');  
 $getParms = new Parm();
 # addional paramaters
-$page = $_REQUEST['page'];
-$key =  $_REQUEST['key']; // optional.  Uncommented 01-23-2019. Why?
+list($page,$key) = $getParms->servepdfParms();
 $dbg=False;
 $dict = $getParms->dict;
 
@@ -38,15 +37,10 @@ if ((!$page)&&$key) {// Try to get $page from 'key' parm
  $dal = new Dal($dict);
  $temp = new Getword_data($getParms,$dal);
  $recs = $temp->matches;
- 
- #$recs = $dal->get1($key); // Assume $key is in SLP1
- if ($dbg) {
-  dbgprint($dbg,count($recs). "  records for $key. page=$page\n");
- }
+ dbgprint($dbg,count($recs). "  records for $key. page=$page\n");
  if (count($recs) > 0) { 
   $dbrec = $recs[0];
   $rec= $dbrec[2];  # $rec['data'];
-  if ($dbg) {print "first record data = \n$rec";}
   if (preg_match('|<info>(.*?)</info><body>(.*?)</body>|',$rec,$matchrec)) {
    $info = $matchrec[1];
    #$html = $matchrec[2]; # unused here
@@ -70,7 +64,6 @@ list($filename,$pageprev,$pagenext)=getfiles($webpath,$page,$dictupper);
 // $dir = "$webpath/pdfpages"; // location of pdf files
 // 08-21-2018. Use local version if available. Otherwise use cologne server
 //  This local version assumes the file structure of xampp
-#$pdffile = "$webpath/pdfpages/$filename";
 $dictlower = $dictinfo->dict;
 if ($dictinfowhich == "cologne") {
  // Use the cologne images
