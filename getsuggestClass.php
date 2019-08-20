@@ -15,32 +15,33 @@ class GetsuggestClass {
   /* Jquery autosuggest uses parameter 'term' 
     We use logic similar to that in the Parm constructor to adjust this keyin
   */
-  $keyin = $_GET['term'];
-  $dbg=false;
-  $keyin = trim($keyin); // remove leading and trailing whitespace
   $english = $getParms->english;
   $filterin = $getParms->filterin;
-  $dict = $getParms->dict;
-  dbgprint($dbg,"getsuggest: dict=$dict\n");
-  $dal = new Dal($dict);
+  list($keyin,$keyin1,$key) = $getParms->compute_text('term');
+  $dbg=false;
+
   $keyprobFlag=false;
-  if ($english) {
-   $keyin1 = $keyin;
-   $key = $keyin1;  
-  }else {
-   $keyin1 = $getParms -> preprocess_unicode_input($keyin,$filterin);
-   $key = transcoder_processString($keyin1,$filterin,"slp1");
+  // 08-19-2019  I can't reproduce the problem that this tests for
+  //  Removing this code for now.
+  /*
+  if (!$english) {
    dbgprint($dbg,"getsuggest.php: keyin=$keyin, keyin1=$keyin1, key=$key, filterin=$filterin\n");
    if ($filterin == 'hk') {
     // for cases like 'gaN'
     $keychk = transcoder_processString($key,"slp1",$filterin);
+    dbgprint(true," HK spelling: keychk=$keychk, keyin1=$keyin1\n");
     if ($keychk != $keyin1) {
-    dbgprint($dbg,"Problem with HK spelling: keychk=$keychk\n");
+    dbgprint(true,"Problem with HK spelling: keychk=$keychk\n");
      $keyprobFlag=true;
     }
    }
   }
+  */
+
   $origkey = $key;
+
+  $dict = $getParms->dict;
+  $dal = new Dal($dict);
 
   $more = True;
   $max = 10;  # max number of return results

@@ -41,8 +41,6 @@ class Parm {
   }else {
    $this->filterin0 = $_REQUEST['input']; 
   }
-  $this->keyin = $_REQUEST['key'];
-  $this->keyin = trim($this->keyin); // remove leading and trailing whitespace
   $this->dict = $_REQUEST['dict'];
   // some places expect dict to be lower case.
   $this->dict = strtolower($this->dict);
@@ -56,26 +54,38 @@ class Parm {
 
   $this->dictinfo = new DictInfo($this->dict);
   $this->english = $this->dictinfo->english;
+  list($this->keyin,$this->keyin1,$this->key) = $this->compute_text('key');
+  
+  $this->compute_dispcss(); 
+
+  dbgprint($dbg,"parm construct keyin = {$this->keyin}\n");
+  dbgprint($dbg,"parm construct keyin1 = {$this->keyin1}\n");
+  dbgprint($dbg,"parm construct key = {$this->key}\n");
+  dbgprint($dbg,"leave parm construct\n");
+ }  
+
+ public function compute_text($code) {
+  // uses public variables $this->english, $this->filterin
+  $keyin = $_REQUEST[$code];
+  $keyin = trim($keyin); // remove leading and trailing whitespace
   if ($this->english) {
-   $this->keyin1 = $this->keyin;
-   $this->key = $this->keyin1;  
+   $keyin1 = $keyin;
+   $key = $keyin1;  
   }else {
-   $this->keyin1 = $this -> preprocess_unicode_input($this->keyin,$this->filterin);
-   $this->key = transcoder_processString($this->keyin1,$this->filterin,"slp1");
+   $keyin1 = $this -> preprocess_unicode_input($keyin,$this->filterin);
+   $key = transcoder_processString($keyin1,$this->filterin,"slp1");
   }
+  return array($keyin,$keyin1,$key);
+ }
+
+ public function compute_dispcss() {
   $this->dispcss = $_REQUEST['dispcss'];
   if (!$this->dispcss) {
    $this->dispcss = 'yes';
   }else if ($this->dispcss != 'no') {
    $this->dispcss = 'yes';
   }
- dbgprint($dbg,"parm construct keyin = {$this->keyin}\n");
- dbgprint($dbg,"parm construct keyin1 = {$this->keyin1}\n");
- dbgprint($dbg,"parm construct key = {$this->key}\n");
- dbgprint($dbg,"leave parm construct\n");
-
- }  
-
+ }
  public function preprocess_unicode_input($x,$filterin) {
   // when a unicode form is input in the citation field, for instance
   // rAma (where the unicode roman for 'A' is used), then,
