@@ -66,6 +66,10 @@ class Parm {
 
  public function compute_text($code) {
   // uses public variables $this->english, $this->filterin
+  // Known usages: 
+  // $_REQUEST['key'] (from Parm constructor)
+  // $_REQUEST['term'] (from GetsuggestClass constructor)
+
   $keyin = $_REQUEST[$code];
   $keyin = trim($keyin); // remove leading and trailing whitespace
   if ($this->english) {
@@ -77,7 +81,7 @@ class Parm {
   }
   return array($keyin,$keyin1,$key);
  }
-
+ 
  public function compute_dispcss() {
   $this->dispcss = $_REQUEST['dispcss'];
   if (!$this->dispcss) {
