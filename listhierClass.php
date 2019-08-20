@@ -185,7 +185,7 @@ class ListhierClass {
   $recarr = $dal->get1($key);
   $matches=array();
   $nmatches=0;
-  $more=false;
+  $more=true;
   foreach($recarr as $rec) {
    if ($more) {
     list($key1,$lnum1,$data1) = $rec;
