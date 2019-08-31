@@ -5,7 +5,7 @@
     web site, and another simpler structure based on that devised for 
     use on other servers, such as xampp or a typical Linux php setup.
 */
- if (preg_match('/^afs/',dirname(__DIR__))) {
+ if (preg_match("|^/afs|",dirname(__DIR__))) {
   $dictinfowhich = "cologne"; 
   #require_once('dbgprint.php');
   #dbgprint(true,"dictinfowhich: " .dirname(__DIR__)  . "  $dictinfowhich\n");
