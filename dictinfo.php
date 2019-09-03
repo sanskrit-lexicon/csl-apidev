@@ -25,6 +25,7 @@ class DictInfo {
  public $year;  
  public $english;
  public $sqlitedir;  // 07-10-2018 for Dalraw
+ public $webpath, $webparent;
  public function __construct($dict) {
   #$this->scanpath_server = realpath(preg_replace('|/awork/apidev|','',__DIR__));
   #$this->scanpath = "../..";
@@ -35,9 +36,10 @@ class DictInfo {
   $this->dictupper=strtoupper($dict);
   $this->year = self::$dictyear[$this->dictupper];
   $this->english = in_array($this->dictupper,array("AE","MWE","BOR")); // boolean flag
-  #$webpath = $this->get_serverPath();
-  $webpath = $this->get_webPath();
-  $this->sqlitedir = "$webpath/sqlite";
+  $this->webpath = $this->get_webPath();
+  $this->webparent = realpath("{$this->webpath}/../");
+  #dbgprint(true,"dictinfo: webpath = {$this->webpath}, webparent={$this->webparent}\n");
+  $this->sqlitedir = "{$this->webpath}/sqlite";
   }
  
  public function get_year() {
@@ -53,9 +55,6 @@ class DictInfo {
  }
  public function get_webPath() {
   include("dictinfowhich.php");
-
-  // $path = self::$scanpath . "/{$this->dictupper}Scan/{$this->year}/web";
-  #$path = $this->scanpath . "/{$this->dictupper}Scan/{$this->year}/web";
   $dbg=false;
   dbgprint($dbg,"dictinfo.get_webPath: dictinfowhich=$dictinfowhich\n");
   if ($dictinfowhich == "xampp") {
@@ -71,36 +70,93 @@ class DictInfo {
    // assume ($dictinfowhich == "cologne")
    $path =  "../../{$this->dictupper}Scan/{$this->year}/web";
   }
-  //dbgprint(true,"get_webPath: $path\n");
   return $path;
  }
- public function unused_get_serverPath() {
-  /* For other php functions to access file system */
-  // $path = self::$scanpath . "/{$this->dictupper}Scan/{$this->year}/web";
-  #$path = $this->scanpath_server . "/{$this->dictupper}Scan/{$this->year}/web";
-  // 04-17-2018  for XAMPP
-  $path = $this->get_webPath();
-  //dbgprint(true,"get_serverPath: $path\n");
-  return $path;
- }
- public function get_htmlPath() {
-  //$path = self::$scanpath . "/{$this->dictupper}Scan/{$this->year}/pywork/html";
-    #$path = $this->scanpath . "/{$this->dictupper}Scan/{$this->year}/pywork/html";
-  // 04-17-2018  for XAMPP
-  #$path = $this->scanpath . "/{$this->dict}/pywork/html";
-  #// 07-10-2018. For revised work which uses doesn't use precomputed html
-  #$path = $this->scanpath . "/{$this->dict}/web/sqlite";
-  # 07-12-2018. Change to use webpath
-  $webpath = $this->get_webPath();
+ public function get_pdfpages_url() {
+  /* Assume this method called only from servepdf, which is in web/webtc folder
+  */
   $dbg=false;
-  dbgprint($dbg,"dictinfo. get_htmlPath. webpath=$webpath\n");
-  $path = $webpath . "/../pywork/html";
-  dbgprint($dbg,"dictinfo. get_htmlPath. 1 path=$path\n");  
-  $path = realpath($path);
-  dbgprint($dbg,"dictinfo. get_htmlPath. 2 path=$path\n");  
-  return $path;
+  include("dictinfowhich.php");
+  $cologne_url = $this->get_cologne_pdfpages_url();
+  if ($dictinfowhich == 'cologne') {
+   return $cologne_url;
+  }
+  // otherwise, $dictinfowhich == 'xampp'
+  // Try relative url, either in web directory, or parent of web directory
+  // Use relative url if it is a non-empty directory.
+  $testpaths = array ( "../{$this->dict}/pdfpages", "../{$this->dict}/web/pdfpages"   );
+  foreach($testpaths as $testpath) {
+   if (!$this->dir_is_empty($testpath)) {
+    return $testpath;
+   }
+  }
+  // Use Cologne url as a fallback
+  return $cologne_url;
+ } 
+ public function dir_is_empty($dir) {
+  /* ref: https://stackoverflow.com/questions/7497733/how-can-i-use-php-to-check-if-a-directory-is-empty
+   Note this is just a function. Put into this class for convenience of this
+   application.  Currently used only by get_pdfpages_dir()
+  */
+  if (! is_dir($dir)) { 
+   return TRUE; 
+  }
+  $handle = opendir($dir);
+  while (false !== ($entry = readdir($handle))) {
+    if ($entry != "." && $entry != "..") {
+      closedir($handle);
+      return FALSE;
+    }
+  }
+  closedir($handle);
+  return TRUE;
  }
-  
+public function get_cologne_pdfpages_url() {
+ /* These urls are current as of 08-31-2019
+ */
+ $cologne_pdfpages_urls = array(
+  "ACC"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/ACCScan/2014/web/pdfpages" ,
+  "AE"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/AEScan/2014/web/pdfpages" ,
+  "AP"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/APScan/2014/web/pdfpages" ,
+  "AP90"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/AP90Scan/2014/web/pdfpages" ,
+  "BEN"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/BENScan/2014/web/pdfpages" ,
+  "BHS"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/BHSScan/2014/web/pdfpages" ,
+  "BOP"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/BOPScan/2014/web/pdfpages" ,
+  "BOR"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/BORScan/2014/web/pdfpages" ,
+  "BUR"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/BURScan/2013/web/pdfpages" ,
+  "CAE"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/CAEScan/2014/web/pdfpages" ,
+  "CCS"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/CCSScan/2014/web/pdfpages" ,
+  "GRA"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/GRAScan/2014/web/pdfpages" ,
+  "GST"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/GSTScan/2014/web/pdfpages" ,
+  "IEG"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/IEGScan/2014/web/pdfpages" ,
+  "INM"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/INMScan/2013/web/pdfpages" ,
+  "KRM"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/KRMScan/2014/web/pdfpages" ,
+  "MCI"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/MCIScan/2014/web/pdfpages" ,
+  "MD"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/MDScan/2014/web/pdfpages" ,
+  #"MW"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/MWScan/2014/web/pdfpages" ,
+  "MW"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/MWScan/MWScanpdf" ,
+  "MW72"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/MW72Scan/2014/web/pdfpages" ,
+  "MWE"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/MWEScan/2013/web/pdfpages" ,
+  "PD"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/PDScan/2014/web/pdfpages" ,
+  "PE"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/PEScan/2014/web/pdfpages" ,
+  "PGN"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/PGNScan/2014/web/pdfpages" ,
+  "PUI"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/PUIScan/2014/web/pdfpages" ,
+  "PWG"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/PWGScan/2013/web/pdfpages" ,
+  "PW"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/PWScan/2014/web/pdfpages" ,
+  "SCH"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/SCHScan/2014/web/pdfpages" ,
+  "SHS"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/SHSScan/2014/web/pdfpages" ,
+  "SKD"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/SKDScan/2013/web/pdfpages" ,
+  "SNP"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/SNPScan/2014/web/pdfpages" ,
+  "STC"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/STCScan/2013/web/pdfpages" ,
+  "VCP"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/VCPScan/2013/web/pdfpages" ,
+  "VEI"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/VEIScan/2014/web/pdfpages" ,
+  "WIL"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/WILScan/2014/web/pdfpages" ,
+  "YAT"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/YATScan/2014/web/pdfpages" ,
+ );
+ $url = $cologne_pdfpages_urls[$this->dictupper];
+ return $url;
+ }
+
 }
 ?>
 

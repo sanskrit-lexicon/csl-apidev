@@ -42,7 +42,6 @@ class GetsuggestClass {
 
   $dict = $getParms->dict;
   $dal = new Dal($dict);
-
   $more = True;
   $max = 10;  # max number of return results
   $maxlike=100;
