@@ -34,7 +34,12 @@ class DictInfo {
   #$this->scanpath = $this->scanpath_server; //"../..";
   $this->dict=strtolower($dict);
   $this->dictupper=strtoupper($dict);
-  $this->year = self::$dictyear[$this->dictupper];
+  if ($_REQUEST['version'] == '1') {
+   // older version -- 2014 or 2013
+   $this->year = self::$dictyear[$this->dictupper];
+  }else {
+   $this->year = '2020';
+  }
   $this->english = in_array($this->dictupper,array("AE","MWE","BOR")); // boolean flag
   $this->webpath = $this->get_webPath();
   $this->webparent = realpath("{$this->webpath}/../");
