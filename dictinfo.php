@@ -89,7 +89,7 @@ class DictInfo {
   // otherwise, $dictinfowhich == 'xampp'
   // Try relative url, either in web directory, or parent of web directory
   // Use relative url if it is a non-empty directory.
-  $testpaths = array ( "../{$this->dict}/pdfpages", "../{$this->dict}/web/pdfpages"   );
+  $testpaths = array ( "../scans/{$this->dict}/pdfpages","../{$this->dict}/pdfpages", "../{$this->dict}/web/pdfpages"   );
   foreach($testpaths as $testpath) {
    if (!$this->dir_is_empty($testpath)) {
     return $testpath;
