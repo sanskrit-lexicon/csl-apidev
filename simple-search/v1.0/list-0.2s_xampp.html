@@ -10,8 +10,8 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
 <!-- jquery-ui is used -->
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
-<script type="text/javascript" src="//localhost/cologne/apidev/sample/dictnames.js"></script>
-<script type="text/javascript" src="//localhost/cologne/apidev/sample/cookieUpdate.js"></script>
+<script type="text/javascript" src="../../sample/dictnames.js"></script>
+<script type="text/javascript" src="../../sample/cookieUpdate.js"></script>
 
 <style>
 body {
@@ -133,7 +133,7 @@ $(document).ready(function() {
   var output = $('#output').val();
   var accent = $('#accent').val();
   // TODO: check for valid inputs before ajax call
-  var urlbase="//localhost/cologne/apidev/listview.php";
+  var urlbase="../../listview.php";
   var url =  urlbase +  
    "?key=" +escape(key) + 
    "&output=" +escape(output) +
@@ -192,7 +192,7 @@ simpleFunction = function(){
   test.key = find_word;
   // 04-18/2018. change from v1.0d to v1.0
   // Currenlty getword_list_1.0.php same in both locations.
-  test.url = "//localhost/cologne/apidev/simple-search/v1.0/getword_list_1.0.php";
+  test.url = "../../simple-search/v1.0/getword_list_1.0.php";
   //console.log('simpleFunction test.url=',test.url);
   test.input = 'hk';
   test.output = $('#output').val(); //'deva';
@@ -329,7 +329,7 @@ $("#key").keypress(function (e) {
 $("#key").autocomplete({
   source: function(request,response) {
    $.ajax({
-   url:"//localhost/cologne/apidev/getsuggest.php",
+   url:"../../getsuggest.php",
    datatype:"jsonp",
    data: {
     //q: request.term
