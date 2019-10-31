@@ -423,16 +423,8 @@ public function __construct($key,$matches,$filterin,$dict) {
     // nothing special here  Greek remains to be filled in
     // Depends on whether the text is filled in
     $n = $attribs['n'];
-    if (in_array($this->dict,array('pwg','mw','pw','wil','md'))) {
+    if (in_array($this->dict,array('pwg','mw','pw','wil','md','yat','mw72','snp','stc'))) {
      # nothing to do.  Greek (and other) unicode has been provided.
-    }else if ($this->dict == 'mw72') {
-     $empty = $attribs['empty'];
-     if ($empty == 'yes') {
-      # placeholder required
-      $this->row .= " ($n) ";
-     }else {
-       # no placeholder required. nothing to do
-     }
     }else {
      # put a placeholder where the greek, arabic, etc. needs to be provided.
      $this->row .= " ($n) ";
@@ -488,8 +480,6 @@ public function __construct($key,$matches,$filterin,$dict) {
    // skd. n = H,P
    $n = $attribs['n'];
    $row .= "<strong>($n) </strong>";   
-  } else if ( ($el == "g")&&($this->dict == "yat")) {
-   # no markup.  Should remove when yat.txt changes to "<lang>" markup
   } else if ( ($el == "pic")&&($this->dict == "ben")) {
    $filename = $attribs['name'];
    $path = "../../web/images/$filename";

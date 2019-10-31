@@ -155,7 +155,8 @@ class BasicAdjust {
    $line = preg_replace('|</div>|',' </div>',$line);
    $line = preg_replace('|<div n="([1I])">([^ ]*)|','<div n="\1"><b>\2</b>',$line);
   } else if ($this->getParms->dict == "mw72") {
-   $line = preg_replace('|></lang>|'," empty='yes'></lang>",$line);
+   # removed 10-31-2019, since Greek text now provided in mw72.
+   #$line = preg_replace('|></lang>|'," empty='yes'></lang>",$line);
   } else if ($this->getParms->dict == "sch") {
    # this should have been done in sch.txt or sch.xml
    $line = preg_replace('|\^(.)|',"<sup>\\1</sup>",$line);
