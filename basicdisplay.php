@@ -671,11 +671,36 @@ public function mw_extra_line($line) {
  /* Currently only used in mw for links to Whitney and Westergaard.
   Based on <info whitneyroots="X"/> or <info westergaard="X"/>
  */
+ include("dictinfowhich.php");
+ $href0_whit_cologne = "//www.sanskrit-lexicon.uni-koeln.de/scans/csl-whitroot/disp/index.php";
+ $href0_west_cologne = "//www.sanskrit-lexicon.uni-koeln.de/scans/csl-westergaard/disp/index.php";
+
+ if ($dictinfowhich == "cologne") {
+  $href0_whit = $href0_whit_cologne;
+  $href0_west = $href0_west_cologne;
+ } else {
+  // use local module if it exists. Otherwise, use Cologne
+  // We are in cologne/xxx/web/webtc OR in cologne/csl-apidev/
+  if (preg_match("|webtc$|",__DIR__)) {
+   $href0_whit = "../../../csl-whitroot/disp/index.php";
+   $href0_west = "../../../csl-westergaard/disp/index.php";
+  }else {  
+   // assume we are in cologne/csl-apidev
+   $href0_whit = "../csl-whitroot/disp/index.php";
+   $href0_west = "../csl-westergaard/disp/index.php";
+  }
+  if (! file_exists($href0_whit)) {
+   $href0_whit = $href0_whit_cologne;
+  }
+  if (! file_exists($href0_west)) {
+   $href0_west = $href0_west_cologne;
+  } 
+ }
  $ans1=""; // whitney
  $ans2=""; // westergaard
  if (preg_match('|<info whitneyroots="(.*?)"/>|',$line,$matches)) {
   $x = $matches[1];
-  $href0="//www.sanskrit-lexicon.uni-koeln.de/scans/KALEScan/WRScan/disp2/index.php";
+  $href0=$href0_whit;
   $results = preg_split("|;|",$x);
   $elts=array();
   foreach ($results as $rec) {
@@ -698,7 +723,7 @@ public function mw_extra_line($line) {
  }
  if (preg_match('|<info westergaard="(.*?)"/>|',$line,$matches)) {
   $x = $matches[1];
-  $href0="//www.sanskrit-lexicon.uni-koeln.de/scans/MWScan/Westergaard/disp/index.php";
+  $href0=$href0_west;
   $results = preg_split("|;|",$x);
   $elts=array();
   foreach ($results as $rec) {
