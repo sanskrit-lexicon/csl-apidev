@@ -47,7 +47,9 @@ class Simple_Search{
   $this->dict = strtolower($dict);
   $this->ngram_initialilze();
 
-  $this->dalnorm = new Dalnorm('hwnorm1c','../../../sanhw1');
+  # hwnorm1c copied from awork/sanhw1/ to ../hwnorm1/
+  #$this->dalnorm = new Dalnorm('hwnorm1c','../../../sanhw1');
+  $this->dalnorm = new Dalnorm('hwnorm1c','../hwnorm1');
   $this->dbg = false;
   #$this->dbg = true;
   dbgprint($this->dbg,"Simple_construct: keyin00 = $keyin00\n");

@@ -37,7 +37,8 @@ dbgprint($dbg,"getword_list_1.0.php: dict=$dict\n");
 $dal = new Dal($dict);
 // WARNING: the relative path to sanhw1 is sensitive to location of
 //   this file.
-$dalnorm = new Dalnorm('hwnorm1c','../../../sanhw1');
+#$dalnorm = new Dalnorm('hwnorm1c','../../../sanhw1');
+$dalnorm = new Dalnorm('hwnorm1c','../hwnorm1');
 // Ordering of results depends on a word frequency file.
 $wfreqs = init_word_frequency();
 
