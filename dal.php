@@ -10,7 +10,7 @@ class Dal {
  public $dict;
  public $dictinfo;
  public $sqlitefile;
- public $file_db;
+ public $file_db, $file_db_xml;
  public $dbg=false;
  public $dbname; 
  public $tabname;  # name of table in sqlitefile. 
@@ -43,6 +43,7 @@ class Dal {
    $this->tabid = 'key';
   }else { // unknown $dbname
    $this->file_db = null;
+   $this->file_db_xml = null;
    $this->status=false;
    return;
   }
@@ -54,8 +55,10 @@ class Dal {
    $this->file_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
    #dbgprint($dbg,"dal.php: opened " . $this->sqlitefile . "\n");
    $this->status=true;
+   $this->file_db_xml = $this->file_db;  
   } catch (PDOException $e) {
    $this->file_db = null;
+   $this->file_db_xml = null;
    #dbgprint($dbg,"dal.php: Cannot open " . $this->sqlitefile . "\n");
    $this->status=false;
   }
