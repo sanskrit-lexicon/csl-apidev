@@ -12,11 +12,11 @@ There is also a Unix softlink from *scans/csl-apidev* to scans/awork/apidev/
 *csl-apidev* is a development version of the Cologne sanskrit-lexicon Application Programming Interface. The basic purpose is to provide software components that may be used to develop web pages making use of the Cologne sanskrit-lexicon dictionaries.
 
 In the mid-2000s, Malcolm Hyman and Peter Scharf envisioned providing accessibility to the data of the dictionary 
-digitizations via an API.   The present 2019 form of *apidev* was implemented by Funderburk (starting around 2015) as materialization of this dictionary api idea.
+digitizations via an API.   The present 2019 form of *apidev* was implemented by Funderburk (starting around 2015) as materialization of this dictionary API idea.
 
-The api uses the PHP programming language, as well as some (currently small) amount of Javascript, and some special purpose CSS.  The current reliability status of the api should be considered well-tested beta.  
+The API uses the PHP programming language, as well as some (currently small) amount of Javascript, and some special purpose CSS.  The current reliability status of the API should be considered well-tested beta.  
 
-The API style of apidev entry points is a RESTful api.  The base url of an api call currently starts with:
+The API style of apidev entry points is a RESTful api.  The base url of an API call currently starts with:
 
  **https://www.sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/X.php**.  Restful parameters can be passed either as part of the base url  (by a so-called "GET" request) or via a "POST" request.  Here **X** specifies the action,
 and is currently one of:
