@@ -55,5 +55,24 @@ class LnumToData(Resource):
 		return jsonify(result)
  
 
+@api.route('/' + apiversion + '/dicts/<string:dict>/hw/<string:hw>')
+@api.doc(params={'dict': 'Dictionary code.', 'hw': 'Headword to search.'})
+class hwToData(Resource):
+	"""Return the JSON data regarding the given headword."""
+
+	get_parser = reqparse.RequestParser()
+
+	@api.expect(get_parser, validate=True)
+	def get(self, dict, hw):
+		sqlitepath = find_sqlite(dict, typ='local')
+		con = sqlite3.connect(sqlitepath)
+		ans = con.execute("SELECT * FROM " + dict + " WHERE key = " + "'" + hw + "'")
+		result = []
+		for [headword, lnum, data] in ans.fetchall():
+			(key2, pc, text) = parse_text_data(data)
+			result.append({'headword': headword, 'lnum': lnum, 'key2': key2, 'pc': pc, 'text': text})
+			return jsonify(result)
+
+
 if __name__ == "__main__":
 	app.run(debug=True)
