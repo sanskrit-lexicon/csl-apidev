@@ -4,6 +4,8 @@ import os
 import sys
 import sqlite3
 import json
+import re
+import xml.etree.ElementTree as ET
 from flask import Flask, jsonify
 from flask_restplus import Api, Resource, reqparse
 from flask_cors import CORS
@@ -26,6 +28,14 @@ def find_sqlite(dict, typ):
 	sqlitepath = os.path.join('..', intermediate, 'web', 'sqlite', dict + '.sqlite')
 	return sqlitepath
 
+def parse_text_data(data):
+	root = ET.fromstring(data)
+	key2 = root.findall("./h/key2")[0].text
+	pc = root.findall("./tail/pc")[0].text
+	m = re.split('<body>(.*)</body>', data)
+	text = m[1]
+	return (key2, pc, text)
+
 
 @api.route('/' + apiversion + '/dicts/<string:dict>/lnum/<string:lnum>')
 @api.doc(params={'dict': 'Dictionary code.', 'lnum': 'L number.'})
@@ -40,14 +50,10 @@ class LnumToData(Resource):
 		con = sqlite3.connect(sqlitepath)
 		ans = con.execute('SELECT * FROM ' + dict + ' WHERE lnum = ' + str(lnum))
 		[headword, lnum, data] = ans.fetchall()[0]
-		result = {'headword': headword, 'lnum': lnum, 'data': data}
+		(key2, pc, text) = parse_text_data(data)
+		result = {'headword': headword, 'lnum': lnum, 'key2': key2, 'pc': pc, 'text': text}
 		return jsonify(result)
  
 
 if __name__ == "__main__":
-	"""
-	dict = sys.argv[1].lower()
-	typ = sys.argv[2]
-	lnum = sys.argv[3]
-	"""
 	app.run(debug=True)
