@@ -20,8 +20,9 @@ apiversion = 'v0.0.1'
 api = Api(app, version=apiversion, title=u'Cologne Sanskrit-lexicon API', description='Provides APIs to Cologne Sanskrit lexica.')
 
 
-def find_sqlite(dict, typ):
-	if typ == 'cologne':
+def find_sqlite(dict):
+	path = os.path.abspath(__file__)
+	if path.startswith('/nfs/'):
 		intermediate = os.path.join(dict.upper() + 'Scan', '2020', 'web', 'sqlite', dict + '.sqlite')
 	else:
 		intermediate = dict
@@ -46,7 +47,7 @@ class LnumToData(Resource):
 
 	@api.expect(get_parser, validate=True)
 	def get(self, dict, lnum):
-		sqlitepath = find_sqlite(dict, typ='local')
+		sqlitepath = find_sqlite(dict)
 		con = sqlite3.connect(sqlitepath)
 		ans = con.execute('SELECT * FROM ' + dict + ' WHERE lnum = ' + str(lnum))
 		[headword, lnum, data] = ans.fetchall()[0]
@@ -64,7 +65,7 @@ class regexToHw(Resource):
 
 	@api.expect(get_parser, validate=True)
 	def get(self, dict, reg):
-		sqlitepath = find_sqlite(dict, typ='local')
+		sqlitepath = find_sqlite(dict)
 		con = sqlite3.connect(sqlitepath)
 		ans = con.execute("SELECT * FROM " + dict )
 		result = []
@@ -84,7 +85,7 @@ class hwToData(Resource):
 
 	@api.expect(get_parser, validate=True)
 	def get(self, dict, hw):
-		sqlitepath = find_sqlite(dict, typ='local')
+		sqlitepath = find_sqlite(dict)
 		con = sqlite3.connect(sqlitepath)
 		ans = con.execute("SELECT * FROM " + dict + " WHERE key = " + "'" + hw + "'")
 		result = []
