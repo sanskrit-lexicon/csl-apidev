@@ -55,6 +55,26 @@ class LnumToData(Resource):
 		return jsonify(result)
  
 
+@api.route('/' + apiversion + '/dicts/<string:dict>/regex/<string:reg>')
+@api.doc(params={'dict': 'Dictionary code.', 'reg': 'Find the headwords matching the given regex.'})
+class regexToHw(Resource):
+	"""Return the headwords matching the given regex."""
+
+	get_parser = reqparse.RequestParser()
+
+	@api.expect(get_parser, validate=True)
+	def get(self, dict, reg):
+		sqlitepath = find_sqlite(dict, typ='local')
+		con = sqlite3.connect(sqlitepath)
+		ans = con.execute("SELECT * FROM " + dict )
+		result = []
+		for [headword, lnum, data] in ans.fetchall():
+			if re.search(reg, headword):
+				(key2, pc, text) = parse_text_data(data)
+				result.append({'headword': headword, 'lnum': lnum, 'key2': key2, 'pc': pc, 'text': text})
+		return jsonify(result)
+
+
 @api.route('/' + apiversion + '/dicts/<string:dict>/hw/<string:hw>')
 @api.doc(params={'dict': 'Dictionary code.', 'hw': 'Headword to search.'})
 class hwToData(Resource):
@@ -72,7 +92,6 @@ class hwToData(Resource):
 			(key2, pc, text) = parse_text_data(data)
 			result.append({'headword': headword, 'lnum': lnum, 'key2': key2, 'pc': pc, 'text': text})
 			return jsonify(result)
-
 
 if __name__ == "__main__":
 	app.run(debug=True)
