@@ -54,9 +54,11 @@ class LnumToData(Resource):
 		sqlitepath = find_sqlite(dict)
 		con = sqlite3.connect(sqlitepath)
 		ans = con.execute('SELECT * FROM ' + dict + ' WHERE lnum = ' + str(lnum))
-		[headword, lnum, data] = ans.fetchall()[0]
-		result = block1(data)
-		return jsonify(result)
+		result = []
+		for [headword, lnum, data] in ans.fetchall():
+			result.append(block1(data))
+		final = {dict: result}
+		return jsonify(final)
  
 
 @api.route('/' + apiversion + '/dicts/<string:dict>/regex/<string:reg>')
@@ -75,7 +77,8 @@ class regexToHw(Resource):
 		for [headword, lnum, data] in ans.fetchall():
 			if re.search(reg, headword):
 				result.append(block1(data))
-		return jsonify(result)
+		final = {dict: result}
+		return jsonify(final)
 
 
 @api.route('/' + apiversion + '/dicts/<string:dict>/hw/<string:hw>')
@@ -93,7 +96,8 @@ class hwToData(Resource):
 		result = []
 		for [headword, lnum, data] in ans.fetchall():
 			result.append(block1(data))
-			return jsonify(result)
+		final = {dict: result}
+		return jsonify(final)
 
 if __name__ == "__main__":
 	app.run(debug=True)
