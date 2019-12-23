@@ -21,6 +21,7 @@ api = Api(app, version=apiversion, title=u'Cologne Sanskrit-lexicon API', descri
 
 
 dicts = ['acc', 'ae', 'ap90', 'ben', 'bhs', 'bop', 'bor', 'bur', 'cae', 'ccs', 'gra', 'gst', 'ieg', 'inm', 'krm', 'mci', 'md', 'mw', 'mw72', 'mwe', 'pe', 'pgn', 'pui', 'pw', 'pwg', 'sch', 'shs', 'skd', 'snp', 'stc', 'vcp', 'vei', 'wil', 'yat']
+
 def find_sqlite(dict):
 	path = os.path.abspath(__file__)
 	if path.startswith('/nfs/'):
@@ -30,20 +31,15 @@ def find_sqlite(dict):
 	sqlitepath = os.path.join('..', intermediate, 'web', 'sqlite', dict + '.sqlite')
 	return sqlitepath
 
-def parse_text_data(data):
+def block1(data):
 	root = ET.fromstring(data)
+	key1 = root.findall("./h/key1")[0].text
 	key2 = root.findall("./h/key2")[0].text
 	pc = root.findall("./tail/pc")[0].text
 	lnum = root.findall("./tail/L")[0].text
 	m = re.split('<body>(.*)</body>', data)
 	text = m[1]
-	return (key2, pc, text, lnum)
-
-
-def prep_dict(data, headword):
-	(key2, pc, text, lnum) = parse_text_data(data)
-	result = {'headword': headword, 'lnum': lnum, 'key2': key2, 'pc': pc, 'text': text}
-	return result
+	return {'key1': key1, 'key2': key2, 'pc': pc, 'text': text, 'lnum': lnum}
 
 
 @api.route('/' + apiversion + '/dicts/<string:dict>/lnum/<string:lnum>')
@@ -59,7 +55,7 @@ class LnumToData(Resource):
 		con = sqlite3.connect(sqlitepath)
 		ans = con.execute('SELECT * FROM ' + dict + ' WHERE lnum = ' + str(lnum))
 		[headword, lnum, data] = ans.fetchall()[0]
-		result = prep_dict(data, headword)
+		result = block1(data)
 		return jsonify(result)
  
 
@@ -78,7 +74,7 @@ class regexToHw(Resource):
 		result = []
 		for [headword, lnum, data] in ans.fetchall():
 			if re.search(reg, headword):
-				result.append(prep_dict(data, headword))
+				result.append(block1(data))
 		return jsonify(result)
 
 
@@ -96,7 +92,7 @@ class hwToData(Resource):
 		ans = con.execute("SELECT * FROM " + dict + " WHERE key = " + "'" + hw + "'")
 		result = []
 		for [headword, lnum, data] in ans.fetchall():
-			result.append(prep_dict(data, headword))
+			result.append(block1(data))
 			return jsonify(result)
 
 if __name__ == "__main__":
