@@ -5,6 +5,7 @@ import sys
 import sqlite3
 import json
 import re
+from indic_transliteration import sanscript
 import xml.etree.ElementTree as ET
 from flask import Flask, jsonify
 from flask_restplus import Api, Resource, reqparse
@@ -15,12 +16,13 @@ except ImportError:
 	from html.parser import HTMLParser
 app = Flask(__name__)
 app.config['JSON_AS_ASCII'] = False
+app.config.SWAGGER_UI_REQUEST_DURATION = True
 CORS(app)
 apiversion = 'v0.0.1'
 api = Api(app, version=apiversion, title=u'Cologne Sanskrit-lexicon API', description='Provides APIs to Cologne Sanskrit lexica.')
 
 
-dicts = ['acc', 'ae', 'ap90', 'ben', 'bhs', 'bop', 'bor', 'bur', 'cae', 'ccs', 'gra', 'gst', 'ieg', 'inm', 'krm', 'mci', 'md', 'mw', 'mw72', 'mwe', 'pe', 'pgn', 'pui', 'pw', 'pwg', 'sch', 'shs', 'skd', 'snp', 'stc', 'vcp', 'vei', 'wil', 'yat']
+cologne_dicts = ['acc', 'ae', 'ap90', 'ben', 'bhs', 'bop', 'bor', 'bur', 'cae', 'ccs', 'gra', 'gst', 'ieg', 'inm', 'krm', 'mci', 'md', 'mw', 'mw72', 'mwe', 'pe', 'pgn', 'pui', 'pw', 'pwg', 'sch', 'shs', 'skd', 'snp', 'stc', 'vcp', 'vei', 'wil', 'yat']
 
 def find_sqlite(dict):
 	path = os.path.abspath(__file__)
@@ -31,7 +33,24 @@ def find_sqlite(dict):
 	sqlitepath = os.path.join('..', intermediate, 'web', 'sqlite', dict + '.sqlite')
 	return sqlitepath
 
-def block1(data):
+def convert_sanskrit(text, inTran, outTran):
+	if outTran != 'slp1':
+		text1 = ''
+		counter = 0
+		# Remove '<srs/>'
+		text = text.replace('<srs/>', '')
+		for i in re.split('<s>([^<]*)</s>', text):
+			if counter % 2 == 0:
+				text1 += i
+			else:
+				text1 += '<s>' + sanscript.transliterate(i, 'slp1', outTran) + '</s>'
+			counter += 1
+	else:
+		text1 = text
+	return text1
+
+
+def block1(data, inTran='slp1', outTran='slp1'):
 	root = ET.fromstring(data)
 	key1 = root.findall("./h/key1")[0].text
 	key2 = root.findall("./h/key2")[0].text
@@ -39,7 +58,9 @@ def block1(data):
 	lnum = root.findall("./tail/L")[0].text
 	m = re.split('<body>(.*)</body>', data)
 	text = m[1]
-	return {'key1': key1, 'key2': key2, 'pc': pc, 'text': text, 'lnum': lnum}
+	text1 = convert_sanskrit(text, inTran, outTran)
+	#text1 = text
+	return {'key1': key1, 'key2': key2, 'pc': pc, 'text': text, 'modiefiedtext': text1, 'lnum': lnum}
 
 
 @api.route('/' + apiversion + '/dicts/<string:dict>/lnum/<string:lnum>')
@@ -61,7 +82,26 @@ class LnumToData(Resource):
 		return jsonify(final)
  
 
-@api.route('/' + apiversion + '/dicts/<string:dict>/regex/<string:reg>')
+@api.route('/' + apiversion + '/dicts/<string:dict>/hw/<string:hw>')
+@api.doc(params={'dict': 'Dictionary code.', 'hw': 'Headword to search.'})
+class hwToData(Resource):
+	"""Return the JSON data regarding the given headword."""
+
+	get_parser = reqparse.RequestParser()
+
+	@api.expect(get_parser, validate=True)
+	def get(self, dict, hw):
+		sqlitepath = find_sqlite(dict)
+		con = sqlite3.connect(sqlitepath)
+		ans = con.execute("SELECT * FROM " + dict + " WHERE key = " + "'" + hw + "'")
+		result = []
+		for [headword, lnum, data] in ans.fetchall():
+			result.append(block1(data))
+		final = {dict: result}
+		return jsonify(final)
+
+
+@api.route('/' + apiversion + '/dicts/<string:dict>/reg/<string:reg>')
 @api.doc(params={'dict': 'Dictionary code.', 'reg': 'Find the headwords matching the given regex.'})
 class regexToHw(Resource):
 	"""Return the headwords matching the given regex."""
@@ -81,23 +121,68 @@ class regexToHw(Resource):
 		return jsonify(final)
 
 
-@api.route('/' + apiversion + '/dicts/<string:dict>/hw/<string:hw>')
-@api.doc(params={'dict': 'Dictionary code.', 'hw': 'Headword to search.'})
-class hwToData(Resource):
-	"""Return the JSON data regarding the given headword."""
+@api.route('/' + apiversion + '/hw/<string:hw>')
+@api.doc(params={'hw': 'Headword to search in all dictionaries.'})
+class hwToAll(Resource):
+	"""Return the entries of this headword from all dictionaries."""
 
 	get_parser = reqparse.RequestParser()
 
 	@api.expect(get_parser, validate=True)
-	def get(self, dict, hw):
+	def get(self, hw):
+		final = {}
+		for dict in cologne_dicts:
+			sqlitepath = find_sqlite(dict)
+			con = sqlite3.connect(sqlitepath)
+			ans = con.execute("SELECT * FROM " + dict + " WHERE key = " + "'" + hw + "'")
+			result = []
+			for [headword, lnum, data] in ans.fetchall():
+				result.append(block1(data))
+			final[dict]  = result
+		return jsonify(final)
+
+
+@api.route('/' + apiversion + '/reg/<string:reg>')
+@api.doc(params={'reg': 'Regex to search in all dictionaries.'})
+class regToAll(Resource):
+	"""Return the entries of this headword from all dictionaries."""
+
+	get_parser = reqparse.RequestParser()
+
+	@api.expect(get_parser, validate=True)
+	def get(self, reg):
+		final = {}
+		for dict in cologne_dicts:
+			sqlitepath = find_sqlite(dict)
+			con = sqlite3.connect(sqlitepath)
+			ans = con.execute("SELECT * FROM " + dict )
+			result = []
+			for [headword, lnum, data] in ans.fetchall():
+				if re.search(reg, headword):
+					result.append(block1(data))
+			final[dict] = result
+		return jsonify(final)
+
+
+@api.route('/' + apiversion + '/dicts/<string:dict>/hw/<string:hw>/<string:inTran>/<string:outTran>')
+@api.doc(params={'dict': 'Dictionary code.', 'hw': 'Headword to search.', 'inTran': 'Input transliteration. devanagari/slp1/iast/hk/wx/itrans/kolkata/velthuis', 'outTran': 'Output transliteration. devanagari/slp1/iast/hk/wx/itrans/kolkata/velthuis'})
+class hwToData1(Resource):
+	"""Return the JSON data regarding the given headword for given input transliteration and output transliteration."""
+
+	get_parser = reqparse.RequestParser()
+
+	@api.expect(get_parser, validate=True)
+	def get(self, dict, hw, inTran, outTran):
+		hw = sanscript.transliterate(hw, inTran, 'slp1')
 		sqlitepath = find_sqlite(dict)
 		con = sqlite3.connect(sqlitepath)
 		ans = con.execute("SELECT * FROM " + dict + " WHERE key = " + "'" + hw + "'")
 		result = []
 		for [headword, lnum, data] in ans.fetchall():
-			result.append(block1(data))
+			result.append(block1(data, inTran, outTran))
 		final = {dict: result}
 		return jsonify(final)
+
 
 if __name__ == "__main__":
 	app.run(debug=True)
