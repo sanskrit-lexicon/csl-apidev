@@ -1,4 +1,4 @@
-const url = 'http://127.0.0.1:5000/v0.0.1/hw/Siva';
+
 
 function generateTab(data) {
 	x = '';
@@ -6,8 +6,6 @@ function generateTab(data) {
 	for (dict in data){
 	block2 = data[dict];
 	if(block2.length > 0) {
-		console.log(dict);
-		console.log(starter);
 		if (starter == 0){
 			x += '<input type="radio" name="tabs" id="' + dict + '" checked="checked">';
 		}
@@ -21,6 +19,7 @@ function generateTab(data) {
 			x += '<h2>' + block1.lnum + '</h2>';
 			x += '<p>' + block1.key2 + ' ' + block1.pc + '<p><br/>';
 			x += block1.modifiedtext;
+			x += '<hr></hr>'
 			}
 		x += '</div>';
 		starter = 1;
@@ -29,10 +28,11 @@ function generateTab(data) {
 	return x;
 }
 
-async function getGithub() {
+async function getApi() {
+	var hw = document.getElementById('headword').value;
+	const url = 'http://127.0.0.1:5000/v0.0.1/hw/' + hw;
 	const response = await fetch(url);
 	const data = await response.json();
 	x = await generateTab(data);
 	document.getElementById("tabs").innerHTML = x;
 }
-getGithub();
