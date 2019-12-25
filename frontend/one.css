@@ -17,6 +17,17 @@
   transition: background ease 0.2s;
 }
 
+.frm {
+  order: 1;
+  display: block;
+  padding: 1rem 2rem;
+  margin-right: 0.2rem;
+  cursor: pointer;
+  background: #90CAF9;
+  font-weight: bold;
+  transition: background ease 0.2s;
+}
+
 .tabs .tab {
   order: 99;
   flex-grow: 1;
