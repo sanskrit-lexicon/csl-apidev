@@ -34,19 +34,17 @@ def find_sqlite(dict):
 	return sqlitepath
 
 def convert_sanskrit(text, inTran, outTran):
-	if outTran != 'slp1':
-		text1 = ''
-		counter = 0
-		# Remove '<srs/>'
-		text = text.replace('<srs/>', '')
-		for i in re.split('<s>([^<]*)</s>', text):
-			if counter % 2 == 0:
-				text1 += i
-			else:
-				text1 += '<s>' + sanscript.transliterate(i, 'slp1', outTran) + '</s>'
-			counter += 1
-	else:
-		text1 = text
+	text1 = ''
+	counter = 0
+	# Remove '<srs/>'
+	text = text.replace('<srs/>', '')
+	for i in re.split('<s>([^<]*)</s>', text):
+		if counter % 2 == 0:
+			text1 += i
+		else:
+			text1 += '<span class="s">' + sanscript.transliterate(i, 'slp1', outTran) + '</span>'
+		counter += 1
+	# Instert tabs
 	return text1
 
 
