@@ -46,6 +46,10 @@ def convert_sanskrit(text, inTran, outTran):
 		counter += 1
 	# PE nesting of LB tag
 	text1 = re.sub('<div n="([^"]*)"/>', '<div n="\g<1>"></div>', text1)
+	text1 = text1.replace('<lb/>', '<br />')
+	# AP90 compounds and meanings break
+	# text1 = text1.replace('<b>--', '<br /><b>--')
+	# text1 = text1.replace('<s>--', '<br /><s>--')
 	# Instert tabs
 	return text1
 
