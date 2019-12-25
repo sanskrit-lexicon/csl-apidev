@@ -44,6 +44,8 @@ def convert_sanskrit(text, inTran, outTran):
 		else:
 			text1 += '<span class="s">' + sanscript.transliterate(i, 'slp1', outTran) + '</span>'
 		counter += 1
+	# PE nesting of LB tag
+	text1 = re.sub('<div n="([^"]*)"/>', '<div n="\g<1>"></div>', text1)
 	# Instert tabs
 	return text1
 
@@ -58,7 +60,7 @@ def block1(data, inTran='slp1', outTran='slp1'):
 	text = m[1]
 	text1 = convert_sanskrit(text, inTran, outTran)
 	#text1 = text
-	return {'key1': key1, 'key2': key2, 'pc': pc, 'text': text, 'modiefiedtext': text1, 'lnum': lnum}
+	return {'key1': key1, 'key2': key2, 'pc': pc, 'text': text, 'modifiedtext': text1, 'lnum': lnum}
 
 
 @api.route('/' + apiversion + '/dicts/<string:dict>/lnum/<string:lnum>')
