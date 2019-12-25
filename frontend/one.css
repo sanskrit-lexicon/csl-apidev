@@ -1,0 +1,25 @@
+body {
+font-family: siddhanta;
+font-size: 15px;
+line-height: 25px;
+}
+table{
+	
+}
+table tr td{
+	border:1px solid #ccc;				
+	padding: 10px;
+}
+div[n="1"]{
+	padding-left: 30px;
+}
+div[n="2"]{
+	padding-left: 60px;
+}
+div[n="3"]{
+	padding-left: 90px;
+}
+div[n="4"]{
+	padding-left: 120px;
+}
+
