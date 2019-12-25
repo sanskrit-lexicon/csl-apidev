@@ -45,12 +45,18 @@ def convert_sanskrit(text, inTran, outTran):
 			text1 += '<span class="s">' + sanscript.transliterate(i, 'slp1', outTran) + '</span>'
 		counter += 1
 	# PE nesting of LB tag
-	text1 = re.sub('<div n="([^"]*)"/>', '<div n="\g<1>"></div>', text1)
+	text1 = text1.replace('<div n="1"/>', 'emsp;<div n="1"></div>')
+	text1 = text1.replace('<div n="2"/>', 'emsp;emsp;<div n="2"></div>')
+	text1 = text1.replace('<div n="3"/>', 'emsp;emsp;emsp;<div n="3"></div>')
+	text1 = text1.replace('<div n="4"/>', 'emsp;emsp;emsp;emsp;<div n="4"></div>')
+	text1 = text1.replace('<div n="5"/>', 'emsp;emsp;emsp;emsp;emsp;<div n="5"></div>')
+	#text1 = re.sub('<div n="([^"]*)"/>', '<div n="\g<1>"></div>', text1)
 	text1 = text1.replace('<lb/>', '<br />')
 	# AP90 compounds and meanings break
-	# text1 = text1.replace('<b>--', '<br /><b>--')
-	# text1 = text1.replace('<s>--', '<br /><s>--')
-	# Instert tabs
+	text1 = text1.replace('<b>--', '<br /><b>--')
+	text1 = text1.replace('<span class="s">--', '<br /><span class="s">--')
+	# — breaks
+	text1 = text1.replace('— ', '<br />— ')
 	return text1
 
 
@@ -63,7 +69,6 @@ def block1(data, inTran='slp1', outTran='slp1'):
 	m = re.split('<body>(.*)</body>', data)
 	text = m[1]
 	text1 = convert_sanskrit(text, inTran, outTran)
-	#text1 = text
 	return {'key1': key1, 'key2': key2, 'pc': pc, 'text': text, 'modifiedtext': text1, 'lnum': lnum}
 
 
@@ -142,6 +147,27 @@ class hwToAll(Resource):
 			result = []
 			for [headword, lnum, data] in ans.fetchall():
 				result.append(block1(data))
+			final[dict]  = result
+		return jsonify(final)
+
+
+@api.route('/' + apiversion + '/hw/<string:hw>/<string:inTran>/<string:outTran>')
+@api.doc(params={'hw': 'Headword to search.', 'inTran': 'Input transliteration. devanagari/slp1/iast/hk/wx/itrans/kolkata/velthuis', 'outTran': 'Output transliteration. devanagari/slp1/iast/hk/wx/itrans/kolkata/velthuis'})
+class hwToAll2(Resource):
+	"""Return the entries of this headword from all dictionaries."""
+
+	get_parser = reqparse.RequestParser()
+
+	@api.expect(get_parser, validate=True)
+	def get(self, hw, inTran, outTran):
+		final = {}
+		for dict in cologne_dicts:
+			sqlitepath = find_sqlite(dict)
+			con = sqlite3.connect(sqlitepath)
+			ans = con.execute("SELECT * FROM " + dict + " WHERE key = " + "'" + hw + "'")
+			result = []
+			for [headword, lnum, data] in ans.fetchall():
+				result.append(block1(data, inTran, outTran))
 			final[dict]  = result
 		return jsonify(final)
 
