@@ -50,7 +50,7 @@ def convert_sanskrit(text, inTran, outTran):
 	text1 = text1.replace('<div n="3"/>', 'emsp;emsp;emsp;<div n="3"></div>')
 	text1 = text1.replace('<div n="4"/>', 'emsp;emsp;emsp;emsp;<div n="4"></div>')
 	text1 = text1.replace('<div n="5"/>', 'emsp;emsp;emsp;emsp;emsp;<div n="5"></div>')
-	#text1 = re.sub('<div n="([^"]*)"/>', '<div n="\g<1>"></div>', text1)
+	text1 = re.sub('<div n="([^"]*)"/>', '<div n="\g<1>"></div>', text1)
 	text1 = text1.replace('<lb/>', '<br />')
 	# AP90 compounds and meanings break
 	text1 = text1.replace('<b>--', '<br /><b>--')
