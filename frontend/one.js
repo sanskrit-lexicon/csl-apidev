@@ -32,7 +32,15 @@ async function getApi() {
 	var hw = document.getElementById('headword').value;
 	var inTran = document.getElementById('inTran').value;
 	var outTran = document.getElementById('outTran').value;
-	const url = 'http://127.0.0.1:5000/v0.0.1/hw/' + hw + '/' + inTran + '/' + outTran;
+	var dictionary = document.getElementById('dictionary').value;
+	var url = ''
+	if (dictionary == 'all'){
+		url = 'http://127.0.0.1:5000/v0.0.1/hw/' + hw + '/' + inTran + '/' + outTran;
+	}
+	else {
+		url = 'http://127.0.0.1:5000/v0.0.1/dicts/' + dictionary + '/hw/' + hw + '/' + inTran + '/' + outTran;
+	}
+	console.log(url)
 	const response = await fetch(url);
 	const data = await response.json();
 	x = await generateTab(data);
