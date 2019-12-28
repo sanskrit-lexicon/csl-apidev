@@ -114,7 +114,7 @@ def block3(dictlist, reg, inTran='slp1', outTran='devanagari'):
 
 @api.route('/' + apiversion + '/dicts/<string:dictionary>/lnum/<string:lnum>')
 @api.doc(params={'dictionary': 'Dictionary code.', 'lnum': 'L number.'})
-class LnumToData(Resource):
+class DL(Resource):
 	"""Return the JSON data regarding the given Lnum."""
 
 	get_parser = reqparse.RequestParser()
@@ -128,7 +128,7 @@ class LnumToData(Resource):
 
 @api.route('/' + apiversion + '/dicts/<string:dictionary>/hw/<string:hw>')
 @api.doc(params={'dictionary': 'Dictionary code.', 'hw': 'Headword to search.'})
-class hwToData(Resource):
+class DH(Resource):
 	"""Return the JSON data regarding the given headword."""
 
 	get_parser = reqparse.RequestParser()
@@ -142,7 +142,7 @@ class hwToData(Resource):
 
 @api.route('/' + apiversion + '/dicts/<string:dictionary>/reg/<string:reg>')
 @api.doc(params={'dictionary': 'Dictionary code.', 'reg': 'Find the headwords matching the given regex.'})
-class regexToHw(Resource):
+class DR(Resource):
 	"""Return the headwords matching the given regex."""
 
 	get_parser = reqparse.RequestParser()
@@ -156,7 +156,7 @@ class regexToHw(Resource):
 
 @api.route('/' + apiversion + '/hw/<string:hw>')
 @api.doc(params={'hw': 'Headword to search in all dictionaries.'})
-class hwToAll(Resource):
+class H(Resource):
 	"""Return the entries of this headword from all dictionaries."""
 
 	get_parser = reqparse.RequestParser()
@@ -170,7 +170,7 @@ class hwToAll(Resource):
 
 @api.route('/' + apiversion + '/hw/<string:hw>/<string:inTran>/<string:outTran>')
 @api.doc(params={'hw': 'Headword to search.', 'inTran': 'Input transliteration. devanagari/slp1/iast/hk/wx/itrans/kolkata/velthuis', 'outTran': 'Output transliteration. devanagari/slp1/iast/hk/wx/itrans/kolkata/velthuis'})
-class hwToAll2(Resource):
+class HIO(Resource):
 	"""Return the entries of this headword from all dictionaries."""
 
 	get_parser = reqparse.RequestParser()
@@ -184,7 +184,7 @@ class hwToAll2(Resource):
 
 @api.route('/' + apiversion + '/reg/<string:reg>')
 @api.doc(params={'reg': 'Regex to search in all dictionaries.'})
-class regToAll(Resource):
+class R(Resource):
 	"""Return the entries of this headword from all dictionaries."""
 
 	get_parser = reqparse.RequestParser()
@@ -198,7 +198,7 @@ class regToAll(Resource):
 
 @api.route('/' + apiversion + '/dicts/<string:dictionary>/hw/<string:hw>/<string:inTran>/<string:outTran>')
 @api.doc(params={'dictionary': 'Dictionary code.', 'hw': 'Headword to search.', 'inTran': 'Input transliteration. devanagari/slp1/iast/hk/wx/itrans/kolkata/velthuis', 'outTran': 'Output transliteration. devanagari/slp1/iast/hk/wx/itrans/kolkata/velthuis'})
-class hwToData1(Resource):
+class DHIO(Resource):
 	"""Return the JSON data regarding the given headword for given input transliteration and output transliteration."""
 
 	get_parser = reqparse.RequestParser()
@@ -214,7 +214,7 @@ class hwToData1(Resource):
 
 @api.route('/' + apiversion + '/reg/<string:reg>/<string:inTran>/<string:outTran>')
 @api.doc(params={'reg': 'Regex to search.', 'inTran': 'Input transliteration. devanagari/slp1/iast/hk/wx/itrans/kolkata/velthuis', 'outTran': 'Output transliteration. devanagari/slp1/iast/hk/wx/itrans/kolkata/velthuis'})
-class regToAll1(Resource):
+class RIO(Resource):
 	"""Return the entries of this headword from all dictionaries."""
 
 	get_parser = reqparse.RequestParser()
@@ -227,7 +227,21 @@ class regToAll1(Resource):
 		return jsonify(final)
 
 
+@api.route('/' + apiversion + '/dicts/<string:dictionary>/reg/<string:reg>/<string:inTran>/<string:outTran>')
+@api.doc(params={'dictionary': 'Dictionary code.', 'reg': 'Regex to search.', 'inTran': 'Input transliteration. devanagari/slp1/iast/hk/wx/itrans/kolkata/velthuis', 'outTran': 'Output transliteration. devanagari/slp1/iast/hk/wx/itrans/kolkata/velthuis'})
+class DRIO(Resource):
+	"""Return the entries of this headword from all dictionaries."""
+
+	get_parser = reqparse.RequestParser()
+
+	@api.expect(get_parser, validate=True)
+	def get(self, dictionary, reg, inTran, outTran):
+		reg = sanscript.transliterate(reg, inTran, 'slp1')
+		dictlist = [dictionary]
+		final = block3(dictlist, reg, inTran, outTran)
+		return jsonify(final)
+
+
 if __name__ == "__main__":
-	print(longest_string('ram.*Ta'))
 	app.run(debug=True)
 	
