@@ -214,5 +214,29 @@ class hwToData1(Resource):
 		return jsonify(final)
 
 
+
+@api.route('/' + apiversion + '/reg/<string:reg>/<string:inTran>/<string:outTran>')
+@api.doc(params={'reg': 'Regex to search.', 'inTran': 'Input transliteration. devanagari/slp1/iast/hk/wx/itrans/kolkata/velthuis', 'outTran': 'Output transliteration. devanagari/slp1/iast/hk/wx/itrans/kolkata/velthuis'})
+class regToAll1(Resource):
+	"""Return the entries of this headword from all dictionaries."""
+
+	get_parser = reqparse.RequestParser()
+
+	@api.expect(get_parser, validate=True)
+	def get(self, reg, inTran, outTran):
+		final = {}
+		for dict in cologne_dicts:
+			reg = sanscript.transliterate(reg, inTran, 'slp1')
+			sqlitepath = find_sqlite(dict)
+			con = sqlite3.connect(sqlitepath)
+			ans = con.execute("SELECT * FROM " + dict )
+			result = []
+			for [headword, lnum, data] in ans.fetchall():
+				if re.search(reg, headword):
+					result.append(block1(data, inTran, outTran))
+			final[dict] = result
+		return jsonify(final)
+
+
 if __name__ == "__main__":
 	app.run(debug=True)
