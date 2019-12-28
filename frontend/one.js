@@ -33,12 +33,24 @@ async function getApi() {
 	var inTran = document.getElementById('inTran').value;
 	var outTran = document.getElementById('outTran').value;
 	var dictionary = document.getElementById('dictionary').value;
-	var url = ''
-	if (dictionary == 'all'){
-		url = 'http://127.0.0.1:5000/v0.0.1/hw/' + hw + '/' + inTran + '/' + outTran;
+	var url = '';
+	var reg1 = /[.*+?]/g;
+	
+	if (hw.match(reg1)){
+		if (dictionary == 'all'){
+			url = 'http://127.0.0.1:5000/v0.0.1/reg/' + hw + '/' + inTran + '/' + outTran;
+		}
+		else {
+			url = 'http://127.0.0.1:5000/v0.0.1/dicts/' + dictionary + '/reg/' + hw + '/' + inTran + '/' + outTran;
+		}
 	}
-	else {
-		url = 'http://127.0.0.1:5000/v0.0.1/dicts/' + dictionary + '/hw/' + hw + '/' + inTran + '/' + outTran;
+	else{
+		if (dictionary == 'all'){
+			url = 'http://127.0.0.1:5000/v0.0.1/hw/' + hw + '/' + inTran + '/' + outTran;
+		}
+		else {
+			url = 'http://127.0.0.1:5000/v0.0.1/dicts/' + dictionary + '/hw/' + hw + '/' + inTran + '/' + outTran;
+		}
 	}
 	console.log(url)
 	const response = await fetch(url);
