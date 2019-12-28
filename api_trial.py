@@ -24,13 +24,13 @@ api = Api(app, version=apiversion, title=u'Cologne Sanskrit-lexicon API', descri
 
 cologne_dicts = ['acc', 'ae', 'ap90', 'ben', 'bhs', 'bop', 'bor', 'bur', 'cae', 'ccs', 'gra', 'gst', 'ieg', 'inm', 'krm', 'mci', 'md', 'mw', 'mw72', 'mwe', 'pe', 'pgn', 'pui', 'pw', 'pwg', 'sch', 'shs', 'skd', 'snp', 'stc', 'vcp', 'vei', 'wil', 'yat']
 
-def find_sqlite(dict):
+def find_sqlite(dictionary):
 	path = os.path.abspath(__file__)
 	if path.startswith('/nfs/'):
-		intermediate = os.path.join(dict.upper() + 'Scan', '2020', 'web', 'sqlite', dict + '.sqlite')
+		intermediate = os.path.join(dict.upper() + 'Scan', '2020', 'web', 'sqlite', dictionary + '.sqlite')
 	else:
-		intermediate = dict
-	sqlitepath = os.path.join('..', intermediate, 'web', 'sqlite', dict + '.sqlite')
+		intermediate = dictionary
+	sqlitepath = os.path.join('..', intermediate, 'web', 'sqlite', dictionary + '.sqlite')
 	return sqlitepath
 
 def convert_sanskrit(text, inTran, outTran):
@@ -60,6 +60,15 @@ def convert_sanskrit(text, inTran, outTran):
 	return text1
 
 
+def longest_string(text):
+	splts = re.split('[.*+]+', text)
+	longest = ''
+	for splt in splts:
+		if len(splt) > len(longest):
+			longest = splt
+	return longest
+
+
 def block1(data, inTran='slp1', outTran='slp1'):
 	root = ET.fromstring(data)
 	key1 = root.findall("./h/key1")[0].text
@@ -72,61 +81,76 @@ def block1(data, inTran='slp1', outTran='slp1'):
 	return {'key1': key1, 'key2': key2, 'pc': pc, 'text': text, 'modifiedtext': text1, 'lnum': lnum}
 
 
-@api.route('/' + apiversion + '/dicts/<string:dict>/lnum/<string:lnum>')
-@api.doc(params={'dict': 'Dictionary code.', 'lnum': 'L number.'})
+def block2(dictlist, query, inTran='slp1', outTran='devanagari'):
+	final = {}
+	for dictionary in dictlist:
+		sqlitepath = find_sqlite(dictionary)
+		con = sqlite3.connect(sqlitepath)
+		query1 = "SELECT * FROM " + dictionary + " WHERE " + query
+		ans = con.execute(query1)
+		result = []
+		for [headword, lnum, data] in ans.fetchall():
+			result.append(block1(data, inTran, outTran))
+		final[dictionary]  = result
+	return final
+
+
+def block3(dictlist, reg, inTran='slp1', outTran='devanagari'):
+	final = {}
+	for dictionary in dictlist:
+		sqlitepath = find_sqlite(dictionary)
+		con = sqlite3.connect(sqlitepath)
+		ans = con.execute("SELECT * FROM " + dictionary)
+		longestString = longest_string(reg)
+		result = []
+		for [headword, lnum, data] in ans.fetchall():
+			if not longestString in headword:
+				pass
+			elif re.search(reg, headword):
+				result.append(block1(data, inTran, outTran))
+		final[dictionary] = result
+	return final
+
+
+@api.route('/' + apiversion + '/dicts/<string:dictionary>/lnum/<string:lnum>')
+@api.doc(params={'dictionary': 'Dictionary code.', 'lnum': 'L number.'})
 class LnumToData(Resource):
 	"""Return the JSON data regarding the given Lnum."""
 
 	get_parser = reqparse.RequestParser()
 
 	@api.expect(get_parser, validate=True)
-	def get(self, dict, lnum):
-		sqlitepath = find_sqlite(dict)
-		con = sqlite3.connect(sqlitepath)
-		ans = con.execute('SELECT * FROM ' + dict + ' WHERE lnum = ' + str(lnum))
-		result = []
-		for [headword, lnum, data] in ans.fetchall():
-			result.append(block1(data))
-		final = {dict: result}
+	def get(self, dictionary, lnum):
+		dictlist = [dictionary]
+		final = block2(dictlist, "lnum = " + str(lnum))
 		return jsonify(final)
  
 
-@api.route('/' + apiversion + '/dicts/<string:dict>/hw/<string:hw>')
-@api.doc(params={'dict': 'Dictionary code.', 'hw': 'Headword to search.'})
+@api.route('/' + apiversion + '/dicts/<string:dictionary>/hw/<string:hw>')
+@api.doc(params={'dictionary': 'Dictionary code.', 'hw': 'Headword to search.'})
 class hwToData(Resource):
 	"""Return the JSON data regarding the given headword."""
 
 	get_parser = reqparse.RequestParser()
 
 	@api.expect(get_parser, validate=True)
-	def get(self, dict, hw):
-		sqlitepath = find_sqlite(dict)
-		con = sqlite3.connect(sqlitepath)
-		ans = con.execute("SELECT * FROM " + dict + " WHERE key = " + "'" + hw + "'")
-		result = []
-		for [headword, lnum, data] in ans.fetchall():
-			result.append(block1(data))
-		final = {dict: result}
+	def get(self, dictionary, hw):
+		dictlist = [dictionary]
+		final = block2(dictlist, "key = " + "'" + hw + "'")
 		return jsonify(final)
 
 
-@api.route('/' + apiversion + '/dicts/<string:dict>/reg/<string:reg>')
-@api.doc(params={'dict': 'Dictionary code.', 'reg': 'Find the headwords matching the given regex.'})
+@api.route('/' + apiversion + '/dicts/<string:dictionary>/reg/<string:reg>')
+@api.doc(params={'dictionary': 'Dictionary code.', 'reg': 'Find the headwords matching the given regex.'})
 class regexToHw(Resource):
 	"""Return the headwords matching the given regex."""
 
 	get_parser = reqparse.RequestParser()
 
 	@api.expect(get_parser, validate=True)
-	def get(self, dict, reg):
-		sqlitepath = find_sqlite(dict)
-		con = sqlite3.connect(sqlitepath)
-		ans = con.execute("SELECT * FROM " + dict )
-		result = []
-		for [headword, lnum, data] in ans.fetchall():
-			if re.search(reg, headword):
-				result.append(block1(data))
-		final = {dict: result}
+	def get(self, dictionary, reg):
+		dictlist = [dictionary]
+		final = block3(dictlist, reg)
 		return jsonify(final)
 
 
@@ -139,15 +163,8 @@ class hwToAll(Resource):
 
 	@api.expect(get_parser, validate=True)
 	def get(self, hw):
-		final = {}
-		for dict in cologne_dicts:
-			sqlitepath = find_sqlite(dict)
-			con = sqlite3.connect(sqlitepath)
-			ans = con.execute("SELECT * FROM " + dict + " WHERE key = " + "'" + hw + "'")
-			result = []
-			for [headword, lnum, data] in ans.fetchall():
-				result.append(block1(data))
-			final[dict]  = result
+		dictlist = cologne_dicts
+		final = block2(dictlist,  "key = " + "'" + hw + "'")
 		return jsonify(final)
 
 
@@ -160,15 +177,8 @@ class hwToAll2(Resource):
 
 	@api.expect(get_parser, validate=True)
 	def get(self, hw, inTran, outTran):
-		final = {}
-		for dict in cologne_dicts:
-			sqlitepath = find_sqlite(dict)
-			con = sqlite3.connect(sqlitepath)
-			ans = con.execute("SELECT * FROM " + dict + " WHERE key = " + "'" + hw + "'")
-			result = []
-			for [headword, lnum, data] in ans.fetchall():
-				result.append(block1(data, inTran, outTran))
-			final[dict]  = result
+		dictlist = cologne_dicts
+		final = block2(dictlist, "key = " + "'" + hw + "'", inTran, outTran)
 		return jsonify(final)
 
 
@@ -181,36 +191,23 @@ class regToAll(Resource):
 
 	@api.expect(get_parser, validate=True)
 	def get(self, reg):
-		final = {}
-		for dict in cologne_dicts:
-			sqlitepath = find_sqlite(dict)
-			con = sqlite3.connect(sqlitepath)
-			ans = con.execute("SELECT * FROM " + dict )
-			result = []
-			for [headword, lnum, data] in ans.fetchall():
-				if re.search(reg, headword):
-					result.append(block1(data))
-			final[dict] = result
+		dictlist = cologne_dicts
+		final = block3(dictlist, reg)
 		return jsonify(final)
 
 
-@api.route('/' + apiversion + '/dicts/<string:dict>/hw/<string:hw>/<string:inTran>/<string:outTran>')
-@api.doc(params={'dict': 'Dictionary code.', 'hw': 'Headword to search.', 'inTran': 'Input transliteration. devanagari/slp1/iast/hk/wx/itrans/kolkata/velthuis', 'outTran': 'Output transliteration. devanagari/slp1/iast/hk/wx/itrans/kolkata/velthuis'})
+@api.route('/' + apiversion + '/dicts/<string:dictionary>/hw/<string:hw>/<string:inTran>/<string:outTran>')
+@api.doc(params={'dictionary': 'Dictionary code.', 'hw': 'Headword to search.', 'inTran': 'Input transliteration. devanagari/slp1/iast/hk/wx/itrans/kolkata/velthuis', 'outTran': 'Output transliteration. devanagari/slp1/iast/hk/wx/itrans/kolkata/velthuis'})
 class hwToData1(Resource):
 	"""Return the JSON data regarding the given headword for given input transliteration and output transliteration."""
 
 	get_parser = reqparse.RequestParser()
 
 	@api.expect(get_parser, validate=True)
-	def get(self, dict, hw, inTran, outTran):
+	def get(self, dictionary, hw, inTran, outTran):
 		hw = sanscript.transliterate(hw, inTran, 'slp1')
-		sqlitepath = find_sqlite(dict)
-		con = sqlite3.connect(sqlitepath)
-		ans = con.execute("SELECT * FROM " + dict + " WHERE key = " + "'" + hw + "'")
-		result = []
-		for [headword, lnum, data] in ans.fetchall():
-			result.append(block1(data, inTran, outTran))
-		final = {dict: result}
+		dictlist = [dictionary]
+		final = block2(dictlist, "key = " + "'" + hw + "'", inTran, outTran)
 		return jsonify(final)
 
 
@@ -224,19 +221,13 @@ class regToAll1(Resource):
 
 	@api.expect(get_parser, validate=True)
 	def get(self, reg, inTran, outTran):
-		final = {}
-		for dict in cologne_dicts:
-			reg = sanscript.transliterate(reg, inTran, 'slp1')
-			sqlitepath = find_sqlite(dict)
-			con = sqlite3.connect(sqlitepath)
-			ans = con.execute("SELECT * FROM " + dict )
-			result = []
-			for [headword, lnum, data] in ans.fetchall():
-				if re.search(reg, headword):
-					result.append(block1(data, inTran, outTran))
-			final[dict] = result
+		reg = sanscript.transliterate(reg, inTran, 'slp1')
+		dictlist = cologne_dicts
+		final = block3(dictlist, reg, inTran, outTran)
 		return jsonify(final)
 
 
 if __name__ == "__main__":
+	print(longest_string('ram.*Ta'))
 	app.run(debug=True)
+	
