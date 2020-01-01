@@ -138,6 +138,21 @@ class Dal {
   $sql = " select * from {$this->dict} where key LIKE '$key%' order by lnum LIMIT $max";
   return $this->get($sql);
  }
+ public function get3b($key,$max) {
+ /*
+ returns an array of records, where 'key' is like $key
+ The wildcards for sqlite are: 
+   (ref=https://www.sqlitetutorial.net/sqlite-like/)
+ The percent sign % wildcard matches any sequence of zero or more characters.
+ The underscore _ wildcard matches any single character.
+ Setting a pragma for case_sensitive
+*/
+  $pragma="PRAGMA case_sensitive_like=true;";
+  $this->file_db->query($pragma);
+  $sql = " select * from {$this->dict} where key LIKE '$key' order by lnum LIMIT $max";
+  return $this->get($sql);
+ }
+
  public function get4a($lnum0,$max) {
   //  Used in listhier
   // in mw, with L=99930.1, $lnum0 appears as if L=99930.1000000001

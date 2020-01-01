@@ -8,3 +8,7 @@ old*
 test*
 upload*
 dbg_apidev.txt
+# python compile files
+*.pyc
+__pycache__
+
