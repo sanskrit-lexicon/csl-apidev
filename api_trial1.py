@@ -120,7 +120,7 @@ http://localhost/cologne/csl-apidev/getword_xml.php?dict=mw&key=guru
 """
  final = {}
  # for local installation. Not sure how on Cologne.
- url = 'http://localhost/cologne/csl-apidev1/getword_xml.php'
+ url = 'http://localhost/cologne/csl-apidev/getword_xml.php'
  #url = 'getword_xml.php'  # since api_trial1 is same place 
  dictlist = params['dictlist']
  payload = {}
