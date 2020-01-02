@@ -49,7 +49,7 @@ async function getApi() {
     src = scripts[scripts.length-1].src;
     var url0='';
     if (src.indexOf("sanskrit-lexicon.uni-koeln.de") >= 0) {
-	url0 = 'https://sanskrit-lexicon.uni-koeln.de/api';
+	url0 = 'https://www.sanskrit-lexicon.uni-koeln.de/api';
     }else { // xampp
      url0 = 'http://localhost/cologne/api';
     }
