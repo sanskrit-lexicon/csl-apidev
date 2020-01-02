@@ -57,9 +57,9 @@ public function getword_data_html_adapter($key,$lnum,$data,$dict,$getParms)
    5   empty line
  */
  if (($ntablines != 6)&& ($ntablines != 7)){
-  dbgprint(true,"html ERROR 1: actual # lines in table = $ntablines\n");
+  #dbgprint(true,"html ERROR 1: actual # lines in table = $ntablines\n");
   for ($i=0;$i<$ntablines;$i++) {
-   dbgprint(true,"tablines[$i]=" .$tablines[$i]."\n");
+   #dbgprint(true,"tablines[$i]=" .$tablines[$i]."\n");
   }
   exit(1);
  }
@@ -82,7 +82,7 @@ public function getword_data_html_adapter($key,$lnum,$data,$dict,$getParms)
  # adjust $info - keep only the displayed page
  if ($dict == 'mw') {
   if(!preg_match('|>([^<]*?)</a>,(.*?)\]|',$info,$matches)) {
-   dbgprint(true,"html ERROR 2: \n" . $info . "\n");
+   #dbgprint(true,"html ERROR 2: \n" . $info . "\n");
    exit(1);
   }
   $page=$matches[1];
@@ -90,7 +90,7 @@ public function getword_data_html_adapter($key,$lnum,$data,$dict,$getParms)
   $pageref = "$page,$col";
  }else {
   if(!preg_match('|>([^<]*?)</a>|',$info,$matches)) {
-   dbgprint(true,"html ERROR 2: \n" . $info . "\n");
+   #dbgprint(true,"html ERROR 2: \n" . $info . "\n");
    exit(1);
   }
   $pageref=$matches[1];
@@ -136,7 +136,7 @@ public function adjust_key2_mw($key2) {
  $ans1 = preg_replace('|</?hom>|','',$ans1);
  $ans1 = preg_replace('|<shortlong/>|','',$ans1);
  if (preg_match('|<|',$ans1)) {
-  dbgprint(true,"adjust_key2: $ans1\n");
+  #dbgprint(true,"adjust_key2: $ans1\n");
   exit(1);
  }
  return $ans;

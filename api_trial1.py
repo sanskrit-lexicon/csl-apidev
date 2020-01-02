@@ -9,17 +9,18 @@ import sys
 #import sqlite3
 import json
 import re
-from indic_transliteration import sanscript
-import xml.etree.ElementTree as ET
+#from indic_transliteration import sanscript
+#import xml.etree.ElementTree as ET
 from flask import Flask, jsonify
 from flask_restplus import Api, Resource, reqparse
 from flask_cors import CORS
 import requests
+"""
 try:
  from HTMLParser import HTMLParser
 except ImportError:
  from html.parser import HTMLParser
-
+"""
 # Start Flask app.
 app = Flask(__name__)
 app.config['JSON_AS_ASCII'] = False
@@ -35,7 +36,7 @@ cologne_dicts = ['acc', 'ae', 'ap90', 'ben', 'bhs', 'bop', 'bor', 'bur', 'cae', 
 
 
 
-def find_sqlite(dictionary):
+def unused_find_sqlite(dictionary):
  """Return path to the sqlite file based on cologne server or local."""
 
  path = os.path.abspath(__file__)
@@ -48,7 +49,7 @@ def find_sqlite(dictionary):
  return sqlitepath
 
 
-def convert_sanskrit(text, inTran, outTran):
+def unused_convert_sanskrit(text, inTran, outTran):
  """Return transliterated adjusted text."""
 
  text1 = ''
@@ -78,7 +79,7 @@ def convert_sanskrit(text, inTran, outTran):
  return text1
 
 
-def longest_string(text):
+def unused_longest_string(text):
  """Return the longest tring from input regular expression."""
  
  splts = re.split('[.*+]+', text)
@@ -92,7 +93,6 @@ def longest_string(text):
 
 def block1(data, html,inTran='slp1', outTran='slp1'):
  """Return a dict from input data."""
- #print('block1: html=',html)
  root = ET.fromstring(data)
  key1 = root.findall("./h/key1")[0].text
  key2 = root.findall("./h/key2")[0].text
@@ -133,10 +133,13 @@ http://localhost/cologne/csl-apidev/getword_xml.php?dict=mw&key=guru
   inTran = 'slp1'
  if 'output' in payload:
   outTran = payload['output']
+  if payload['output'] == 'devanagari':
+   payload['output'] = 'deva' # since php transcoder is used
  else:
   outTran = 'slp1'
  for dictionary in dictlist:
   payload['dict'] = dictionary
+  #print('payload=',payload)
   r = requests.get(url,params = payload)
   #r.encoding='UTF-8'
   #jsonobj = json.loads(text)
@@ -145,6 +148,7 @@ http://localhost/cologne/csl-apidev/getword_xml.php?dict=mw&key=guru
   if r.status_code == 200:
    jsonobj = r.json()
    datarr = jsonobj['xml']  # list of data string
+   #print('datarr',datarr);
    htmlarr = jsonobj['html']
    for idata,data in enumerate(datarr):
     # Append to list.

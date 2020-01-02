@@ -10,6 +10,7 @@ require_once("dal.php");
 require_once("parm.php");
 require_once("accent_adjust.php");
 require_once("basic_xml_html.php");
+require_once("dbgprint.php"); 
 class GetwordXmlClass {
  public $json;
  public function __construct() {
@@ -41,7 +42,7 @@ class GetwordXmlClass {
    $regex = $_REQUEST['regex']; 
    # for sqlite regex
    $sqlite_regex = str_replace("*","%",$regex);
-   $sqlite_regex = str_replace("?","_",$sqlite_regex);
+   $sqlite_regex = preg_replace('/\?/','_',$sqlite_regex);
    $max = 100;   ## throttle
    $matches = $dal->get3b($sqlite_regex,$max);
   }else {
@@ -73,7 +74,9 @@ class GetwordXmlClass {
     }
     $table1[$i]=$x;
     $temp = new Basic_xml_html($rec,$dict,$getParms);
-    $table2[$i] = $temp->html;
+    $html = $temp->html;
+    $htmla = transcoder_processElements($html,"slp1",$filter,"SA");
+    $table2[$i] = $htmla;
    }
    $ans['xml']=$table1;
    $ans['html']=$table2;
