@@ -84,7 +84,7 @@ class BasicAdjust {
  dbgprint($dbg,"BasicAdjust dict={$this->getParms->dict}\n");
  if ($this->getParms->dict == 'gra') {
   dbgprint($dbg,"BasicAdjust before rgveda: $line\n");
-  $line = preg_replace_callback('| ([0-9]+)[ ,]+([0-9]+)|',"BasicAdjust::rgveda_verse_callback",$line);
+  $line = preg_replace_callback('|([ (])([0-9]+)[ ,]+([0-9]+)|',"BasicAdjust::rgveda_verse_callback",$line);
   dbgprint($dbg,"BasicAdjust after rgveda: $line\n");
  }
 
@@ -437,8 +437,9 @@ public function rgveda_link($gra1,$gra2) {
     to be converted to html in basicdisplay.php
 */
  $x0 = $matches[0];
- $gra1 = $matches[1];
- $gra2 = $matches[2];
+ $gra0 = $matches[1];
+ $gra1 = $matches[2];
+ $gra2 = $matches[3];
  $modern = $this->rgveda_verse_modern((int)$gra1);
  #$x = "<ab n='Standard hymn reference=$modern'>$gra1</ab>,$gra2";
  #$x = "<ab n='=$modern (mandala,hymn)'>$gra1</ab>,<graverse>$gra2</graverse>";
@@ -451,8 +452,8 @@ public function rgveda_link($gra1,$gra2) {
  $modern1 = "$modern.$gra2";
  $tooltip = "=$modern1 (mandala,hymn,verse)";
  $x = "<gralink href='$href' n='$tooltip'>$gra1,<graverse>$gra2</graverse></gralink>";
-# restore the initial space
- $x = " $x";
+# restore the initial space or (
+ $x = $gra0 . $x;
  return $x;
 }
 public function move_L_mw($line) {
