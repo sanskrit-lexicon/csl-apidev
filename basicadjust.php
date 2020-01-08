@@ -97,6 +97,8 @@ class BasicAdjust {
    $line = $this->move_L_mw($line);
    # remove <hom>X</hom> within head portion
    $line = preg_replace("|<key2>(.*?)<hom>.*?</hom>(.*?<body>)|","<key2>$1$2",$line); 
+   # remove space after sqrt 
+   $line = preg_replace("|√ |u","√",$line); # experiment of 12/25/2019
   }
   else if ($this->getParms->dict == "ap90") {
    /*  ap90.xml has a line break '<lb/>' according to the printed edition.
