@@ -155,10 +155,13 @@ public function __construct($key,$matches,$filterin,$dict) {
     return "<br/><span style='$style'>";
    }else if ($this->dict == 'bur') {
     if (($n == '2')) {
-     $style="position:relative; left:1.5em;";
+     $style="position:relative; left:1.0em;";
      $ans = "<br/><span style='$style'>";
     } else if (($n == 'P')) {
      $style="";
+     $ans = "<br/><span style='$style'>";
+    } else if (($n == '3')) {
+     $style="position:relative; left:2.0em;";
      $ans = "<br/><span style='$style'>";
     } else {
      // e.g. n="3"
