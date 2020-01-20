@@ -155,10 +155,13 @@ public function __construct($key,$matches,$filterin,$dict) {
     return "<br/><span style='$style'>";
    }else if ($this->dict == 'bur') {
     if (($n == '2')) {
-     $style="position:relative; left:1.5em;";
+     $style="position:relative; left:1.0em;";
      $ans = "<br/><span style='$style'>";
     } else if (($n == 'P')) {
      $style="";
+     $ans = "<br/><span style='$style'>";
+    } else if (($n == '3')) {
+     $style="position:relative; left:2.0em;";
      $ans = "<br/><span style='$style'>";
     } else {
      // e.g. n="3"
@@ -423,7 +426,7 @@ public function __construct($key,$matches,$filterin,$dict) {
     // nothing special here  Greek remains to be filled in
     // Depends on whether the text is filled in
     $n = $attribs['n'];
-    if (in_array($this->dict,array('pwg','mw','pw','wil','md','yat','mw72','snp','stc'))) {
+    if (in_array($this->dict,array('pwg','mw','pw','wil','md','yat','mw72','snp','stc','gra'))) {
      # nothing to do.  Greek (and other) unicode has been provided.
     }else {
      # put a placeholder where the greek, arabic, etc. needs to be provided.
