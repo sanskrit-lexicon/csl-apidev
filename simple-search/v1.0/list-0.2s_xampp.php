@@ -178,7 +178,8 @@ $(document).ready(function() {
    "&output=" +escape(output) +
    "&dict=" + escape(dict) +
    "&accent=" + escape(accent) +
-   "&input=" + escape(input);
+   "&input=" + escape(input) +
+   "&dev=yes";
     //jQuery("#disp").html(""); // clear output
   //console.log('listDisplay: url=',url);
   jQuery("#dataframe").attr("src",url);
@@ -235,7 +236,8 @@ simpleFunction = function(){
   //console.log('simpleFunction test.url=',test.url);
   test.input = 'hk';
   test.output = $('#output').val(); //'deva';
-  test.dict = $('#dict').val();; 
+  test.dict = $('#dict').val();
+  test.dev = 'yes';
   //console.log('list-0.2s.html calling url=',test.url);
   //$('#outputdiv').html("<p>Accessing server for alternates of " + test.key + "  ...</p>");
   // Blank out result area
@@ -248,7 +250,8 @@ simpleFunction = function(){
     input:test.input, // not currently used
     output:test.output, // not currently used
     dict:test.dict, // not currently used
-    key:test.key
+    key:test.key,
+    dev:test.dev
    }
   }) // end of $.ajax
   .done(displayOption2)

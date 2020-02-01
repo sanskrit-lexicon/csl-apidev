@@ -22,8 +22,9 @@ class Getword_data {
  // Can we use get1_mwalt for ALL dictionaries? (8-10-2019)
  if (strtolower($dict) == 'mw') {
   $matches0 = $dal->get1_mwalt($key); // Jul 19, 2015
- }else {
-  $matches0= $dal->get1($key); 
+ }else { 
+  #$matches0= $dal->get1($key); 
+  $matches0 = $dal->get1_mwalt($key); // Feb 1, 2020
  }
  $nmatches = count($matches0);
  dbgprint($dbg,"getword_data.php #3: nmatches=$nmatches\n");

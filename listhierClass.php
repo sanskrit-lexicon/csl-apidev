@@ -177,7 +177,8 @@ class ListhierClass {
 
  public function list1a($key,$dal) {
   // first exact match
-  $recarr = $dal->get1($key);
+  #$recarr = $dal->get1($key);
+  $recarr = $dal->get1_mwalt($key);
   $matches=array();
   $nmatches=0;
   $more=true;

@@ -19,7 +19,7 @@ class GetsuggestClass {
   $english = $getParms->english;
   $filterin = $getParms->filterin;
   $dbg=false;
-
+  #dbgprint($dbg,"Starting getsuggestClass.php\n");
   $keyprobFlag=false;
   // 08-19-2019  I can't reproduce the problem that this tests for
   //  Removing this code for now.
@@ -41,6 +41,7 @@ class GetsuggestClass {
   $origkey = $key;
 
   $dict = $getParms->dict;
+  dbgprint($dbg,"getsuggestClass: call Dal($dict)\n");
   $dal = new Dal($dict);
   $more = True;
   $max = 10;  # max number of return results
@@ -48,9 +49,11 @@ class GetsuggestClass {
   $matches=array();
   $nmatches=0;
   if(!$keyprobFlag) {
+   dbgprint($dbg,"getsuggestClass. call dal_get3a: $key, $maxlike\n");
    $results1 = $dal->get3a($key,$maxlike); 
    dbgprint($dbg,"dal_get3a: $key, $maxlike, nresults1=".count($results1)."\n");
-   $results2 = $dal->get1($key); // include exact matches, if any
+   #$results2 = $dal->get1($key); // include exact matches, if any
+   $results2 = $dal->get1_mwalt($key); // include exact matches, if any
    dbgprint($dbg,"dal_get1: $key, nresults2=".count($results2)."\n");
    $results=array();
    foreach($results1 as $result){

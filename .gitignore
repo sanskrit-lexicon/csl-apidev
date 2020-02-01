@@ -2,6 +2,8 @@
 *~
 # temp files
 temp*
+# dev (development) versions
+dev*
 # old files and directories
 old*
 # test files
