@@ -67,6 +67,7 @@ class Dal {
    $this->file_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
    dbgprint($dbg,"dal.php: opened " . $this->sqlitefile . "\n");
    $this->status=true;
+   $this->file_db_xml = $this->file_db;  
   } catch (PDOException $e) {
    $this->file_db = null;
    $this->file_db_xml = $this->file_db;  

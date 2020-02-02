@@ -13,6 +13,7 @@ require_once("basic_xml_html.php");
 require_once("dbgprint.php"); 
 class GetwordXmlClass {
  public $json;
+ public $dbg;
  public function __construct() {
   $getParms = new Parm();
   
@@ -49,6 +50,8 @@ class GetwordXmlClass {
    $matches= $dal->get1_xml($key); 
   }
   $nmatches = count($matches);
+  
+  dbgprint($this->dbg,"getwordXmlClass: dict=$dict, key=$key, #matches=$nmatches\n");
   if ($nmatches > 0) {
    // reset xml, and status
    $dictinfo = $getParms->dictinfo;

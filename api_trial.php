@@ -147,12 +147,14 @@ class API {
  }
  $dictlist = $this->ans['dictlist'];
  $final = array(); //associative array, dictionary code is key
+ $dbg=False;
  foreach($dictlist as $dict) {
   $_REQUEST['dict'] = $dict;
   $temp = new GetwordXmlClass();
   $jsonobj = $temp->json;
   $obj = json_decode($jsonobj,$assoc=True);
   $status = $obj['status'];
+  dbgprint($dbg,"api_trial.php: $dict, $status\n");
   $result=array();
   if ($status  == 200 ) {
    #jsonobj = r.json()

@@ -521,6 +521,7 @@ class BasicAdjustLexParser{
   $line1 = preg_replace("/&amp;/","<amp/>",$line); # 09-27-2018
   if (!xml_parse($p,$line1)) {
    dbgprint(true,"BasicAdjustLexParser: xml parse error\n");
+   dbgprint(true,"line1=$line1\n");
    $this->result = $line;
    $this->status = false;
    return;
