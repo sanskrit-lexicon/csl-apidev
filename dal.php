@@ -341,10 +341,10 @@ $dbg=False;
 if ($this->keydoc_db) { // use keydoc if it is available
  return $this->get1_keydoc($key);
 }else {
- return $this->get1($key);
+ return $this->get1_mwalt_prev($key);
 }
 }
-public function unused_get1_mwalt($key) {
+public function get1_mwalt_prev($key) {
 $dbg=False;
 # first step is to call the original dal_mw1_get1
 $recs = $this->get1($key);
