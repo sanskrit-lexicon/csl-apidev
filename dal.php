@@ -60,7 +60,6 @@ class Dal {
   }
   // connection to sqlitefile
   $dbg=false;
-  #$dbg=true;
   if (file_exists($this->sqlitefile)) {
   try {
    $this->file_db = new PDO('sqlite:' .$this->sqlitefile);

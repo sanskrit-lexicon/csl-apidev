@@ -34,7 +34,7 @@ class DictInfo {
   #$this->scanpath = $this->scanpath_server; //"../..";
   $this->dict=strtolower($dict);
   $this->dictupper=strtoupper($dict);
-  if ($_REQUEST['version'] == '1') {
+  if ((isset($_REQUEST['version'])) &&($_REQUEST['version'] == '1')) {
    // older version -- 2014 or 2013
    $this->year = self::$dictyear[$this->dictupper];
   }else {

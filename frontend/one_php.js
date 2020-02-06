@@ -36,7 +36,6 @@ async function getApi() {
 	var dictionary = document.getElementById('dictionary').value;
 	var url = '';
 	//var reg1 = /[.*+?]/g;
- 	var reg1 = /[*?]/g;  // detector for whether this is regex search 
        //var url0 = 'http://127.0.0.1:5000/v0.0.1';
         //var url0 = 'http://localhost/cologne/api';
        // ref: https://stackoverflow.com/questions/2255689/how-to-get-the-file-path-of-the-currently-executing-javascript-code
@@ -45,8 +44,8 @@ async function getApi() {
     //  Are we running at Cologne or locally?
     // src = http://localhost/cologne/csl-apidev/frontend/one_php.js
     // at cologne, it will be src = https://sanskrit-lexicon.uni-koeln.de/api/...
-    var scripts = document.getElementsByTagName("script"),
-    src = scripts[scripts.length-1].src;
+    var scripts = document.getElementsByTagName("script");
+    var src = scripts[scripts.length-1].src;
     var url0='';
     if (src.indexOf("sanskrit-lexicon.uni-koeln.de") >= 0) {
 	url0 = 'https://www.sanskrit-lexicon.uni-koeln.de/api';
@@ -55,6 +54,7 @@ async function getApi() {
     }
     console.log('one_php.js. src =',src);
     console.log('url0=',url0);
+ 	var reg1 = /[*?]/g;  // detector for whether this is regex search 
 	if (hw.match(reg1)){
 		if (dictionary == 'all'){
 			url = url0 + '/reg/' + hw + '/' + inTran + '/' + outTran;
