@@ -546,6 +546,7 @@ public function getgeneral($key,$table) {
    return array();
   }
 #$sql = "select * from $table where id='$key'";
+$key = str_replace("'","''",$key); // 02-08-2020
 $sql = "select * from $table where {$this->tabid}='$key'";
 $result = $this->file_db->query($sql);
 $ansarr = array();
