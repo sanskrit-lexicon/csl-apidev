@@ -312,6 +312,12 @@ public function get1_keydoc($key) {
    //
    //$sortkey = floatval($rec[1]); 
    // We know our lnum has at most 3 decimal places 
+   // 02-09-2020 skip records which come from alternate headwords
+   // These have '<alt>' tag
+   $data = $rec[2];
+   if (preg_match('/<alt>/',$data)) {
+    continue;
+   }
    $lnum = floatval($rec[1]);
    $lnum1 = $lnum * 1000.0;
    $sortkey = intval($lnum1);
