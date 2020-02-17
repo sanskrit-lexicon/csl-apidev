@@ -252,7 +252,10 @@ include('dictinfowhich.php');
  $lnums = preg_split('/[,]/',$data);  
  $serve = "servepdf.php";
  if ($dictinfowhich == "cologne") {
-  $serve = "//www.sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/$serve";
+  #$serve = "//www.sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/$serve";
+  $serve = "//www.sanskrit-lexicon.uni-koeln.de/scans/csl-apidev/$serve";
+ }else {
+  $serve = "//localhost/cologne/csl-apidev/$serve";
  }
  #dbgprint(true,"dispitem.getHrefPage: serve=$serve\n");
  foreach($lnums as $lnum) {
