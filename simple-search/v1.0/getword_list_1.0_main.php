@@ -109,7 +109,7 @@ for($ikey=0;$ikey<count($keysin);$ikey++) {
    }
 
  }
- 
+
  foreach($dictheadwords as $dictheadword) {
   // This loop doesn't execute unless $nmatches>0.
   // transcode to HK for this display
@@ -137,7 +137,8 @@ for($ikey=0;$ikey<count($keysin);$ikey++) {
   $result[] = $ans1;
  }
 }
-$result1 = order_by_wf($result,$wfreqs);
+$result1a = order_by_wf($result,$wfreqs);
+$result1 = put_user_word_first($result1a);
 $ans['result']=$result1;
 return $ans;
 }  // end of getword_list_processone
@@ -174,6 +175,32 @@ function wf_cmp($a,$b) {
  }
  return  ($a['wf'] > $b['wf']) ? -1 : 1;
  #return  ($a['wf'] > $b['wf']) ? 1 : -1;
+}
+function put_user_word_first($result) {
+ $iuser = -1;
+ $i = 0;
+ foreach($result as $ans1) {
+  if ($ans1['user_key_flag']) {
+   $iuser = $i;
+   break;
+  }
+  $i++;
+ }
+ if ($iuser == -1) {
+  return $result;
+ }
+ # put user index first.  Otherwise don't change ordering
+ $result1 = array(); 
+ for($i=0;$i<count($result);$i++) {
+  if ($i == 0) {
+   $result1[] = $result[$iuser];
+  }else if ($i <= $iuser) {
+   $result1[] = $result[$i-1];
+  }else { # $i > $iuser
+   $result1[] = $result[$i];
+  }
+ }
+ return $result1;
 }
 function order_by_wf($result,$wfreqs) {
  $result1 = array();
