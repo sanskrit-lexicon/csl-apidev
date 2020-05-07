@@ -396,7 +396,7 @@ public function __construct($key,$matches,$filterin,$dict) {
   } else if ($el == "pb"){
    if ($this->dict == "mw") {
     # do nothing.
-   }else if ($this->dict == "bur") {
+   }else if (in_array($this->dict,array("bur","stc"))) {
     # do nothing
    }else {
     $this->row .= "<br/>";
@@ -527,7 +527,7 @@ public function __construct($key,$matches,$filterin,$dict) {
   } else if ($el == "pb"){
    if ($this->dict == "mw") {
     # do nothing.
-   }else if ($this->dict == "bur") {
+   }else if (in_array($this->dict,array("bur","stc"))) {
     # do nothing
    }else {
     $this->row .= "<br/>";
@@ -611,7 +611,7 @@ public function __construct($key,$matches,$filterin,$dict) {
   } else if ($this->parentEl == 'div') { 
    $this->row .= $data;
   } else if ($this->parentEl == 'pb') { 
-   if ($this->dict == "bur") {
+   if (in_array($this->dict,array("bur","stc"))) {
     # do nothing
    }else {
     $this->row .= $data;
