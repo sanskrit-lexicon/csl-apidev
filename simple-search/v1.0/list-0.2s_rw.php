@@ -1,6 +1,11 @@
 <?php
  /* Same as list-0.2s_xampp.php, but accepts some or all inputs as
    $_REQUEST parameters (i.e. either 'GET' or 'POST')
+  This is file list-0.2s_rw.php.  ('rw' = rewrite)
+  Primarily for use on Cologne server to allow /simple/ urls to be parsed.
+  See .htaccess in root directory ('docs') of Cologne.
+  06-09-2020  Remove 'www' in urls 
+  
  */
 // Report all errors except E_NOTICE  (also E_WARNING?)
 error_reporting(E_ALL & ~E_NOTICE);
@@ -55,7 +60,8 @@ for($i=0;$i<count($keys);$i++) {
 <META charset="UTF-8">
 <title>list-0.2s Cologne</title>
 <!-- ref=https://www.w3.org/TR/html4/struct/links.html#edef-BASE -->
-<BASE href="https://www.sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/simple-search/v1.0/list-0.2s_rw.php">
+
+<BASE href="/scans/awork/apidev/simple-search/v1.0/list-0.2s_rw.php">
 
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.css">
 <!-- links to jquery, using CDNs -->
@@ -162,7 +168,7 @@ $(document).ready(function() {
  changeCorrectionHref = function () {
   //console.log('changeCorrectionHref: dict=',$('#dict').val());
   var dict = $('#dict').val();
-  var url = "//www.sanskrit-lexicon.uni-koeln.de/php/correction_form.php?dict=" + dict;
+  var url = "/php/correction_form.php?dict=" + dict;
   $('#correction').attr('href',url);
  };
  keyAutocompleteActivation = function () {
@@ -482,8 +488,8 @@ changeActions();  // initialize now that #dict, etc are set.
 </head>
 <body>
  <div id="logo">
-     <a href="//www.sanskrit-lexicon.uni-koeln.de/">
-      <img id="unilogo" src="//www.sanskrit-lexicon.uni-koeln.de/images/cologne_univ_seal.gif"
+     <a href="/">
+      <img id="unilogo" src="/images/cologne_univ_seal.gif"
            alt="University of Cologne" width="60" height="60" 
            title="Cologne Sanskrit Lexicon"/>
       </a>
@@ -544,8 +550,6 @@ changeActions();  // initialize now that #dict, etc are set.
    <p>Your browser does not support iframes.</p>
   </iframe>
  </div>
-<script>
-</script>
-<script src="//www.sanskrit-lexicon.uni-koeln.de/js/piwik_analytics.js"></script> 
+<script src="/js/piwik_analytics.js"></script> 
 </body>
 </html>
