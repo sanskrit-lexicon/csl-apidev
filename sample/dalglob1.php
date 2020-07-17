@@ -1,3 +1,7 @@
+<?php
+// Report all errors except E_NOTICE  (also E_WARNING?)
+error_reporting(E_ALL & ~E_NOTICE);
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -384,6 +388,39 @@ Problem is that only the last value
  console.log('html for',dict,'= ',html);
  $('#disp').html(html);
 }; // function getdataForkeyDict
+
+// Allow parameter input for key, input, and output
+ phpinit_helper = function(name,val){
+  if (val == ''){return;}
+  if (name == 'accent') { //val should be yes or no. Case not important
+   val = val.toLowerCase();
+  }
+  /* 01-03-2018 */
+  if (val == 'iast') {val = 'roman';}
+  $('#' + name).val(val);
+  console.log("phpinit_helper: change #",name,"to",val);
+ };
+ phpinit = function() {
+  //var names = ['key','dict','input','output','accent'];
+  var names = ['key','input','output'];
+  var phpvals=[ // same order as names
+  "<?php echo $_GET['key']?>",
+  "<?php echo $_GET['input']?>",
+  "<?php echo $_GET['output']?>"
+  ];
+  console.log('phpvals=',phpvals);
+  //"<?php echo $_GET['dict']?>",
+  //"<?php echo $_GET['accent']?>"
+  var i,name,phpval;
+  for(i=0;i<names.length;i++) {
+   phpinit_helper(names[i],phpvals[i]);
+  }
+  // If key is provided, generate display for it
+  if($('#key').val() != '') {
+   dictlistDisplay();
+  }
+ };
+ phpinit();
 
 }); // document.ready
 
