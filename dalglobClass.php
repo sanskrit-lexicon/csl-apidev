@@ -112,7 +112,10 @@ class Dalglob {
 
  public function get1($key) {
   // Returns associative array for the records in dictionary with this key
-  $sql = "select * from {$this->tabname} where key='$key'";
+  // 7/14/2020  Normalize the key before searching for it.
+  //
+  $keynorm = $this->normalize_key($key);
+  $sql = "select * from {$this->tabname} where key='$keynorm'";
   $ansarr =  $this->get($sql);
   if (count($ansarr) == 0) {
    return $this->errans;
@@ -122,7 +125,7 @@ class Dalglob {
   if ($this->dbname == 'keydoc_glob') {
    $dicts = preg_split('|,|',$data);
   }else if ($this->dbname == 'keydoc_glob1') {
-   $dicts = $this->parse_glob1($data,$key);
+   $dicts = $this->parse_glob1($data,$keynorm);
   }
    return array('status'=>200, 'dicts'=>$dicts);
  }
@@ -151,6 +154,111 @@ class Dalglob {
   }
   return $ans;
  }
+ public function normalize_key($a){
+ /* This function is consistent with the hwnorm1c.py version in
+  sanskrit-lexicon/hwnorm2/keydoc/
+ */
+ $aM = function($b) {return preg_replace('/aM$/','a',$b);};
+ $aH = function($b) {return preg_replace('/aH$/','a',$b);};
+ $uH = function($b) {return preg_replace('/uH$/','u',$b);};
+ $iH = function($b) {return preg_replace('/iH$/','i',$b);};
+ $ttr_tr = function($b) {return preg_replace('/ttr/','tr',$b);};
+ $ant_at = function($b) {return preg_replace('/ant$/','at',$b);};
+ $normalize_key_C = function($b) {
+  if (strpos($b,'C') == False) {return $b;}
+  # X + C -> XcC  (X a vowel)
+  $b1 = preg_replace('/([aAiIuUfFxXeEoO])C/','\1cC',$b);
+  # X + cC -> XC  (X a consonant)
+  $b2 = preg_replace('/([kKgGNcCjJYwWqQRtTdDnpPbBmyrlvhzSsHM])cC/','\1C',$b1);
+  return $b2;
+ };
+ $rxx_rx = function($b) {return preg_replace('/([r])(.)\2/','\1\2',$b);};
+
+$homorganic_nasal = function($b) {
+  return preg_replace_callback('/(M)([kKgGNcCjJYwWqQRtTdDnpPbBm])/',
+   function($matches) {
+    #n = $matches[1] is  always M
+    $c = $matches[2];
+    $slp1_cmp1_helper_data = array(
+    'k'=>'N','K'=>'N','g'=>'N','G'=>'N','N'=>'N',
+    'c'=>'Y','C'=>'Y','j'=>'Y','J'=>'Y','Y'=>'Y',
+    'w'=>'R','W'=>'R','q'=>'R','Q'=>'R','R'=>'R',
+    't'=>'n','T'=>'n','d'=>'n','D'=>'n','n'=>'n',
+    'p'=>'m','P'=>'m','b'=>'m','B'=>'m','m'=>'m'
+    );
+    $nasal = $slp1_cmp1_helper_data[$c];
+    return ($nasal . $c);
+
+   },
+   $b);
+};
+/*
+ $rxX_helper_data = array(
+ 'k'=>'K','g'=>'G',
+ 'c'=>'C','j'=>'J',
+ 'w'=>'W','q'=>'Q',
+ 't'=>'T','d'=>'D',
+ 'p'=>'P','b'=>'B'
+ );
+
+ $rxX_helper = function($matches) {
+  $x = $matches[1];
+  $X = $matches[2];
+  if (array_key_exists($x,$rxX_helper_data) &&
+      ($X == $$rxX_helper_data[$x])) {
+   return 'r' . $X; 
+  } else {
+   # no change
+   return 'r' . $x . $X;
+  }
+ };
+*/
+
+ $rxX_rx = function($b) {
+
+  return preg_replace_callback('/r(.)(.)/',
+ 
+  function ($matches) { // anonymous function
+  $x = $matches[1];
+  $X = $matches[2];
+ $rxX_helper_data = array(
+ 'k'=>'K','g'=>'G',
+ 'c'=>'C','j'=>'J',
+ 'w'=>'W','q'=>'Q',
+ 't'=>'T','d'=>'D',
+ 'p'=>'P','b'=>'B'
+ );
+
+  if (array_key_exists($x,$rxX_helper_data)) {
+   if($X == $rxX_helper_data[$x]) {
+    return 'r' . $X;
+   }
+  }
+  # no change
+  return 'r' . $x . $X;
+ }
+ ,
+   $b);
+ };
+ $rules = array(
+  array('Mm',$homorganic_nasal),
+  array('aM',$aM),
+  array('aH',$aH),
+  array('uH',$uH),
+  array('iH',$iH),
+  array('ttr',$ttr_tr),
+  array('ant',$ant_at),
+  array('cC',$normalize_key_C),
+  array('rxx',$rxx_rx),
+  array('rxX',$rxX_rx)
+ );
+ foreach($rules as $rule) {
+  list($code,$f) = $rule;
+  $b = $f($a);
+  $a = $b;
+ }
+ return $a;
+}
  public function unused_get3b($key,$max) {
  /*  This is not yet ready!!!
  returns an array of records, where 'key' is like $key

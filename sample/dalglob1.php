@@ -13,23 +13,26 @@
 <!-- this stylesheet is NOT portable, but does work when used
  either at Cologne, or in a local installation
 -->
+
 <link rel="stylesheet" type="text/css" href="../css/basic.css">
+
 <style>
 body {
  color: black; background-color:#DBE4ED;
  /*font-size: 14pt; */
 }
 
-#dataframe,#disp {
+/*#dataframe,#disp {*/
+#disp {
  color: black; background-color: white;
  padding-left:5px;
- padding-right:2.0em;
+ /*padding-right:2.0em;*/
  width: 600px;
- height: 600px;
+ height: 400px;
  /* resize doesn't work on Firefox. 
   On Chrome, the size may be increased, but not decreased*/
  /*resize: both; */
-overflow: auto;
+ overflow: auto;
 }
 
 #accentdiv,#outputdiv,#inputdiv,#dictionary input,label {display:block;}
@@ -66,7 +69,84 @@ overflow: auto;
  
 }
 </style>
+<style>
+div.sticky {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 15px; /* 0; */
+  background-color: yellow;
+  padding: 5px;
+  font-size: 20px;
+}
 
+</style>
+<style>
+/* Experimental tab styling. 
+Ref: https://www.w3schools.com/howto/howto_js_tabs.asp
+*/
+/* Style the tab */
+.tab {
+  overflow: auto; /*hidden;*/
+  border: 1px solid #ccc;
+  background-color: #f1f1f1;
+}
+
+/* Style the buttons inside the tab */
+.tab button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+  font-size: 17px;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+  background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+  background-color: #ccc;
+}
+
+/* Style the tab content */
+.tabcontent {
+  display: none;
+  /*padding: 6px 12px;*/
+  margin: 15px;
+
+  border: 1px solid #ccc;
+  border-top: none;
+}
+/*
+div.tabcontent { 
+  overflow:auto;
+}
+*/
+#disp > .tabcontent{
+  overflow:auto;
+}
+</style>
+<script>
+function openHw(evt, hwName) {
+  var i, tabcontent, tablinks;
+  tabcontent = document.getElementsByClassName("tabcontent");
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
+  }
+  tablinks = document.getElementsByClassName("tablinks");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" active", "");
+  }
+  document.getElementById(hwName).style.display = "block";
+  evt.currentTarget.className += " active";
+}
+
+</script>
 <script>
 $(document).ready(function() {
  $('#key').keypress(function (e) {
@@ -85,6 +165,7 @@ $(document).ready(function() {
   }
  }
  dictlistDisplay = function () {
+  console.clear();  // So console.log messages don't pile up.
   var key = $('#key').val();
   //var dict = $('#dict').val();
   var input = $('#input').val();
@@ -103,7 +184,8 @@ $(document).ready(function() {
    "&accent=" + escape(accent) +
    "&input=" + escape(input) + 
    "&dbglob=keydoc_glob1" +
-   "&dev=yes";
+   "&dev=no";
+   //"&dev=yes";
     //jQuery("#disp").html(""); // clear output
   console.log('dictlistDisplay url=',url);
   $('#dictlist').html("");
@@ -123,8 +205,10 @@ $(document).ready(function() {
      let f = function(dictrec) {
        let dict = dictrec.dict;
        let dockeys = dictrec.dockeys;
-       let button = "<button onclick='getdataForkeyDict(\"" +dict + "\")'>" + dict + "</button>";
        let dockeystr = dockeys.join(" ");
+       let parm = dict + " " + dockeystr;
+       //let button = "<button onclick='getdataForkeyDict(\"" +dict + "\")'>" + dict + "</button>";
+       let button = "<button onclick='getdataForkeyDict(\"" +parm + "\")'>" + dict + "</button>";
        let ans = button + "  " + dockeystr + "<br/>";
        return ans;
      };
@@ -137,11 +221,129 @@ $(document).ready(function() {
   }
  });
 }; // function dictlistDisplay
-getdataForkeyDict = function(dict) {
-  console.log('getdataForkeyDict: dict=',dict);
 
-  var key = $('#key').val();
+getdataForkeyDict_url = function(key,dict) {
   var input = $('#input').val();
+  input = 'slp1';
+  var output = $('#output').val();
+  var accent = 'no'; //$('#accent').val();
+  var urlbase = urlbaseF() + "/csl-apidev/getword.php";
+  var url =  urlbase +  
+   "?key=" +escape(key) + 
+   "&output=" +escape(output) +
+   "&dict=" + escape(dict) +
+   "&accent=" + escape(accent) +
+   "&input=" + escape(input) + 
+   "&dev=yes";
+  return url;
+}
+getdataForkeyDict = function(parmstr) {
+ let parmarr = parmstr.split(" ");
+ let dict = parmarr[0];
+ let dockeys = parmarr.slice(1);
+ console.log('getdataForkeyDict: dict=',dict,'dockeys=',dockeys);
+ var totalRequestCount = dockeys.length;  // 1 url for each dockey
+ var resultarr= []; 
+ for(var i=0;i<dockeys.length;i++) {
+  let key = dockeys[i];
+  let result = {
+   key:key,
+   url:getdataForkeyDict_url(key,dict),
+   status: 404,  // initially unavailable
+   result: `<p>Result not available for ${key}</p>`
+  }; // result
+  resultarr[i] = result;
+ }
+
+ var showResults_tabs = function(resultarr,dict) {
+  let html = "";
+  // html = html + `<div style="color:red;">${dict}</div>`;
+  html = html + `<div class="sticky">`;
+  html = html + `<div class="tab">`;
+  console.log('showResults_tabs. resultarr length=',resultarr.length)
+  for(var i=0;i<resultarr.length;i++) {
+   let resultval = resultarr[i];
+   let key = resultval.key;
+   let id = `disp_${key}`;
+   let btnid = `button_${id}`;
+   html = html + `<button id="${btnid}" class="tablinks" onclick="openHw(event,'${id}')">${key}</button>`;
+  }
+  html = html + "</div>";  // close class tab
+  html = html + "</div>";  // close class sticky
+  console.log('showResults_tabs returns',html);
+  return html;
+ };
+ var showResults = function(resultarr) {
+  let html = "";
+  html = html + showResults_tabs(resultarr,dict);
+  html = html + `<h3>${dict}</h3>`;
+  let id0 = "";
+  for(var i=0;i<resultarr.length;i++) {
+   //continue;
+   let resultval = resultarr[i];
+   let input = resultval.input;
+   let serverval = resultval.result;
+   let key = resultval.key;
+   //let html0 = `<h3 style="color:red">${key}</h3>`;
+   let id = `disp_${key}`;
+   let html0 = `<div id="${id}" class="tabcontent">`;
+   if (i == 0) {id0 = id;}
+   html0 = html0 + serverval + "</div>";
+   html = html + html0;
+  }
+  $('#disp').html(html);
+  let btnid0 = `button_${id0}`;
+  document.getElementById(btnid0).click(); // To show first result
+ };
+ 
+ makeRequest = function(i){  
+  var input = $('#key' + i).val();
+  var resultarrElt = resultarr[i-1]; // 1<=i<=totalRequestCount
+  var reqUrl = resultarrElt.url;
+  console.log('reqUrl=',reqUrl);
+  fetch(reqUrl)  
+   .then(response => response.text())  // convert to text
+   .then(text => {
+    console.log('makeRequest for',i,reqUrl);
+    resultarrElt.status = 200;
+    resultarrElt.result = text;
+    executedRequest++;  
+    if (totalRequestCount == executedRequest) {
+     console.log("All Requests are executed");  
+     showResults(resultarr);
+    }
+   }); // .then text => ...
+ }; // makeRequest
+
+ var totalRequestCount = dockeys.length;  // 1 url for each dockey
+ var executedRequest = 0;
+ // Start async call inside loops  
+ for(var i=totalRequestCount;i>=1;i--) {
+  makeRequest(i);  
+ } // for i
+
+
+}; // getdataForkeyDict
+
+
+still_wrong_getdataForkeyDict = function(parmstr) {
+/* ref: https://stackoverflow.com/questions/22621689/javascript-ajax-request-inside-loops
+Problem is that only the last value
+*/
+  let parmarr = parmstr.split(" ");
+  let dict = parmarr[0];
+  let dockeys = parmarr.slice(1);
+  console.log('getdataForkeyDict: dict=',dict,'dockeys=',dockeys);
+  var key;
+  var async_request=[];
+  var responses={}; // associative array
+
+  $('#disp').html("");
+  let html = "<h3>"+dict+"</h3>";
+  for(key of dockeys) {
+  //var key = $('#key').val();
+  var input = $('#input').val();
+  input = 'slp1';
   var output = $('#output').val();
   var accent = 'no'; //$('#accent').val();
   var urlbase = urlbaseF() + "/csl-apidev/getword.php";
@@ -153,8 +355,7 @@ getdataForkeyDict = function(dict) {
    "&input=" + escape(input) + 
    "&dev=yes";
   console.log('getdataForkeyDict url=',url);
-  $('#disp').html("");
-  $.ajax({
+  var ajax_request = $.ajax({
    url:url,
    datatype:"json",   
    success: function(data0) {
@@ -163,14 +364,28 @@ getdataForkeyDict = function(dict) {
     //let thetype=typeof data0;
     //console.log('data is of type',thetype);
     //$('#disp').html('got some data of type ' + thetype + ' for dict '+dict);
-    let html = "<h3>"+dict+"</h3>";
-    html = html + data0;
-    $('#disp').html(html);
+    //let html = "<h3>"+dict+"</h3>";
+    //responses.push(key,data0);
+    responses[key] = data0;
+    console.log('ajax response for',key);
+    //$('#disp').html(html);
   }
  });
+  async_request.push(ajax_request);
+ }  // end of for(key of dockeys)
+ //$.when.apply(null,async_request).done( 
+ $.when.apply($,async_request).then( 
+  function() {
+   for(key of dockeys) {
+    html = html + responses[key];
+   }
+   $('#disp').html(html);
+ });
+ console.log('html for',dict,'= ',html);
+ $('#disp').html(html);
 }; // function getdataForkeyDict
 
-});
+}); // document.ready
 
 </script>
 </head>
