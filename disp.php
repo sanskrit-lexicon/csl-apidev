@@ -17,8 +17,16 @@ function basicDisplay($parms,$matches) {
  // Aug 17, 2015 Remove use of _GET['options']. Always use $options='2'
  $key = $parms->key;
  $dict = strtoupper($parms->dict);
- $options = '2'; // $parms->options;
- 
+ if(isset($_REQUEST['dispopt'])) {
+  $temp = $_REQUEST['dispopt'];
+  if (in_array($temp,array('1','2','3'))) {
+   $options = $temp;
+  }else {
+   $options = '2';
+  }
+ }else { # dispopt not set
+  $options = '2'; // $parms->options;
+ }
  #output = returned string of html for basic display
  
  /* 
@@ -32,6 +40,9 @@ function basicDisplay($parms,$matches) {
  }else {
   $linkcss = "<link rel='stylesheet' type='text/css' href='css/basic.css' />";
  }
+if ($options == '3') {
+ $output = '';
+}else {
  $output = <<<EOT
 <!DOCTYPE html>
 <html>
@@ -41,6 +52,7 @@ $linkcss
 </head>
 <body>
 EOT;
+}
  $english = $parms->english; 
 /* use of 'CologneBasic' is coordinated with basic.css
   So basic.css won't interfere with the user page.  This
@@ -48,6 +60,8 @@ EOT;
 */
  if (($options == '1')||($options == '2')) {
   $table = "<div id='CologneBasic'>\n";
+ }else if ($options == '3') {
+  $table = "<div>";  
  }else {
   if ($english) {
    $table = "<div id='CologneBasic'>\n<h1>&nbsp;$key</h1>\n";

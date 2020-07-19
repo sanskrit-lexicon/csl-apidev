@@ -77,6 +77,7 @@ body {
 div.sticky {
   position: -webkit-sticky;
   position: sticky;
+  z-index: 1;
   top: 15px; /* 0; */
   background-color: yellow;
   padding: 5px;
@@ -238,6 +239,8 @@ getdataForkeyDict_url = function(key,dict) {
    "&dict=" + escape(dict) +
    "&accent=" + escape(accent) +
    "&input=" + escape(input) + 
+   //"&dispopt=3" +  // 07-18-2020  for disp.php
+   //"&dispcss=no" + // 07-18-2020  for disp.php
    "&dev=yes";
   return url;
 }
