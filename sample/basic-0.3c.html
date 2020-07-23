@@ -108,7 +108,7 @@ requires some code for this purpose.
 $("#key").autocomplete({
   source: function(request,response) {
    $.ajax({
-   url:"//www.sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/getsuggest.php",
+   url:"https://www.sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/getsuggest.php",
    datatype:"jsonp",
    data: {
     //q: request.term
