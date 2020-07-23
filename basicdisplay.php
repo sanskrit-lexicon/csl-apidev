@@ -686,6 +686,9 @@ public function mw_extra_line($line) {
  $href0_whit_cologne = "//www.sanskrit-lexicon.uni-koeln.de/scans/csl-whitroot/disp/index.php";
  $href0_west_cologne = "//www.sanskrit-lexicon.uni-koeln.de/scans/csl-westergaard/disp/index.php";
 
+ $href0_whit_xampp = "//localhost/cologne/csl-whitroot/disp/index.php";
+ $href0_west_xampp = "//localhost/cologne/csl-westergaard/disp/index.php";
+ 
  if ($dictinfowhich == "cologne") {
   $href0_whit = $href0_whit_cologne;
   $href0_west = $href0_west_cologne;
@@ -693,19 +696,23 @@ public function mw_extra_line($line) {
   // use local module if it exists. Otherwise, use Cologne
   // We are in cologne/xxx/web/webtc OR in cologne/csl-apidev/
   if (preg_match("|webtc$|",__DIR__)) {
-   $href0_whit = "../../../csl-whitroot/disp/index.php";
-   $href0_west = "../../../csl-westergaard/disp/index.php";
+   $href0_whit_rel = "../../../csl-whitroot/disp/index.php";
+   $href0_west_rel = "../../../csl-westergaard/disp/index.php";
   }else {  
    // assume we are in cologne/csl-apidev
-   $href0_whit = "../csl-whitroot/disp/index.php";
-   $href0_west = "../csl-westergaard/disp/index.php";
+   $href0_whit_rel = "../csl-whitroot/disp/index.php";
+   $href0_west_rel = "../csl-westergaard/disp/index.php";
   }
-  if (! file_exists($href0_whit)) {
+  if (file_exists($href0_whit_rel)) {
+   $href0_whit = $href0_whit_xampp;
+  } else {
    $href0_whit = $href0_whit_cologne;
   }
-  if (! file_exists($href0_west)) {
+  if (file_exists($href0_west_rel)) {
+   $href0_west = $href0_west_xampp;
+  } else {
    $href0_west = $href0_west_cologne;
-  } 
+  }
  }
  $ans1=""; // whitney
  $ans2=""; // westergaard
