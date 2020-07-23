@@ -31,7 +31,8 @@ class GetwordClass {
   $key = $getParms->key;
   $keyin = $getParms->keyin1;
   if ($nmatches == 0) {
-   $table1 = "<meta charset='UTF-8'>\n";
+   //$table1 = "<meta charset='UTF-8'>\n"; // remove 07/20/2020
+   $table1 = '';
    $table1 .= "<h2>not found: '$keyin' (slp1 = $key)</h2>\n";
   }else {
    $table = basicDisplay($getParms,$matches); // from disp.php
