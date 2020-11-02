@@ -11,6 +11,8 @@ error_reporting( error_reporting() & ~E_NOTICE );
 // This XML string is further assumed to be in UTF-8 encoding.
 // July 2, 2018 - begin universal version of BasicDisplay.  Objective is
 // for this to work for all Cologne dictionaries.
+// Aug 7, 2020.  Restructure under assumption that input to
+// constructor is either a string or an array of strings.
 */
 require_once("dbgprint.php");
 class BasicDisplay {
@@ -18,18 +20,17 @@ class BasicDisplay {
  public $parentEl;
  public $row;
  public $row1;
+ public $row1x;
  public $pagecol;
  public $dbg;
  public $inSanskrit;
  public $inkey2;
- #public $accent;  // Not used here
- #public $noLit;  // Not used here
  public $table;
  public $dict;
  public $sdata; // class to use for Sanskrit
  public $filterin; // transcoding for output
  public $key; // the original key being searched for
-public function __construct($key,$matches,$filterin,$dict) {
+public function __construct($key,$string_or_array,$filterin,$dict) {
  $this->key = $key;
  $this->dict = $dict;
  $this->filterin = $filterin;
@@ -46,26 +47,53 @@ public function __construct($key,$matches,$filterin,$dict) {
   $this->sdata = "sdata"; // default.
  }
  $sdata = $this->sdata;
+ // 
  if (in_array($this->dict,array('ae','mwe','bor'))) {
   // no transliteration of $key for English headword
   $this->table = "<h1>&nbsp;$key</h1>\n";
  }else {
   $this->table = "<h1 class='$sdata'>&nbsp;<SA>$key</SA></h1>\n";
  }
+
+
  $this->table .= "<table class='display'>\n";
- $ntot = count($matches);
+ if (is_string($string_or_array)) {
+  $matches = array($string_or_array);
+ }else if (is_array($string_or_array)) {
+  if (count($string_or_array) == 0) {
+   $matches = array();
+  }else {
+   // take only first item
+   $matches = array($string_or_array[0]);
+  }
+ }else {
+  $matches = array();
+ }
+ 
+ $ntot = count($matches);  // either 0 or 1.
+ // Associative array. keys are:
+ // status 
+ // mwx  (whitney/westergaard links -- currently requires dict == mw
+ // 
+ $this->status = true;
+ $this->mwx = "";
+ $this->row = "";
+ $this->row1 = "";
+ $this->html = "";
  $i = 0;
  while($i<$ntot) {
   $linein=$matches[$i];
   $line=$linein;
   
-  dbgprint($this->dbg,"disp: line[$i+1]=$line\n");
+  dbgprint($this->dbg,"basicdisplay: line[$i+1]=$line\n");
   $line=trim($line);
   $l0=strlen($line);
   $this->row = "";
   $this->row1 = "";
+  $this->row1x = "";
   if ($dict == 'mw') {
    $row1x = $this->mw_extra_line($line);
+   $this->row1x = $row1x;
   }else {
    $row1x = "";
   }
@@ -79,19 +107,20 @@ public function __construct($key,$matches,$filterin,$dict) {
   if (!xml_parse($p,$line)) {
    dbgprint(true,"basicdisplay.php: xml parse error\nline=$line\n");
    $row = $line;
+   $this->status = false;
+   $this->html = "<p>basicdisplay.php: xml parse error</p>";
    return;
   }
   dbgprint($this->dbg,"chk 2\n");
   xml_parser_free($p);
   dbgprint($this->dbg,"chk 3\n");
-  /* May 4, 2017
-  $this->table .= "<tr><td class='display' valign=\"top\">$row1</td>\n";
-  $this->table .= "<td class='display' valign=\"top\">$row</td></tr>\n";
-  */
   $this->table .= "<tr>";
   $this->table .= "<td>";
   // $style = "background-color:beige";
-  $style = ""; #none
+  $style = ""; #none  
+  // Since style is "", the use of $style below has no impact on display
+  // in browser.
+  $row1a = "";
   if ($this->dict == 'mw') {
    /* adjust $this->row */
    $this->mw_row_key_adjust($line);
@@ -107,10 +136,20 @@ public function __construct($key,$matches,$filterin,$dict) {
    }else {
     $this->table .= "{$this->row}\n";
    }
+   /* Summary for MW. Note that row1 is NEVER the empty string
+    row1x can be empty (usual) or not-empty (Whitney, Westergaard links)
+    if row1x is not empty, then
+      table = row1 <br> row1x <br> row
+    if row1x is empty, then
+      table = row1 <br> row
+   */
   } else {
    $row1a = "<span style='$style'>{$this->row1}</span>";
    $this->table .= "$row1a\n<br/>{$this->row}\n";
+   /* table = row1 + <br> + row */
   }
+  /*  row1, row
+  */
   $this->table .= "</td>";
   // This is so that there will be no need for a horizontal scroll. 12-14-2017
   $this->table .= "<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>";
@@ -118,9 +157,6 @@ public function __construct($key,$matches,$filterin,$dict) {
   $i++;
  }
  $this->table .= "</table>\n";
- #$dbg=true;
- #dbgprint($dbg,"BasicDisplay: table={$this->table}\n");
- #return $this->table;
 }
 
  public function getline_key1($line) {
@@ -574,21 +610,22 @@ public function __construct($key,$matches,$filterin,$dict) {
    if ($this->dict == 'mw') {
     // don't show
    }else {
+    // 08-07-2020 also don't show for other dictionaries.
+    /*
     if (in_array($this->dict,array('ae','mwe','bor'))) {
      // no transliteration of $key for English headword
      $this->row1 .= "&nbsp;<span class='$sdata'>$data</span>";
     }else {
      $this->row1 .= "&nbsp;<span class='$sdata'><SA>$data</SA></span>";
     }
+    */
    }
-   //$this->row1 .= "&nbsp;<span class='$sdata'>$data</span>";
   } else if ($this->parentEl == "key1"){ // nothing printed
   } else if ($this->parentEl == "pc") {
    $hrefdata = $this->getHrefPage($data);
    $style = "font-size:normal; color:rgb(160,160,160);";
    $this->row1 .= "<span style='$style'> [Printed book page $hrefdata]</span>";
   } else if ($this->parentEl == "L") {
-   //$this->row1 .= "<span class='lnum'> [Cologne record ID=$data]</span>";
    $style = "font-size:normal; color:rgb(160,160,160);";
    $this->row1 .= "<span style='$style'> [Cologne record ID=$data]</span>";
   } else if ($this->parentEl == "L1") {
@@ -641,8 +678,11 @@ public function __construct($key,$matches,$filterin,$dict) {
    #$this->row .= $data1;
    $this->row .= $data;
   } else if ($this->parentEl == "type") {
+    // 08-07-2020: Which dictionaries have 'type' tag?  SCH?
     // prepend to $row1, so it precedes key2
-    $this->row1 = "<strong>$data</strong> " . $row1;
+    // Note: $row1 is null in this routine.  change to $this->row1
+    //$this->row1 = "<strong>$data</strong> " . $row1;
+    $this->row1 = "<strong>$data</strong> " . $this->row1;
   } else { // Arbitrary other text
    $this->row .= $data;
   }
