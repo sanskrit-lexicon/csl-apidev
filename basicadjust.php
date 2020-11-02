@@ -18,6 +18,7 @@ class BasicAdjust {
  public $dal_ab, $dal_auth; // 
  public $accent;
  public $dbg;
+ public $pagecol;
  public function __construct($getParms,$xmlrecs) {
   $this->accent = $getParms->accent;
   $dict = $getParms->dict;
@@ -34,9 +35,10 @@ class BasicAdjust {
   }
  
   $this->getParms = $getParms;
-  $adjxmlrecs = array();
+  $this->adjxmlrecs = array();
   #$i = 0;
   foreach($xmlrecs as $line) {
+   $this->pagecol = '';
    $line1 = $this->line_adjust($line);
    $this->adjxmlrecs[] = $line1;
    #$i = $i + 1;
@@ -58,6 +60,7 @@ class BasicAdjust {
    $line = preg_replace('/<pc>(.*)<\/pc>/','',$line);
   }else {$this->pagecol = $matches[1];}
  }
+
  /* removed 12-14-2017
  $line = preg_replace_callback('/<ls(.*?)>(.*?)<\/ls>/',
       "line_adjust1_callback",$line);
