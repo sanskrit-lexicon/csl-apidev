@@ -164,15 +164,31 @@ dbgprint($dbg,"dispitem. key2=$key2\n");
    // Add extra spaces so preceding text will not be overwritten.
    // This applies to dictionaries where a 'position:relative' css style 
    // is used to indent text.
-   $lnumshow = "<span class='lnum' '> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;[<span title='Cologne record ID'>ID=</span>$lnum]</span>";
+   //$lnumshow = "<span class='lnum'> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;[<span title='Cologne record ID'>ID=</span>$lnum]</span>";
+   $lnumshowid = $this->get_lnumshow_id($lnum);
+   $lnumshow = "<span class='lnum'> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;$lnumshowid";
   }else {
-   $lnumshow = "<span class='lnum'> [<span title='Cologne record ID'>ID=</span>$lnum]</span>";
+   //$lnumshow = "<span class='lnum'> [<span title='Cologne record ID'>ID=</span>$lnum]</span>";
+   $lnumshowid = $this->get_lnumshow_id($lnum);
+   $lnumshow = "<span class='lnum'> $lnumshowid</span>";
   }
+  $pageshow = $this->get_pageshow($hrefdata); 
   $pageshow = "<span class='hrefdata'> [<span title='Printed book page-column'>p=</span> $hrefdata]</span>";
   if ($hrefdata == $hrefdata_prev) {
    $pageshow="";
   }
-   return array($keyshow,$lnumshow,$pageshow);
+  return array($keyshow,$lnumshow,$pageshow);
+ }
+ public function get_pageshow($hrefdata) {
+  // 08-04-2020 make consistent with basicdisplay.php
+  $style = "font-weight:normal; color:rgb(160,160,160);";
+  $ans = "<span class='hrefdata'><span style='$style'> [Printed book page $hrefdata]</span></span>";
+  return $ans;
+ }
+ public function get_lnumshow_id($lnum) {
+  // 08-04-2020
+  $style = "font-size:normal; color:rgb(160,160,160);";
+  return "[<span title='Cologne record ID' style='$style'>ID=$lnum</span>]";
  }
  public function basicRow1Default($prev) {
   list($keyshow,$lnumshow,$pageshow) = $this->basicRow1DefaultParts($prev);
@@ -198,21 +214,27 @@ dbgprint($dbg,"dispitem. key2=$key2\n");
   $row = $this->html;
   // 01-17-2019. for MW, when user requests IAST output, make this output italic
   if ($this->dictup == 'MW') {
+   // The Parm constructor for dispitem here requires 'dict' parameter
+   // but in csl-apidev/dispitem.php, no argument is required.
+   // 11-02-2020. Use from $dictinfo
+   //$getParms = new Parm($this->dict); 
    $getParms = new Parm();
    if ($getParms->filter == "roman") {
     $row = preg_replace('|<SA>|','<i><SA>',$row);
     $row = preg_replace('|</SA>|','</SA></i>',$row);
    }
   }
+  $hrefdata = $this->hrefdata;
+  //$pageshow = "<span class='hrefdata'> [<span title='Printed book page-column'>p=</span> $hrefdata]</span>";
   if ($this->hom) { // for MW
    $pre1 = ""; // incomplete  need a link with onclick
-   $hrefdata = $this->hrefdata;
-   $pageshow = "<span class='hrefdata'> [<span title='Printed book page-column'>p=</span> $hrefdata]</span>";
+   $pageshow = $this->get_pageshow($hrefdata); 
    $pre2="<span style='font-weight:bold'>$keyshow $pageshow</span> :";
    $pre = $pre1 . $pre2;
   }else if (($keyshow == "") and ($pageshow == "")) {
    $pre = "";
   }else {
+   $pageshow = $this->get_pageshow($hrefdata); 
    $pre="<span style='font-weight:bold'>$keyshow $pageshow</span>";
   }
   if (($this->dictup == 'MW') and ($this->hom)) {
