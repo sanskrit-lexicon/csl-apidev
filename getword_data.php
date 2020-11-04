@@ -6,52 +6,128 @@ error_reporting(E_ALL & ~E_NOTICE );
  class to get the html data for getword.php
 */
 require_once('dbgprint.php');
-
-class Getword_data {
- public $matches;  // the computed array of html
- public function __construct($getParms,$dal) {
- $dbg=false;
- $dict = $getParms->dict;
- dbgprint($dbg,"getword_data.php #1 getword_data_html\n");
- 
- /* $matches0 is array. each element is 3-element array
-   list($key1,$lnum1,$data1)
- */
- $key = $getParms->key;
- dbgprint($dbg,"getword_data.php #2: key=$key, dict=$dict \n");
- // Can we use get1_mwalt for ALL dictionaries? (8-10-2019)
- if (strtolower($dict) == 'mw') {
-  $matches0 = $dal->get1_mwalt($key); // Jul 19, 2015
- }else { 
-  #$matches0= $dal->get1($key); 
-  $matches0 = $dal->get1_mwalt($key); // Feb 1, 2020
- }
- $nmatches = count($matches0);
- dbgprint($dbg,"getword_data.php #3: nmatches=$nmatches\n");
- // adjust xml
- $matches = array();
- foreach($matches0 as $match0){
-  list($key0,$lnum0,$data0) = $match0;
-  $html = $this->getword_data_html_adapter($key0,$lnum0,$data0,$dict,$getParms);
-  $matches[] = array($key0,$lnum0,$html);
- }
- if ($dbg) {
-  dbgprint($dbg,"getword_data_html returns:\n");
-  for($i=0;$i<count($matches);$i++) {
-   dbgprint($dbg,"record $i = {$matches[$i][2]}\n"); #[0] $matches[$i][1] $matches[$i][2] \n");
-  }
- }
- $this->matches = $matches;
-}
-public function getword_data_html_adapter($key,$lnum,$data,$dict,$getParms)
-{
+require_once('dal.php');
  require_once('basicadjust.php');
  require_once('basicdisplay.php');
+class Getword_data {
+ /* $matches contains array of records. 
+   Each record is an array with three elements:
+   - key
+   - lnum (cologne id)
+   - computed html string
+ */
+ public $matches;  
+ public function __construct() {
+ $dbg=false;
+ $getParms = new Parm();
+ $dict = $getParms->dict;
+ dbgprint($dbg,"getword_data.php #1 getword_data_html\n");
+ $dal = new Dal($dict);
+ $key = $getParms->key;
+ dbgprint($dbg,"getword_data.php #2: key=$key, dict=$dict \n");
+  // xmlmatches is array of records rec, where
+  // rec is array with 3 items:
+  //  0: key0  the headword of the record (usu. but not always same as key)
+  //  1: lnum0 The Cologne id
+  //  2: data:  xml string from xxx.xml
+ $xmlmatches = $dal->get1_mwalt($key); 
+ $dal->close();
+
+  $xmldata = [];
+  for ($i=0;$i<count($xmlmatches);$i++) {
+   $xmlmatch = $xmlmatches[$i];
+   list($key0,$lnum0,$xmldata0) = $xmlmatch;
+   $xmldata[] = $xmldata0;
+  }
+  $adjxml = new BasicAdjust($getParms,$xmldata);
+  $adjmatches = $adjxml->adjxmlrecs;
+
+  $htmlmatches = [];
+  for($i=0;$i<count($xmlmatches);$i++) {
+   $xmlmatch = $xmlmatches[$i];
+   list($key0,$lnum0,$xmldata0) = $xmlmatch;
+   $adjxmldata0 = $adjmatches[$i];
+   $html = $this->getword_data_html_adapter($key0,$lnum0,$adjxmldata0,$dict,$getParms);
+   $htmlmatches[] = array($key0,$lnum0,$html);
+  }
+ if ($dbg) {
+  dbgprint($dbg,"getword_data_html returns:\n");
+  for($i=0;$i<count($htmlmatches);$i++) {
+   dbgprint($dbg,"record $i = {$htmlmatches[$i][2]}\n"); #[0] $htmlmatches[$i][1] $htmlmatches[$i][2] \n");
+  }
+ }
+ $this->matches = $htmlmatches;
+}
+/* ------------------------------
+  getword_data_html_adapter and related functions
+*/
+public function getword_data_html_adapter($key,$lnum,$adjxml,$dict,$getParms)
+{
+ // 08-07-2020.  This is the only place where BasicAdjust and
+ // BasicDisplay are called.
+ // We don't need to have arrays of strings, but only one string
+ //  ($data is a string, one record  from xxx.xml)
+ // BasicDisplay is written to allow a string for the second argument.
+ /*
  $matches1=array($data);
  $adjxml = new BasicAdjust($getParms,$matches1);
  $matches = $adjxml->adjxmlrecs;
+ */
  $filter = $getParms->filter;
- $display = new BasicDisplay($key,$matches,$filter,$dict);
+ $display = new BasicDisplay($key,array($adjxml),$filter,$dict);
+ $row1 = $display->row1;
+ $row1x = $display->row1x; 
+ $row = $display->row;
+ $info = $row1;
+ if ($row1x == '') { // True except for some mw verbs
+  $body = "$row";
+ } else {
+  $body = "$row1x<br>$row";
+ }
+ $dbg=false;
+ dbgprint($dbg,"adapter\n");
+ dbgprint($dbg,"info = $info\n");
+ dbgprint($dbg,"body = $body\n");
+
+ # adjust body
+ $body = preg_replace('|<td.*?>|','',$body);
+ $body = preg_replace('|</td></tr>|','',$body);
+ if ($dict == 'mw') {
+  // in case of MW, we remove [ID=...]</span>
+  $body = preg_replace('|<span class=\'lnum\'.*?\[ID=.*?\]</span>|','',$body);
+ }
+ # adjust $info - keep only the displayed page
+ if ($dict == 'mw') {
+  if(!preg_match('|>([^<]*?)</a>,(.*?)\]|',$info,$matches)) {
+   dbgprint(true,"html ERROR 2: \n" . $info . "\n");
+   exit(1);
+  }
+  $page=$matches[1];
+  $col = $matches[2];
+  $pageref = "$page,$col";
+ }else {
+  if(!preg_match('|>([^<]*?)</a>|',$info,$matches)) {
+   dbgprint(true,"html ERROR 2: \n" . $info . "\n");
+   exit(1);
+  }
+  $pageref=$matches[1];
+ }
+ if ($dict == 'mw') {
+  list($hcode,$key2,$hom) = $this->adjust_info_mw($adjxml); 
+  # construct return value as colon-separated values
+  $infoval = "$pageref:$hcode:$key2:$hom";
+  $ans = "<info>$infoval</info><body>$body</body>";
+ }else {
+  # construct return value
+  $ans = "<info>$pageref</info><body>$body</body>";
+ }
+ return $ans;
+}
+public function unused_getword_data_html_adapter($key,$lnum,$adjxml,$dict,$getParms)
+{
+ dbgprint(true,"adapter: key=$key, lnum=$lnum, dict=$dict\n");
+ $filter = $getParms->filter;
+ $display = new BasicDisplay($key,array($adjxml),$filter,$dict);
  $table = $display->table;
  $tablines = explode("\n",$table); 
  $ntablines = count($tablines);
@@ -128,7 +204,7 @@ public function getword_data_html_adapter($key,$lnum,$data,$dict,$getParms)
   $pageref=$matches[1];
  }
  if ($dict == 'mw') {
-  list($hcode,$key2,$hom) = $this->adjust_info_mw($data); 
+  list($hcode,$key2,$hom) = $this->adjust_info_mw($adjxml); 
   # construct return value as colon-separated values
   $infoval = "$pageref:$hcode:$key2:$hom";
   $ans = "<info>$infoval</info><body>$body</body>";
@@ -139,6 +215,7 @@ public function getword_data_html_adapter($key,$lnum,$data,$dict,$getParms)
  return $ans;
 }
 public function adjust_info_mw($data) {
+ dbgprint(true,"adjust_info_mw: data=$data\n");
  # In case of MW, also retrieve Hcode and hom from head of $data
  $hom='';
  if (preg_match('|</key2><hom>(.*?)</hom>|',$data,$matches)) {

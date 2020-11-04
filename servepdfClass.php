@@ -22,7 +22,7 @@ $webparent = $dictinfo->webparent;
 $pdffiles_filename = "$webparent/web/webtc/pdffiles.txt";
 if ((!$page)&&$key) {
  // Try to get $page from 'key' parm 
- $page = $this->get_page_from_key($dict,$getParms);
+ $page = $this->get_page_from_key($getParms);
 }
 $dictupper = $dictinfo->dictupper;
 list($filename,$pageprev,$pagenext)=$this->getfiles($pdffiles_filename,$page,$dictupper);
@@ -69,12 +69,13 @@ HTML;
 
 $this->html = $html;
 }
-public function get_page_from_key($dict,$getParms) {
+public function get_page_from_key($getParms) {
  require_once('dal.php');
  require_once('getword_data.php');
  $page = '0000'; # default. a string but not a valid page 
- $dal = new Dal($dict);
- $temp = new Getword_data($getParms,$dal);
+ $dict = $getParms->dict;
+ #$dal = new Dal($dict);
+ $temp = new Getword_data();
  $recs = $temp->matches;
  $dbg = false;
  dbgprint($dbg,count($recs). "  records for $key.\n");
@@ -96,7 +97,7 @@ public function get_page_from_key($dict,$getParms) {
   }
  }
  // In any case, close this database connection
- $dal->close();
+ #$dal->close();
  return $page;
 }
 
