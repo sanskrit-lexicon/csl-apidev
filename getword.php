@@ -20,5 +20,4 @@ function getwordCall() {
   }
  }
  getwordCall();
-?> 
-
+?>

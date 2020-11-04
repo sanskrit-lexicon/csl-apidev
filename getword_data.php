@@ -7,8 +7,9 @@ error_reporting(E_ALL & ~E_NOTICE );
 */
 require_once('dbgprint.php');
 require_once('dal.php');
- require_once('basicadjust.php');
- require_once('basicdisplay.php');
+require_once('basicadjust.php');
+require_once('basicdisplay.php');
+
 class Getword_data {
  /* $matches contains array of records. 
    Each record is an array with three elements:
@@ -51,7 +52,7 @@ class Getword_data {
    $htmlmatches[] = array($key0,$lnum0,$html);
   }
  if ($dbg) {
-  dbgprint($dbg,"getword_data_html returns:\n");
+  dbgprint($dbg,"getword_data returns:\n");
   for($i=0;$i<count($htmlmatches);$i++) {
    dbgprint($dbg,"record $i = {$htmlmatches[$i][2]}\n"); #[0] $htmlmatches[$i][1] $htmlmatches[$i][2] \n");
   }
@@ -123,99 +124,9 @@ public function getword_data_html_adapter($key,$lnum,$adjxml,$dict,$getParms)
  }
  return $ans;
 }
-public function unused_getword_data_html_adapter($key,$lnum,$adjxml,$dict,$getParms)
-{
- dbgprint(true,"adapter: key=$key, lnum=$lnum, dict=$dict\n");
- $filter = $getParms->filter;
- $display = new BasicDisplay($key,array($adjxml),$filter,$dict);
- $table = $display->table;
- $tablines = explode("\n",$table); 
- $ntablines = count($tablines);
- /* $table is a string with 6 lines, or 7 lines when dict==mw
-  Only indices 2,3,4 of $tablines are used here.
-  The exact structure of these lines is complicated.
-  STRUCTURE FOR MW
-  $idx  $tablines[$idx] description
-   0    <h1 class='$sdata'>&nbsp;<SA>$key2</SA></h1>
-   1   <table class='display'>
-   2  <tr><td>Hx and link to scan<br> (but for Hxy cases no Hxy)
-   a) When there are Whitney links or Westegaard links,
-   3   The Whitney/Westergaard links<br>
-   4   html for the body of the entry
-   5   </td><td>spaces</td></tr></table>
-   6   empty line
-   b) When there are no links
-   3   html for the body of the entry
-   4   </td><td>spaces</td></tr></table>
-   5   empty line
-  STRUCTURE FOR non-mw, and non-English headwords (i.e., not ae,mwe, bor, mw)
-   0    <h1 class='$sdata'>&nbsp;<SA>$key2</SA></h1>
-   1   <table class='display'>
-   2  <tr><td>{KEY} {link to scan}  (but for Hxy cases no Hxy)
-   3  <br> html for the body of the entry
-   4  </td><td>spaces</td></tr></table>
-   5   empty line
 
-  STRUCTURE FOR  ae,mwe, bor,
-   0    <h1>&nbsp;$key2</h1>
-   1   <table class='display'>
-   2  <tr><td>{KEY} {link to scan}  (but for Hxy cases no Hxy)
-   3  <br> html for the body of the entry
-   4  </td><td>spaces</td></tr></table>
-   5   empty line
- */
- if (($ntablines != 6)&& ($ntablines != 7)){
-  dbgprint(true,"html ERROR 1: actual # lines in table = $ntablines\n");
-  for ($i=0;$i<$ntablines;$i++) {
-   dbgprint(true,"tablines[$i]=" .$tablines[$i]."\n");
-  }
-  exit(1);
- }
-
- $info = $tablines[2];
- #$body = $tablines[3];
- if ($ntablines == 6) {
-  $body = $tablines[3];
- }else {  //$ntablines == 7
-  $body = $tablines[3] . $tablines[4];
- }
-
- # adjust body
- $body = preg_replace('|<td.*?>|','',$body);
- $body = preg_replace('|</td></tr>|','',$body);
- if ($dict == 'mw') {
-  // in case of MW, we remove [ID=...]</span>
-  $body = preg_replace('|<span class=\'lnum\'.*?\[ID=.*?\]</span>|','',$body);
- }
- # adjust $info - keep only the displayed page
- if ($dict == 'mw') {
-  if(!preg_match('|>([^<]*?)</a>,(.*?)\]|',$info,$matches)) {
-   dbgprint(true,"html ERROR 2: \n" . $info . "\n");
-   exit(1);
-  }
-  $page=$matches[1];
-  $col = $matches[2];
-  $pageref = "$page,$col";
- }else {
-  if(!preg_match('|>([^<]*?)</a>|',$info,$matches)) {
-   dbgprint(true,"html ERROR 2: \n" . $info . "\n");
-   exit(1);
-  }
-  $pageref=$matches[1];
- }
- if ($dict == 'mw') {
-  list($hcode,$key2,$hom) = $this->adjust_info_mw($adjxml); 
-  # construct return value as colon-separated values
-  $infoval = "$pageref:$hcode:$key2:$hom";
-  $ans = "<info>$infoval</info><body>$body</body>";
- }else {
-  # construct return value
-  $ans = "<info>$pageref</info><body>$body</body>";
- }
- return $ans;
-}
 public function adjust_info_mw($data) {
- dbgprint(true,"adjust_info_mw: data=$data\n");
+ #dbgprint(true,"adjust_info_mw: data=$data\n");
  # In case of MW, also retrieve Hcode and hom from head of $data
  $hom='';
  if (preg_match('|</key2><hom>(.*?)</hom>|',$data,$matches)) {
@@ -245,7 +156,7 @@ public function adjust_key2_mw($key2) {
  $ans1 = preg_replace('|</?hom>|','',$ans1);
  $ans1 = preg_replace('|<shortlong/>|','',$ans1);
  if (preg_match('|<|',$ans1)) {
-  dbgprint(true,"adjust_key2: $ans1\n");
+  #dbgprint(true,"adjust_key2: $ans1\n");
   exit(1);
  }
  return $ans;
