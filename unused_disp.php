@@ -1,4 +1,5 @@
 <?php
+// 11-03-2020.  This put as function 'getwordDisplay' in getwordClass
 // The main function basicDisplay constructs an HTML table from
 // an array ($matches) of data elements.
 // Each of the  data elements is a string which is valid XML.
