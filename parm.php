@@ -18,7 +18,7 @@
   english  copy of dictinfo's english attribute
   keyin1   from keyin   
   key      from keyin1 
-  
+  basicOption Set to False, for apidev display. (GetwordClass)
   lnumin, direction  Computed upon request by listhierParm method
  
 */
@@ -31,6 +31,7 @@ class Parm {
  public $dictinfo,$english;
  public $keyin1,$key;
  public function __construct() {
+  $this->basicOption = false;
   $dbg=false;
   dbgprint($dbg,"enter parm construct\n");
   if ($_REQUEST['filter']) {
