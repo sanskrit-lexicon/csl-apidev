@@ -15,7 +15,8 @@ class DictInfo {
        "MWE"=>"2013" , "PD"=>"2014" , "PE"=>"2014" , "PGN"=>"2014",
        "PUI"=>"2014" , "PWG"=>"2013" , "PW"=>"2014" , "SCH"=>"2014",
        "SHS"=>"2014" , "SKD"=>"2013" , "SNP"=>"2014" , "STC"=>"2013",
-       "VCP"=>"2013" , "VEI"=>"2014" , "WIL"=>"2014" , "YAT"=>"2014");
+       "VCP"=>"2013" , "VEI"=>"2014" , "WIL"=>"2014" , "YAT"=>"2014",
+       "LAN"=>"2019");
  //static public $scanpath = "../..";  // scan dir.depends on loc of this file!
  //static public $scanpath = preg_replace('|/awork/apidev|','',__DIR__);
  #public $scanpath;
