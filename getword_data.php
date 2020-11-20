@@ -48,7 +48,7 @@ class Getword_data {
    $xmlmatch = $xmlmatches[$i];
    list($key0,$lnum0,$xmldata0) = $xmlmatch;
    $adjxmldata0 = $adjmatches[$i];
-   $html = $this->getword_data_html_adapter($key0,$lnum0,$adjxmldata0,$dict,$getParms);
+   $html = $this->getword_data_html_adapter($key0,$lnum0,$adjxmldata0,$dict,$getParms,$xmldata0);
    $htmlmatches[] = array($key0,$lnum0,$html);
   }
  if ($dbg) {
@@ -62,7 +62,7 @@ class Getword_data {
 /* ------------------------------
   getword_data_html_adapter and related functions
 */
-public function getword_data_html_adapter($key,$lnum,$adjxml,$dict,$getParms)
+public function getword_data_html_adapter($key,$lnum,$adjxml,$dict,$getParms,$xmldata)
 {
  // 08-07-2020.  This is the only place where BasicAdjust and
  // BasicDisplay are called.
@@ -114,8 +114,11 @@ public function getword_data_html_adapter($key,$lnum,$adjxml,$dict,$getParms)
   $pageref=$matches[1];
  }
  if ($dict == 'mw') {
-  list($hcode,$key2,$hom) = $this->adjust_info_mw($adjxml); 
+  list($hcode,$key2,$hom) = $this->adjust_info_mw($xmldata); 
   # construct return value as colon-separated values
+  if ($getParms->basicOption) {
+   $hom="";
+  }
   $infoval = "$pageref:$hcode:$key2:$hom";
   $ans = "<info>$infoval</info><body>$body</body>";
  }else {
@@ -126,7 +129,6 @@ public function getword_data_html_adapter($key,$lnum,$adjxml,$dict,$getParms)
 }
 
 public function adjust_info_mw($data) {
- #dbgprint(true,"adjust_info_mw: data=$data\n");
  # In case of MW, also retrieve Hcode and hom from head of $data
  $hom='';
  if (preg_match('|</key2><hom>(.*?)</hom>|',$data,$matches)) {
