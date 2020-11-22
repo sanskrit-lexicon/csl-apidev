@@ -402,6 +402,16 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
     $tooltip = $attribs['n'];
     $style = '';
     $this->row .= "<a href='$href' title='$tooltip' target='_rvlink'>";
+  } else if ($el == "lanlink") {
+    $href = $attribs['href'];
+    # A work around.  Instead of real url parameter ('&page=...'),
+    # we have, in basicadjust, put '_page=...'.  change back to '&page'
+    $href = preg_replace('|_page|','&page',$href);
+    # next so line number will appear in url of displayed page.
+    $href = preg_replace('|_line|','&line',$href); 
+    $tooltip = $attribs['n'];
+    $target = $attribs['target'];
+    $this->row .= "<a href='$href' title='$tooltip' target='$target'>";
   } else if ($el == "lex"){ // m. f., etc.
    $this->row .= "<strong>"; 
   } else if ($el == "i"){
@@ -555,6 +565,8 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
   } else if ($el == "graverse") {
    $this->row .= "</span>";
   } else if ($el == "gralink") {
+   $this->row .= "</a>";
+  } else if ($el == "lanlink") {
    $this->row .= "</a>";
   } else if ($el == "lex"){
    $this->row .= "</strong>"; 

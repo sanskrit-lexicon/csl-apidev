@@ -90,6 +90,15 @@ class BasicAdjust {
   $line = preg_replace_callback('|([ (])([0-9]+)[ ,]+([0-9]+)|',"BasicAdjust::rgveda_verse_callback",$line);
   dbgprint($dbg,"BasicAdjust after rgveda: $line\n");
  }
+ if ($this->getParms->dict == 'lan') {
+  #$dbg=true; ###11-20
+  /* Two types: <ls n="lan,16,4">16^4^</ls>
+      <ls n="wg,1235">1235b</ls>
+  */
+  dbgprint($dbg,"BasicAdjust before lanman link: $line\n");
+  $line = preg_replace_callback('|<ls n="(.*?)">(.*?)</ls>|',"BasicAdjust::lanman_link_callback",$line);
+  dbgprint($dbg,"BasicAdjust after lanman_link: $line\n");
+ }
 
  //$line = preg_replace('|- <br/>|','',$line);
  //$line = preg_replace('|<br/>|',' ',$line);
@@ -459,6 +468,38 @@ public function rgveda_link($gra1,$gra2) {
  $x = "<gralink href='$href' n='$tooltip'>$gra1,<graverse>$gra2</graverse></gralink>";
 # restore the initial space or (
  $x = $gra0 . $x;
+ return $x;
+}
+public function lanman_link_callback($matches) {
+/* 
+    Adds 'lanlink' or 'wglink'  elements to xml. These need
+    to be converted to html in basicdisplay.php
+*/
+ $x0 = $matches[0];
+ $n0 = $matches[1]; # lan,16,4   or wg,1235
+ $txt = $matches[2]; # text of <ls> tag}
+ $parts = explode(",",$n0);
+ if ($parts[0] == "lan") {
+  $page = $parts[1];
+  $linenum = $parts[2];
+  $url = 'https://www.sanskrit-lexicon.uni-koeln.de/scans/csl-apidev/servepdf.php?dict=LAN'; #&page=111-a
+  # This ampersand causes problems in basicdisplay parsing!
+  #$href = "$url" . "&page=$page";
+  $href = "$url" . "_page=$page";
+  # It is useful to also have the line number visible in the url of the displayed url
+  $href = "$href" . "_line=$linenum";
+  $tooltip = "Lanman Sanskrit Reader, page $page, line $linenum";
+  $x = "<lanlink href='$href' n='$tooltip' target='_lanlink'>$txt</lanlink>";
+ }else if ($parts[0] == "wg") {
+  // https://funderburkjim.github.io/WhitneyGrammar/step1/pages2c.html#section_1234
+  $section = $parts[1];
+  $url = 'https://funderburkjim.github.io/WhitneyGrammar/step1/pages2c.html';
+  $href = "$url#section_$section";
+  $tooltip = "Whitney Grammar, section $section";
+  $x = "<lanlink href='$href' n='$tooltip' target='_wglink'>$txt</lanlink>";
+ }else { // $n0 mal-formed
+  $x = $x0; // return unchanged
+ }
  return $x;
 }
 public function move_L_mw($line) {
