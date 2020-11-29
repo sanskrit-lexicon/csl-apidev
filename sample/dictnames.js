@@ -7,6 +7,7 @@ CologneDisplays.dictionaries= {
 ['BEN' , 'Benfey Sanskrit-English Dictionary'],
 ['MW72' , 'Monier-Williams Sanskrit-English Dictionary'],
 ['AP90' , 'Apte Practical Sanskrit-English Dictionary'],
+['LAN' , 'Lanman Sanskrit Reader Dictionary'],
 ['CAE' , 'Cappeller Sanskrit-English Dictionary'],
 ['MD' , 'Macdonell Sanskrit-English Dictionary'],
 ['MW' , 'Monier-Williams Sanskrit-English Dictionary'],
