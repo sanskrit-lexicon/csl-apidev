@@ -1,11 +1,7 @@
 <?php
- /* Same as list-0.2s_xampp.php, but accepts some or all inputs as
-   $_REQUEST parameters (i.e. either 'GET' or 'POST')
-  This is file list-0.2s_rw.php.  ('rw' = rewrite)
-  Primarily for use on Cologne server to allow /simple/ urls to be parsed.
-  See .htaccess in root directory ('docs') of Cologne.
-  06-09-2020  Remove 'www' in urls 
-  
+ /* This is file list-0.2s_rw.php.  ('rw' = rewrite)
+  Allows /simple/ urls to be parsed.
+  See .htaccess in root directory.
  */
 // Report all errors except E_NOTICE  (also E_WARNING?)
 error_reporting(E_ALL & ~E_NOTICE);
@@ -48,7 +44,12 @@ $phpvals = array();
 for($i=0;$i<count($keys);$i++) {
  $key=$keys[$i];
  $val=$parms[$key];
- $phpvals[$key] = $val; //$_REQUEST[$key];
+ if ($key == 'key') { //12-03-2020
+  $val1 = urldecode($val);  // from uri-encoding to utf-8
+  $phpvals[$key] = $val1;
+ }else {
+  $phpvals[$key] = $val; //$_REQUEST[$key];
+ }
  //$_REQUEST[$key] = $val; 
  //echo("phpvals: $key -> $val<br/>\n");
 }
@@ -60,7 +61,6 @@ for($i=0;$i<count($keys);$i++) {
 <META charset="UTF-8">
 <title>list-0.2s Cologne</title>
 <!-- ref=https://www.w3.org/TR/html4/struct/links.html#edef-BASE -->
-
 <BASE href="/scans/awork/apidev/simple-search/v1.0/list-0.2s_rw.php">
 
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.css">
@@ -168,7 +168,7 @@ $(document).ready(function() {
  changeCorrectionHref = function () {
   //console.log('changeCorrectionHref: dict=',$('#dict').val());
   var dict = $('#dict').val();
-  var url = "/php/correction_form.php?dict=" + dict;
+  var url = "//www.sanskrit-lexicon.uni-koeln.de/php/correction_form.php?dict=" + dict;
   $('#correction').attr('href',url);
  };
  keyAutocompleteActivation = function () {
@@ -270,7 +270,7 @@ simpleFunction = function(){
   //console.log('test: find_word=',find_word);
   test.key = find_word;
   // 04-18/2018. change from v1.0d to v1.0
-  // Currenlty getword_list_1.0.php same in both locations.
+  // Currently getword_list_1.0.php same in both locations.
   test.url = "../../simple-search/v1.0/getword_list_1.0.php";
   //console.log('simpleFunction test.url=',test.url);
   test.input = 'hk';
@@ -483,8 +483,7 @@ changeActions();  // initialize now that #dict, etc are set.
 
 }); // end ready
  </script>
-<script> // see MWScan/2014/web/webtcdev/main_webtc.js
-</script>
+
 </head>
 <body>
  <div id="logo">

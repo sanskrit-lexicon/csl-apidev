@@ -1,6 +1,7 @@
 <?php
- /* Same as list-0.2s_xampp.php, but accepts some or all inputs as
-   $_REQUEST parameters (i.e. either 'GET' or 'POST')
+ /* This is file list-0.2s_xampp_rw.php.  ('rw' = rewrite) for local installs
+  Allows /simple/ urls to be parsed.
+  See .htaccess in root directory.
  */
 // Report all errors except E_NOTICE  (also E_WARNING?)
 error_reporting(E_ALL & ~E_NOTICE);
@@ -43,7 +44,12 @@ $phpvals = array();
 for($i=0;$i<count($keys);$i++) {
  $key=$keys[$i];
  $val=$parms[$key];
- $phpvals[$key] = $val; //$_REQUEST[$key];
+ if ($key == 'key') { //12-03-2020
+  $val1 = urldecode($val);  // from uri-encoding to utf-8
+  $phpvals[$key] = $val1;
+ }else {
+  $phpvals[$key] = $val; //$_REQUEST[$key];
+ }
  //$_REQUEST[$key] = $val; 
  //echo("phpvals: $key -> $val<br/>\n");
 }
@@ -264,7 +270,7 @@ simpleFunction = function(){
   //console.log('test: find_word=',find_word);
   test.key = find_word;
   // 04-18/2018. change from v1.0d to v1.0
-  // Currenlty getword_list_1.0.php same in both locations.
+  // Currently getword_list_1.0.php same in both locations.
   test.url = "../../simple-search/v1.0/getword_list_1.0.php";
   //console.log('simpleFunction test.url=',test.url);
   test.input = 'hk';
@@ -477,8 +483,7 @@ changeActions();  // initialize now that #dict, etc are set.
 
 }); // end ready
  </script>
-<script> // see MWScan/2014/web/webtcdev/main_webtc.js
-</script>
+
 </head>
 <body>
  <div id="logo">
@@ -544,8 +549,6 @@ changeActions();  // initialize now that #dict, etc are set.
    <p>Your browser does not support iframes.</p>
   </iframe>
  </div>
-<script>
-</script>
-<script src="//www.sanskrit-lexicon.uni-koeln.de/js/piwik_analytics.js"></script> 
+
 </body>
 </html>

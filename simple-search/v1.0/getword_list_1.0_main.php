@@ -37,16 +37,17 @@ dbgprint($dbg,"getword_list_1.0.php: dict=$dict\n");
 $dal = new Dal($dict);
 // WARNING: the relative path to sanhw1 is sensitive to location of
 //   this file.
-#$dalnorm = new Dalnorm('hwnorm1c','../../../sanhw1');
 $dalnorm = new Dalnorm('hwnorm1c','../hwnorm1');
 // Ordering of results depends on a word frequency file.
 $wfreqs = init_word_frequency();
 
 // keyparmin is the key input. It is what the user requested.
+// Assumed to be in utf-8 encoding
 $keyparmin = $getParms->keyin;  // original
 dbgprint($dbg,"keyparmin=$keyparmin\n");
-
-//keyparmin is original.
+// php function. Convert back to utf-8
+// This is done already in javascript list-0.2s_(xampp)_rw.php
+//$keyparmin1 = urldecode($keyparmin); 
 $ssobj = new Simple_Search($keyparmin,$dict);
 $keysin = $ssobj->normkeys;  // normalized slp1 spelling
 // 11-01-2017. user keyin, slp1, norm. So we can identify
