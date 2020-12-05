@@ -27,37 +27,37 @@ class Ngram_Check {
  }
  public function validate($word) {
   // are all the ngrams of word found in ngramdict?
+  $max = 1; 
   $ngrams = $this->generate($word);
-  $ans = true;
   foreach($ngrams as $ngram) {
    if (! isset($this->ngramdict[$ngram])) {
-    $ans = false;
-    break;
+    return false;
+   }
+   if ($this->ngramdict[$ngram] <= $max) {
+    // this is considered a 'rare' ngram
+    // a more sophisticated determination, taking account of dictionary,
+    // could be done.
+    return false;  
    }
   }
-  $dbg=false;
-  dbgprint($dbg,"validate: $word -> $ans ({$this->filein})\n");
-  return $ans; 
+  return true; 
  }
  public function validate_beg($word) {
   // is the FIRST of word found
   $ngrams = $this->generate($word);
-  $ans = true;
   foreach($ngrams as $ngram) {
    if (! isset($this->ngramdict[$ngram])) {
-    $ans = false;
+    return false;
    }
-   break;  // always break after the first
-   
+   if ($this->ngramdict[$ngram] <= $max) {
+    // this is considered a 'rare' ngram
+    // a more sophisticated determination, taking account of dictionary,
+    // could be done.
+    return false;  
+   }
+   break;  # just consider the FIRST ngram of $word
   }
-/*
-  $dbg=false;
-  if (substr($word,0,1) == 'F') {
-   $dbg = true;
-   dbgprint($dbg,"Ngram.validate_beg: $word -> $ans\n");
-  }
-*/
-  return $ans; 
+  return true; 
  }
 }
 

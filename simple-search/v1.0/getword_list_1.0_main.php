@@ -15,6 +15,7 @@
   08-17-2017. word_frequency now from ../wf0/wf.txt -- 
 */
 function getword_list_processone() {
+$ru0 = microtime(true);
 $dirpfx = "../../"; // apidev
 $dbg = false;
 //$dbg = true;
@@ -47,8 +48,17 @@ $keyparmin = $getParms->keyin;  // original
 dbgprint($dbg,"keyparmin=$keyparmin\n");
 // php function. Convert back to utf-8
 // This is done already in javascript list-0.2s_(xampp)_rw.php
-//$keyparmin1 = urldecode($keyparmin); 
+
+$ru1 = microtime(true); //getrusage();
+$utime = $ru1 - $ru0;
+dbgprint($dbg,"time before simple_search: $utime s\n");
+
 $ssobj = new Simple_Search($keyparmin,$dict);
+
+$ru2 = microtime(true);
+$utime = $ru2 - $ru1;
+dbgprint($dbg,"time used simple_search: $utime s\n");
+
 $keysin = $ssobj->normkeys;  // normalized slp1 spelling
 // 11-01-2017. user keyin, slp1, norm. So we can identify
 // whether the user's spelling is one of the results.
@@ -68,6 +78,8 @@ $ans['accent']=$getParms->accent;   // # yes or no  Not used otherwise
   - values of $key  (if $key does not occur in dictionary $dict).
 */
 $nkeysin = count($keysin);
+
+dbgprint($dbg,"getword_list_1.0_main back from simple_search\n");
 dbgprint($dbg,"$keyparmin has $nkeysin alternates\n");
 $result = [];  
 for($ikey=0;$ikey<count($keysin);$ikey++) {
@@ -83,7 +95,7 @@ for($ikey=0;$ikey<count($keysin);$ikey++) {
  $matches = $dalnorm->get1($key);
  $nmatches = count($matches);
  $dictheadwords = [];
- dbgprint($dbg,"for key=$key, nmatches1=$nmatches\n");
+ #dbgprint($dbg,"for key=$key, nmatches1=$nmatches\n");
  if ($nmatches > 0) {
   // We know that $key is the normalized spelling of a
   //  headword in SOME dictionary
@@ -93,11 +105,11 @@ for($ikey=0;$ikey<count($keysin);$ikey++) {
   // than 1 headword spelling (key1) (example: key1=vfti, vftti).
   # $nmatches is either 0 or 1 for this hwnorm1c database
   $i = 0;
-   #dbgprint(true,"$i\n");
+   
    $rec = $matches[$i]; //($m['key'],$m['data'])
    $parts = explode(';',$rec[1]);
    $dictup = strtoupper($dict);  // dictlist below are upper
-   dbgprint($dbg,"dictup=$dictup\n");
+   #dbgprint($dbg,"dictup=$dictup\n");
    foreach($parts as $part) {
     list($dictheadword0,$dictliststring) = explode(':',$part);
     dbgprint($dbg,"$dictheadword0  IS IN $dictliststring\n");
@@ -138,9 +150,15 @@ for($ikey=0;$ikey<count($keysin);$ikey++) {
   $result[] = $ans1;
  }
 }
+
 $result1a = order_by_wf($result,$wfreqs);
 $result1 = put_user_word_first($result1a);
 $ans['result']=$result1;
+
+$ru3 = microtime(true); //getrusage();
+$utime = $ru3 - $ru2;
+dbgprint($dbg,"time used gathering data: $utime s\n");
+
 return $ans;
 }  // end of getword_list_processone
 

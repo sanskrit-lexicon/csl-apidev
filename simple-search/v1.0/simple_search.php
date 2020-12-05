@@ -2,14 +2,15 @@
 /* 06-05-2017   
    08-03-2017. Generate grammar variants AFTER all other variants.
    10-12-2017. Revise based on changes to hwnorm1c. 
-               Also, revise ../ngram data
+               Also, revise ../ngram2 data
                Also, revise dalnorm.normalize_key
                Add 't,tt' transition rule.
+   12-04-2020  stop using ngram data
 */
 $dirpfx = "../../";
 require_once($dirpfx . "utilities/transcoder.php"); // initializes transcoder
 require_once($dirpfx . "dbgprint.php");
-require_once('ngram_check.php');
+//require_once('ngram_check.php');
 require_once('dalnorm.php');
 
 class Simple_Search{
@@ -38,14 +39,17 @@ class Simple_Search{
  public $keysin,$keys,$normkeys;
  public $searchdict;
  public $dbg;
- public $ngram2_check;
- public $ngram2beg_check;  // beginning 2-gram
- public $ngram3_check;
- public $ngram3beg_check;  // beginning 2-gram
+ #public $ngram2_check;
+ #public $ngram2beg_check;  // beginning 2-gram
+ #public $ngram3_check;
+ #public $ngram3beg_check;  // beginning 3-gram
+ #public $ngram4_check;
+# public $ngram4beg_check;  // beginning 4-gram  12-04-2020
  public $dict;  // 20170725
- public function __construct($keyin00,$dict) {
+ public $badprefs; // prefixes known to be non-valid for this search
+ public function __construct($keyin00,$dict) { 
   $this->dict = strtolower($dict);
-  $this->ngram_initialilze();
+  #$this->ngram_initialilze();
 
   # hwnorm1c copied from awork/sanhw1/ to ../hwnorm1/
   #$this->dalnorm = new Dalnorm('hwnorm1c','../../../sanhw1');
@@ -67,19 +71,39 @@ class Simple_Search{
   dbgprint($this->dbg,"Simple_construct: alternates=" . join(',',$alternates)."\n");
   // Generate variants for each of the HK alternates.
   //  The spelling of the alternates is in SLP1.
+
   foreach($alternates as $alt) {
    // First step is to convert alternate to slp1 spelling.
    $keyin = transcoder_processString($alt,"hk","slp1");
    dbgprint($this->dbg,"Simple_construct: BEGIN alt=$alt, keyin=$keyin\n");
    // Now, the main step, use transition table to generate variants
+   // keep track of unknown prefixes in $badprefs array
+   $this->badprefs = [];
    $this->doVariant("",$keyin);
   }
+
   // add grammar variants to searchdict. This may depend on dictionary.
+  if ($this->dbg) {
+   $a = [];
+   foreach($this->searchdict as $k=>$v) {$a[] = $k;}
+   $na = count($a);
+   $a1 = join(' ',$a);
+   dbgprint($this->dbg,"searchdict starts as $a1\n");
+  }
   foreach($this->searchdict as $k=>$v){
    $galts = $this->grammar_variants($k);
    foreach($galts as $keyina) {
+    // $galts starts with $k, and may have other variants
     //$this->searchdict[$keyina] = true;
     $this->searchdict_add($keyina);
+   }
+   if ($this->dbg) {
+    $na = count($galts);
+    if ($na > 1) {
+     $a = array_slice($galts,1);
+     $a1 = join(' ',$a);
+     #dbgprint($this->dbg,"$k has $na grammar variants $a1\n");
+    }
    }
   }
   // Linearize searchdict keys into keysin array
@@ -89,6 +113,13 @@ class Simple_Search{
   }
   // Generate distinct normalized keys
   $this->generate_normkeys();
+
+  if ($this->dbg) {
+   $a = $this->normkeys;
+   $na = count($a);
+   $a1 = join(' ',$a);
+   dbgprint($this->dbg,"$na normkeys = $a1\n");
+  }
   //$this->user_key_first($keyin0); // 11-01-2017. not used. see comment below
   // provide keyin_norm for user
   $this->user_keyin = transcoder_processString($keyin0,"hk","slp1");
@@ -161,7 +192,7 @@ class Simple_Search{
  public function doVariant($pref,$word) {
   /* This is the most important function of the class.
      Uses transitionTable to generate alternates to '$word', using the
-     given prefeix '$pref'.
+     given prefix '$pref'.
      Alternates are entered into the $this->searchdict associative array.
      It is a recursive routine, called externally with $pref as the
      empty string;  in this case $word goes into searchdict.
@@ -170,7 +201,7 @@ class Simple_Search{
      that occurs in transitionTable; this prefix is $varChar.
      When
   */
-  dbgprint($this->dbg,"doVariant: '$pref' + '$word'\n");
+  #dbgprint($this->dbg,"doVariant: '$pref' + '$word'\n");
   if (strlen($pref) == 0) {
    // This occurs only when doVariant is called externally.  Recursive
    // Calls have strlen($pref)>0.
@@ -178,9 +209,17 @@ class Simple_Search{
    $this->searchdict_add($word);
    dbgprint($this->dbg,"doVariant: (a) Add $word to searchdict\n");
   }
+  if (isset($this->badprefs[$pref])) {
+   // We know this prefix is bad
+   #dbgprint($this->dbg,"doVariant. $pref known to be bad\n");
+   return;
+  }
   if (!$this->ngramValidate($pref)) {
-   // '$pref' is not validated by ngrams, return with no further analysis
-   dbgprint($this->dbg,"doVariant:  non-valid ngram $pref\n");
+   // '$pref' is not validated , return with no further analysis
+   #dbgprint($this->dbg,"doVariant:  non-valid $pref\n");
+   // add $pref to the bad ones
+   $this->badprefs[$pref]=true;   # debug  to disregard badprefs
+   #dbgprint($this->dbg,"doVariant. Marking $pref as bad\n");
    return;
   }
   if (strlen($word) == 0) {
@@ -191,7 +230,7 @@ class Simple_Search{
    $this->searchdict_add($pref);
    return; // done
   }
-  // Find variants for the beinning of $word
+  // Find variants for the beginning of $word
   // $varCharsData is an array.
   // WHAT IF THERE ARE NO VARIANTS?? CAN THIS HAPPEN?
   $varCharsData = $this->getChar($word);
@@ -201,7 +240,7 @@ class Simple_Search{
      list($itransition,$varChar) = $temp;
      $tempstrs[] = "$itransition,$varChar";
     }
-   dbgprint($this->dbg,"doVariant: varChars=" . count($varCharsData) . "  " . join(' ; ',$tempstrs) . "\n");
+   #dbgprint($this->dbg,"doVariant: varChars=" . count($varCharsData) . "  " . join(' ; ',$tempstrs) . "\n");
   }
   if (count($varCharsData) == 0) {
    // e.g., if first character of word is 'e'
@@ -330,8 +369,8 @@ class Simple_Search{
   }
   return $ans;
  }
- public function ngram_initialilze(){
-  $ngramdir = "ngram1";
+ public function unused_ngram_initialilze(){
+  $ngramdir = "ngram2";
   #$dbg=true;
   #dbgprint($dbg,"Using ngramdirectory $ngramdir\n");
   $this->ngram2_check = new Ngram_Check(2,"../$ngramdir/2gram.txt");
@@ -339,28 +378,107 @@ class Simple_Search{
   // beginning ngrams
   $this->ngram2beg_check = new Ngram_Check(2,"../$ngramdir/2gram_beg.txt");
   $this->ngram3beg_check = new Ngram_Check(3,"../$ngramdir/3gram_beg.txt");
+  // 4-grams  25000+ too many?
+  $this->ngram4_check = new Ngram_Check(4,"../$ngramdir/4gram.txt");
+  $this->ngram4beg_check = new Ngram_Check(4,"../$ngramdir/4gram_beg.txt");
+
  }
 
  public function ngramValidate($word) {
+ /* don't use 4-grams for now
+   if (! $this->ngram4beg_check->validate_beg($word)) {
+    // $word has a bad initial 4gram. 
+    return false;
+   }
+  if (! $this->ngram4_check->validate($word)) {
+    // $word has a bad 4gram. 
+   return false;
+  }
+ */
+  /* also don't use 3-grams or 2-grams
+   if (! $this->ngram3beg_check->validate_beg($word)) {
+    // $word has a bad initial 3gram. 
+    return false;
+   }
+  if (! $this->ngram3_check->validate($word)) {
+    // $word has a bad 3gram. 
+   return false;
+  }
    if (! $this->ngram2beg_check->validate_beg($word)) {
-    // $word has a bad initial ngram. 
+    // $word has a bad initial 2gram. 
+    #dbgprint($this->dbg,"ngramValidate: bad initial 2gram for $word\n");
+    return false;
+   }
+   if (! $this->ngram2_check->validate($word)) {
+    // $word has a bad 2gram. 
+   return false;
+  }
+  if (strlen($word) < 4) {
+   // No problem found.  We've already checked for 2 and 3
+   return true;
+  }
+  */
+  
+  // see if anything in hwnorm1c starts with $word for this dictionary
+  // normalize
+  $norm = $this->dalnorm->normalize($word);
+  // no problem found
+  try {
+   $sql1 = "PRAGMA case_sensitive_like = 1;";
+   $file_db = $this->dalnorm->file_db;
+   $file_db->exec($sql1);
+  } catch (PDOException $e) {
+   #dbgprint($this->dbg,"SQLITE ERROR: $e\n");
+   return true;
+  }
+  #dbgprint($this->dbg,"PRAMGA executed\n");
+  try {
+   $sql = "SELECT * from hwnorm1c where key LIKE '$word%' LIMIT 1;";
+   $matches = $this->dalnorm->get($sql);
+   $nmatches = count($matches);
+   #dbgprint($this->dbg,"$nmatches headwords start with $word\n");
+   if ($nmatches == 0) {
+    return false;
+   } else {
+    return true;
+   }
+  }  catch (Exception $e) {
+   #dbgprint($this->dbg,"SQLITE ERROR get: $e\n");
+   return true;
+  }
+
+ }
+
+public function version1_ngramValidate($word) {
+   if (! $this->ngram2beg_check->validate_beg($word)) {
+    // $word has a bad initial 2gram. 
+    dbgprint($this->dbg,"ngramValidate: bad initial 2gram for $word\n");
     return false;
    }
    if (! $this->ngram3beg_check->validate_beg($word)) {
-    // $word has a bad initial ngram. 
+    // $word has a bad initial 3gram. 
     return false;
    }
-  if (! $this->ngram2_check->validate($word)) {
+   if (! $this->ngram4beg_check->validate_beg($word)) {
+    // $word has a bad initial 4gram. 
+    return false;
+   }
+   if (! $this->ngram2_check->validate($word)) {
     // $word has a bad 2gram. 
    return false;
   }
   if (! $this->ngram3_check->validate($word)) {
-    // $word has a bad 2gram. 
+    // $word has a bad 3gram. 
+   return false;
+  }
+  if (! $this->ngram4_check->validate($word)) {
+    // $word has a bad 4gram. 
    return false;
   }
   // No problem found.
   return true;
  }
+
  public function convert_nonascii($wordin) {
  // Devanagari and IAST to HK
  if (preg_match('/^[a-zA-Z]+$/',$wordin)) {
