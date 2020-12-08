@@ -14,10 +14,10 @@
         using values from php $_REQUEST global. Generates no stdout output
   08-17-2017. word_frequency now from ../wf0/wf.txt -- 
 */
+require_once('get_parent_dirpfx.php');
 function getword_list_processone() {
 $ru0 = microtime(true);
-$dirpfx = "../../"; // apidev
-$dbg = false;
+$dirpfx = get_parent_dirpfx("simple-search");
 //$dbg = true;
 require_once($dirpfx . "utilities/transcoder.php"); // initializes transcoder
 require_once($dirpfx . "dal.php");  
@@ -38,7 +38,10 @@ dbgprint($dbg,"getword_list_1.0.php: dict=$dict\n");
 $dal = new Dal($dict);
 // WARNING: the relative path to sanhw1 is sensitive to location of
 //   this file.
-$dalnorm = new Dalnorm('hwnorm1c','../hwnorm1');
+#$dalnorm = new Dalnorm('hwnorm1c','../hwnorm1');
+$dirpfx = get_parent_dirpfx("simple-search");
+$hwnorm1 = $dirpfx . "simple-search/hwnorm1";
+$dalnorm = new Dalnorm('hwnorm1c',$hwnorm1);
 // Ordering of results depends on a word frequency file.
 $wfreqs = init_word_frequency();
 
@@ -166,7 +169,9 @@ function init_word_frequency() {
  # word_frequency_adj.txt removes duplicates from word_frequency.txt
  # see readme.org in ../v0.1
  #$filein = "../v0.1/word_frequency_adj.txt";
- $filein = "../wf0/wf.txt";  // 08-17-2017
+ #$filein = "../wf0/wf.txt";  // 08-17-2017
+ $dirpfx = get_parent_dirpfx("simple-search");
+ $filein = $dirpfx . "simple-search/wf0/wf.txt";
  $lines = file($filein,FILE_IGNORE_NEW_LINES);
  $ans = array();
  $nans = 0;

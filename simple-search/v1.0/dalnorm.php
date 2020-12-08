@@ -3,7 +3,8 @@
   Oct 12, 2017 Revised in agreement with changes to hwnorm1c.py
   Oct 23, 2017 Revised in agreement with changes to hwnorm1c.py: 'C' words
 */
-$dirpfx = "../../";
+require_once('get_parent_dirpfx.php');
+$dirpfx = get_parent_dirpfx("simple-search");
 require_once($dirpfx . "dbgprint.php");
 
 class Dalnorm {
@@ -23,6 +24,7 @@ class Dalnorm {
    $this->status=true;
   } catch (PDOException $e) {
    $this->file_db = null;
+   dbgprint(true,"dalnorm ERROR. Cannot open sqlitefile {$this->sqlitefile}\n");
    #echo "PDO exception=".$e."<br/>\n";
    #echo "<p>Dal ERROR. Cannot open sqlitefile for dictionary $dict </p>\n";
    $this->status=false;
