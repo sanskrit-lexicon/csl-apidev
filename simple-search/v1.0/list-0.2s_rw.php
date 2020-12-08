@@ -59,7 +59,7 @@ for($i=0;$i<count($keys);$i++) {
 <html>
 <head>
 <META charset="UTF-8">
-<title>list-0.2s Cologne</title>
+<title>Sanskrit simple search</title>
 <!-- ref=https://www.w3.org/TR/html4/struct/links.html#edef-BASE -->
 <BASE href="/scans/awork/apidev/simple-search/v1.0/list-0.2s_rw.php">
 
