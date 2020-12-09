@@ -9,6 +9,7 @@ error_reporting(E_ALL & ~E_NOTICE);
 $uri = $_SERVER['REQUEST_URI'];  
 //echo("uri = $uri<br/>\n");
 // delete up through /simple/
+if (preg_match('|/simple$|',$uri)) {$uri = ($uri . "/");}
 $url = preg_replace('|^.*?/simple/|','',$uri);
 $url_parts = explode("/",$url);
 // assume parameters are:  dict, key,output,accent(optional, default=no)
