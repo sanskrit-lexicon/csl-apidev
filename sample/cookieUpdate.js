@@ -23,7 +23,16 @@ CologneDisplays.dictionaries.cookieUpdate = function(flag) {
   cookieName=cookieNames[i];
   domid=domids[i];
   cookieValue = $.cookie(cookieName); // old value of cookie
-  if(! cookieValue) { // cookie not defined. 
+  /*
+  if (i == 2) {
+   console.log(cookieName,domid,cookieValue,typeof(cookieValue),(! cookieValue),
+      (cookieValue === 'null'));
+  }
+  */
+  // When not defined, cookieValue seems to be string 'null', not
+  // JS object null.  12-10-2020
+  //if(! cookieValue) {  
+  if((cookieValue === 'null')|| (cookieValue === null)) {  
    cookieValue= cookieDefaultValues[i]; // Use default value
    $.cookie(cookieName,cookieValue,cookieOptions); // and set cook
   }
