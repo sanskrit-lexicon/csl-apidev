@@ -2,7 +2,10 @@
  /* This is file list-0.2s_rw.php.  ('rw' = rewrite)
   Allows /simple/ urls to be parsed.
   See .htaccess in root directory.
+  12-010-2020:  Use '$dictinfowhich' to detect whether we are
+  running in 'cologne' file system or 'xampp' file system.
  */
+require_once('dictinfowhich.php'); // exposes $dictinfowhich
 // Report all errors except E_NOTICE  (also E_WARNING?)
 error_reporting(E_ALL & ~E_NOTICE);
 // uri: uri = /cologne/simple/mw/devi/simple/deva/no
@@ -62,8 +65,13 @@ for($i=0;$i<count($keys);$i++) {
 <META charset="UTF-8">
 <title>Sanskrit simple search</title>
 <!-- ref=https://www.w3.org/TR/html4/struct/links.html#edef-BASE -->
-<BASE href="/scans/awork/apidev/simple-search/v1.0/list-0.2s_rw.php">
-
+<?php 
+ if ($dictinfowhich == "cologne") {
+  echo '<BASE href="/scans/awork/apidev/simple-search/v1.0/list-0.2s_rw.php">' . "\n";
+ }else {
+  echo '<BASE href="http://localhost/cologne/csl-apidev/simple-search/v1.0/list-0.2s_xampp.php">' . "\n";
+ }
+?>
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.css">
 <!-- links to jquery, using CDNs -->
 <script type="text/javascript" src="//code.jquery.com/jquery-2.1.4.min.js"></script>
@@ -488,8 +496,14 @@ changeActions();  // initialize now that #dict, etc are set.
 </head>
 <body>
  <div id="logo">
-     <a href="/">
-      <img id="unilogo" src="/images/cologne_univ_seal.gif"
+<?php
+ if ($dictinfowhich == "cologne") {
+     echo '<a href="/">' . "\n";
+ } else { // xampp.  go back to Cologne
+     echo '<a href="//sanskrit-lexicon.uni-koeln.de/">' . "\n";
+ }
+?>
+      <img id="unilogo" src="//sanskrit-lexicon.uni-koeln.de/images/cologne_univ_seal.gif"
            alt="University of Cologne" width="60" height="60" 
            title="Cologne Sanskrit Lexicon"/>
       </a>
@@ -550,6 +564,10 @@ changeActions();  // initialize now that #dict, etc are set.
    <p>Your browser does not support iframes.</p>
   </iframe>
  </div>
-<script src="/js/piwik_analytics.js"></script> 
+<?php
+if ($dictinfowhich == "cologne") {
+ echo '<script src="/js/piwik_analytics.js"></script>' . "\n";
+}
+?>
 </body>
 </html>
