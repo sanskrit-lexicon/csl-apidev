@@ -17,6 +17,8 @@
 require_once('get_parent_dirpfx.php');
 function getword_list_processone() {
 $ru0 = microtime(true);
+// $dirpfx is assumed to be the 'csl-apidev' directory.
+// We make use of several functions in csl-apidev.
 $dirpfx = get_parent_dirpfx("simple-search");
 //$dbg = true;
 require_once($dirpfx . "utilities/transcoder.php"); // initializes transcoder
@@ -125,6 +127,7 @@ for($ikey=0;$ikey<count($keysin);$ikey++) {
    }
 
  }
+  dbgprint(true,"getword_list_1.0_main: input = {$ans['input']}, output = {$ans['output']}\n");
 
  foreach($dictheadwords as $dictheadword) {
   // This loop doesn't execute unless $nmatches>0.
