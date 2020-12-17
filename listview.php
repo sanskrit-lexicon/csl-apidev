@@ -59,7 +59,8 @@ error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
 
 <script type="text/javascript">
   $(window).load(function() {
-  var correctionsUrl = 'https://www.sanskrit-lexicon.uni-koeln.de/php/correction_form_response.php';
+  //var correctionsUrl = 'https://www.sanskrit-lexicon.uni-koeln.de/php/correction_form_response.php';
+  var correctionsUrl = 'https://www.sanskrit-lexicon.uni-koeln.de/scans/csl-corrections/app/correction_form_response.php';
   <?php 
    require_once("parm.php");
    $getParms = new Parm();
