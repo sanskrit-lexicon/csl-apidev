@@ -9,8 +9,8 @@ import sys
 #import sqlite3
 import json
 import re
-#from indic_transliteration import sanscript
-#import xml.etree.ElementTree as ET
+from indic_transliteration import sanscript
+import xml.etree.ElementTree as ET
 from flask import Flask, jsonify
 from flask_restplus import Api, Resource, reqparse
 from flask_cors import CORS
