@@ -166,5 +166,3 @@ public function get_cologne_pdfpages_url() {
 
 }
 ?>
-
-
