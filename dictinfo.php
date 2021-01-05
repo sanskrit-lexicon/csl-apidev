@@ -75,8 +75,18 @@ class DictInfo {
    $path = "$dirpfx" . "csl-apidev/../{$this->dict}/web";
    dbgprint($dbg,"dictinfo.get_webPath. 1 path = $path\n");
   }else {
-   // assume ($dictinfowhich == "cologne")
-   $path =  "../../{$this->dictupper}Scan/{$this->year}/web";
+   /* assume ($dictinfowhich == "cologne")
+   Example.  csl-apidev at Cologne is a sibling of MWScan
+   Currently (01-05-2021) csl-apidev is a symlink.
+   The 'real' name of this is awork/apidev
+   */
+   #$dirpfx = $this->get_parent_dirpfx("csl-apidev"); # ends in /
+   #$dirpfx = $this->get_parent_dirpfx("awork"); # ends in /.  doesn't work
+   $dirpfx = $this->get_parent_dirpfx("apidev"); # ends in /.  symlink doesn't work
+   # dirpfx now is path to awork  (it is a path string that ends in `awork/`)
+   $path = $dirpfx . "../". "{$this->dictupper}Scan/{$this->year}/web";
+   dbgprint($dbg,"dictinfo. dirpfx = $dirpfx\n");
+   dbgprint($dbg,"dictinfo.get_webPath Cologne. 1 path = $path\n");
   }
   return $path;
  }
