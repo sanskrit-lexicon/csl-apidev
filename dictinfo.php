@@ -64,20 +64,37 @@ class DictInfo {
   $dbg=false;
   dbgprint($dbg,"dictinfo.get_webPath: dictinfowhich=$dictinfowhich\n");
   if ($dictinfowhich == "xampp") {
-   /* 04-17-2018  reconstruct for XAMPP 
+   /* 01-05-2021  reconstruct for XAMPP 
     This makes an assumption regarding location of the directory of this
     file, namely that it is a sibling of the dictionary directories.
+    Example. Dict = mw.
+    We assume csl-apidev directory is a sibling of mw.
+    and that path to web directory is mw/web
    */
-   $path =  "../{$this->dict}/web";
+   $dirpfx = $this->get_parent_dirpfx("csl-apidev"); # ends in /
+   $path = "$dirpfx" . "csl-apidev/../{$this->dict}/web";
    dbgprint($dbg,"dictinfo.get_webPath. 1 path = $path\n");
-   $path = realpath($path); 
-   dbgprint($dbg,"dictinfo.get_webPath. 2 path = $path\n");
   }else {
    // assume ($dictinfowhich == "cologne")
    $path =  "../../{$this->dictupper}Scan/{$this->year}/web";
   }
   return $path;
  }
+ public function get_parent_dirpfx($base) {
+  $dirpfx = "../../"; // apidev  Not portable
+  #$ds = DIRECTORY_SEPARATOR;
+  for($i=1;$i<10;$i++) {
+   $d = dirname(__FILE__,$i);
+   $b = basename($d);
+   if ($b == $base) {
+    $d = dirname(__FILE__,$i+1);
+    $dirpfx = "$d/";
+    break;
+   }
+  }
+  return $dirpfx;
+ }
+
  public function get_pdfpages_url() {
   /* Assume this method called only from servepdf, which is in web/webtc folder
   */

@@ -218,7 +218,7 @@ class Dal {
 
  public function get3a($key,$max) {
   // returns an array of records, which start like $key
-  // Setting a pragma must for case_sensitive
+  // Setting a pragma for case_sensitive
   $dbg=False;
   if ($this->keydoc_db != null) {
    dbgprint($dbg,"get3a: using get3a_keydoc\n");
