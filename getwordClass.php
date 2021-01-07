@@ -10,13 +10,15 @@ require_once('dispitem.php');
 
 class GetwordClass {
  public $getParms,$matches,$table1,$status,$basicOption;
+ public $xmlmatches;
  public function __construct() {
   $this->getParms = new Parm();
   $this->basicOption = $this->getParms->basicOption;
   $temp = new Getword_data();
   $this->matches = $temp->matches; 
   $this->table1 = $this->getword_html();
-  $nxml = count($xmlmatches);
+  $this->xmlmatches = $temp->xmlmatches;
+  $nxml = count($this->xmlmatches);
   if ($nxml == 0) {
    $this->status = false;
   }else {

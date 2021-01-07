@@ -21,7 +21,7 @@ class DictInfo {
  //static public $scanpath = preg_replace('|/awork/apidev|','',__DIR__);
  #public $scanpath;
  #public $scanpath_server;
- public $dict;
+ public $dict,$dictstatus,$dicterr;
  public $dictupper;
  public $year;  
  public $english;
@@ -35,6 +35,13 @@ class DictInfo {
   #$this->scanpath = $this->scanpath_server; //"../..";
   $this->dict=strtolower($dict);
   $this->dictupper=strtoupper($dict);
+  if (! isset(self::$dictyear[$this->dictupper])) {
+   $this->dictstatus = 404;
+   $this->dicterr = "Unknown dictionary code: $dict";
+  }else {
+   $this->dictstatus = 200;
+   $this->dicterr = "";
+  }
   if ((isset($_REQUEST['version'])) &&($_REQUEST['version'] == '1')) {
    // older version -- 2014 or 2013
    $this->year = self::$dictyear[$this->dictupper];

@@ -20,7 +20,7 @@
   key      from keyin1 
   basicOption Set to False, for apidev display. (GetwordClass)
   lnumin, direction  Computed upon request by listhierParm method
- 
+  status   200 or 404.
 */
 require_once('utilities/transcoder.php'); // initializes transcoder
 require_once('dictinfo.php');
@@ -31,6 +31,7 @@ class Parm {
  public $dictinfo,$english;
  public $keyin1,$key;
  public function __construct() {
+  $this->status = 200;  // assume all is ok.
   $this->basicOption = false;
   $dbg=false;
   dbgprint($dbg,"enter parm construct\n");
@@ -58,7 +59,11 @@ class Parm {
   $this->dictinfo = new DictInfo($this->dict);
   $this->english = $this->dictinfo->english;
   list($this->keyin,$this->keyin1,$this->key) = $this->compute_text($_REQUEST['key']);
-  
+  // check for validity of 'dict'
+  #if (! isset($this->dictinfo->dictyear[$this->dictinfo->dictupper])) {
+  if ($this->dictinfo->dictstatus != 200) {
+   $this->status = 404; // error
+  }
   $this->compute_dispcss(); 
 
   dbgprint($dbg,"parm construct keyin = {$this->keyin}\n");
