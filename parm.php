@@ -30,6 +30,8 @@ class Parm {
  public $filter,$filterin;
  public $dictinfo,$english;
  public $keyin1,$key;
+ public $status,$errorinfo;
+ public $getsuggestTerm;
  public function __construct() {
   $this->status = 200;  // assume all is ok.
   $this->basicOption = false;
@@ -63,6 +65,7 @@ class Parm {
   #if (! isset($this->dictinfo->dictyear[$this->dictinfo->dictupper])) {
   if ($this->dictinfo->dictstatus != 200) {
    $this->status = 404; // error
+   $this->errorinfo = "ERROR: " . $this->dictinfo->dicterr;
   }
   $this->compute_dispcss(); 
 
@@ -73,7 +76,13 @@ class Parm {
  }
 
  public function getsuggestParms() {
-  return $this->compute_text($_REQUEST['term']);
+  if (! isset($_REQUEST['term'])) {
+   $this->getsuggestTerm = '';
+  } else {
+   $this->getsuggestTerm = $_REQUEST['term'];
+  }
+  $term = $this->getsuggestTerm;
+  return $this->compute_text($term);
  }
 
  public function servepdfParms() {

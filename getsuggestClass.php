@@ -52,8 +52,11 @@ class GetsuggestClass {
    dbgprint($dbg,"getsuggestClass. call dal_get3a: $key, $maxlike\n");
    $results1 = $dal->get3a($key,$maxlike); 
    dbgprint($dbg,"dal_get3a: $key, $maxlike, nresults1=".count($results1)."\n");
-   #$results2 = $dal->get1($key); // include exact matches, if any
+   /* Including results2 gives some keys NOT matching the '$key'
    $results2 = $dal->get1_mwalt($key); // include exact matches, if any
+   Later, we can remove more code. For now, just set results2 to empty array
+   */
+   $results2 = array();
    dbgprint($dbg,"dal_get1: $key, nresults2=".count($results2)."\n");
    $results=array();
    foreach($results1 as $result){

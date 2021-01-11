@@ -256,6 +256,42 @@ class Dal {
   return $this->get($sql);
  }
 
+ public function get3c($key,$max) {
+ /*
+ returns an array of records, where 'key' is like $key
+ The wildcards for sqlite are: 
+   (ref=https://www.sqlitetutorial.net/sqlite-like/)
+ The percent sign % wildcard matches any sequence of zero or more characters.
+ The underscore _ wildcard matches any single character.
+ Setting a pragma for case_sensitive
+ get3c differs from get3a by:
+   select distinct key
+*/
+  $pragma="PRAGMA case_sensitive_like=true;";
+  $this->file_db->query($pragma);
+  # $sql = " select distinct key from {$this->dict} where key LIKE '$key%' order by lnum LIMIT $max";
+  $sql = " select distinct key from {$this->dict} where key LIKE '$key%' LIMIT $max";
+  return $this->get3c_helper($sql);
+ }
+ public function get3c_helper($sql) {
+  $ansarr = array();
+  if (!$this->file_db) {
+   //"file_db is null for $this->sqlitefile.
+   return $ansarr;
+  }
+  $result = $this->file_db->query($sql);
+  if ($result == false) {
+   return $ansarr;
+  }
+
+  foreach($result as $m) {
+   #$rec = array($m['key'],$m['lnum'],$m['data']);
+   $ansarr[]=$m['key'];
+  }
+  return $ansarr; 
+
+ }
+
  public function get4a($lnum0,$max) {
   //  Used in listhier
   // in mw, with L=99930.1, $lnum0 appears as if L=99930.1000000001
