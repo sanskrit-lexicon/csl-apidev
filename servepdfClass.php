@@ -47,6 +47,7 @@ class ServepdfClass {
    $pageinfo = array('page'=>$page, 'key' => '', 'lnum' => '');
    $pdffiles_filename = $this->get_pdffiles_filename($dictinfo);
    $lines = file($pdffiles_filename);
+   $dictupper = $dictinfo->dictupper;
    $imageFiles = $this->getImagefiles($lines,$page,$dictupper);
    list($status,$filename,$pageprev,$pagenext)=$imageFiles;
    if (!$status) {
@@ -110,6 +111,7 @@ EOF;
 
   $pdffiles_filename = $this->get_pdffiles_filename($dictinfo);
   $lines = file($pdffiles_filename);
+  $dictupper = $dictinfo->dictupper;
   $imageFiles = $this->getImagefiles($lines,$page,$dictupper);
   list($status,$filename,$pageprev,$pagenext)=$imageFiles;
 
@@ -238,6 +240,7 @@ HTML;
    $pagestr = "$pagenum";
    $ncur = $pagehash[$pagestr];
   }
+  
   if ((!$ncur) && ($dictupper == 'PWG')) {
    $lnum = $pagestr_in;
    list($vol,$page) =  preg_split('/[,-]/',$lnum);
