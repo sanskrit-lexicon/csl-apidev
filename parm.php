@@ -50,7 +50,16 @@ class Parm {
   $this->dict = $_REQUEST['dict'];
   // some places expect dict to be lower case.
   $this->dict = strtolower($this->dict);
-  $this->accent = $_REQUEST['accent']; 
+  if (isset($_REQUEST['accent'])) {
+   $accent = $_REQUEST['accent'];
+  }else{
+   $accent = '';
+  }
+  $accent = strtolower($accent);
+  if ($accent != 'yes') {
+   $accent = 'no';
+  }
+  $this->accent = $accent;
 
   if(!$this->accent) {$this->accent="no";}
 
