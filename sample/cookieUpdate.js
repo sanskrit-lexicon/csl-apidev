@@ -8,31 +8,35 @@ CologneDisplays.dictionaries.cookieUpdate = function(flag) {
  var domids = ['#input','#output','#accent','#dict'];
  var cookieOptions = {expires: 365, path:'/'}; // 365 days
  var i,cookieName,cookieValue,domid;
+ var cookieDefaultValues = ['hk','deva','no','mw'];
  if (flag) { // set values of cookies acc. to 'value' of corresponding ids
   for(i=0;i<cookieNames.length;i++) {
    cookieName=cookieNames[i];
    domid=domids[i];
    cookieValue=$(domid).val();
+   //console.log('cookieUpdate: ',cookieName,domid,cookieValue);
+   if((cookieValue === 'null')|| (cookieValue === null) || (cookieValue === '')) {  
+    cookieValue= cookieDefaultValues[i]; // Use default value
+    $.cookie(cookieName,cookieValue,cookieOptions); // and set cook
+    $(domid).val(cookieValue);
+    //console.log('Reseting cookie:',cookieName,domid,cookieValue);
+   } else {
+   // set dom value
    $.cookie(cookieName,cookieValue,cookieOptions);
+   }
   }
   return;
  }
  // When flag is false. For initializing (a) cookies, and (b) dom values
- var cookieDefaultValues = ['hk','deva','no','mw'];
  for(i=0;i<cookieNames.length;i++) {
   cookieName=cookieNames[i];
   domid=domids[i];
   cookieValue = $.cookie(cookieName); // old value of cookie
-  /*
-  if (i == 2) {
-   console.log(cookieName,domid,cookieValue,typeof(cookieValue),(! cookieValue),
-      (cookieValue === 'null'));
-  }
-  */
+  
   // When not defined, cookieValue seems to be string 'null', not
   // JS object null.  12-10-2020
   //if(! cookieValue) {  
-  if((cookieValue === 'null')|| (cookieValue === null)) {  
+  if((cookieValue === 'null')|| (cookieValue === null) || (cookieValue === '')) {  
    cookieValue= cookieDefaultValues[i]; // Use default value
    $.cookie(cookieName,cookieValue,cookieOptions); // and set cook
   }
