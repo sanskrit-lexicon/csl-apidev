@@ -74,14 +74,14 @@ for($i=0;$i<count($keys);$i++) {
 <html>
 <head>
 <META charset="UTF-8">
-<title>Sanskrit simple search</title>
+<title>Sanskrit simple search t</title>
 <!-- ref=https://www.w3.org/TR/html4/struct/links.html#edef-BASE -->
 <?php 
 /* remove 01/21/20201 */
  if ($dictinfowhich == "cologne") {
-  echo '<BASE href="/scans/awork/apidev/simple-search/' . $version . '/list-0.2s_rw.php">' . "\n";
+  echo '<BASE href="/scans/csl-apidev/simple-search/' . $version . '/">' . "\n";
  }else {
-  echo '<BASE href="http://localhost/cologne/csl-apidev/simple-search/' . $version . '/list-0.2s_xampp.php">' . "\n";
+  echo '<BASE href="http://localhost/cologne/csl-apidev/simple-search/' . $version . '/">' . "\n";
  }
 
   
