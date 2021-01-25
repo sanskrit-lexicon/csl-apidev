@@ -22,7 +22,8 @@ class Simple_Search{
    ["a","A"],
    ["i","I"],
    ["u","U"],
-   ["r","f","F","ri","ar","ru","rI"],
+   #["r","f","F","ri","ar","ru","rI"],
+   ["r","f","F","ri","ar","ru","rI","R","RI"],
    ["l","x","X","lri",],
    ["h","H"],
    #["M","n","R","Y","N","m"], # 01-24-2021.  replaced by below
@@ -36,7 +37,8 @@ class Simple_Search{
    ["j","J"],
    ["w","W","t","T"],
    ["q","Q","d","D"],
-   ["p","P","f"],
+   #["p","P","f"],
+   ["p","P","f","b","B"],
    ["b","B","v","V"],
    ["t","tt"]
 ];
@@ -54,7 +56,7 @@ class Simple_Search{
   or slp1, deva, iast,hk,itrans
  */
  public function __construct($keyin00,$input00,$dict) {
-  $this->dbg = false; 
+  $this->dbg = false;
   dbgprint($this->dbg,"simple_search: construct: $keyin00, $input00, $dict\n");
   $this->input_simple = $input00;
   $this->dict = strtolower($dict);
@@ -330,23 +332,31 @@ class Simple_Search{
    foreach ($ans1 as $a1) {
     $ans[] = $a1;
    }
-   return $ans;
+   #return $ans;
   } 
   // Word now ends in a vowel.
   if (preg_match('|[iu]$|',$word)) {
    // 2. word ends in i,u:  add alternate m and H  (nom. sing.)
    $ans[] = $word . 'H';
    $ans[] = $word . 'm';
-   return $ans;
+  }
+  if (preg_match('|[iI]$|',$word)) {
+   // 2. word ends in 
+   $ans[] = substr($word,0,-1) . 'in';
+  }
+  if (preg_match('|i[Rn]I$|',$word)) {
+   // 2. word ends in 
+   $word1 = substr($word,0,-3) . 'in';
+   #dbgprint(true,"dbg: $word -> $word1\n");
+   $ans[] = substr($word,0,-3) . 'in';
   }
   
   // Word now ends in a vowel other than i,u
   if (preg_match('|a$|',$word)) {
    // 2. word ending in 'a'.  Think 'karma' -> 'karman'
    $ans[] = $word . 'n';
-   return $ans;
   }
-  return $ans; ## debug.
+  
   # do skd nom. sing. variants 
   $ans1 = $this->grammar_variants_skd($word);
   foreach ($ans1 as $a1) {
