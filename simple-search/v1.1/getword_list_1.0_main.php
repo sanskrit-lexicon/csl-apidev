@@ -16,11 +16,12 @@
 */
 require_once('get_parent_dirpfx.php');
 function getword_list_processone() {
+/* this is the function called by getword_list_1.0.php */
 $ru0 = microtime(true);
 // $dirpfx is assumed to be the 'csl-apidev' directory.
 // We make use of several functions in csl-apidev.
 $dirpfx = get_parent_dirpfx("simple-search");
-//$dbg = true;
+$dbg = false; #true;
 require_once($dirpfx . "utilities/transcoder.php"); // initializes transcoder
 require_once($dirpfx . "dal.php");  
 require_once($dirpfx . 'dbgprint.php');
@@ -40,7 +41,6 @@ dbgprint($dbg,"getword_list_1.0.php: dict=$dict\n");
 $dal = new Dal($dict);
 // WARNING: the relative path to sanhw1 is sensitive to location of
 //   this file.
-#$dalnorm = new Dalnorm('hwnorm1c','../hwnorm1');
 $dirpfx = get_parent_dirpfx("simple-search");
 $hwnorm1 = $dirpfx . "simple-search/hwnorm1";
 $dalnorm = new Dalnorm('hwnorm1c',$hwnorm1);
@@ -50,7 +50,9 @@ $wfreqs = init_word_frequency();
 // keyparmin is the key input. It is what the user requested.
 // Assumed to be in utf-8 encoding
 $keyparmin = $getParms->keyin;  // original
-dbgprint($dbg,"keyparmin=$keyparmin\n");
+$inputparmin = $_REQUEST['input']; // $getParms->filterin; NO
+//dbgprint(true,"getword_list_1.0_main: input_simple = $inputparmin, keyparmin=$keyparmin\n");
+
 // php function. Convert back to utf-8
 // This is done already in javascript list-0.2s_(xampp)_rw.php
 
@@ -58,7 +60,7 @@ $ru1 = microtime(true); //getrusage();
 $utime = $ru1 - $ru0;
 dbgprint($dbg,"time before simple_search: $utime s\n");
 
-$ssobj = new Simple_Search($keyparmin,$dict);
+$ssobj = new Simple_Search($keyparmin,$inputparmin,$dict);
 
 $ru2 = microtime(true);
 $utime = $ru2 - $ru1;
@@ -83,7 +85,7 @@ $ans['accent']=$getParms->accent;   // # yes or no  Not used otherwise
   - values of $key  (if $key does not occur in dictionary $dict).
 */
 $nkeysin = count($keysin);
-
+#dbgprint(true,"getword_list_1.0_main: $nkeysin results from simple search\n");
 dbgprint($dbg,"getword_list_1.0_main back from simple_search\n");
 dbgprint($dbg,"$keyparmin has $nkeysin alternates\n");
 $result = [];  
@@ -127,7 +129,7 @@ for($ikey=0;$ikey<count($keysin);$ikey++) {
    }
 
  }
-  dbgprint(true,"getword_list_1.0_main: input = {$ans['input']}, output = {$ans['output']}\n");
+  //dbgprint(true,"getword_list_1.0_main: input = {$ans['input']}, output = {$ans['output']}\n");
 
  foreach($dictheadwords as $dictheadword) {
   // This loop doesn't execute unless $nmatches>0.
@@ -156,7 +158,7 @@ for($ikey=0;$ikey<count($keysin);$ikey++) {
   $result[] = $ans1;
  }
 }
-
+#dbgprint(true,"getword_list_1.0_main: #result=" . count($result) . "\n");
 $result1a = order_by_wf($result,$wfreqs);
 $result1 = put_user_word_first($result1a);
 $ans['result']=$result1;

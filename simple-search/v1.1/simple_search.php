@@ -5,12 +5,15 @@
                Also, revise ../ngram data
                Also, revise dalnorm.normalize_key
                Add 't,tt' transition rule.
+called by getword_list_1.0_main.php, which uses public variables
+user_keyin
+user_keyin_norm
+normkeys
 */
 require_once('get_parent_dirpfx.php');
 $dirpfx = get_parent_dirpfx("simple-search");
 require_once($dirpfx . "utilities/transcoder.php"); // initializes transcoder
 require_once($dirpfx . "dbgprint.php");
-#require_once('ngram_check.php');
 require_once('dalnorm.php');
 
 class Simple_Search{
@@ -22,13 +25,14 @@ class Simple_Search{
    ["r","f","F","ri","ar","ru","rI"],
    ["l","x","X","lri",],
    ["h","H"],
-   ["M","n","R","Y","N","m"],
+   #["M","n","R","Y","N","m"], # 01-24-2021.  replaced by below
+   ["n","R","Y","N"],  
    ["S","z","s","zh","sh"],
    ["b","v"],
    ["k","K"],
    ["g","G"],
-   #["c","C","Ch","ch"],
-   ["c","C","cC"],
+   ["c","C","Ch","ch","cC"],
+   #["c","C","cC"],
    ["j","J"],
    ["w","W","t","T"],
    ["q","Q","d","D"],
@@ -37,7 +41,7 @@ class Simple_Search{
    ["t","tt"]
 ];
  public $keysin,$keys,$normkeys;
- public $searchdict;
+ public $searchdict,$input_simple;
  public $dbg;
  #public $ngram2_check;
  #public $ngram2beg_check;  // beginning 2-gram
@@ -45,49 +49,56 @@ class Simple_Search{
  #public $ngram3beg_check;  // beginning 2-gram
  public $dict;  // 20170725
  public $badprefs; // prefixes known to be non-valid for this search
- public function __construct($keyin00,$dict) {
+ /* input00 is the 'input_simple' from list-0.2s_rw.php.  It is the
+  spelling assumption of $keyin00.  The values can be 'default' or
+  or slp1, deva, iast,hk,itrans
+ */
+ public function __construct($keyin00,$input00,$dict) {
+  $this->dbg = false; #true; 
+  dbgprint($this->dbg,"simple_search: construct:,$keyin00, $input00, $dict\n");
+  $this->input_simple = $input00;
   $this->dict = strtolower($dict);
-  #$this->ngram_initialilze();
 
   # hwnorm1c copied from awork/sanhw1/ to ../hwnorm1/
   $dirpfx = get_parent_dirpfx("simple-search");
   $hwnorm1 = $dirpfx . "simple-search/hwnorm1";
   $this->dalnorm = new Dalnorm('hwnorm1c',$hwnorm1);
-  $this->dbg = false;
-  #$this->dbg = true;
-  dbgprint($this->dbg,"Simple_construct: keyin00 = $keyin00\n");
   // searchdict is associative array which is modified by doVariant
   //  It's keys are the different variants
   $this->searchdict = array();
   $keyin0 = $this->convert_nonascii($keyin00);
   dbgprint($this->dbg,"Simple_construct: keyin0 = $keyin0\n");
-  // $keyin0 is assumed to generally follow HK spelling. However,
-  // the 'generate_hkalternates' makes certain 'correction' or adjustments
-  // to this spelling.
-  $alternates = $this->generate_hkalternates($keyin0);
+  $alternates0 = [$keyin0];
+  $normkey = $this->dalnorm->normalize($keyin0);
+  if (!in_array($normkey,$alternates0)) {
+   $alternates0[] = $normkey;
+  }
   // Add alternates by removing certain last letters
-  $alternates = $this->generate_alternate_endings($alternates);
-  dbgprint($this->dbg,"Simple_construct: alternates=" . join(',',$alternates)."\n");
-  // Generate variants for each of the HK alternates.
+  #$alternates = $this->generate_alternate_endings($alternates);
+  #dbgprint($this->dbg,"Simple_construct: alternates=" . join(',',$alternates)."\n");
+  // Generate variants for each of the alternates.
   //  The spelling of the alternates is in SLP1.
-  foreach($alternates as $alt) {
-   // First step is to convert alternate to slp1 spelling.
-   $keyin = transcoder_processString($alt,"hk","slp1");
-   dbgprint($this->dbg,"Simple_construct: BEGIN alt=$alt, keyin=$keyin\n");
-   // Now, the main step, use transition table to generate variants
-   // keep track of unknown prefixes in $badprefs array
+  foreach($alternates0 as $alt) {
+   $keyin = $alt;
+   // Use transition table to generate variants
+   // Keep track of unknown prefixes in $badprefs array
    $this->badprefs = [];
-   if ($alt != $keyin) {$this->doVariant("",$alt);} // 12-07-2020
+   #if ($alt != $keyin) {$this->doVariant("",$alt);} // 12-07-2020
    $this->doVariant("",$keyin);
   }
-  // add grammar variants to searchdict. This may depend on dictionary.
+  // add grammar variants to searchdict. 
+  $galtsall = [];
   foreach($this->searchdict as $k=>$v){
    $galts = $this->grammar_variants($k);
    foreach($galts as $keyina) {
-    //$this->searchdict[$keyina] = true;
-    $this->searchdict_add($keyina);
+    $galtsall[] = $keyina;
    }
   }
+
+   foreach($galtsall as $keyina) {
+    $this->searchdict_add($keyina);
+   }
+  
   // Linearize searchdict keys into keysin array
   $this->keysin = [];
   foreach($this->searchdict as $k=>$v){
@@ -101,42 +112,11 @@ class Simple_Search{
   $this->user_keyin_norm = $this->dalnorm->normalize($this->user_keyin);
   // close dalnorm connection
   $this->dalnorm->close();
- }
- public function unused_user_key_first($keyin0) {
-  /* 11-01-2017
-   if the user key is one of the normkeys, put it first in the list
-   This is not quite what is needed, since the caller sorts the
-   results by word frequency, and also checks whether they are 
-   known words.
-  */
-  // Let's get the normalized slp1 spelling of $keyin0
-  $user_key_slp1 = transcoder_processString($keyin0,"hk","slp1");
-  $user_key_slp1_norm = $this->dalnorm->normalize($user_key_slp1);
-  $i0 = -1;  // subscript where user key found
-  for($i=0;$i<count($this->normkeys);$i++) {
-   if ($this->normkeys[$i] == $user_key_slp1_norm ) {
-    $i0 = $i;
-    break;
-   }
-  }
-  dbgprint($this->dbg,"user_key_first: $keyin0, $user_key_slp1, $user_key_slp1_norm, $i0\n");
-  for($i=0;$i<count($this->normkeys);$i++) {
-   $temp = $this->normkeys[$i];
-   dbgprint($this->dbg,"user_key_first. normkeys[$i] = $temp\n");
-  }
-  if ($i0 != -1) {
-   if ($i0 != 0) {
-    // Nothing to do if user key already first
-    // $ a is temporary array, a reordering of normkeys
-    $a = array();
-    $a[] = $this->normkeys[$i0]; // put user key first
-    for($i=0;$i<count($this->normkeys);$i++) {
-     if ($i != $i0) {
-      $a[] = $this->normkeys[$i];
-     }
-    }
-    // reset normkeys to a
-    $this->normkeys = $a;
+  if (true) { #($this->dbg) {
+   $keys = $this->normkeys;
+   $nkeys = count($keys);
+   for ($i=0;$i<count($keys);$i++) {
+    $key = $keys[$i];
    }
   }
  }
@@ -144,7 +124,7 @@ class Simple_Search{
   // normkeys is the array that the caller sees. It contains
   // normalized spellings that 'solve' the search
   $this->normkeys = [];
-  $dbg=false;
+  $dbg=false; #true
   
   // $foundkeysin is associative array, to make the 
   // search for duplicate normalized keys simpler.
@@ -154,47 +134,58 @@ class Simple_Search{
    if (!isset($foundkeysin[$normkey])) {
     $foundkeysin[$normkey] = true;
     $this->normkeys[] = $normkey;
-    dbgprint($dbg,"NORMKEY: $key -> $normkey\n");
    }
   }
  }
 
+ public function searchdict_add_basic($k0) {
+  // add $k0 to searchdict PROVIDED it is in hwnorm1c for SOME dictionary
+  $k = $this->dalnorm->normalize($k0);
+  $matches = $this->dalnorm->get1($k);
+  $nmatches = count($matches);
+  if ($nmatches > 0) {
+   if(!isset($this->searchdict[$k])) {
+    $this->searchdict[$k]=true;
+   }
+  }
+ }
  public function searchdict_add($k) {
-  $this->searchdict[$k]=true;
-  #$dbg=true;
-  #dbgprint($dbg,"searchdict_add: $k\n");
+  $alts1 = $this->generate_alternate_endings(array($k));
+  $alts2 = [];
+  foreach($alts1 as $a1) {
+   $alts3 = $this->grammar_variants($a1);
+   foreach($alts3 as $a3) {
+    $alts2[] = $a3;
+   }
+  }
+  # normalize and add to searchdict
+  foreach($alts2 as $a2) {
+   $this->searchdict_add_basic($a2);
+  }
  }
  public function doVariant($pref,$word) {
-  /* This is the most important function of the class.
-     Uses transitionTable to generate alternates to '$word', using the
-     given prefeix '$pref'.
-     Alternates are entered into the $this->searchdict associative array.
+  /* Use transitionTable to generate variants to '$word', using the
+     given prefix '$pref'.
+     Variants are entered into the $this->searchdict associative array.
      It is a recursive routine, called externally with $pref as the
      empty string;  in this case $word goes into searchdict.
      The function bottoms out when $word is the empty string.
      Otherwise, it uses getChar to retrieve prefixes of $word
      that occurs in transitionTable; this prefix is $varChar.
-     When
   */
-  dbgprint($this->dbg,"doVariant: '$pref' + '$word'\n");
   if (strlen($pref) == 0) {
    // This occurs only when doVariant is called externally.  Recursive
    // Calls have strlen($pref)>0.
-   //$this->searchdict[$word] = true;
    $this->searchdict_add($word);
-   dbgprint($this->dbg,"doVariant: (a) Add $word to searchdict\n");
   }
   if (isset($this->badprefs[$pref])) {
    // We know this prefix is bad
-   #dbgprint($this->dbg,"doVariant. $pref known to be bad\n");
    return;
   }
   if (!$this->ngramValidate($pref)) {
    // '$pref' is not validated , return with no further analysis
-   #dbgprint($this->dbg,"doVariant:  non-valid $pref\n");
    // add $pref to the bad ones
    $this->badprefs[$pref]=true;   # debug  to disregard badprefs
-   dbgprint($this->dbg,"doVariant. Marking $pref as bad\n");
    return;
   }
   if (strlen($word) == 0) {
@@ -215,7 +206,6 @@ class Simple_Search{
      list($itransition,$varChar) = $temp;
      $tempstrs[] = "$itransition,$varChar";
     }
-   dbgprint($this->dbg,"doVariant: varChars=" . count($varCharsData) . "  " . join(' ; ',$tempstrs) . "\n");
   }
   if (count($varCharsData) == 0) {
    // e.g., if first character of word is 'e'
@@ -267,7 +257,7 @@ class Simple_Search{
   return $newChars;
  }
 
- public function correcthk($wordin) {
+ public function unused_correcthk($wordin) {
   $wordin = preg_replace('/ii|ee/','i',$wordin);
   $wordin = preg_replace('/uu|oo/','u',$wordin);
   $wordin = preg_replace('/aa/','a',$wordin);
@@ -281,19 +271,31 @@ class Simple_Search{
   $wordin = preg_replace('/w|W/','v',$wordin);
   return $wordin;
  }
- public function generate_hkalternates($wordin) {
+ public function unused_generate_hkalternates($wordin) {
   $ans=[];
-  $wordin = $this->correcthk($wordin);
+  $wordin = $this->unused_correcthk($wordin);
   return [$wordin];  // expect a list
  }
  public function generate_alternate_endings($alternates) {
   $ans = [];
   foreach($alternates as $alt) {
    $ans[] = $alt; 
-   $alt1 = preg_replace('/^(.*)[msH]$/','\1',$alt);
+   //1. if alt ends in m,s,H,  generate new alternate by dropping final letter
+   $alt1 = preg_replace('/^(.*)[MmsHhn]$/','\1',$alt);
    if (! in_array($alt1,$ans)){
     $ans[] = $alt1;
    }
+   //2. if alt ends in 'f', try 'A'  : example kartf -> kartA
+   //  and vice-versa
+   $alt1 = preg_replace('/f$/','A',$alt);
+   if (! in_array($alt1,$ans)){
+    $ans[] = $alt1;
+   }
+   $alt1 = preg_replace('/A$/','f',$alt);
+   if (! in_array($alt1,$ans)){
+    $ans[] = $alt1;
+   }
+   
   }
   return $ans;
  }
@@ -302,21 +304,38 @@ class Simple_Search{
   // some other possibilities
   $ans = array();
   $ans[] = $word;  // start with given word
+  
   $slp1_consonants = '/[kKgGNcCjJYwWqQRtTdDnpPbBmyrlvSzsh]$/';
   if (preg_match($slp1_consonants,$word)) {
-   // 1. Jul 19, 2017. If $keyin ends in a consonant,
+   // 1. Jul 19, 2017. If $word ends in a consonant,
    // add an 'a' (schwa) to the end, and generate variants of that.
    $ans[] = $word . 'a';
-  } else if (preg_match('|a$|',$word)) {
-    // 2. word ending in 'a'.  Think 'karma' -> 'karman'
-    $ans[] = $word . 'n';
-  }
-  // July 25, 2017.  Special logic for dictionaries
-  if ($this->dict == 'skd') {
+   # do skd nom. sing. variants 
    $ans1 = $this->grammar_variants_skd($word);
-   foreach($ans1 as $x) {
-    $ans[] = $x;
+   foreach ($ans1 as $a1) {
+    $ans[] = $a1;
    }
+   return $ans;
+  } 
+  // Word now ends in a vowel.
+  if (preg_match('|[iu]$|',$word)) {
+   // 2. word ends in i,u:  add alternate m and H  (nom. sing.)
+   $ans[] = $word . 'H';
+   $ans[] = $word . 'm';
+   return $ans;
+  }
+  
+  // Word now ends in a vowel other than i,u
+  if (preg_match('|a$|',$word)) {
+   // 2. word ending in 'a'.  Think 'karma' -> 'karman'
+   $ans[] = $word . 'n';
+   return $ans;
+  }
+  return $ans; ## debug.
+  # do skd nom. sing. variants 
+  $ans1 = $this->grammar_variants_skd($word);
+  foreach ($ans1 as $a1) {
+   $ans[] = $a1;
   }
   return $ans;
  }
@@ -324,7 +343,7 @@ class Simple_Search{
   // spelling of $word is slp1
   // skd tends to use nominative singular for headwords
   $ans=[];
- 
+  return $ans;
   if (preg_match('|f$|',$word)) {
    // replace ending 'f' with 'A'  (kartf -> kartA)
    $word1 = substr($word,0,-1) . 'A';
@@ -344,52 +363,9 @@ class Simple_Search{
   }
   return $ans;
  }
- public function unused_ngram_initialilze(){
-  $ngramdir = "ngram1";
-  #$dbg=true;
-  #dbgprint($dbg,"Using ngramdirectory $ngramdir\n");
-  $this->ngram2_check = new Ngram_Check(2,"../$ngramdir/2gram.txt");
-  $this->ngram3_check = new Ngram_Check(3,"../$ngramdir/3gram.txt");
-  // beginning ngrams
-  $this->ngram2beg_check = new Ngram_Check(2,"../$ngramdir/2gram_beg.txt");
-  $this->ngram3beg_check = new Ngram_Check(3,"../$ngramdir/3gram_beg.txt");
- }
 
  public function ngramValidate($word) {
- /* don't use 4-grams for now
-   if (! $this->ngram4beg_check->validate_beg($word)) {
-    // $word has a bad initial 4gram. 
-    return false;
-   }
-  if (! $this->ngram4_check->validate($word)) {
-    // $word has a bad 4gram. 
-   return false;
-  }
- */
-  /* also don't use 3-grams or 2-grams
-   if (! $this->ngram3beg_check->validate_beg($word)) {
-    // $word has a bad initial 3gram. 
-    return false;
-   }
-  if (! $this->ngram3_check->validate($word)) {
-    // $word has a bad 3gram. 
-   return false;
-  }
-   if (! $this->ngram2beg_check->validate_beg($word)) {
-    // $word has a bad initial 2gram. 
-    #dbgprint($this->dbg,"ngramValidate: bad initial 2gram for $word\n");
-    return false;
-   }
-   if (! $this->ngram2_check->validate($word)) {
-    // $word has a bad 2gram. 
-   return false;
-  }
-  if (strlen($word) < 4) {
-   // No problem found.  We've already checked for 2 and 3
-   return true;
-  }
-  */
-  
+ 
   // see if anything in hwnorm1c starts with $word for this dictionary
   // normalize
   $norm = $this->dalnorm->normalize($word);
@@ -399,54 +375,71 @@ class Simple_Search{
    $file_db = $this->dalnorm->file_db;
    $file_db->exec($sql1);
   } catch (PDOException $e) {
-   #dbgprint($this->dbg,"SQLITE ERROR: $e\n");
    return true;
   }
-  #dbgprint($this->dbg,"PRAMGA executed\n");
   try {
    $sql = "SELECT * from hwnorm1c where key LIKE '$word%' LIMIT 1;";
    $matches = $this->dalnorm->get($sql);
    $nmatches = count($matches);
-   #dbgprint($this->dbg,"$nmatches headwords start with $word\n");
    if ($nmatches == 0) {
     return false;
    } else {
     return true;
    }
   }  catch (Exception $e) {
-   #dbgprint($this->dbg,"SQLITE ERROR get: $e\n");
    return true;
   }
 
  }
-
+ public function clean_slp1($x) {
+  $y =  preg_replace('/[^a-zA-Z|~]/','',$x);
+  return $y;
+ }
  public function convert_nonascii($wordin) {
- // Devanagari and IAST to HK
- if (preg_match('/^[a-zA-Z]+$/',$wordin)) {
-  // no conversion needed
-  return $wordin;
- }
- // transcode Devanagari to HK
- $wordin1 = transcoder_processString($wordin,'deva','slp1');
- if ($wordin1 != $wordin) {
-  // $wordin has characters in the Devanagari character set
-  // Further convert $wordin1 to HK transliteration (from slp1)
-  $wordin1 =  transcoder_processString($wordin1,'slp1','hk');
-  // Assume there is no mixture of Devanagari and IAST. Thus return
-  return $wordin1;
- }
- // There are no Devanagari characters in $wordin, but there are
- // some non-alphabetical characters.  ASSUME this is due to the
- // presence of IAST diacritics.
- // transcode IAST to HK
- // 'w' has special sense in slp1.  Can't be part of regular IAST.
- $wordin1 = preg_replace('/w|W/','v',$wordin1);
+  $input_simple=$this->input_simple;
+  // Step1: deal with specific transcodings from $input_simple
+  if ($input_simple == 'slp1') {
+   $wordin2 = $this->clean_slp1($wordin);
+   return $wordin2;
+  }
 
- $wordin2 = transcoder_processString($wordin1,'roman','slp1');
- if ($wordin2 != $wordin1) {
-  $wordin2 =  transcoder_processString($wordin2,'slp1','hk');
- }
- return $wordin2;
+  if ($input_simple == 'hk') {
+   $wordin1 = transcoder_processString($wordin,'hk','slp1');
+   $wordin2 = $this->clean_slp1($wordin1);
+   return $wordin2;
+  }
+  if ($input_simple == 'itrans') {
+   $wordin1 = transcoder_processString($wordin,'roman','slp1');
+   $wordin2 = $this->clean_slp1($wordin1);
+   return $wordin2;
+  }
+  if ($input_simple == 'iast') {
+   // transcoder files use 'roman' instead of 'iast' 
+   $wordin1 = transcoder_processString($wordin,'roman','slp1');
+   $wordin2 = $this->clean_slp1($wordin1);
+   return $wordin2;
+  }
+  if ($input_simple == 'deva') {
+   $wordin1 = transcoder_processString($wordin,'deva','slp1');
+   $wordin2 = $this->clean_slp1($wordin1);
+   return $wordin2;
+  }
+  // step 2.  Assume $input_simple == default
+ 
+  // detect devanagari by converting to slp1
+  $wordin1 = transcoder_processString($wordin,'deva','slp1');
+  if ($wordin1 != $wordin) {
+   // Assume $wordin is spelled in devanagari
+   $wordin2 = $this->clean_slp1($wordin1);
+   return $wordin2;
+  }
+  // $wordin might have letters with diacritics.
+  // We will lower-case the string first. Try to handle diacritics.
+  $wordin0 = mb_strtolower($wordin, 'UTF-8');
+  // converting from 'roman'
+  $wordin1 = transcoder_processString($wordin0,'roman','slp1');
+  $wordin2 = $this->clean_slp1($wordin1);
+  return $wordin2;
  }
 }
 ?>

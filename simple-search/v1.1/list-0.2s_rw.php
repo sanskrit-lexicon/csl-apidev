@@ -8,67 +8,13 @@
  */
 require_once('dictinfowhich.php'); // exposes $dictinfowhich
 require_once('../../dbgprint.php');
-require_once('get_parent_dirpfx.php');
+require_once('parse_uri.php');
+//require_once('get_parent_dirpfx.php');
 $version = 'v1.1';  # 12-25-2020
 $htaccess = 'simplet'; #12-25-2020
-// Report all errors except E_NOTICE  (also E_WARNING?)
-error_reporting(E_ALL & ~E_NOTICE);
-// uri: uri = /cologne/simple/mw/devi/simple/deva/no
-$uri = $_SERVER['REQUEST_URI'];  
-//echo("uri = $uri<br/>\n");
-// delete up through /simple/
-$simplepat = "/$htaccess";
-if (preg_match('|' . $simplepat . '$|',$uri)) {$uri = ($uri . "/");}
-$url = preg_replace('|^.*?' . $simplepat . '/|','',$uri);
-$url_parts = explode("/",$url);
-// assume parameters are:  dict, key,output,accent(optional, default=no)
-$url_parts_num = count($url_parts);
-$key_parts =['dict','key','input_simple','output','accent'];
-$key_parts_num = count($key_parts); //5
-$parms = array(); 
-// set defaults for $parms 
-$parms['dict'] = null; // use cookie
-$parms['key'] = null;
-$parms['input'] = 'simple'; 
-$parms['input_simple'] = 'iast';  # can be overridden
-$parms['output'] = null; // use cookie
-$parms['accent'] = null; // use cookie
-// overwrite with values from url_parts
-for($i=0;$i<$key_parts_num;$i++) {
- $key = $key_parts[$i];
- if ($i < $url_parts_num) {
-  $val = $url_parts[$i];
-  $parms[$key] = $val;
- }
-}
-
-
-/* See phpinit
- $dict = $_REQUEST['dict'];
- $key = $_REQUEST['key'];
- $accent= $_REQUEST['accent'];
- $input_simple = $_REQUEST['input_simple'];
- $output = $_REQUEST['output'];
-*/
-$keys = array('key','dict','input','input_simple','output','accent');
-$phpvals = array();
-for($i=0;$i<count($keys);$i++) {
- $key=$keys[$i];
- $val=$parms[$key];
- if ($key == 'key') { //12-03-2020
-  $val1 = urldecode($val);  // from uri-encoding to utf-8
-  $phpvals[$key] = $val1;
- }else if ($key == "input_simple") {
-  // optional. This will specify the assumed spelling used in the citation.
-  $phhpvals[$key] = $val;
- }else {
-  $phpvals[$key] = $val; //$_REQUEST[$key];
- }
- //$_REQUEST[$key] = $val; 
- //echo("phpvals: $key -> $val<br/>\n");
- dbgprint(true,"$i , $key,$val, ${$phpvals[$key]}\n");
-}
-//exit(0);
+// Report all errors except E_NOTICE and E_WARNING
+error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
+$phpvals = parse_uri($htaccess);
 ?>
 <!DOCTYPE html>
 <html>
@@ -77,14 +23,11 @@ for($i=0;$i<count($keys);$i++) {
 <title>Sanskrit simple search t</title>
 <!-- ref=https://www.w3.org/TR/html4/struct/links.html#edef-BASE -->
 <?php 
-/* remove 01/21/20201 */
  if ($dictinfowhich == "cologne") {
   echo '<BASE href="/scans/csl-apidev/simple-search/' . $version . '/">' . "\n";
  }else {
   echo '<BASE href="http://localhost/cologne/csl-apidev/simple-search/' . $version . '/">' . "\n";
  }
-
-  
 ?>
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.css">
 <!-- links to jquery, using CDNs -->
@@ -93,8 +36,12 @@ for($i=0;$i<count($keys);$i++) {
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
 <!-- jquery-ui is used -->
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+<!-- local scripts -->
 <script type="text/javascript" src="../../sample/dictnames.js"></script>
+<!--
 <script type="text/javascript" src="../../sample/cookieUpdate.js"></script>
+-->
+<script type="text/javascript" src="cookieUpdate.js"></script>
 
 <style>
 body {
@@ -159,18 +106,15 @@ a.hwlinks {
 a.hwlinks:active,a.hwlinks:visisted {
 color:red;
 }
-/*
-#hwlinksmenu {
- height: 25px;line-height:25px;
- margin-top: 10px; margin-bottom:10px;
-}
-*/
+
 </style>
 <script> 
  // Jquery
 $(document).ready(function() {
+ let cookieUpdate = CologneDisplays.dictionaries.cookieUpdate;
 
  $('#output,#accent').change(function(event) {
+  //console.log('list-0.2s_rw.php check1');
   cookieUpdate(true);   
   $('#simpleinfo').html("");
  });
@@ -217,8 +161,20 @@ $(document).ready(function() {
   //  initialized from cookies or change  due to user input
   changeCorrectionHref();
   keyAutocompleteActivation();
+  /* Display #input_simplediv IFF input == simple */
+  var element = document.querySelector("#input_simplediv");
+  document.querySelector('#input').addEventListener('change', function(){
+  if(this.value != 'simple')
+    element.style.display = 'none';
+  else
+    element.style.display = 'block';
+  });
  };
-
+ /* 
+ ------------------------------------
+ listDisplay is used when 'input' is NOT simple 
+ ------------------------------------ 
+ */
  listDisplay = function (keyin) {
   var key;
   if (keyin == undefined) {
@@ -228,13 +184,12 @@ $(document).ready(function() {
   }
   var dict = $('#dict').val();
   var input = $('#input').val();
-  if (input == 'simple') {
-   input = 'slp1';  // used when keyin is present.
+  if (input == 'simple') {  // Needed?
+   input = 'slp1';  // used when keyin is present. 
   }
   //console.log('listDisplay: keyin=',keyin,'input=',input);
   var output = $('#output').val();
   var accent = $('#accent').val();
-  // TODO: check for valid inputs before ajax call
   var urlbase="../../listview.php";
   var url =  urlbase +  
    "?key=" +escape(key) + 
@@ -242,14 +197,11 @@ $(document).ready(function() {
    "&dict=" + escape(dict) +
    "&accent=" + escape(accent) +
    "&input=" + escape(input);
-    //jQuery("#disp").html(""); // clear output
-  //console.log('listDisplay: url=',url);
   jQuery("#dataframe").attr("src",url);
     
  }; // listDisplay
  
-cookieUpdate = CologneDisplays.dictionaries.cookieUpdate;
-
+/* Jquery UI functions for selecting a dictionary from the #dict div */
 $("#dict").autocomplete( { 
   source : CologneDisplays.dictionaries.dictshow,
   autoFocus: true,
@@ -266,8 +218,6 @@ $("#dict").focus(function() {
   $(this).val('');
   $(this).trigger(jQuery.Event("keydown"));
   }).blur(function() {
-   //console.log('blur: this.val=',$(this).val());
-   //console.log('blur: dict.val=',$('#dict').val());
    // This check also inspired by stackoverflow suggestion.
    if($(this).val() == "") {
     $(this).val(prevdictval);
@@ -279,28 +229,26 @@ $("#dict").focus(function() {
     $(this).change();  
    }
   }).change(function(event) {
-  //console.log('dict change: dict=',$('#dict').val());
   cookieUpdate(true);   
   $('#simpleinfo').html("");
   changeActions();
  });
-
-simpleFunction = function(){
- // $('#simpleinfo').html("<p>This not yet functional</p>");
+ /*
+ -----------------------------------------------------------
+ simpleDisplay  The display when input=simple.
+ calls getword_list_1.0.php
+ -----------------------------------------------------------
+ */
+ simpleDisplay = function(){
   var find_word = $('#key').val();
   find_word = find_word.trim();
   var test ={}; // Javascript object to pass as parameters
-  //console.log('test: find_word=',find_word);
   test.key = find_word;
-  // 04-18/2018. change from v1.0d to v1.0
-  // Currently getword_list_1.0.php same in both locations.
-  test.url = "../../simple-search/v1.1/getword_list_1.0.php";  // 12-25-2020
-  //console.log('simpleFunction test.url=',test.url);
-  test.input = $('#input_simple').val();  // 'hk'; 12-25-2020
+  test.url = "getword_list_1.0.php";  // 01-22-2021
+  test.input = $('#input_simple').val();  // 
+  console.log('list-0.2s_rw: simpleDisplay: test.input=',test.input);
   test.output = $('#output').val(); //'deva';
   test.dict = $('#dict').val();; 
-  //console.log('list-0.2s.html calling url=',test.url);
-  //$('#outputdiv').html("<p>Accessing server for alternates of " + test.key + "  ...</p>");
   // Blank out result area
   $('#simpleinfo').html(" working...")
   $.ajax({
@@ -308,7 +256,7 @@ simpleFunction = function(){
    cache: false,
    method: "POST",
    data: {
-    input:test.input, // not currently used
+    input:test.input, // 
     output:test.output, // not currently used
     dict:test.dict, // not currently used
     key:test.key
@@ -333,18 +281,14 @@ displayOption2Helper = function(dicthw,index,nresults) {
  }
  listDisplay(dicthw);
 }
-//console.log('displayOption2Helper=',displayOption2Helper);
 
 displayOption2 = function(json) {
-   //console.log('json = ',json);
- //console.log('outputparm =',json['output']);
  var results = json['result'];
  var dict = json['dict'];
  var nresults = results.length;
  var nfound = nresults;
  var htmlarr = [];
  var dicthwfirst = null;
- //console.log('nfound=',nfound);
  if (true) {
   htmlarr.push('<ol>')
   if (nresults == 1) {
@@ -358,7 +302,6 @@ displayOption2 = function(json) {
    var dicthw,dicthwoutput,dicthwFlag;
    dicthw = result['dicthw'];
    dicthwFlag = result['user_key_flag']
-   //console.log('dicthw:',dicthw,dicthwFlag);
    if (index == 0) {
     dicthwfirst = dicthw;
    }
@@ -366,18 +309,15 @@ displayOption2 = function(json) {
    if (dicthwFlag) { 
     // 11-01-2017. Bold when this is user input
     dicthwoutput = "<strong>" + dicthwoutput + "</strong>";
-    //console.log('dicthwoutput =',dicthwoutput);
    }
    var classattr = '';
    if (json['output'] == 'deva') {
     classattr = ' class="sdata"'; // control font for Devanagari
    }
-   //console.log("classattr=",classattr);
    var x = "<a class='hwlinks' id='hwlink_" + 
         index + "' onclick='displayOption2Helper(" +
         '"' + dicthw + '"' + "," + index + "," + nresults + ");'>" +
     "<span" + classattr + ">" + dicthwoutput + "</span></a>";
-   //console.log('x=',x);
    htmlarr.push('<li style="display:inline; padding:5px;" >' +x + '</li>');
   });
   htmlarr.push('</ol>')
@@ -386,11 +326,9 @@ displayOption2 = function(json) {
  var html = htmlarr.join("\n");
  $('#simpleinfo').html(html);
  if (dicthwfirst != null) {
-  //listDisplay(dicthwfirst);
   displayOption2Helper(dicthwfirst,0,nresults);
  }
 }; // displayOption2
-//console.log('displayOption2=',displayOption2);
 
 
 /* ----------------------------------------------------------
@@ -408,14 +346,13 @@ $("#key").keypress(function (e) {
  var key = e.which;
  if(key == 13) {  // the enter key code
    var inputval = $('#input').val();
-   //console.log('inputval=',inputval);
     if(inputval != 'simple') {
      //console.log(' keypress running listDisplay');
      listDisplay();
     } else {
      //otherwise, simple
-     //console.log(' keypress running simpleFunction');
-     simpleFunction();
+     //console.log(' keypress running simpleDisplay');
+     simpleDisplay();
     }
     return false; // deactivate 'normal' return key functionality in JS.
   }
@@ -454,7 +391,6 @@ $("#key").autocomplete({
   },
   autoFocus: true,
  }); //key-autocomplete
-// new for php version
 cookieUpdate(false);  // for initializing cookie
 changeActions();  // initialize now that #dict is set.
 
@@ -462,15 +398,17 @@ changeActions();  // initialize now that #dict is set.
 */
 
  phpinit_helper = function(name,val){
-  console.log('phpinit_helper: name=',name,'val=',val);
-  if (val == ''){return;}
+  if (val == ''){
+   //console.log("phpinit_helper:  #",name,"is blank. Not changed");
+   return;
+  }
   if (name == 'accent') { //val should be yes or no. Case not important
    val = val.toLowerCase();
   }
   /* 01-03-2018 */
   if (val == 'iast') {val = 'roman';}
   $('#' + name).val(val);
-  console.log("phpinit_helper: change #",name,"to",val);
+  //console.log("phpinit_helper: change #",name,"to",val);
   cookieUpdate(true);  // initialize dom values from cookie values
   //changeActions();  // initialize now that #dict, etc are set.
  };
@@ -494,21 +432,34 @@ changeActions();  // initialize now that #dict is set.
  actions.
 */
 cookieUpdate(false);  // initialize dom values from cookie values
- phpinit();
- //console.log('phpvals=',phpvals);
+phpinit();
+
 changeActions();  // initialize now that #dict, etc are set.
+/* perhaps better to get $phpvals via Javascript parsing ? 
+Also cf. sitepoint.com/get-url-parameters-with-javascript/
+*/
+/*
+displayURL = function() {
+ console.log("Page location is ",window.location.href);
+ console.log("Page hostname is ", window.location.hostname);
+ console.log("Page path is " ,window.location.pathname);
+
+};
+
+displayURL();
+*/
   // If key is provided, generate display for it
   if($('#key').val() != '') {
    var inputval = $('#input').val();
    if (inputval != 'simple') {
     listDisplay();
    }else {
-    simpleFunction();
+    simpleDisplay();
    }
   }
 
 }); // end ready
- </script>
+</script>
 
 </head>
 <body>
@@ -537,7 +488,7 @@ changeActions();  // initialize now that #dict, etc are set.
  <div id="inputdiv">
   <label for="input">input</label>
   <select name="input" id="input">
-   <option value='hk'>HK <!--Kyoto-Harvard--></option>
+   <option value='hk'>HK</option>
    <option value='slp1'>SLP1</option>
    <option value='itrans'>ITRANS</option>
    <option value='deva'>Devanagari</option>
@@ -550,7 +501,7 @@ changeActions();  // initialize now that #dict, etc are set.
   <label for="output">output</label>
   <select name="output" id="output">
    <option value='deva'>Devanagari</option>
-   <option value='hk'>HK <!--Kyoto-Harvard--></option>
+   <option value='hk'>HK</option>
    <option value='slp1'>SLP1</option>
    <option value='itrans'>ITRANS</option>
    <option value='roman' selected='selected'>IAST</option>
@@ -564,13 +515,23 @@ changeActions();  // initialize now that #dict, etc are set.
   <option value="no" selected="selected">Hide</option>
  </select>
  </div>
+</td><td>
+ <div id="input_simplediv">
+  <label for="input_simple">input_simple</label>
+  <select name="input_simple" id="input_simple">
+   <option value='hk'>HK</option>
+   <option value='slp1'>SLP1</option>
+   <option value='itrans'>ITRANS</option>
+   <option value='deva'>Devanagari</option>
+   <option value='roman'>IAST</option>
+   <option value='default' selected='selected'>default</option>
+  </select>
+ </div>
 </td></tr>
 </table> <!-- preferences -->
  <div id="citationdiv">
   citation:&nbsp;
   <input type="text" name="key" size="20" id="key" value="" style="height:1.4em;"/>
-  <!--<input type="button" id="correction" value="Corrections" /> -->
-  <!-- href is set in change function on #dict -->
   <a id="correction" href="#" target="Corrections">Corrections</a>
  </div>
   
