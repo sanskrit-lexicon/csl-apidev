@@ -54,8 +54,8 @@ class Simple_Search{
   or slp1, deva, iast,hk,itrans
  */
  public function __construct($keyin00,$input00,$dict) {
-  $this->dbg = false; #true; 
-  dbgprint($this->dbg,"simple_search: construct:,$keyin00, $input00, $dict\n");
+  $this->dbg = false; 
+  dbgprint($this->dbg,"simple_search: construct: $keyin00, $input00, $dict\n");
   $this->input_simple = $input00;
   $this->dict = strtolower($dict);
 
@@ -83,7 +83,6 @@ class Simple_Search{
    // Use transition table to generate variants
    // Keep track of unknown prefixes in $badprefs array
    $this->badprefs = [];
-   #if ($alt != $keyin) {$this->doVariant("",$alt);} // 12-07-2020
    $this->doVariant("",$keyin);
   }
   // add grammar variants to searchdict. 
@@ -112,7 +111,7 @@ class Simple_Search{
   $this->user_keyin_norm = $this->dalnorm->normalize($this->user_keyin);
   // close dalnorm connection
   $this->dalnorm->close();
-  if (true) { #($this->dbg) {
+  if ($this->dbg) { 
    $keys = $this->normkeys;
    $nkeys = count($keys);
    for ($i=0;$i<count($keys);$i++) {
@@ -149,6 +148,13 @@ class Simple_Search{
    }
   }
  }
+ public function searchdict_add_norm($k0) {
+  $k = $this->dalnorm->normalize($k0);
+  if (!isset($this->searchdict[$k])) {
+   dbgprint($this->dbg,"$k searchdict_add_norm\n");
+   $this->searchdict[$k]=true;
+  }
+ }
  public function searchdict_add($k) {
   $alts1 = $this->generate_alternate_endings(array($k));
   $alts2 = [];
@@ -160,7 +166,7 @@ class Simple_Search{
   }
   # normalize and add to searchdict
   foreach($alts2 as $a2) {
-   $this->searchdict_add_basic($a2);
+   $this->searchdict_add_norm($a2);
   }
  }
  public function doVariant($pref,$word) {
@@ -182,12 +188,6 @@ class Simple_Search{
    // We know this prefix is bad
    return;
   }
-  if (!$this->ngramValidate($pref)) {
-   // '$pref' is not validated , return with no further analysis
-   // add $pref to the bad ones
-   $this->badprefs[$pref]=true;   # debug  to disregard badprefs
-   return;
-  }
   if (strlen($word) == 0) {
    // Recursive calls bottom out here.
    // Add $pref to searchdict
@@ -196,6 +196,14 @@ class Simple_Search{
    $this->searchdict_add($pref);
    return; // done
   }
+  if (!$this->ngramValidate($pref)) {
+   // '$pref' is not validated , return with no further analysis
+   // add $pref to the bad ones
+   $this->badprefs[$pref]=true;   # debug  to disregard badprefs
+   dbgprint($this->dbg,"doVariant bad pref 1: $pref ($word)\n");
+   return;
+  }
+  dbgprint($this->dbg,"doVariant finding variants of $pref + $word\n");
   // Find variants for the beinning of $word
   // $varCharsData is an array.
   // WHAT IF THERE ARE NO VARIANTS?? CAN THIS HAPPEN?
@@ -221,10 +229,16 @@ class Simple_Search{
    $subWord = substr($word,strlen($varChar)); 
    // Try each of the variants
    $variants = $this->transitionTable[$itransition];
-    foreach($variants as $newChar) {
-     $pref1 = $pref . $newChar;
-     $this->doVariant($pref1,$subWord);
-    }
+   foreach($variants as $newChar) {
+    $pref1 = $pref . $newChar;
+    $this->doVariant($pref1,$subWord);
+   }
+   if (strlen($varChar) > 1) {
+    $subWord1 = substr($word,1);
+    $newChar1 = substr($varChar,0,1) ;
+    $pref1 = $pref . $newChar1;
+    $this->doVariant($pref1,$subWord1);
+   }
   }
  }
  public function getChar($word) {
@@ -281,7 +295,8 @@ class Simple_Search{
   foreach($alternates as $alt) {
    $ans[] = $alt; 
    //1. if alt ends in m,s,H,  generate new alternate by dropping final letter
-   $alt1 = preg_replace('/^(.*)[MmsHhn]$/','\1',$alt);
+   //$alt1 = preg_replace('/^(.*)[MmsHhn]$/','\1',$alt);
+   $alt1 = preg_replace('/[MmsHhn]$/','',$alt);
    if (! in_array($alt1,$ans)){
     $ans[] = $alt1;
    }
