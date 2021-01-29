@@ -1,5 +1,5 @@
 <?php
-error_reporting(E_ALL & ~E_NOTICE );
+error_reporting(E_ALL & ~E_NOTICE &~E_WARNING);
 ?>
 <?php 
 /* getword_data.php
@@ -56,7 +56,7 @@ class Getword_data {
  if ($dbg) {
   dbgprint($dbg,"getword_data returns:\n");
   for($i=0;$i<count($htmlmatches);$i++) {
-   dbgprint($dbg,"record $i = {$htmlmatches[$i][2]}\n"); #[0] $htmlmatches[$i][1] $htmlmatches[$i][2] \n");
+   dbgprint($dbg,"record $i = {$htmlmatches[$i][2]}\n"); 
   }
  }
  $this->matches = $htmlmatches;
