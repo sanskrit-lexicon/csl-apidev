@@ -125,7 +125,11 @@ EOF;
    'CCS' => "width ='1400' height='2000'",
    'MD'  => "width ='1000' height='1370'",
   );
-  $imageParm = $imageParms[$dictinfo->dictupper];
+  if (isset($imageParms[$dictinfo->dictupper])) {
+   $imageParm = $imageParms[$dictinfo->dictupper];
+  } else {
+   $imageParm = false;
+  }
   if ($imageParm) {
    $imageElt = "<img src='$pdf' $imageParm />";
   } else {

@@ -1,5 +1,5 @@
 <?php
-error_reporting(E_ALL & ~E_NOTICE &~E_WARNING);
+error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
 ?>
 <?php
 /* parm.php  Jul 10, 2015  Contains Parm class, which
@@ -40,17 +40,25 @@ class Parm {
   $this->basicOption = false;
   $dbg=false;
   dbgprint($dbg,"enter parm construct\n");
-  if ($_REQUEST['filter']) {
+  if (isset($_REQUEST['filter'])) {
    $this->filter0 = $_REQUEST['filter'];
-  }else{
+  }else if(isset($_REQUEST['output'])){
    $this->filter0 = $_REQUEST['output'];
-  }
-  if ($_REQUEST['transLit']) {
-   $this->filterin0 = $_REQUEST['transLit']; 
   }else {
-   $this->filterin0 = $_REQUEST['input']; 
+   $this->filter0 = 'deva';
   }
-  $this->dict = $_REQUEST['dict'];
+  if (isset($_REQUEST['transLit'])) {
+   $this->filterin0 = $_REQUEST['transLit']; 
+  }else if (isset($_REQUEST['input'])){
+   $this->filterin0 = $_REQUEST['input']; 
+  }else {
+   $this->filterin0 = 'hk';
+  }
+  if (isset($_REQUEST['dict'])) {
+   $this->dict = $_REQUEST['dict'];
+  } else {
+   $this->dict = 'mw';
+  }
   // some places expect dict to be lower case.
   $this->dict = strtolower($this->dict);
   if (isset($_REQUEST['accent'])) {
@@ -72,7 +80,12 @@ class Parm {
 
   $this->dictinfo = new DictInfo($this->dict);
   $this->english = $this->dictinfo->english;
-  list($this->keyin,$this->keyin1,$this->key) = $this->compute_text($_REQUEST['key']);
+  if (isset($_REQUEST['key'])) {
+   $tempkey = $_REQUEST['key'];
+  }else {
+   $tempkey = 'guru';  // arbitrary
+  }
+  list($this->keyin,$this->keyin1,$this->key) = $this->compute_text($tempkey);
   // check for validity of 'dict'
   #if (! isset($this->dictinfo->dictyear[$this->dictinfo->dictupper])) {
   if ($this->dictinfo->dictstatus != 200) {
@@ -98,7 +111,11 @@ class Parm {
  }
 
  public function servepdfParms() {
-  $page = $_REQUEST['page'];
+  if (isset($_REQUEST['page'])) {
+   $page = $_REQUEST['page'];
+  } else {
+   $page = '1'; // arbitrary
+  }
   return array($page,$this->keyin);
  }
 
@@ -122,12 +139,15 @@ class Parm {
  }
  
  public function compute_dispcss() {
-  $this->dispcss = $_REQUEST['dispcss'];
-  if (!$this->dispcss) {
-   $this->dispcss = 'yes';
-  }else if ($this->dispcss != 'no') {
-   $this->dispcss = 'yes';
+  if (isset($_REQUEST['dispcss'])) {
+   $dispcss = $_REQUEST['dispcss'];
+  }else {
+   $dispcss = 'yes';
   }
+  if ($dispcss != 'no') {
+   $dispcss = 'yes';
+  }
+  $this->dispcss = $dispcss;
  }
  public function listhierParms() {
   /* extensions for listhier parameters. See listhierClass*/

@@ -31,7 +31,7 @@ function transcoder_fsm($from,$to) {
 // returned, so the xml file does not have to be re-parsed.
  global $transcoder_dir,$transcoder_fsmarr;
  $fromto = $from . "_" . $to;
- if ($transcoder_fsmarr[$fromto]) {
+ if (isset($transcoder_fsmarr[$fromto])) {
   return;
  }
  $filein = $transcoder_dir . "/" . $fromto . ".xml";
@@ -108,10 +108,10 @@ function transcoder_fsm($from,$to) {
  foreach($fsmentries as $i => $fsmentry) {
   $in = $fsmentry['in'];
   $c = $in[0];
-  $state=$states[$c];
-  if ($state) {
-    $state[]=$i;
-    $states[$c]=$state;
+  if (isset($states[$c])) {
+   $state=$states[$c];
+   $state[]=$i;
+   $states[$c]=$state;
   }else {
    $state = array();
    $state[]=$i;
@@ -207,8 +207,9 @@ global $transcoder_htmlentities;
  $m=strlen($line);
  while ($n < $m) {
   $c = $line[$n];
-  $isubs = $states[$c];
-  if (! $isubs) {
+  if (isset($states[$c])) {
+   $isubs = $states[$c];
+  }else {
    $result .= $c;
    $currentState=$fsm['start'];
    $n++;
@@ -263,11 +264,14 @@ function transcoder_processString($line,$from,$to) {
  global $transcoder_dir,$transcoder_fsmarr;
  if ($from == $to) {return $line;}
  $fromto = $from . "_" . $to;
- $fsm = $transcoder_fsmarr[$fromto];
- if (!$fsm) {
-  transcoder_fsm($from,$to);
+ 
+ if (isset($transcoder_fsmarr[$fromto])) {
   $fsm = $transcoder_fsmarr[$fromto];
-  if (!$fsm) {
+ }else {
+  transcoder_fsm($from,$to);
+  if (isset($transcoder_fsmarr[$fromto])) {
+   $fsm = $transcoder_fsmarr[$fromto];
+  }else {
 //   echo "could not find fsm\n";
    return $line;
   }
