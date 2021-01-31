@@ -1,7 +1,21 @@
 <?php
 // Report all errors except E_NOTICE  (also E_WARNING?)
-error_reporting(E_ALL & ~E_NOTICE);
+error_reporting(E_ALL & (~E_NOTICE & ~E_WARNING));
 ?>
+<?php
+function init_dalglob1_parms() {
+ $temp_names = ['key','input','output'];
+ $default_values = ['','slp1','iast'];
+ for($i=0;$i<count($temp_names);$i++) {
+  $temp = $temp_names[$i];
+  if (!isset($_GET[$temp])) {
+   $_GET[$temp] = $default_values[$i];
+  }
+ }
+}
+init_dalglob1_parms();
+?>
+
 <!DOCTYPE html>
 <html>
 <head>

@@ -408,7 +408,8 @@ function transcoder_standardize_filter($filter) {
   "TAMIL" => "tamil",
   "ROMAN" => "roman",
   "DEVA" => "deva",
-  "IAST" => "roman"
+  "IAST" => "roman",
+  "SLP1" => "slp1"
  );
 $filter = strtoupper($filter);
 $result=$standard_hash[$filter];

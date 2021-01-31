@@ -11,7 +11,8 @@ class Dalglob {
  public $file_db;
  public $dbg=false;
  public $ans= array('status'=>404, 'dicts'=>array());
- public $dbname; 
+ public $dbname;
+ 
  public $tabname;  # name of table in sqlitefile. 
  public $tabid;    # name of 'id' key used by getgeneral
  public $dbinfo;   # provides map from dbname to dbinfo
@@ -20,7 +21,7 @@ class Dalglob {
  public function __construct() {
   include("dictinfowhich.php");
   $this->dbg=false;
-  $this->key = $parms->key;
+  // $this->key = $parms->key;
   if ($dictinfowhich == "cologne") {
    $parent = "../..";
   }else {
@@ -58,7 +59,7 @@ class Dalglob {
   $this->sqlitefile = $dbinfo["sqlitefile"];
   $this->tabname = $dbinfo["tabname"];
   $this->tabid = $dbinfo["tabid"];
-   dbgprint($this->dbg,"Dalglob construct. sqlitefile={$this->sqlitefile}, tabname={$this->tabname}\n");
+  dbgprint($this->dbg,"Dalglob construct. sqlitefile={$this->sqlitefile}, tabname={$this->tabname}\n");
   $dbg=false;
   if (file_exists($this->sqlitefile)) {
    try {
