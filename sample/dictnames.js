@@ -37,7 +37,8 @@ CologneDisplays.dictionaries= {
 ['SNP' , 'Meulenbeld Sanskrit Names of Plants'],
 ['PE' , 'Puranic Encyclopedia'],
 ['PGN' , 'Personal and Geographical Names in the Gupta Inscriptions'],
-['MCI' , 'Mahabharata Cultural Index']
+['MCI' , 'Mahabharata Cultural Index'],
+['ARMH','Abhidhānaratnamālā of Halāyudha']
 ],
     dictshowMake: function() {
 	var x = [];

@@ -38,7 +38,7 @@ function parse_uri($htaccess) {
    array('wil','yat','gst','ben','mw72','ap90','lan','cae','md','mw',
      'shs','bhs','ap','pd','mwe','bor','ae','bur','stc','pwg',
      'gra','pw','ccs','sch','bop','skd','vcp','inm','vei','pui',
-     'acc','krm','ieg','snp','pe','pgn','mci');
+     'acc','krm','ieg','snp','pe','pgn','mci','armh');
  $parmvalues['input_simple'] = array('slp1','deva','iast','hk','itrans'); // 'roman'?
  $parmvalues['output'] = array('slp1','deva','iast','hk','itrans');
  $parmvalues['accent'] = array('yes','no');
