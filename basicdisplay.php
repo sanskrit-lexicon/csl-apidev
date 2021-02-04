@@ -474,7 +474,7 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
     // nothing special here  Greek remains to be filled in
     // Depends on whether the text is filled in
     $n = $attribs['n'];
-    if (in_array($this->dict,array('pwg','mw','pw','wil','md','yat','mw72','snp','stc','gra'))) {
+    if (in_array($this->dict,array('pwg','mw','pw','wil','md','yat','mw72','snp','stc','gra','lan'))) {
      # nothing to do.  Greek (and other) unicode has been provided.
     }else {
      # put a placeholder where the greek, arabic, etc. needs to be provided.
@@ -670,7 +670,11 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
   } else if ($this->parentEl == "lang") {
    // Greek typically uncoded
    //$data = $data . ' (greek)';
-   $this->row .= $data;
+   if ($this->dict == "mw") {
+    $this->row .= "<i>$data</i>"; # Greek italic for MW
+   } else {
+    $this->row .= $data;
+   }
   } else if ($this->parentEl == "ab") {
    $this->row .= "$data";
    /* not used 12-14-2017
