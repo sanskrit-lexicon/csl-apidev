@@ -15,6 +15,12 @@ $htaccess = 'simplet'; #12-25-2020
 // Report all errors except E_NOTICE and E_WARNING
 error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
 $phpvals = parse_uri($htaccess);
+if (false) {
+ dbgprint(true,"list-0.2s_rw.php:  phpvals returned from parse_uri\n");
+ foreach($phpvals as $key=>$val) {
+  dbgprint(true,"phpvals[$key] = $val \n");
+ }
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -283,6 +289,8 @@ displayOption2Helper = function(dicthw,index,nresults) {
 }
 
 displayOption2 = function(json) {
+ // console.log('list-0.2s_rw.php: displayOption2');
+ // console.log('json=',json);
  var results = json['result'];
  var dict = json['dict'];
  var nresults = results.length;
