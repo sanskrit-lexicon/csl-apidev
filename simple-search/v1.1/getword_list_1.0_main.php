@@ -138,6 +138,7 @@ for($ikey=0;$ikey<count($keysin);$ikey++) {
   // reset xml, and status
   // 11-01-2017. Extra flag to indicate whether this is the user's input word
   $ans1['user_key_flag'] = ($dictheadword == $keyparmin_slp1);
+  #dbgprint(true,"getword: dictheadword = $dictheadword, keyparmin_slp1 = $keyparmin_slp1\n");
   # accent-adjustment
   #require_once($dirpfx . "accent_adjust.php");
   $dictinfo = $getParms->dictinfo;
@@ -161,7 +162,10 @@ for($ikey=0;$ikey<count($keysin);$ikey++) {
 #dbgprint(true,"getword_list_1.0_main: #result=" . count($result) . "\n");
 $result1a = order_by_wf($result,$wfreqs);
 $result1 = put_user_word_first($result1a);
-$ans['result']=$result1;
+// 02-05-2021: Return ONLY user result if inputparmin is not default,
+// and certain other conditions
+$result2 = restrict_to_user_word($result1,$inputparmin);
+$ans['result']=$result2;
 
 $ru3 = microtime(true); //getrusage();
 $utime = $ru3 - $ru2;
@@ -169,7 +173,23 @@ dbgprint($dbg,"time used gathering data: $utime s\n");
 
 return $ans;
 }  // end of getword_list_processone
-
+function restrict_to_user_word($result1,$inputparmin){
+ if (count($result1) == 0) {
+  return $result1;
+ }
+ if ($inputparmin == 'default') {
+  return $result1;
+ }
+ $ans1 = $result1[0];
+ if (! $ans1['user_key_flag']) {
+  return $result1;
+ }
+ // Now, the user's spelling was found, and user specified a non-default
+ // spelling.
+ // Return ONLY the user's spelling
+ $result2 = array($ans1);
+ return $result2;
+}
 function init_word_frequency() {
  # word_frequency_adj.txt removes duplicates from word_frequency.txt
  # see readme.org in ../v0.1
@@ -205,6 +225,7 @@ function wf_cmp($a,$b) {
  return  ($a['wf'] > $b['wf']) ? -1 : 1;
  #return  ($a['wf'] > $b['wf']) ? 1 : -1;
 }
+
 function put_user_word_first($result) {
  $iuser = -1;
  $i = 0;

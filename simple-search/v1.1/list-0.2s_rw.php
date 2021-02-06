@@ -252,7 +252,7 @@ $("#dict").focus(function() {
   test.key = find_word;
   test.url = "getword_list_1.0.php";  // 01-22-2021
   test.input = $('#input_simple').val();  // 
-  console.log('list-0.2s_rw: simpleDisplay: test.input=',test.input);
+  //console.log('list-0.2s_rw: simpleDisplay: test.input=',test.input);
   test.output = $('#output').val(); //'deva';
   test.dict = $('#dict').val();; 
   // Blank out result area
@@ -287,11 +287,22 @@ displayOption2Helper = function(dicthw,index,nresults) {
  }
  listDisplay(dicthw);
 }
-
+displayOption2_error = function(json) {
+ console.log('displayOption2 error: json=',json); 
+ var html = `<p>Programming error in simple search at displayOption2<br/>
+ Please notify programmer Funderburk of the error, with your inputs <br/>
+ at the email at bottom of Sanskrit-lexicon home page.`
+ $('#simpleinfo').html(html);
+}
 displayOption2 = function(json) {
  // console.log('list-0.2s_rw.php: displayOption2');
  // console.log('json=',json);
+ // 02-05-2021. Prepare for errors (e.g. non-json results)
  var results = json['result'];
+ if (! results) { // results may be undefined
+  displayOption2_error();
+  return;
+ } 
  var dict = json['dict'];
  var nresults = results.length;
  var nfound = nresults;
