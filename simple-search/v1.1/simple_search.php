@@ -25,13 +25,15 @@ class Simple_Search{
  public $transitionTable_default = [
    // The spellings are in slp1, but they are to applied when
    // the user input spelling is default
-   ["a","A"],
+   ["a","A","ah"],  // ah tamilish
    ["i","I"],
-   ["u","U"],
-   ["o","O"],
+   ["u","U","oo"],  // oo = tamilish
+   ["o","O","au","ou"], // au = tamilish
    ["e","E"],
    ["r","f","F","ri","ar","ru","rI","R","RI"],
    ["l","x","X","lri"],
+   ["ou","O"],  // tamilish
+   
    ["h","H"],
    ["n","Y","N","m","R","M"],  
    ["S","z","s","zh","sh"],
