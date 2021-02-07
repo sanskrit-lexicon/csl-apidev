@@ -25,14 +25,13 @@ class Simple_Search{
  public $transitionTable_default = [
    // The spellings are in slp1, but they are to applied when
    // the user input spelling is default
-   ["a","A","ah"],  // ah tamilish
+   ["a","A","ah"],  // ah tamilish ?
    ["i","I"],
-   ["u","U","oo"],  // oo = tamilish
-   ["o","O","au","ou"], // au = tamilish
+   ["u","U"], 
+   ["o","O"],
    ["e","E"],
    ["r","f","F","ri","ar","ru","rI","R","RI"],
    ["l","x","X","lri"],
-   ["ou","O"],  // tamilish
    
    ["h","H"],
    ["n","Y","N","m","R","M"],  
@@ -45,7 +44,8 @@ class Simple_Search{
    ["jy","jY"],
    ["w","W","t","T"],
    ["q","Q","d","D"],
-   ["p","P","f","b","B"],
+   //["p","P","f","b","B"],
+   ["p","P"],
    ["b","B","v","V"],
    ["t","tt"]
  ];
@@ -563,6 +563,7 @@ class Simple_Search{
   // some letters are not in 'roman', but are in 'slp1'
   $wordin0 = $this->clean_default($wordin0);
   // converting from 'roman'
+  // It might be better to have a different transcoder here
   $wordin1 = transcoder_processString($wordin0,'roman','slp1');
   $wordin2 = $this->clean_slp1($wordin1);
   return $wordin2;
@@ -574,6 +575,10 @@ class Simple_Search{
   $word1 = preg_replace('|w|','v',$word);
   $word1 = preg_replace('|f|','p',$word1);
   $word1 = preg_replace('|x|','z',$word1);  # e.g. xenophobe
+  // tamilish
+  $word1 = preg_replace('|oo|','u',$word1);
+  $word1 = preg_replace('|ou|','o',$word1);
+  $word1 = preg_replace('|f|','ph',$word1);
   return $word1;
  }
 }
