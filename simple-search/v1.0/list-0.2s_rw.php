@@ -17,8 +17,8 @@ $uri = $_SERVER['REQUEST_URI'];
 $dbg=false;
 dbgprint($dbg,"uri = $uri\n"); 
 // delete up through /simple/
-if (preg_match('|/simple$|',$uri)) {$uri = ($uri . "/");}
-$url = preg_replace('|^.*?/simple/|','',$uri);
+if (preg_match('|/simple[^/]*$|',$uri)) {$uri = ($uri . "/");}
+$url = preg_replace('|^.*?/simple[^/]*/|','',$uri);
 $url_parts = explode("/",$url);
 // assume parameters are:  dict, key,output,accent(optional, default=no)
 $url_parts_num = count($url_parts);
