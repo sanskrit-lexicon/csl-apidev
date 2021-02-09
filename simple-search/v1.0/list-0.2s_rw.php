@@ -6,11 +6,16 @@
   running in 'cologne' file system or 'xampp' file system.
  */
 require_once('dictinfowhich.php'); // exposes $dictinfowhich
+require_once('get_parent_dirpfx.php');
+$dirpfx = get_parent_dirpfx("simple-search");
+require_once($dirpfx . "utilities/transcoder.php"); // initializes transcoder
+require_once($dirpfx . "dbgprint.php");
 // Report all errors except E_NOTICE  (also E_WARNING?)
 error_reporting(E_ALL & ~E_NOTICE);
 // uri: uri = /cologne/simple/mw/devi/simple/deva/no
-$uri = $_SERVER['REQUEST_URI'];  
-//echo("uri = $uri<br/>\n");
+$uri = $_SERVER['REQUEST_URI'];
+$dbg=false;
+dbgprint($dbg,"uri = $uri\n"); 
 // delete up through /simple/
 if (preg_match('|/simple$|',$uri)) {$uri = ($uri . "/");}
 $url = preg_replace('|^.*?/simple/|','',$uri);

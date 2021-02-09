@@ -127,7 +127,7 @@ for($ikey=0;$ikey<count($keysin);$ikey++) {
    }
 
  }
-  dbgprint(true,"getword_list_1.0_main: input = {$ans['input']}, output = {$ans['output']}\n");
+  dbgprint($dbg,"getword_list_1.0_main: input = {$ans['input']}, output = {$ans['output']}\n");
 
  foreach($dictheadwords as $dictheadword) {
   // This loop doesn't execute unless $nmatches>0.
