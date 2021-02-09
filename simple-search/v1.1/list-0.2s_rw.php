@@ -11,7 +11,7 @@ require_once('../../dbgprint.php');
 require_once('parse_uri.php');
 //require_once('get_parent_dirpfx.php');
 $version = 'v1.1';  # 12-25-2020
-$htaccess = 'simplet'; #12-25-2020
+$htaccess = 'simple[^/]*'; #12-25-2020
 // Report all errors except E_NOTICE and E_WARNING
 error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
 $phpvals = parse_uri($htaccess);
