@@ -1,0 +1,46 @@
+<fsm start='INIT' inputDecoding='UTF-8' outputEncoding='UTF-8'>
+ <!-- Feb 12, 2021 
+  Use to 'stem' words spelled with slp1
+  Assume slp1 text has been converted to lower case EXCEPT for Y and R
+-->
+
+<e> <s>INIT</s> <in>f</in> <out>r</out></e>
+<e> <s>INIT</s> <in>x</in> <out>l</out></e>
+
+<!-- known hiatuses (from sanhw1/hwnorm1c.txt) -->
+<e> <s>INIT</s> <in>ai</in> <out>e</out></e>
+<e> <s>INIT</s> <in>au</in> <out>o</out></e>
+<e> <s>INIT</s> <in>af</in> <out>r</out></e>
+
+<e> <s>INIT</s> <in>ia</in> <out>i</out></e>
+<e> <s>INIT</s> <in>if</in> <out>r</out></e>
+<e> <s>INIT</s> <in>io</in> <out>i</out></e>
+<e> <s>INIT</s> <in>ie</in> <out>e</out></e>
+
+<e> <s>INIT</s> <in>ua</in> <out>u</out></e>
+<e> <s>INIT</s> <in>uu</in> <out>u</out></e>
+
+<e> <s>INIT</s> <in>eu</in> <out>e</out></e>
+<e> <s>INIT</s> <in>ei</in> <out>e</out></e>
+
+<e> <s>INIT</s> <in>oa</in> <out>o</out></e>
+<e> <s>INIT</s> <in>oi</in> <out>o</out></e>
+<e> <s>INIT</s> <in>ou</in> <out>o</out></e>
+<e> <s>INIT</s> <in>of</in> <out>o</out></e>
+<e> <s>INIT</s> <in>oo</in> <out>o</out></e>
+<!--
+<e> <s>INIT</s> <in></in> <out></out></e>
+<e> <s>INIT</s> <in></in> <out></out></e>
+ Y is palatal nasal;
+ y is semivowel
+-->
+<e> <s>INIT</s> <in>Y</in> <out>n</out></e>
+
+<e> <s>INIT</s> <in>w</in> <out>t</out></e>
+<e> <s>INIT</s> <in>q</in> <out>d</out></e>
+<e> <s>INIT</s> <in>R</in> <out>n</out></e>
+
+<e> <s>INIT</s> <in>z</in> <out>s</out></e>
+
+<e> <s>INIT</s> <in>|</in> <out>l</out></e>
+</fsm>

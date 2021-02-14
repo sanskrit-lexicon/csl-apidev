@@ -1,0 +1,60 @@
+<!-- simple_slp1.xml  used in simple_search v1.1a c
+Assume 'in' is in default transcoding with all lower-case letters.
+We transcode to a 'lower case' slp1 spelling.
+This is a 'tokenizer':  i.e., it changes the spelling, but is
+not invertible.  Nor does it give the slp1 spelling if 'in' is in roman.
+This transcoder:
+1. removes diacritics from lower-case letters that occur with diacritics
+in iast spelling
+This results in just 2 nasals:  n,m
+and one sibilant (s)
+2. There are just 5 vowels: a,i,u,f,l,e,o  (l can also be semi-vowel
+-->
+<fsm start='SKT' inputDecoding='UTF-8' outputEncoding='UTF-8'>
+<!-- lower case diacritics -->
+<e> <s>SKT</s> <in>ā</in> <out>a</out></e>
+<e> <s>SKT</s> <in>ī</in> <out>i</out></e>
+<e> <s>SKT</s> <in>ū</in> <out>u</out></e>
+<e> <s>SKT</s> <in>ṛ</in> <out>r</out></e>
+<e> <s>SKT</s> <in>ṝ</in> <out>r</out></e>
+<e> <s>SKT</s> <in>ḷ</in> <out>l</out></e>
+<e> <s>SKT</s> <in>ḹ</in> <out>l</out></e>
+<e> <s>SKT</s> <in>ai</in> <out>e</out></e>
+<e> <s>SKT</s> <in>au</in> <out>o</out></e>
+<e> <s>SKT</s> <in>ṃ</in> <out>m</out></e>
+<e> <s>SKT</s> <in>ḥ</in> <out>h</out></e>
+
+<e> <s>SKT</s> <in>kh</in> <out>k</out></e> 
+<e> <s>SKT</s> <in>gh</in> <out>g</out></e>
+<e> <s>SKT</s> <in>ṅ</in> <out>n</out></e>
+<e> <s>SKT</s> <in>ch</in> <out>c</out></e>
+<e> <s>SKT</s> <in>jh</in> <out>j</out></e>
+<e> <s>SKT</s> <in>ñ</in> <out>n</out></e>
+<e> <s>SKT</s> <in>ṭ</in> <out>t</out></e>
+<e> <s>SKT</s> <in>ṭh</in> <out>t</out></e>
+<e> <s>SKT</s> <in>ḍ</in> <out>d</out></e>
+<e> <s>SKT</s> <in>ḍ</in> <out>d</out></e>
+<e> <s>SKT</s> <in>ṇ</in> <out>n</out></e>
+<e> <s>SKT</s> <in>th</in> <out>t</out></e>
+<e> <s>SKT</s> <in>dh</in> <out>d</out></e>
+<e> <s>SKT</s> <in>ph</in> <out>p</out></e>
+<e> <s>SKT</s> <in>bh</in> <out>b</out></e>
+
+<e> <s>SKT</s> <in>ś</in> <out>s</out></e>
+<e> <s>SKT</s> <in>ṣ</in> <out>s</out></e>
+
+<!-- interpret q,w,x,z --> 
+<e> <s>SKT</s> <in>q</in> <out>k</out></e>
+<e> <s>SKT</s> <in>x</in> <out>ks</out></e>
+<e> <s>SKT</s> <in>z</in> <out>s</out></e>
+<e> <s>SKT</s> <in>w</in> <out>v</out></e>
+
+<e> <s>SKT</s> <in>sh</in> <out>s</out></e>
+<e> <s>SKT</s> <in>zh</in> <out>s</out></e>
+
+<!-- tamilish ? -->
+<e> <s>SKT</s> <in>oo</in> <out>u</out></e>
+<e> <s>SKT</s> <in>ou</in> <out>o</out></e>
+<e> <s>SKT</s> <in>f</in> <out>p</out></e>  <!-- ph -->
+
+</fsm>
