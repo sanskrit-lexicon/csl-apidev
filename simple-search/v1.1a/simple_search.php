@@ -638,18 +638,18 @@ class Simple_Search{
   $word1 = mb_strtolower($word, 'UTF-8');
   //dbgprint(true,"td: word=$word, word1=$word1\n");
   // do other preparation, similar to simpleslp1.py function simpleslp1
-  // 1. replace double letters
-  $word1a = preg_replace_callback('|(.)\1|','Simple_Search::double_letter_callback',$word1);
   dbgprint($this->dbg,"tokenizer_default calling transcoder_get_dir\n");
   $savedir = transcoder_get_dir();
-  dbgprint($this->dbg,"savedir=$savedir\n");
-  transcoder_set_dir($this->simple_transcoder_dir());
-  dbgprint($this->dbg,"tokenizer_default calling transcoder\n");
-  $word2 = transcoder_processString($word1a,'simple','simpleslp1');
+  $newdir = $this->simple_transcoder_dir();
+  //dbgprint($this->dbg,"savedir=$savedir\newdir=$newdir");
+  transcoder_set_dir($newdir);
+  //dbgprint($this->dbg,"tokenizer_default calling transcoder\n");
+  $word1a = transcoder_processString($word1,'simple','simpleslp1');
   transcoder_set_dir($savedir);
-  dbgprint($this->dbg,"tokenizer_default back from transcoder");
-  //dbgprint(true,"td: word2=$word2\n");
-  //$word2 = $word1;
+  //dbgprint($this->dbg,"tokenizer_default back from transcoder\n");
+  // replace double letters
+  $word2 = preg_replace_callback('|(.)\1|','Simple_Search::double_letter_callback',$word1a);
+
   dbgprint($this->dbg,"tokenizer_default: $word, $word1, $word1a, $word2\n");
   return $word2;
  }

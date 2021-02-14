@@ -36,7 +36,7 @@ def create_virtual_table(c,conn,tabname,colnames):
  ftsargs = colnames + [tokenizers]
  ftsargs_string = ','.join(ftsargs)
  # can also use fts4 or fts3
- template = 'CREATE VIRTUAL TABLE %s USING fts5(%s);' % (tabname,ftsargs_string)
+ template = 'CREATE VIRTUAL TABLE %s USING fts4(%s);' % (tabname,ftsargs_string)
  if False:  #dbg
   print('DBG: table template=')
   print(template)
