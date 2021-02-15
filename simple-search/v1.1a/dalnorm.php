@@ -35,7 +35,7 @@ class Dalnorm {
   if ($this->file_db) {
    $this->file_db = null;  //ref: //php.net/manual/en/pdo.connections.php
   }
-  if ($this->file_db_xml) {
+  if (isset($this->file_db_xml)) {
    $this->file_db_xml = null;  //ref: //php.net/manual/en/pdo.connections.php
   }
  }

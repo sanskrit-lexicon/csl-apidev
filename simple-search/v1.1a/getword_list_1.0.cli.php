@@ -10,5 +10,5 @@ require_once('getword_list_1.0_main.php');
 $ans = getword_list_processone(); // Gets arguments from $_REQUEST
 print_r($ans);
 $json = json_encode($ans);
-echo $json + "\n";
+echo $json . "\n";
 ?>
