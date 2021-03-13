@@ -40,6 +40,7 @@ class ServepdfClass {
   $this->init_request($getParms,$dictinfo);
   $page = $this->request['page'];
   $key = $this->request['key'];
+  //dbgprint(true,"get_pageinfos: page=$page, key=$key\n");
   #list($page,$key) = $getParms->servepdfParms();  
   
   if ($page != '') {
@@ -92,6 +93,7 @@ EOF;
   # addional paramaters
   $dict = $getParms->dict;
   $dictupper = $dictinfo->dictupper;
+  //dbgprint(true,"html_construct: dict=$dict, key={$getParms->keyin},status={$getParms->status}\n");
   if ($getParms->status != 200) {
    if ($dictinfo->dictstatus != 200) {
     $errmsg = "servepdf ERROR: " . $dictinfo->dicterr;
@@ -102,6 +104,7 @@ EOF;
    return;  
   }
   $pageinfos = $this->get_pageinfos($getParms,$dictinfo);
+  //dbgprint(true,"servepdfClass: # pageinfos=" . count($pageinfos) . "\n");
   if (count($pageinfos) > 0) {
    $pageinfo = $pageinfos[0];
    $page = $pageinfo['page'];
@@ -351,7 +354,8 @@ HTML;
   $this->json = json_encode($ans);
  }
  public function init_request($getParms,$dictinfo) {
-  list($page,$key) = $getParms->servepdfParms();  
+  list($page,$key) = $getParms->servepdfParms();
+  //dbgprint(true,"init_request: page=$page, key=$key\n");
   if ($page) {
    $this->request = array('dict' => $getParms->dict,
     'page'=>$page, 

@@ -114,7 +114,8 @@ class Parm {
   if (isset($_REQUEST['page'])) {
    $page = $_REQUEST['page'];
   } else {
-   $page = '1'; // arbitrary
+   //$page = '1'; // arbitrary
+   $page = false; // 03-12-2021. Used oly by serepdfdClass.
   }
   return array($page,$this->keyin);
  }
