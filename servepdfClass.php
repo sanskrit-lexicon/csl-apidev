@@ -235,14 +235,26 @@ HTML;
    $pagehash[$pagestr_trim]=$n;
    $pagearr[$n]=array($pagestr,$pagefile);
   }
-  $ncur = $pagehash[$pagestr_in];
+  if (isset($pagehash[$pagestr_in])) {
+   $ncur = $pagehash[$pagestr_in];
+  }else {
+   $ncur = false;
+  }
   if (!$ncur) {
-   $pagenum = intval($pagestr_in); // result is 0 if not a string of digits
+   if (isset($pagestr_in)) {
+    $pagenum = intval($pagestr_in); // result is 0 if not a string of digits
+   }else {
+    $pagenum = 0;
+   }
    if (($pagenum % 2) == 1) {
     $pagenum = $pagenum - 1;
    }
    $pagestr = "$pagenum";
-   $ncur = $pagehash[$pagestr];
+   if (isset($pagehash[$pagestr])) {
+    $ncur = $pagehash[$pagestr];
+   }else {
+    $ncur = false;
+   }
   }
   
   if ((!$ncur) && ($dictupper == 'PWG')) {

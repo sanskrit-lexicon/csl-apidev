@@ -3,9 +3,10 @@
  June 4, 2015 get_htmlPath - sqlite file for html
  This code depends on the organization of files on the server,
  and specifically depends on the orgranization at Cologne sanskrit-lexicon.
+ // VCP changed from 2013 to 2019 03-12-2021
 */
 require_once('dbgprint.php');
-class DictInfo {
+class DictInfo {  
  static public $dictyear=
    array("ACC"=>"2014" , "AE"=>"2014" , "AP"=>"2014" , "AP90"=>"2014",
        "BEN"=>"2014" , "BHS"=>"2014" , "BOP"=>"2014" , "BOR"=>"2014",
@@ -15,7 +16,7 @@ class DictInfo {
        "MWE"=>"2013" , "PD"=>"2014" , "PE"=>"2014" , "PGN"=>"2014",
        "PUI"=>"2014" , "PWG"=>"2013" , "PW"=>"2014" , "SCH"=>"2014",
        "SHS"=>"2014" , "SKD"=>"2013" , "SNP"=>"2014" , "STC"=>"2013",
-       "VCP"=>"2013" , "VEI"=>"2014" , "WIL"=>"2014" , "YAT"=>"2014",
+       "VCP"=>"2019" , "VEI"=>"2014" , "WIL"=>"2014" , "YAT"=>"2014",
        "LAN"=>"2019","ARMH"=>"2020");
  //static public $scanpath = "../..";  // scan dir.depends on loc of this file!
  //static public $scanpath = preg_replace('|/awork/apidev|','',__DIR__);
@@ -188,7 +189,7 @@ public function get_cologne_pdfpages_url() {
   "SKD"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/SKDScan/2013/web/pdfpages" ,
   "SNP"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/SNPScan/2014/web/pdfpages" ,
   "STC"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/STCScan/2013/web/pdfpages" ,
-  "VCP"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/VCPScan/2013/web/pdfpages" ,
+  "VCP"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/VCPScan/2019/web/pdfpages" ,
   "VEI"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/VEIScan/2014/web/pdfpages" ,
   "WIL"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/WILScan/2014/web/pdfpages" ,
   "YAT"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/YATScan/2014/web/pdfpages" ,
