@@ -1,6 +1,6 @@
 import sqlite3
 import json
-import sys,codecs,re
+import sys,codecs,re,os
 def stems_m(word,dbg):
  ans = [word]
  if re.search(r'[aiu][m]$',word):
@@ -115,11 +115,16 @@ def query3(word,dbg):
  sql = 'select slp1 from %s where simpleslp1 MATCH "%s" ;' %(tabname,query)
  #dbg=True
  if dbg:
-  import os
   cwd = os.getcwd()
   # when called from php in ../v1.1a,  cwd is ../v1.1a
   dbgprint(dbg,"query3.py: cwd=%s\n" %cwd)
- filepath = '../simpleslp/%s' % fileout  
+ #filepath = '../simpleslp/%s' % fileout
+ parent = os.path.dirname(os.path.realpath(__file__)) 
+ #parent1 = os.path.dirname(os.path.realpath(parent))
+ filepath = os.path.join(parent,fileout)
+ #dbgprint(True,"__file__ = %s\n" % __file__)
+ #dbgprint(True,"parent = %s\n" % parent)
+ #dbgprint(True,"filepath = %s\n" % filepath)
  conn = sqlite3.connect(filepath)
  c = conn.cursor()  # prepare cursor for further use
  ans0 = c.execute(sql).fetchall()
