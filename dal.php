@@ -115,7 +115,11 @@ class Dal {
    //"file_db is null for $this->sqlitefile.
    return $ansarr;
   }
-  $result = $this->file_db->query($sql);
+  try {
+   $result = $this->file_db->query($sql);
+  } catch (PDOException $e) {
+   $result == false;
+  }
   if ($result == false) {
    return $ansarr;
   }
