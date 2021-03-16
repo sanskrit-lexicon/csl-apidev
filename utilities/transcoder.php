@@ -106,8 +106,16 @@ function transcoder_fsm($from,$to) {
 //  first character of $key
  $states=array();
  foreach($fsmentries as $i => $fsmentry) {
-  $in = $fsmentry['in'];
-  $c = $in[0];
+  if (isset($fsmentry['in'])) {
+   $in = $fsmentry['in'];
+   if (isset($in[0])) {
+    $c = $in[0];
+   } else {
+    $c = null;
+   }
+  } else {
+   $c = null;
+  }
   if (isset($states[$c])) {
    $state=$states[$c];
    $state[]=$i;
@@ -313,6 +321,9 @@ function transcoder_processString_match($line,$n,$m,$fsmentry) {
   if (!$b) { return $match;}
   if ($k != $nedge)  { return $match;}
   $match=$edge;
+  if (!isset($fsmentry['regex'])){
+   return $match;
+  }
   if (!$fsmentry['regex']) {
    return $match;
   }
