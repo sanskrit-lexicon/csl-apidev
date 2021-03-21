@@ -21,7 +21,7 @@ CologneDisplays.dictionaries= {
 ['BUR' , 'Burnouf Dictionnaire Sanscrit-Français'],
 ['STC' , 'Stchoupak Dictionnaire Sanscrit-Français'],
 ['PWG' , 'Böhtlingk and Roth Grosses Petersburger Wörterbuch'],
-['GRA' , 'Grassman Wörterbuch zum Rig Veda'],
+['GRA' , 'Grassmann Wörterbuch zum Rig Veda'],
 ['PW' , 'Böhtlingk Sanskrit-Wörterbuch in kürzerer Fassung'],
 ['CCS' , 'Cappeller Sanskrit Wörterbuch'],
 ['SCH' , 'Schmidt Nachträge zum Sanskrit-Wörterbuch'],
