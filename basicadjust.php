@@ -83,11 +83,12 @@ class BasicAdjust {
  $line = preg_replace_callback('|<ab(.*?)>(.*?)</ab>|',"BasicAdjust::abbrv_callback",$line);
  
  // Experiment 05-21-2018 for dict == gra
+ // Revised 04-05-2021
  $dbg=false;
  dbgprint($dbg,"BasicAdjust dict={$this->getParms->dict}\n");
  if ($this->getParms->dict == 'gra') {
   dbgprint($dbg,"BasicAdjust before rgveda: $line\n");
-  $line = preg_replace_callback('|([ (])([0-9]+)[ ,]+([0-9]+)|',"BasicAdjust::rgveda_verse_callback",$line);
+  $line = preg_replace_callback('|[{](.*?)[}]|',"BasicAdjust::rgveda_verse_callback",$line);
   dbgprint($dbg,"BasicAdjust after rgveda: $line\n");
  }
  if ($this->getParms->dict == 'lan') {
@@ -402,6 +403,7 @@ public function remove_slp1_accent($y) {
 }
  public function rgveda_verse_modern($gra) {
  /*Github user SergeA
+  $gra is called 'mandala' in rgveda_verse_callback
   https://github.com/sanskrit-lexicon/Cologne/issues/223#issuecomment-390369526
  */
  $data = [
@@ -444,30 +446,32 @@ public function rgveda_link($gra1,$gra2) {
  dbgprint($dbg,"rgveda_link: hymnfile=$hymnfile, anchor=$anchor\n");
  return array($hymnfile,$anchor);
 }
- public function rgveda_verse_callback($matches) {
-/* no special coding for Sanskrit in <s>X</s> form.
-    So, just remove the <s>,</s> elements
+public function rgveda_verse_callback($matches0) {
+/* 
     Adds 'gralink' and 'graverse' elements to xml. These need
     to be converted to html in basicdisplay.php
 */
- $x0 = $matches[0];
- $gra0 = $matches[1];
- $gra1 = $matches[2];
- $gra2 = $matches[3];
+ $dbg=false;
+ $x0 = $matches0[0];
+ $x1 = $matches0[1];
+ if(! preg_match('|^([0-9]+)[ ,]+([0-9]+)(.*)$|',$x1,$matches)) {
+  dbgprint($dbg,"rgveda_verse_callback: error. x1=$x1\n");
+  return $x0;
+ }
+ $gra1 = $matches[1];  // mandala
+ $gra2 = $matches[2];  // hymn
+ $gra3 = $matches[3];  // rest of stuff before closing }
+ dbgprint($dbg,"rgveda_verse_callback: gra1=$gra1, gra2=$gra2, gra3=$gra3\n");
  $modern = $this->rgveda_verse_modern((int)$gra1);
- #$x = "<ab n='Standard hymn reference=$modern'>$gra1</ab>,$gra2";
- #$x = "<ab n='=$modern (mandala,hymn)'>$gra1</ab>,<graverse>$gra2</graverse>";
  # This version provides a link
  list($rvfile,$rvanchor) = $this->rgveda_link($modern,$gra2);
- #$dir = "../sqlite/rvhymns";
  # 2018-08-30  use github location
  $dir = "https://sanskrit-lexicon.github.io/rvlinks/rvhymns";
  $href = "$dir/$rvfile#$rvanchor";
  $modern1 = "$modern.$gra2";
  $tooltip = "=$modern1 (mandala,hymn,verse)";
- $x = "<gralink href='$href' n='$tooltip'>$gra1,<graverse>$gra2</graverse></gralink>";
-# restore the initial space or (
- $x = $gra0 . $x;
+ // 04-03-2021
+ $x = "<gralink href='$href' n='$tooltip'>$gra1,$gra2$gra3</gralink>";
  return $x;
 }
 public function lanman_link_callback($matches) {
