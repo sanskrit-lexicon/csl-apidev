@@ -72,6 +72,11 @@ class BasicAdjust {
   $line = preg_replace_callback('|<ls n="(.*?)">(.*?)</ls>|',
       "BasicAdjust::ls_callback_pwg",$line);
  }else if (in_array($this->getParms->dict,array('mw'))){
+  // 04-09-2021.  Use rvlinks for <ls>RV. x,y,z
+  // This will create a 'gralink' element, like for Grassman
+  // If this gralink element can't be constructed, by ls_rv_callback_mw,
+  // then the ls element will be handled by general ls_callback_mw.
+  $line = preg_replace_callback('|<ls>(RV[.] [^<]*?)</ls>|', "BasicAdjust::ls_rv_callback_mw",$line);  
   $line = preg_replace_callback('|<ls>([A-ZĀĪŚṚṢṬ][A-Za-zÂáâêîñôĀāĪīŚśūûḍḥṃṅṇṉṚṛṢṣṬṭ.]*[.])(.*?)</ls>|', "BasicAdjust::ls_callback_mw",$line);  
   // handle the frequent <ls>ib.xxx</ls> by marking ib. as abbreviation
   $line = preg_replace('|<ls>ib[.]|','<ls><ab>ib.</ab>',$line);    
@@ -508,6 +513,61 @@ public function avveda_verse_callback($matches0) {
  $tooltip = sprintf("Atharva Veda %02d.%03d.%02d",$imandala,$ihymn,$iverse);
  // 04-03-2021
  $x = "<gralink href='$href' n='$tooltip'>$x1</gralink>";
+ return $x;
+}
+
+public function roman_int($roman) {
+ $a = array("i" => 1,"ii" => 2,"iii" => 3,"iv" => 4,"v" => 5,"vi" => 6,"vii" => 7,"viii" => 8,"ix" => 9,"x" => 10);
+ try {
+  if(isset($a[$roman])) {
+   return $a[$roman];
+  }else {
+   return 0;
+  }
+ } catch (exception $e)  {
+ return 0; // error
+ }
+ return 0;
+}
+public function ls_rv_callback_mw($matches0) {
+/*  modeled after avveda_verse_callback
+    Adds 'gralink' elements to xml. These need
+    to be converted to html in basicdisplay.php
+    Basic form of $x1 is m,h,v  (mandala, hymn, verse)
+    where mandala is in lower-case roman numerals :
+     i,ii,iii,iv,v,vi,vii,viii,ix,x
+*/
+ $dbg=false;
+ $x0 = $matches0[0];
+ $x1 = $matches0[1];
+ dbgprint($dbg,"ls_rv_callback_mw: x0=$x0\n");
+ if(! preg_match('|^RV[.] *([^ ,]+)[ ,]+([0-9]+)[ ,]+([0-9]+)(.*)$|',$x1,$matches)) {
+  dbgprint($dbg,"ls_rv_callback_mw (1): cannot parse. x1=$x1\n");
+  return $x0;
+ }
+ $gra1r = $matches[1];  // mandala, in Roman numerals (1-10)
+ $gra2 = $matches[2];  // hymn
+ $gra3 = $matches[3];  // verse
+ $gra4 = $matches[4];  // rest of stuff before closing 
+ // convert Roman numeral to integer
+ $gra1 = $this->roman_int($gra1r);
+ dbgprint($dbg,"ls_rv_callback_mw: gra1=$gra1, gra2=$gra2, gra3=$gra3\n");
+
+ $imandala = (int)$gra1;
+ $ihymn = (int)$gra2;
+ $hymnfilepfx = sprintf("rv%02d.%03d",$imandala,$ihymn);
+ $hymnfile = "$hymnfilepfx.html";
+ $iverse = (int)$gra3;
+ $versesfx = sprintf("%02d",$iverse);
+ $anchor = "$hymnfilepfx.$versesfx";
+
+ # 2018-08-30  use github location
+ $dir = "https://sanskrit-lexicon.github.io/rvlinks/rvhymns";
+ $href = "$dir/$hymnfile#$anchor";
+ $tooltip = sprintf("Rg Veda %02d.%03d.%02d",$imandala,$ihymn,$iverse);
+ // 04-03-2021
+ $x = "<gralink href='$href' n='$tooltip'>$x1</gralink>";
+ dbgprint($dbg,"ls_rv_callback_mw returns $x\n");
  return $x;
 }
 
