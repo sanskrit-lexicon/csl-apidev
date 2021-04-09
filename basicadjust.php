@@ -83,11 +83,12 @@ class BasicAdjust {
  $line = preg_replace_callback('|<ab(.*?)>(.*?)</ab>|',"BasicAdjust::abbrv_callback",$line);
  
  // Experiment 05-21-2018 for dict == gra
- // Revised 04-05-2021
+ // Revised 04-05-2021, 04-09-2021 for AV
  $dbg=false;
  dbgprint($dbg,"BasicAdjust dict={$this->getParms->dict}\n");
  if ($this->getParms->dict == 'gra') {
-  dbgprint($dbg,"BasicAdjust before rgveda: $line\n");
+  dbgprint($dbg,"BasicAdjust before rgveda, avveda: $line\n");
+  $line = preg_replace_callback('|[{](AV[.] .*?)[}]|',"BasicAdjust::avveda_verse_callback",$line);
   $line = preg_replace_callback('|[{](.*?)[}]|',"BasicAdjust::rgveda_verse_callback",$line);
   dbgprint($dbg,"BasicAdjust after rgveda: $line\n");
  }
@@ -469,11 +470,47 @@ public function rgveda_verse_callback($matches0) {
  $dir = "https://sanskrit-lexicon.github.io/rvlinks/rvhymns";
  $href = "$dir/$rvfile#$rvanchor";
  $modern1 = "$modern.$gra2";
- $tooltip = "=$modern1 (mandala,hymn,verse)";
+ //$tooltip = "=$modern1 (mandala,hymn,verse)";
+ $tooltip = "Rg Veda $modern1 (mandala,hymn,verse)";
  // 04-03-2021
  $x = "<gralink href='$href' n='$tooltip'>$gra1,$gra2$gra3</gralink>";
  return $x;
 }
+public function avveda_verse_callback($matches0) {
+/* 
+    Adds 'gralink' elements to xml. These need
+    to be converted to html in basicdisplay.php
+*/
+ $dbg=false;
+ $x0 = $matches0[0];
+ $x1 = $matches0[1];
+ if(! preg_match('|^AV[.] ([0-9]+),([0-9]+),([0-9]+)(.*)$|',$x1,$matches)) {
+  dbgprint($dbg,"avveda_verse_callback: error. x1=$x1\n");
+  return $x0;
+ }
+ $gra1 = $matches[1];  // mandala
+ $gra2 = $matches[2];  // hymn
+ $gra3 = $matches[3];  // verse
+ $gra4 = $matches[4];  // rest of stuff before closing }
+ dbgprint($dbg,"avveda_verse_callback: gra1=$gra1, gra2=$gra2, gra3=$gra3\n");
+
+ $imandala = (int)$gra1;
+ $ihymn = (int)$gra2;
+ $hymnfilepfx = sprintf("av%02d.%03d",$imandala,$ihymn);
+ $hymnfile = "$hymnfilepfx.html";
+ $iverse = (int)$gra3;
+ $versesfx = sprintf("%02d",$iverse);
+ $anchor = "$hymnfilepfx.$versesfx";
+
+ # 2018-08-30  use github location
+ $dir = "https://sanskrit-lexicon.github.io/avlinks/avhymns";
+ $href = "$dir/$hymnfile#$anchor";
+ $tooltip = sprintf("Atharva Veda %02d.%03d.%02d",$imandala,$ihymn,$iverse);
+ // 04-03-2021
+ $x = "<gralink href='$href' n='$tooltip'>$x1</gralink>";
+ return $x;
+}
+
 public function lanman_link_callback($matches) {
 /* 
     Adds 'lanlink' or 'wglink'  elements to xml. These need
