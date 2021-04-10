@@ -79,6 +79,9 @@ class BasicAdjust {
   $line = preg_replace_callback('|<ls>(RV[.] [^<]*?)</ls>|', "BasicAdjust::ls_rv_callback_mw",$line);
   // 04-09-2021  Similarly, for AV (Atharva Veda)
   $line = preg_replace_callback('|<ls>(AV[.] [^<]*?)</ls>|', "BasicAdjust::ls_av_callback_mw",$line);
+  // 04-11-2021 Similarly for Panini
+  $line = preg_replace_callback('|<ls>(Pāṇ[.].*?)</ls>|', "BasicAdjust::ls_pan_callback_mw",$line);
+  // General ls expansion  
   $line = preg_replace_callback('|<ls>([A-ZĀĪŚṚṢṬ][A-Za-zÂáâêîñôĀāĪīŚśūûḍḥṃṅṇṉṚṛṢṣṬṭ.]*[.])(.*?)</ls>|', "BasicAdjust::ls_callback_mw",$line);  
   // handle the frequent <ls>ib.xxx</ls> by marking ib. as abbreviation
   $line = preg_replace('|<ls>ib[.]|','<ls><ab>ib.</ab>',$line);    
@@ -611,6 +614,37 @@ public function ls_av_callback_mw($matches0) {
  $href = "$dir/$hymnfile#$anchor";
  $tooltip = sprintf("Atharva Veda %02d.%03d.%02d",$imandala,$ihymn,$iverse);
  // 04-03-2021
+ $x = "<gralink href='$href' n='$tooltip'>$x1</gralink>";
+ dbgprint($dbg,"ls_av_callback_mw returns $x\n");
+ return $x;
+}
+
+public function ls_pan_callback_mw($matches0) {
+/*  modeled after ls_av_callback_mw
+    Adds 'gralink' elements to xml. These need
+    to be converted to html in basicdisplay.php
+    Basic form of $x1 is c-s,v  (chapter,section, verse)
+*/
+ $dbg=false;
+ $x0 = $matches0[0];
+ $x1 = $matches0[1];
+ dbgprint($dbg,"ls_pan_callback_mw: x0=$x0\n");
+ if(! preg_match('|^Pāṇ[.] *([0-9]+)-([0-9]+)[ ,]+([0-9]+)(.*)$|',$x1,$matches)) {
+  dbgprint($dbg,"ls_pan_callback_mw (1): cannot parse. x1=$x1\n");
+  return $x0;
+ }
+ $gra1 = $matches[1];  // chapter
+ $gra2 = $matches[2];  // section
+ $gra3 = $matches[3];  // verse
+ $gra4 = $matches[4];  // rest of stuff before closing 
+
+ // construct https://ashtadhyayi.com/sutraani/c/s/v
+ $ic = (int)$gra1;
+ $is = (int)$gra2;
+ $iv = (int)$gra3;
+ $dir = "https://ashtadhyayi.com/sutraani";
+ $href = "$dir/$ic/$is/$iv";
+ $tooltip = sprintf("Pāṇini %d.%d.%d",$ic,$is,$iv);
  $x = "<gralink href='$href' n='$tooltip'>$x1</gralink>";
  dbgprint($dbg,"ls_av_callback_mw returns $x\n");
  return $x;
