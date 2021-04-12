@@ -142,12 +142,17 @@ class BasicAdjust {
    # It might be better to do this logic (including the em-dash) in
    # make_xml.py or even in ap90.txt. E.g., change
    # <b>--X</b> to <div n="1"/><b>—X</b>
-   #$line = preg_replace('|<b>--|','<lb/><b>&mdash;',$line);
    $line = preg_replace('|<b>--|','<div n="1"/><b>&#x2014; ',$line);
    # also, there are seven instances of "<P/>". Replace with a div
    $line = preg_replace('|<P/>|','<div n="P"/>',$line);
-   # $line = preg_replace('|<s>--|','<div n="1"/><s>&#x2014;',$line);
-   $line = preg_replace('|<s>--|','<div n="1"/><b>&#x2014;</b> <s>-',$line);
+   # remove '-' after <s> 04-11-2021
+   # $line = preg_replace('|<s>--|','<div n="1"/><b>&#x2014;</b> <s>-',$line);
+   $line = preg_replace('|<s>--|','<div n="1"/><b>&#x2014;</b> <s>',$line);
+   // 04-11-2021.  Add line breaks at two additional patterns
+   // at start of italics (about 2000 cases)
+   $line = preg_replace('|<i>--|','<div n="1"/><i>&#x2014; ',$line);
+   // preceding small Roman numerals (about 360 case, in verbs)
+   $line = preg_replace('|--([IV]+[.])|','<div n="1"/>&#x2014; \1',$line);
    #dbgprint(true,"line after <lb> changes\n$line\n");
   }
   else if ($this->getParms->dict == "ap") {
