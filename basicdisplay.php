@@ -400,8 +400,8 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
   } else if ($el == "gralink") {
     $href = $attribs['href'];
     $tooltip = $attribs['n'];
-    $style = '';
-    $this->row .= "<a href='$href' title='$tooltip' target='_rvlink'>";
+    $style = 'text-decoration: none; border-bottom: 1px dotted #000;';
+    $this->row .= "<a href='$href' title='$tooltip' style='$style' target='_rvlink'>";
   } else if ($el == "lanlink") {
     $href = $attribs['href'];
     # A work around.  Instead of real url parameter ('&page=...'),
@@ -501,10 +501,18 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
    }else {
     $this->row .= "&nbsp;<span class='ls'>";   
    }
+  } else if ($el == "span") {
+   if (isset($attribs['class'])) {
+    $class = $attribs['class'];
+    $this->row .= "<span class='$class'>";   
+   } else {
+   $this->row .= "<span>";
+   }
   } else if ($el == "lshead") {
    // pwg, pw
    $style = "color:blue; border-bottom: 1px dotted #000; text-decoration: none;";
-   $this->row  .= "<span style='$style'>";
+   $style = "color:blue;";
+   $this->row  .= "<span style='$style' class='ls'>";
   } else if ($el == "is") {
     //pwg, pw
    #$this->row .= "<span style='font-style: normal; color:teal'>";
@@ -598,6 +606,8 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
    $this->row .= "</sup>";
   } else if ($el == "ls") {
    $this->row .= "</span>&nbsp;";
+  } else if ($el == "span") {
+   $this->row .= "</span>";
   } else if ($el == "is") {
    $this->row .= "</span>";
   } else if ($el == "bot") {

@@ -60,30 +60,32 @@ class BasicAdjust {
    $line = preg_replace('/<pc>(.*)<\/pc>/','',$line);
   }else {$this->pagecol = $matches[1];}
  }
-
- /* removed 12-14-2017
- $line = preg_replace_callback('/<ls(.*?)>(.*?)<\/ls>/',
-      "line_adjust1_callback",$line);
- */
  /*  Replace the 'title' part of a known ls with its capitalized form
      This is probably particular to pwg and/or pw 
  */
  if (in_array($this->getParms->dict,array('pw','pwg'))) {
-  $line = preg_replace_callback('|<ls n="(.*?)">(.*?)</ls>|',
+  $line = preg_replace_callback('|<ls(.*?)>(.*?)</ls>|',
       "BasicAdjust::ls_callback_pwg",$line);
+      
  }else if (in_array($this->getParms->dict,array('mw'))){
+  /*
+  // ls element expansion for mw.
   // 04-09-2021.  Use rvlinks for <ls>RV. x,y,z
   // This will create a 'gralink' element, like for Grassman
   // If this gralink element can't be constructed, by ls_rv_callback_mw,
-  // then the ls element will be handled by general ls_callback_mw.
+  // then the ls element will be handled by general ls_callback_mw_version0.
   $line = preg_replace_callback('|<ls>(RV[.] [^<]*?)</ls>|', "BasicAdjust::ls_rv_callback_mw",$line);
   // 04-09-2021  Similarly, for AV (Atharva Veda)
   $line = preg_replace_callback('|<ls>(AV[.] [^<]*?)</ls>|', "BasicAdjust::ls_av_callback_mw",$line);
   // 04-11-2021 Similarly for Panini
   $line = preg_replace_callback('|<ls>(Pāṇ[.].*?)</ls>|', "BasicAdjust::ls_pan_callback_mw",$line);
   // General ls expansion  
-  $line = preg_replace_callback('|<ls>([A-ZĀĪŚṚṢṬ][A-Za-zÂáâêîñôĀāĪīŚśūûḍḥṃṅṇṉṚṛṢṣṬṭ.]*[.])(.*?)</ls>|', "BasicAdjust::ls_callback_mw",$line);  
+  $line = preg_replace_callback('|<ls>([A-ZĀĪŚṚṢṬ][A-Za-zÂáâêîñôĀāĪīŚśūûḍḥṃṅṇṉṚṛṢṣṬṭ.]*[.])(.*?)</ls>|', "BasicAdjust::ls_callback_mw_version0",$line);  
   // handle the frequent <ls>ib.xxx</ls> by marking ib. as abbreviation
+  */
+  $line = preg_replace_callback('|<ls(.*?)>(.*?)</ls>|',
+      "BasicAdjust::ls_callback_mw",$line);
+
   $line = preg_replace('|<ls>ib[.]|','<ls><ab>ib.</ab>',$line);    
  }
  /* 12-14-2017
@@ -206,45 +208,276 @@ class BasicAdjust {
   }
  return $line;
 }
- 
+
+ public function ls_matchabbr($fieldname,$fieldidx,$data) {
+  $dbg = false;
+  $table = $this->dal_auth->tabname;
+  dbgprint($dbg,"ls_matchabbr: data=$data\n");
+  //dbgprint($dbg,"  table=$table\n");
+  $ans = array();  // default return value
+  // Use $data. Variant of getgeneral
+  if (!$this->dal_auth->file_db) {
+   return $ans;
+  }
+  // 
+  if (!preg_match("|^([^ .,']+)|",$data,$matches)) {
+   return $ans;
+  }
+  //$tabid = 'code'; // pw, pwg
+  $key = $matches[1];
+  $key1 = $key . '%';
+  $sql = "select * from $table where $fieldname LIKE '$key1'";
+  dbgprint($dbg,"ls_matchabbr: sql=$sql\n");
+  $result = $this->dal_auth->file_db->query($sql);
+  $ansarr = array();
+  $max = -1;
+  $ansmax = null;
+  foreach($result as $m) {
+   $code0 = $m[$fieldidx];
+   if (strpos($data,$code0) === 0) {
+    // this is a candidate. is it the longest?
+    $n = strlen($code0);
+    if ($n > $max) {
+     $ansmax = $m;
+     $max = $n;
+    }
+   }
+  }
+  if ($ansmax == null) {
+   // probably could not happen. Return default answer
+   return $ans;
+  }
+  $ans = array($ansmax);
+  dbgprint($dbg,"ls_matchabbr: $data ->  $ansmax\n");
+  return $ans;
+ }
  public function ls_callback_pwg($matches) {
  // for pw, pwg
- // <ls n="$n">$data</ls>
- $ans = $matches[0];
- $n = $matches[1];
- $data = $matches[2];
+ // Two situations envisioned:
+ // <ls>X</ls>  
+ // <ls n="C">Y</ls>
  $dbg=false;
- dbgprint($dbg,"ls_callback_pwg: n=$n, data=$data\n");
+ $ans = $matches[0];
+ $ndata = $matches[1];  // empty string or ' n="C"'
+ $data0 = $matches[2];
+ if (preg_match('|n="(.*?)"|',$ndata,$matchesn)) {
+  $n = $matchesn[1]; //
+  $data = "$n $data0";  // controversial.
+ } else{
+  $n = '';
+  $data = $data0;
+ }
+ dbgprint($dbg,"ls_callback_pwg BEGIN: ndata=$ndata, data0=$data0\n");
+ dbgprint($dbg,"ls_callback_pwg : n=$n, data=$data\n");
  if (!$this->dal_auth->status) {
   return $ans;
  }
- $table = $this->dal_auth->tabname;
- $result = $this->dal_auth->getgeneral($n,$table);
- if (count($result) != 1) {
+ $fieldname = 'code';
+ $fieldidx = 1;
+ $result = $this->ls_matchabbr($fieldname,$fieldidx,$data);
+ if (count($result) == 0) {
   return $ans; // failure
  }
- if (in_array($this->getParms->dict,array('pwg','pw'))) {
-  // This if is currently redundant, as ls_callback_pwg only called
-  // when this is true. However, it does no harm.
   $rec = $result[0];
   list($n0,$code,$codecap,$text) = $rec;
-  dbgprint($dbg," ls_callback_pwg code=$code,  codecap=$codecap, text=\n$text\n");
-  #$datanew = preg_replace("/^$code/",$codecap,$data);
-  #$ans = "<ls n='$n'>$datanew</ls>";
   # 12-26-2017. pwg. Add lshead, so as to be able to style
-  $datanew = preg_replace("/^$code/","<lshead>$codecap</lshead>",$data);
+  if ($n != '') {
+   $datanew = preg_replace("/^$code/","<lshead></lshead>",$data);
+  } else {
+   $datanew = preg_replace("/^$code/","<lshead>$codecap</lshead>",$data);
+  }
   # be sure there is no xml in the text
   $text = preg_replace('/<.*?>/',' ',$text);
-  dbgprint($dbg," ls_callback_pwg. text after removing tags: \n$text\n");
+  //dbgprint($dbg," ls_callback_pwg. text after removing tags: \n$text\n");
   # convert special characters to html entities
   # for instance, this handles cases when $tran has single (or double) quotes
   $tooltip = $this->htmlspecial($text);
-  $ans = "<ls n='$tooltip'>$datanew</ls>";
+  $tip0 = mb_substr($tooltip,0,10) . "...";
+  //dbgprint($dbg," ls_callback_pwg code=$code,  codecap=$codecap, tooltip=$tip0\n");
+ // 04-14-2021.  Use 'gralink' for certain values of 'code'
+  //$linkcodes = array('ṚV.','AV.','P');
+  $href = $this->ls_callback_pwg_href($code,$data);
+  
+  if ($href != null) {
+   // link
+   //$ans = "<gralink href='$href' n='$tooltip'><ls>$datanew</ls></gralink>";
+   $datanew1 = preg_replace("|</lshead>(.*)$|",'</lshead><span class="ls">${1}</span>',$datanew);
+   $ans = "<gralink href='$href' n='$tooltip'>$datanew1</gralink>";
+  }else {
+   //$ans = "<ls n='$tooltip'>$datanew</ls>";
+   $ans = "<ls n='$tooltip'><span class='dotunder'>$datanew</span></ls>";
+  }
   dbgprint($dbg,"ls_callback_pwg: ans=$ans\n");
- }
+ 
  return $ans;
 }
+public function ls_callback_pwg_href($code,$data) {
+ $href = null; // default if no success
+ $dbg = false;
+ dbgprint($dbg,"ls_callback_pwg_href. data=$data\n");
+ if (!preg_match('|^(.*?)[.] *([0-9]+)[ ,]+([0-9]+)[ ,]+([0-9]+)(.*)$|',$data,$matches)) {
+  return $href;
+ }
+ $code_to_pfx = array('ṚV.' => 'rv', 'AV.' => 'av', 'P.' => 'p');
+ if (!isset($code_to_pfx[$code])) {
+  return $href;
+ }
+ $pfx = $code_to_pfx[$code];
+ $code0 = $matches[1];
+ $imandala = (int)$matches[2]; 
+ $ihymn = (int)$matches[3];
+ $iverse = (int)$matches[4];
+ dbgprint($dbg,"ls_callback_pwg_href. $code0, $imandala, $ihymn, $iverse\n");
+ $rest = $matches[5];
+ if (in_array($pfx,array('rv','av'))) {
+  $hymnfilepfx = sprintf("%s%02d.%03d",$pfx,$imandala,$ihymn);
+  $hymnfile = "$hymnfilepfx.html";
+  $versesfx = sprintf("%02d",$iverse);
+  $anchor = "$hymnfilepfx.$versesfx";
+  $versesfx = sprintf("%02d",$iverse);
+  $anchor = "$hymnfilepfx.$versesfx";
+  $dir = sprintf("https://sanskrit-lexicon.github.io/%slinks/%shymns",$pfx,$pfx);
+  $href = "$dir/$hymnfile#$anchor";
+ }else if ($pfx == "p") {  // P.  = Panini
+  $dir = "https://ashtadhyayi.com/sutraani";
+  $href = "$dir/$imandala/$ihymn/$iverse";
+ }
+ dbgprint($dbg,"href=$href\n");
+ return $href; 
+}
+public function unused_ls_callback_pwg_href_rvavp($pfx,$data) {
+ $href = null; // default if no success
+ $dbg = false;
+ dbgprint($dbg,"ls_callback_pwg_href_rvavp. data=$data\n");
+ if (!preg_match('|^(.*?)[.] *([0-9]+)[ ,]+([0-9]+)[ ,]+([0-9]+)(.*)$|',$data,$matches)) {
+  return $href;
+ }
+ $code = $matches[1];
+ $imandala = (int)$matches[2]; 
+ $ihymn = (int)$matches[3];
+ $iverse = (int)$matches[4];
+ dbgprint($dbg,"ls_callback_pwg_href_rvavp. $code, $imandala, $ihymn, $iverse\n");
+ $rest = $matches[5];
+ if (in_array($pfx,array('rv','av'))) {
+  $hymnfilepfx = sprintf("%s%02d.%03d",$pfx,$imandala,$ihymn);
+  $hymnfile = "$hymnfilepfx.html";
+  $versesfx = sprintf("%02d",$iverse);
+  $anchor = "$hymnfilepfx.$versesfx";
+  $versesfx = sprintf("%02d",$iverse);
+  $anchor = "$hymnfilepfx.$versesfx";
+  $dir = sprintf("https://sanskrit-lexicon.github.io/%slinks/%shymns",$pfx,$pfx);
+  $href = "$dir/$hymnfile#$anchor";
+ }else if ($pfx == "p") {  // P.  = Panini
+  $dir = "https://ashtadhyayi.com/sutraani";
+  $href = "$dir/$imandala/$ihymn/$iverse";
+ }
+ dbgprint($dbg,"href=$href\n");
+ return $href; 
+}
 public function ls_callback_mw($matches) {
+ // Two situations envisioned:
+ // <ls>X</ls>  
+ // <ls n="C">Y</ls>
+ $dbg=false;
+ $ans = $matches[0];
+ $ndata = $matches[1];  // empty string or ' n="C"'
+ $data0 = $matches[2];
+ if (preg_match('|n="(.*?)"|',$ndata,$matchesn)) {
+  $n = $matchesn[1]; //
+  $data = "$n $data0";  // controversial.
+ } else{
+  $n = '';
+  $data = $data0;
+ }
+ dbgprint($dbg,"ls_callback_mw BEGIN: ndata=$ndata, data0=$data0\n");
+ dbgprint($dbg,"ls_callback_mw : n=$n, data=$data\n");
+ if (!$this->dal_auth->status) {
+  return $ans;
+ }
+ $fieldname = 'key';
+ $fieldidx = 1;
+ $result = $this->ls_matchabbr($fieldname,$fieldidx,$data);
+ if (count($result) == 0) {
+  return $ans; // failure
+ }
+  $rec = $result[0];
+  list($cid,$code,$title,$type) = $rec;
+  $text = "$title ($type)";
+  //list($n0,$code,$codecap,$text) = $rec; // pw, pwg
+  # Add lshead, so as to be able to style
+  // for mw, codecap = code
+  $codecap = $code;
+  if ($n != '') {
+   $datanew = preg_replace("/^$code/","<lshead></lshead>",$data);
+  } else {
+   $datanew = preg_replace("/^$code/","<lshead>$codecap</lshead>",$data);
+  }
+  # be sure there is no xml in the text
+  $text = preg_replace('/<.*?>/',' ',$text);
+  //dbgprint($dbg," ls_callback_mw. text after removing tags: \n$text\n");
+  # convert special characters to html entities
+  # for instance, this handles cases when $tran has single (or double) quotes
+  $tooltip = $this->htmlspecial($text);
+  //$tip0 = mb_substr($tooltip,0,10) . "...";
+  //dbgprint($dbg," ls_callback_mw code=$code,  codecap=$codecap, tooltip=$tip0\n");
+  $href = $this->ls_callback_mw_href($code,$data);
+  if ($href != null) {
+   // link
+   //$ans = "<gralink href='$href' n='$tooltip'><ls>$datanew</ls></gralink>";
+   $datanew1 = preg_replace("|</lshead>(.*)$|",'</lshead><span class="ls">${1}</span>',$datanew);
+   $ans = "<gralink href='$href' n='$tooltip'>$datanew1</gralink>";
+  }else {
+   $ans = "<ls n='$tooltip'><span class='dotunder'>$datanew</span></ls>";
+  }
+  dbgprint($dbg,"ls_callback_mw: ans=$ans\n");
+ 
+ return $ans;
+}
+public function ls_callback_mw_href($code,$data) {
+ $href = null; // default if no success
+ $dbg = false;
+ dbgprint($dbg,"ls_callback_mw_href. code=$code, data=$data\n");
+ $code_to_pfx = array('RV.' => 'rv', 'AV.' => 'av', 'Pāṇ.' => 'p');
+ if (!isset($code_to_pfx[$code])) {
+  return $href;
+ }
+ $pfx = $code_to_pfx[$code];
+ if (in_array($pfx,array('rv','av'))) {
+  if (!preg_match('|^(.*?)[.] *([^ ,]+)[ ,]+([0-9]+)[ ,]+([0-9]+)(.*)$|',$data,$matches)) {
+   return $href;
+  }
+  $code0 = $matches[1];
+  $mandala = $matches[2];  // in lower-case roman numerals for mw
+  $imandala = $this->roman_int($mandala);
+  $ihymn = (int)$matches[3];
+  $iverse = (int)$matches[4];
+  dbgprint($dbg,"ls_callback_mw_href. $code0, $mandala, $ihymn, $iverse\n");
+  $rest = $matches[5];
+  $hymnfilepfx = sprintf("%s%02d.%03d",$pfx,$imandala,$ihymn);
+  $hymnfile = "$hymnfilepfx.html";
+  $versesfx = sprintf("%02d",$iverse);
+  $anchor = "$hymnfilepfx.$versesfx";
+  $versesfx = sprintf("%02d",$iverse);
+  $anchor = "$hymnfilepfx.$versesfx";
+  $dir = sprintf("https://sanskrit-lexicon.github.io/%slinks/%shymns",$pfx,$pfx);
+  $href = "$dir/$hymnfile#$anchor";
+  return $href;
+ } // end for rv, av
+ if (in_array($pfx,array('p'))) {
+  if(! preg_match('|^(.*?)[.] *([0-9]+)-([0-9]+)[ ,]+([0-9]+)(.*)$|',$data,$matches)) {
+    return $href;
+   }
+   $code0 = $matches[1];
+   $ic = (int)$matches[2];
+   $is = (int)$matches[3];
+   $iv = (int)$matches[4];
+   $dir = "https://ashtadhyayi.com/sutraani";
+   $href = "$dir/$ic/$is/$iv";
+   return $href;
+ }
+ return $href; 
+}
+public function unused_ls_callback_mw_version0($matches) {
  /* <ls>AR</ls>  A = $abbrv, R = $rest */
  $ans = $matches[0];
  $abbrv = $matches[1];
@@ -540,7 +773,7 @@ public function roman_int($roman) {
  }
  return 0;
 }
-public function ls_rv_callback_mw($matches0) {
+public function unused_ls_rv_callback_mw($matches0) {
 /*  modeled after avveda_verse_callback
     Adds 'gralink' elements to xml. These need
     to be converted to html in basicdisplay.php
@@ -582,7 +815,7 @@ public function ls_rv_callback_mw($matches0) {
  return $x;
 }
 
-public function ls_av_callback_mw($matches0) {
+public function unused_ls_av_callback_mw($matches0) {
 /*  modeled after ls_rv_callback_mw
     Adds 'gralink' elements to xml. These need
     to be converted to html in basicdisplay.php
@@ -624,7 +857,7 @@ public function ls_av_callback_mw($matches0) {
  return $x;
 }
 
-public function ls_pan_callback_mw($matches0) {
+public function unused_ls_pan_callback_mw($matches0) {
 /*  modeled after ls_av_callback_mw
     Adds 'gralink' elements to xml. These need
     to be converted to html in basicdisplay.php
