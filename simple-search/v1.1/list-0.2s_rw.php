@@ -26,7 +26,7 @@ if (false) {
 <html>
 <head>
 <META charset="UTF-8">
-<title>Sanskrit simple search t</title>
+<title>Cologne Sanskrit Simple Search</title>
 <!-- ref=https://www.w3.org/TR/html4/struct/links.html#edef-BASE -->
 <?php 
  if ($dictinfowhich == "cologne") {
