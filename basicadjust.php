@@ -19,16 +19,18 @@ class BasicAdjust {
  public $accent;
  public $dbg;
  public $pagecol;
+ public $dict;
  public function __construct($getParms,$xmlrecs) {
   $this->accent = $getParms->accent;
   $dict = $getParms->dict;
+  $this->dict = $dict;
   $key = $getParms->key;
   $this->dbg=false;
   $this->dal_ab = new Dal($dict,"ab");
   if (in_array($dict,array('pwg','pw'))) {
    $this->dal_auth = new Dal($dict,"bib");  # pwgbib
    dbgprint(false,"basicadjust: bib file open? " . $this->dal_auth->status ."\n");
-  }else if ($dict == 'mw'){
+  }else if (in_array($dict,array('mw','ap90'))){
    $this->dal_auth = new Dal($dict,"authtooltips");
   }else {
    $this->dal_auth = null;
@@ -67,22 +69,7 @@ class BasicAdjust {
   $line = preg_replace_callback('|<ls(.*?)>(.*?)</ls>|',
       "BasicAdjust::ls_callback_pwg",$line);
       
- }else if (in_array($this->getParms->dict,array('mw'))){
-  /*
-  // ls element expansion for mw.
-  // 04-09-2021.  Use rvlinks for <ls>RV. x,y,z
-  // This will create a 'gralink' element, like for Grassman
-  // If this gralink element can't be constructed, by ls_rv_callback_mw,
-  // then the ls element will be handled by general ls_callback_mw_version0.
-  $line = preg_replace_callback('|<ls>(RV[.] [^<]*?)</ls>|', "BasicAdjust::ls_rv_callback_mw",$line);
-  // 04-09-2021  Similarly, for AV (Atharva Veda)
-  $line = preg_replace_callback('|<ls>(AV[.] [^<]*?)</ls>|', "BasicAdjust::ls_av_callback_mw",$line);
-  // 04-11-2021 Similarly for Panini
-  $line = preg_replace_callback('|<ls>(Pāṇ[.].*?)</ls>|', "BasicAdjust::ls_pan_callback_mw",$line);
-  // General ls expansion  
-  $line = preg_replace_callback('|<ls>([A-ZĀĪŚṚṢṬ][A-Za-zÂáâêîñôĀāĪīŚśūûḍḥṃṅṇṉṚṛṢṣṬṭ.]*[.])(.*?)</ls>|', "BasicAdjust::ls_callback_mw_version0",$line);  
-  // handle the frequent <ls>ib.xxx</ls> by marking ib. as abbreviation
-  */
+ }else if (in_array($this->getParms->dict,array('mw','ap90'))){
   $line = preg_replace_callback('|<ls(.*?)>(.*?)</ls>|',
       "BasicAdjust::ls_callback_mw",$line);
 
@@ -137,6 +124,7 @@ class BasicAdjust {
    $line = preg_replace('|- *<lb/>|','',$line);
    $line = preg_replace('|-</s> <lb/><s>|','',$line);
    $line = preg_replace('|<lb/>|','',$line);
+   /* moved into make_xml.py 04-21-2020
    # now reintroduce some line breaks, and replace '--' with '&mdash;'
    # tech note on php:  when html entity &mdash; is used, then there is
    # an error in the xml parser in basicdisplay.php.  However, when we use 
@@ -156,6 +144,9 @@ class BasicAdjust {
    // preceding small Roman numerals (about 360 case, in verbs)
    $line = preg_replace('|--([IV]+[.])|','<div n="1"/>&#x2014; \1',$line);
    #dbgprint(true,"line after <lb> changes\n$line\n");
+   // any remaining -- to mdash
+   $line = preg_replace('|--|','&#x2014; ',$line);
+   */
   }
   else if ($this->getParms->dict == "ap") {
    // replace -- with mdash : perhaps should be part of ap.txt
@@ -375,6 +366,7 @@ public function unused_ls_callback_pwg_href_rvavp($pfx,$data) {
  return $href; 
 }
 public function ls_callback_mw($matches) {
+ // Try to also handle ap90.
  // Two situations envisioned:
  // <ls>X</ls>  
  // <ls n="C">Y</ls>
@@ -395,17 +387,24 @@ public function ls_callback_mw($matches) {
   return $ans;
  }
  $fieldname = 'key';
- $fieldidx = 1;
+ if ($this->dict == 'mw') {
+  $fieldidx = 1;
+ }else { // ap90
+  $fieldidx = 0;
+ }
  $result = $this->ls_matchabbr($fieldname,$fieldidx,$data);
  if (count($result) == 0) {
   return $ans; // failure
  }
   $rec = $result[0];
-  list($cid,$code,$title,$type) = $rec;
-  $text = "$title ($type)";
-  //list($n0,$code,$codecap,$text) = $rec; // pw, pwg
+  if ($this->dict == 'mw') {
+   list($cid,$code,$title,$type) = $rec;
+   $text = "$title ($type)";
+  } else if ($this->dict == 'ap90') {
+   list($code,$text) = $rec;
+  }
   # Add lshead, so as to be able to style
-  // for mw, codecap = code
+  // for mw and ap90, codecap = code
   $codecap = $code;
   if ($n != '') {
    $datanew = preg_replace("/^$code/","<lshead></lshead>",$data);
@@ -418,9 +417,12 @@ public function ls_callback_mw($matches) {
   # convert special characters to html entities
   # for instance, this handles cases when $tran has single (or double) quotes
   $tooltip = $this->htmlspecial($text);
-  //$tip0 = mb_substr($tooltip,0,10) . "...";
-  //dbgprint($dbg," ls_callback_mw code=$code,  codecap=$codecap, tooltip=$tip0\n");
-  $href = $this->ls_callback_mw_href($code,$data);
+  $href = null;
+  if ($this->dict == 'mw') {
+   $href = $this->ls_callback_mw_href($code,$data);
+  }else if ($this->dict == 'ap90') {
+   $href = $this->ls_callback_ap90_href($code,$data);
+  }
   if ($href != null) {
    // link
    //$ans = "<gralink href='$href' n='$tooltip'><ls>$datanew</ls></gralink>";
@@ -469,6 +471,55 @@ public function ls_callback_mw_href($code,$data) {
    }
    $code0 = $matches[1];
    $ic = (int)$matches[2];
+   $is = (int)$matches[3];
+   $iv = (int)$matches[4];
+   $dir = "https://ashtadhyayi.com/sutraani";
+   $href = "$dir/$ic/$is/$iv";
+   return $href;
+ }
+ return $href; 
+}
+public function ls_callback_ap90_href($code,$data) {
+ $href = null; // default if no success
+ $dbg = false;
+ dbgprint($dbg,"ls_callback_ap90_href. code=$code, data=$data\n");
+ $code_to_pfx = array('Rv.' => 'rv', 'Av.' => 'av', 'P.' => 'p');
+ if (!isset($code_to_pfx[$code])) {
+  return $href;
+ }
+ $pfx = $code_to_pfx[$code];
+ if (in_array($pfx,array('rv','av'))) {
+  // #. #. #  (three numbers,
+  if (!preg_match('|^(.*?)[.] *([0-9]+)[.] +([0-9]+)[.] +([0-9]+)(.*)$|',$data,$matches)) {
+   return $href;
+  }
+  $code0 = $matches[1];
+  //$mandala = $matches[2];  // in 
+  //$imandala = $this->roman_int($mandala);
+  $imandala = (int)$matches[2];
+  $ihymn = (int)$matches[3];
+  $iverse = (int)$matches[4];
+  dbgprint($dbg,"ls_callback_ap90_href. $code0, $mandala, $ihymn, $iverse\n");
+  $rest = $matches[5];
+  $hymnfilepfx = sprintf("%s%02d.%03d",$pfx,$imandala,$ihymn);
+  $hymnfile = "$hymnfilepfx.html";
+  $versesfx = sprintf("%02d",$iverse);
+  $anchor = "$hymnfilepfx.$versesfx";
+  $versesfx = sprintf("%02d",$iverse);
+  $anchor = "$hymnfilepfx.$versesfx";
+  $dir = sprintf("https://sanskrit-lexicon.github.io/%slinks/%shymns",$pfx,$pfx);
+  $href = "$dir/$hymnfile#$anchor";
+  return $href;
+ } // end for rv, av
+ if (in_array($pfx,array('p'))) {
+  // I. 2. 3
+  if(!preg_match('|^(.*?)[.] *([IV]+)[.] +([0-9]+)[.] +([0-9]+)(.*)$|',$data,$matches)) {
+    return $href;
+   }
+   $code0 = $matches[1];
+   $roman = $matches[2];  // upper-case
+   $romanlo = strtolower($roman);
+   $ic = $this->roman_int($romanlo);
    $is = (int)$matches[3];
    $iv = (int)$matches[4];
    $dir = "https://ashtadhyayi.com/sutraani";
