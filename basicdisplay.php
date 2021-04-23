@@ -43,6 +43,8 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
     This let's us use siddhanta font for Devanagari.
  */
   $this->sdata = "sdata_siddhanta"; // consistent with font.css
+ }else if (($filterin == 'roman')&&($this->dict == 'mw')) {
+  $this->sdata = "sdata_italic_iast";
  } else {
   $this->sdata = "sdata"; // default.
  }

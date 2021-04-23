@@ -40,6 +40,13 @@
  /*font-size:larger;*/
  font-family: siddhanta_deva;
 }
+#CologneBasic .sdata_italic_iast { 
+ color:teal; 
+ font-family: oldstandard_i;
+}
+#CologneBasic i {
+ font-family: oldstandard_i;
+}
 
 #CologneBasic .asdata {color:blue;font-size:larger;}
 #CologneBasic .pb {font-size:smaller; }
