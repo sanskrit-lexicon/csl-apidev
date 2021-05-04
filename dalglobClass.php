@@ -33,12 +33,14 @@ class Dalglob {
    $dbname = "dbglob not set";
   }
   $this->dbinfo = array(
+   // keydob_glob not currently used. 05-01-2021
    "keydoc_glob"=>array(
           "dbname"=>"keydoc_glob",
           "sqlitefile"=>"$parent/hwnorm2/keydoc/keydoc_glob.sqlite",
           "tabname"=>"keydoc_glob",
           "tabid"=>"key"
    ),
+   // keydoc_glob1 used by csl-apidev/sample/dalglob1 (see dbglob=keydoc_glob1)
    "keydoc_glob1"=>array(
           "dbname"=>"keydoc_glob1",
           "sqlitefile"=>"$parent/hwnorm2/keydoc/keydoc_glob1.sqlite",
@@ -160,6 +162,7 @@ class Dalglob {
   sanskrit-lexicon/hwnorm2/keydoc/
  */
  $aM = function($b) {return preg_replace('/aM$/','a',$b);};
+ $am = function($b) {return preg_replace('/am$/','a',$b);}; //05-03-2021
  $aH = function($b) {return preg_replace('/aH$/','a',$b);};
  $uH = function($b) {return preg_replace('/uH$/','u',$b);};
  $iH = function($b) {return preg_replace('/iH$/','i',$b);};
@@ -244,6 +247,7 @@ $homorganic_nasal = function($b) {
  $rules = array(
   array('Mm',$homorganic_nasal),
   array('aM',$aM),
+  array('am',$am),
   array('aH',$aH),
   array('uH',$uH),
   array('iH',$iH),
