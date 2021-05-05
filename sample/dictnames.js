@@ -2,6 +2,7 @@ var CologneDisplays = {};
 CologneDisplays.dictionaries= {
     dictnames:
 [ /*['AP' , 'Practical Sanskrit-English Dictionary'],*/
+['ACC' , 'Aufrecht Catalogus Catalogorum'],	
 ['AP90' , 'Apte Practical Sanskrit-English Dictionary'],
 ['ARMH' , 'Abhidhānaratnamālā of Halāyudha'],
 ['BEN' , 'Benfey Sanskrit-English Dictionary'],
