@@ -26,7 +26,8 @@
  font-family: oldstandard;
 }
 @font-face { 
- src: url(../fonts/oldstandarditalic.otf);
+ /*src: url(../fonts/oldstandarditalic.otf);*/
+ src: url(../fonts/CharisSIL-I.woff);
  font-family: oldstandard_i;
 }
 
@@ -38,13 +39,14 @@
 #CologneBasic .sdata_siddhanta,.sdata { 
  color:teal;  /* was blue */
  /*font-size:larger;*/
+ font-style:italic;  
  font-family: siddhanta_deva;
 }
-#CologneBasic .sdata_italic_iast { 
- color:teal; 
+#CologneBasic i {
  font-family: oldstandard_i;
 }
-#CologneBasic i {
+#CologneBasic .sdata_italic_iast i { 
+ color:teal; 
  font-family: oldstandard_i;
 }
 
