@@ -506,7 +506,10 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
   } else if ($el == "span") {
    if (isset($attribs['class'])) {
     $class = $attribs['class'];
-    $this->row .= "<span class='$class'>";   
+    $this->row .= "<span class='$class'>";
+   } else if (isset($attribs['style'])) {
+    $style = $attribs['style'];
+    $this->row .= "<span style='$style'>";
    } else {
    $this->row .= "<span>";
    }
