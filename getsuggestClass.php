@@ -59,6 +59,7 @@ class GetsuggestClass {
    $results2 = array();
    dbgprint($dbg,"dal_get1: $key, nresults2=".count($results2)."\n");
    $results=array();
+   $results=$dal->get1($key); // exact matches, if any
    foreach($results1 as $result){
     $results[]=$result;
    }
