@@ -156,17 +156,13 @@ Experiment 08-06-2021. Ref https://github.com/sanskrit-lexicon/pwg/issues/5
 <e> <s>INIT,SKT</s> <in>Z</in> <out>\u1cf2</out> <next>INIT</next></e>
 <e> <s>INIT,SKT</s> <in>V</in> <out>\u1cf2</out> <next>INIT</next></e>
 
-<e n='124b'> <s>INIT,SKT</s> <in>^M</in> <out>\u0902\u0951</out> <next>SKT</next> </e> 
-<e n='124a'> <s>INIT,SKT</s> <in>^H</in> <out>\u0903\u0951</out> <next>SKT</next> </e> 
 
-<!--
 <e n='122a'> <s>INIT,SKT</s> <in>\H</in> <out>\u0903\u0952</out>  <next>SKT</next></e>
 <e n='122b'> <s>INIT,SKT</s> <in>\M</in> <out>\u0902\u0952</out>  <next>SKT</next></e>
 <e n='123a'> <s>INIT,SKT</s> <in>/H</in> <out>\u0903\ua8eb</out>  <next>SKT</next></e>
 <e n='123b'> <s>INIT,SKT</s> <in>/M</in> <out>\u0902\ua8eb</out>  <next>SKT</next></e>
 <e n='124a'> <s>INIT,SKT</s> <in>^H</in> <out>\u0903\u0951</out> <next>SKT</next> </e> 
 <e n='124b'> <s>INIT,SKT</s> <in>^M</in> <out>\u0902\u0951</out> <next>SKT</next> </e> 
--->
 
 <!-- DEVANAGARI SIGN SPACING CANDRABINDU -->
 <e> <s>INIT,SKT</s> <in>£</in> <out>\ua8f2</out> <next>INIT</next> </e> 
