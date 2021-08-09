@@ -40,6 +40,11 @@ class GetwordClass {
    $table = $this->getwordDisplay($getParms,$matches);
    dbgprint($dbg,"getword\n$table\n\n");
    $filter = $getParms->filter;
+   $dict = strtoupper($getParms->dict);
+   if (($dict == 'PWG') && ($filter == 'deva') && ($getParms->accent == 'yes')) {
+    $filter = 'deva1';
+   }
+   // dbgprint(true,"filter=$filter, dict=$dict\n");
    $table1 = transcoder_processElements($table,"slp1",$filter,"SA");
   }
   return $table1;
