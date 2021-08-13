@@ -230,7 +230,10 @@ HTML;
   $n=0;
   foreach($lines as $line) {
    $line = trim($line);  // 08-21-2018 Removes end of line chars, and white spc
-   list($pagestr,$pagefile,$pagetitle) = preg_split('|:|',$line);
+   # list($pagestr,$pagefile,$pagetitle) = preg_split('|:|',$line);
+   $parts = preg_split('|:|',$line);
+   $pagestr = $parts[0];
+   $pagefile = $parts[1];
    # pagetitle currently unused, and may be absent, eg. in Wilson
    $n++;
    //$pagehash[$pagestr]=$n;
