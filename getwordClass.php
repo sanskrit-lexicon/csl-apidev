@@ -41,7 +41,7 @@ class GetwordClass {
    dbgprint($dbg,"getword\n$table\n\n");
    $filter = $getParms->filter;
    $dict = strtoupper($getParms->dict);
-   if (($dict == 'PWG') && ($filter == 'deva') && ($getParms->accent == 'yes')) {
+   if (in_array($dict,array('PWG','PW')) && ($filter == 'deva') && ($getParms->accent == 'yes')) {
     $filter = 'deva1';
    }
    // dbgprint(true,"filter=$filter, dict=$dict\n");
