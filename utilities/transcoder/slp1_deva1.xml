@@ -166,7 +166,8 @@ Experiment 08-06-2021. Ref https://github.com/sanskrit-lexicon/pwg/issues/5
 <e n='125b'> <s>INIT,SKT</s> <in>^\M</in> <out>\u0902\u0951\u0952</out> <next>SKT</next> </e> 
 <e n='126a'> <s>INIT,SKT</s> <in>\~</in> <out>\u0901\u0952</out>  <next>SKT</next></e>
 <e n='126b'> <s>INIT,SKT</s> <in>^~</in> <out>\u0901\u0951</out>  <next>SKT</next></e>
-<e n='126x'> <s>INIT,SKT</s> <in>/~</in> <out>\u0901\ua8eb</out>  <next>SKT</next></e>
+<e n='126d'> <s>INIT,SKT</s> <in>/~</in> <out>\u0901\ua8eb</out>  <next>SKT</next></e>
+<e n='126e'> <s>INIT,SKT</s> <in>/~H</in> <out>\u0901\u0903\ua8eb</out>  <next>SKT</next></e>
 
 <!-- DEVANAGARI SIGN SPACING CANDRABINDU -->
 <e> <s>INIT,SKT</s> <in>£</in> <out>\ua8f2</out> <next>INIT</next> </e> 
