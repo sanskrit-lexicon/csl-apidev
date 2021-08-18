@@ -17,8 +17,10 @@
 #CologneBasic .lnum {font-size:smaller;}
 /*.sdata {color:black;font-size:larger;} */ /* for devanagari */
 @font-face { 
- /*src: url(../fonts/siddhanta.ttf);*/
- src: url(../fonts/siddhanta.ttf); /* relative to this css file */
+    /*src: url(../fonts/siddhanta.ttf);*/
+    /* 08-17-2021 change to siddhanta1.ttf.
+     Ref: https://github.com/sanskrit-lexicon/pwg/issues/5 */
+ src: url(../fonts/siddhanta1.ttf); /* relative to this css file */
  font-family: siddhanta_deva;
 }
 @font-face { /* for normal text in pwg */
