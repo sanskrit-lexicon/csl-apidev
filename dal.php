@@ -49,7 +49,7 @@ class Dal {
    $this->tabname = $this->dict . "bib";
    $this->sqlitefile = "$sqlitedir/{$this->tabname}.sqlite";
    $this->tabid = 'id';
-  }else if ($dbname == "authtooltips") {  // author file for mw
+  }else if ($dbname == "authtooltips") {  // author file for mw,ap90,ben
    $this->tabname = $this->dict . "authtooltips";
    $this->sqlitefile = "$sqlitedir/{$this->tabname}.sqlite";
    $this->tabid = 'key';
@@ -66,7 +66,8 @@ class Dal {
    $this->file_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
    dbgprint($dbg,"dal.php: opened " . $this->sqlitefile . "\n");
    $this->status=true;
-   $this->file_db_xml = $this->file_db;  
+   $this->file_db_xml = $this->file_db;
+   //dbgprint(true,"dal.php. opened {$this->sqlitefile}\n");
   } catch (PDOException $e) {
    $this->file_db = null;
    $this->file_db_xml = $this->file_db;  

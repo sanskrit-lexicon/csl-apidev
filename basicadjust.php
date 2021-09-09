@@ -30,7 +30,7 @@ class BasicAdjust {
   if (in_array($dict,array('pwg','pw'))) {
    $this->dal_auth = new Dal($dict,"bib");  # pwgbib
    dbgprint(false,"basicadjust: bib file open? " . $this->dal_auth->status ."\n");
-  }else if (in_array($dict,array('mw','ap90'))){
+  }else if (in_array($dict,array('mw','ap90','ben'))){
    $this->dal_auth = new Dal($dict,"authtooltips");
   }else {
    $this->dal_auth = null;
@@ -69,7 +69,7 @@ class BasicAdjust {
   $line = preg_replace_callback('|<ls(.*?)>(.*?)</ls>|',
       "BasicAdjust::ls_callback_pwg",$line);
       
- }else if (in_array($this->getParms->dict,array('mw','ap90'))){
+ }else if (in_array($this->getParms->dict,array('mw','ap90','ben'))){
   $line = preg_replace_callback('|<ls(.*?)>(.*?)</ls>|',
       "BasicAdjust::ls_callback_mw",$line);
 
@@ -366,7 +366,7 @@ public function unused_ls_callback_pwg_href_rvavp($pfx,$data) {
  return $href; 
 }
 public function ls_callback_mw($matches) {
- // Try to also handle ap90.
+ // Try to also handle ap90, ben
  // Two situations envisioned:
  // <ls>X</ls>  
  // <ls n="C">Y</ls>
@@ -389,7 +389,7 @@ public function ls_callback_mw($matches) {
  $fieldname = 'key';
  if ($this->dict == 'mw') {
   $fieldidx = 1;
- }else { // ap90
+ }else { // ap90, ben
   $fieldidx = 0;
  }
  $result = $this->ls_matchabbr($fieldname,$fieldidx,$data);
@@ -400,7 +400,7 @@ public function ls_callback_mw($matches) {
   if ($this->dict == 'mw') {
    list($cid,$code,$title,$type) = $rec;
    $text = "$title ($type)";
-  } else if ($this->dict == 'ap90') {
+  } else if (in_array($this->dict,array('ap90','ben'))) {
    list($code,$text) = $rec;
   }
   # Add lshead, so as to be able to style
