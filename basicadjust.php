@@ -182,8 +182,8 @@ class BasicAdjust {
    # removed 10-31-2019, since Greek text now provided in mw72.
    #$line = preg_replace('|></lang>|'," empty='yes'></lang>",$line);
   } else if ($this->getParms->dict == "sch") {
-   # this should have been done in sch.txt or sch.xml
-   $line = preg_replace('|\^(.)|',"<sup>\\1</sup>",$line);
+   // this conversion now present in sch.txt
+   // $line = preg_replace('|\^(.)|',"<sup>\\1</sup>",$line);
   } else if ($this->getParms->dict == "acc") {
    # this should have been done in acc.txt or acc.xml
    $line = preg_replace('|\^([a-d02th]+)|',"<sup>\\1</sup>",$line);
