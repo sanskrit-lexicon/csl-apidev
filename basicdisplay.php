@@ -96,6 +96,9 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
   if ($dict == 'mw') {
    $row1x = $this->mw_extra_line($line);
    $this->row1x = $row1x;
+  }else if ($dict == 'mci') {
+   $row1x =  $this->mci_extra_line($line);
+   $this->row1x = $row1x;
   }else {
    $row1x = "";
   }
@@ -831,6 +834,32 @@ public function mw_extra_line($line) {
   $ans = "$ans1&nbsp;&nbsp;&nbsp;&amp;&nbsp;$ans2";
  }else {
   $ans = "$ans1$ans2";
+ }
+ return $ans;
+}
+public function mci_extra_line($line) {
+ /*
+ display section name
+ */
+ $ans = "";
+ if (preg_match('|<info section="(.*?)"/>|',$line,$matches)) {
+  $x = $matches[1];
+  $section = array();
+  $section["1.1"] = "Names of Serpents, Birds, Animals etc.";
+  $section["1.2"] = "Names of Missiles, Weapons, Bows etc.";
+  $section["1.3"] = "Names of Literary Works, Parts of Works etc.";
+  $section["1.4"] = "Names of Divisions of Time, Planets, Nakṣatras etc.";
+  $section["1.5"] = "Names of Tīrthas, Rivers, Mountains, Forests etc.";
+  $section["1.5A"] = "Names of Āśramas, Villages, Cities etc.";
+  $section["1.6"] = "Names of Countries, Peoples, Islands etc.";
+  $section["1.7"] =  "Miscellaneous Names";
+  if (isset($section[$x])) {
+   $name = $section[$x];
+   $ans = "<b>$name</b>"; /* first option */
+   $ans = "<i>($name)</i>"; /* second option */
+   $x1 = substr($x,2);
+   $ans = "<i>($x1. $name)</i>"; /* third option */
+  }
  }
  return $ans;
 }
