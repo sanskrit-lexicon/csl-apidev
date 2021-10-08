@@ -376,23 +376,29 @@ public function ls_callback_mw($matches) {
  $data0 = $matches[2];
  if (preg_match('|n="(.*?)"|',$ndata,$matchesn)) {
   $n = $matchesn[1]; //
-  $data = "$n $data0";  // controversial.
+  $data1 = "$n $data0";  // controversial.
+  $data = $data0; //10-07
  } else{
   $n = '';
+  $data1 = $data0;
   $data = $data0;
  }
- dbgprint($dbg,"ls_callback_mw BEGIN: ndata=$ndata, data0=$data0\n");
- dbgprint($dbg,"ls_callback_mw : n=$n, data=$data\n");
+ //$dbg = true;
+ dbgprint($dbg,"\nls_callback_mw BEGIN: ndata=$ndata, n=$n, data0=$data0\n");
+ //dbgprint($dbg,"ls_callback_mw : n=$n, data=$data\n");
+ $dbg = false;
  if (!$this->dal_auth->status) {
   return $ans;
  }
+ // --------------------------------------------------------------
+ // Tooltip for name of work
  $fieldname = 'key';
  if ($this->dict == 'mw') {
   $fieldidx = 1;
  }else { // ap90, ben
   $fieldidx = 0;
  }
- $result = $this->ls_matchabbr($fieldname,$fieldidx,$data);
+ $result = $this->ls_matchabbr($fieldname,$fieldidx,$data1);
  if (count($result) == 0) {
   return $ans; // failure
  }
@@ -411,22 +417,30 @@ public function ls_callback_mw($matches) {
   } else {
    $datanew = preg_replace("/^$code/","<lshead>$codecap</lshead>",$data);
   }
+  //dbgprint(true,"datanew=$datanew\n");
   # be sure there is no xml in the text
   $text = preg_replace('/<.*?>/',' ',$text);
   //dbgprint($dbg," ls_callback_mw. text after removing tags: \n$text\n");
   # convert special characters to html entities
   # for instance, this handles cases when $tran has single (or double) quotes
   $tooltip = $this->htmlspecial($text);
+  // --------------------------------------------------------------
   $href = null;
+  //dbgprint(true,"before ls_callback_mw_href, dict=" . $this->dict . "\n");
   if ($this->dict == 'mw') {
-   $href = $this->ls_callback_mw_href($code,$data);
+   $href = $this->ls_callback_mw_href($code,$n,$data);
   }else if ($this->dict == 'ap90') {
-   $href = $this->ls_callback_ap90_href($code,$data);
+   $href = $this->ls_callback_ap90_href($code,$n,$data);
   }
   if ($href != null) {
    // link
    //$ans = "<gralink href='$href' n='$tooltip'><ls>$datanew</ls></gralink>";
-   $datanew1 = preg_replace("|</lshead>(.*)$|",'</lshead><span class="ls">${1}</span>',$datanew);
+   if ($n == '') {
+    $datanew1 = preg_replace("|</lshead>(.*)$|",'</lshead><span class="ls">${1}</span>',$datanew);
+   }else {
+    $datanew1 = '<span class="ls">' . $datanew . '</span>';
+   }
+   //dbgprint(true,"datanew1=$datanew1\n");
    $ans = "<gralink href='$href' n='$tooltip'>$datanew1</gralink>";
   }else {
    $ans = "<ls n='$tooltip'><span class='dotunder'>$datanew</span></ls>";
@@ -435,17 +449,23 @@ public function ls_callback_mw($matches) {
  
  return $ans;
 }
-public function ls_callback_mw_href($code,$data) {
+public function ls_callback_mw_href($code,$n,$data) {
  $href = null; // default if no success
  $dbg = false;
- dbgprint($dbg,"ls_callback_mw_href. code=$code, data=$data\n");
+ dbgprint($dbg,"ls_callback_mw_href. code=$code, n='$n', data='$data'\n");
+ $dbg = false;
  $code_to_pfx = array('RV.' => 'rv', 'AV.' => 'av', 'Pāṇ.' => 'p');
  if (!isset($code_to_pfx[$code])) {
   return $href;
  }
  $pfx = $code_to_pfx[$code];
+ if ($n == '') {
+  $data1 = $data;
+ }else {
+  $data1 = "$n $data";
+ }
  if (in_array($pfx,array('rv','av'))) {
-  if (!preg_match('|^(.*?)[.] *([^ ,]+)[ ,]+([0-9]+)[ ,]+([0-9]+)(.*)$|',$data,$matches)) {
+  if (!preg_match('|^(.*?)[.] *([^ ,]+)[ ,]+([0-9]+)[ ,]+([0-9]+)(.*)$|',$data1,$matches)) {
    return $href;
   }
   $code0 = $matches[1];
@@ -466,11 +486,15 @@ public function ls_callback_mw_href($code,$data) {
   return $href;
  } // end for rv, av
  if (in_array($pfx,array('p'))) {
-  if(! preg_match('|^(.*?)[.] *([0-9]+)-([0-9]+)[ ,]+([0-9]+)(.*)$|',$data,$matches)) {
+  //if(! preg_match('|^(.*?)[.] *([0-9]+)-([0-9]+)[ ,]+([0-9]+)(.*)$|',$data1,$matches)) {
+  // Panini for mw.   10-07-2021
+  if(! preg_match('|^(.*?)[.] *([iv]+)[ ,]+([0-9]+)[ ,]+([0-9]+)(.*)$|',$data1,$matches)) {
     return $href;
    }
    $code0 = $matches[1];
-   $ic = (int)$matches[2];
+   //$ic = (int)$matches[2];
+   $romanlo = $matches[2];
+   $ic = $this->roman_int($romanlo); 
    $is = (int)$matches[3];
    $iv = (int)$matches[4];
    $dir = "https://ashtadhyayi.com/sutraani";
@@ -479,18 +503,23 @@ public function ls_callback_mw_href($code,$data) {
  }
  return $href; 
 }
-public function ls_callback_ap90_href($code,$data) {
+public function ls_callback_ap90_href($code,$n,$data) {
  $href = null; // default if no success
  $dbg = false;
- dbgprint($dbg,"ls_callback_ap90_href. code=$code, data=$data\n");
+ dbgprint($dbg,"ls_callback_ap90_href. code=$code, n=$n, data=$data\n");
  $code_to_pfx = array('Rv.' => 'rv', 'Av.' => 'av', 'P.' => 'p');
  if (!isset($code_to_pfx[$code])) {
   return $href;
  }
  $pfx = $code_to_pfx[$code];
+ if ($n == '') {
+  $data1 = $data;
+ }else {
+  $data1 = "$n $data";
+ }
  if (in_array($pfx,array('rv','av'))) {
   // #. #. #  (three numbers,
-  if (!preg_match('|^(.*?)[.] *([0-9]+)[.] +([0-9]+)[.] +([0-9]+)(.*)$|',$data,$matches)) {
+  if (!preg_match('|^(.*?)[.] *([0-9]+)[.] +([0-9]+)[.] +([0-9]+)(.*)$|',$data1,$matches)) {
    return $href;
   }
   $code0 = $matches[1];
@@ -513,7 +542,7 @@ public function ls_callback_ap90_href($code,$data) {
  } // end for rv, av
  if (in_array($pfx,array('p'))) {
   // I. 2. 3
-  if(!preg_match('|^(.*?)[.] *([IV]+)[.] +([0-9]+)[.] +([0-9]+)(.*)$|',$data,$matches)) {
+  if(!preg_match('|^(.*?)[.] *([IV]+)[.] +([0-9]+)[.] +([0-9]+)(.*)$|',$data1,$matches)) {
     return $href;
    }
    $code0 = $matches[1];
