@@ -181,6 +181,10 @@ class BasicAdjust {
   } else if ($this->getParms->dict == "mw72") {
    # removed 10-31-2019, since Greek text now provided in mw72.
    #$line = preg_replace('|></lang>|'," empty='yes'></lang>",$line);
+  } else if ($this->getParms->dict == "inm") {
+   # Greek text in inm is italic
+   $line = preg_replace('|<lang n="greek">|','<i><lang n="greek">',$line);
+   $line = preg_replace('|</lang>|','</lang></i>',$line);
   } else if ($this->getParms->dict == "sch") {
    // this conversion now present in sch.txt
    // $line = preg_replace('|\^(.)|',"<sup>\\1</sup>",$line);
