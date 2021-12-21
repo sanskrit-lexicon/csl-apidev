@@ -23,7 +23,7 @@ function parse_uri($htaccess) {
  $url = preg_replace('|/$|','',$url);
  $url_parts = explode("/",$url);
  $url_parts_num = count($url_parts);
- $key_parts =['dict','key','input_simple','output','accent'];
+ $key_parts =['dict','key','input','input_simple','output','accent'];
  $key_parts_num = count($key_parts); //5
  $parms = array(); 
  // set defaults for $parms 
@@ -41,9 +41,10 @@ function parse_uri($htaccess) {
      'shs','bhs','ap','pd','mwe','bor','ae','bur','stc','pwg',
      'gra','pw','ccs','sch','bop','skd','vcp','inm','vei','pui',
      'acc','krm','ieg','snp','pe','pgn','mci','armh');
- $parmvalues['input_simple'] = array('slp1','deva','iast','hk','itrans'); // 'roman'?
+ $parmvalues['input_simple'] = array('slp1','deva','iast','hk','itrans','default'); // 'roman'?
  $parmvalues['output'] = array('slp1','deva','iast','hk','itrans');
  $parmvalues['accent'] = array('yes','no');
+ $parmvalues['input'] = array('slp1','deva','iast','hk','itrans','default');
  for($i=0;$i<$key_parts_num;$i++) {
   $key = $key_parts[$i];
   if ($i < $url_parts_num) {
@@ -69,7 +70,7 @@ function parse_uri($htaccess) {
   $input_simple = $_REQUEST['input_simple'];
   $output = $_REQUEST['output'];
  */
- $keys = array('key','dict','input_simple','output','accent');
+ $keys = array('key','dict','input','input_simple','output','accent');
  $phpvals = array();
  for($i=0;$i<count($keys);$i++) {
   $key=$keys[$i];
