@@ -52,7 +52,7 @@ $wfreqs = init_word_frequency();
 $keyparmin = $getParms->keyin;  // original
 $inputparmin = $_REQUEST['input']; // $getParms->filterin; NO
 $inputsimple = $_REQUEST['input_simple'];
-dbgprint(true,"getword_list_1.0_main: input = $inputparmin, keyparmin=$keyparmin, inputsimple=$inputsimple\n");
+dbgprint($dbg,"getword_list_1.0_main: input = $inputparmin, keyparmin=$keyparmin, inputsimple=$inputsimple\n");
 
 // php function. Convert back to utf-8
 // This is done already in javascript list-0.2s_(xampp)_rw.php
