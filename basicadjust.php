@@ -68,6 +68,7 @@ class BasicAdjust {
  if (in_array($this->getParms->dict,array('pw','pwg'))) {
   $line = preg_replace_callback('|<ls(.*?)>(.*?)</ls>|',
       "BasicAdjust::ls_callback_pwg",$line);
+  
       
  }else if (in_array($this->getParms->dict,array('mw','ap90','ben'))){
   $line = preg_replace_callback('|<ls(.*?)>(.*?)</ls>|',
@@ -81,7 +82,6 @@ class BasicAdjust {
  */
  $line = preg_replace_callback('|<ab(.*?)>(.*?)</ab>|',"BasicAdjust::abbrv_callback",$line);
  
- // Experiment 05-21-2018 for dict == gra
  // Revised 04-05-2021, 04-09-2021 for AV
  $dbg=false;
  dbgprint($dbg,"BasicAdjust dict={$this->getParms->dict}\n");
@@ -310,10 +310,35 @@ public function ls_callback_pwg_href($code,$data) {
  $href = null; // default if no success
  $dbg = false;
  dbgprint($dbg,"ls_callback_pwg_href. data=$data\n");
+ if (preg_match('|^(Spr[.]) ([0-9]+)|',$data,$matches)) {
+  if ($this->dict == 'pw') {
+   // Indische Sprüche in pw
+   $pfx = $matches[1];
+   $verse = $matches[2];
+   $href = "https://funderburkjim.github.io/boesp-prep/web1/boesp.html?$verse";
+   dbgprint($dbg,"Spr: href=$href\n");
+   return $href;
+  }
+  if ($this->dict == 'pwg') {
+   // This is an reference to 1st edition of Indische Spruche in pwg.
+   // Link to boesp as above is not correct.
+   return $href;
+  }
+ }
+ if (preg_match('|^(Spr[.]) \(II\) ([0-9]+)|',$data,$matches)) {
+  // Indische Sprüche in pwg (2nd edition)
+  $pfx = $matches[1];
+  $verse = $matches[2];
+  $href = "https://funderburkjim.github.io/boesp-prep/web1/boesp.html?$verse";
+  dbgprint($dbg,"Spr: href=$href\n");
+  return $href;
+ }
  if (!preg_match('|^(.*?)[.] *([0-9]+)[ ,]+([0-9]+)[ ,]+([0-9]+)(.*)$|',$data,$matches)) {
   return $href;
  }
- $code_to_pfx = array('ṚV.' => 'rv', 'AV.' => 'av', 'P.' => 'p');
+ // links for Rigveda, Atharvaveda, or Panini
+ $code_to_pfx = array('ṚV.' => 'rv', 'AV.' => 'av', 'P.' => 'p',
+  'Spr.' => 'Spr');
  if (!isset($code_to_pfx[$code])) {
   return $href;
  }
@@ -340,35 +365,7 @@ public function ls_callback_pwg_href($code,$data) {
  dbgprint($dbg,"href=$href\n");
  return $href; 
 }
-public function unused_ls_callback_pwg_href_rvavp($pfx,$data) {
- $href = null; // default if no success
- $dbg = false;
- dbgprint($dbg,"ls_callback_pwg_href_rvavp. data=$data\n");
- if (!preg_match('|^(.*?)[.] *([0-9]+)[ ,]+([0-9]+)[ ,]+([0-9]+)(.*)$|',$data,$matches)) {
-  return $href;
- }
- $code = $matches[1];
- $imandala = (int)$matches[2]; 
- $ihymn = (int)$matches[3];
- $iverse = (int)$matches[4];
- dbgprint($dbg,"ls_callback_pwg_href_rvavp. $code, $imandala, $ihymn, $iverse\n");
- $rest = $matches[5];
- if (in_array($pfx,array('rv','av'))) {
-  $hymnfilepfx = sprintf("%s%02d.%03d",$pfx,$imandala,$ihymn);
-  $hymnfile = "$hymnfilepfx.html";
-  $versesfx = sprintf("%02d",$iverse);
-  $anchor = "$hymnfilepfx.$versesfx";
-  $versesfx = sprintf("%02d",$iverse);
-  $anchor = "$hymnfilepfx.$versesfx";
-  $dir = sprintf("https://sanskrit-lexicon.github.io/%slinks/%shymns",$pfx,$pfx);
-  $href = "$dir/$hymnfile#$anchor";
- }else if ($pfx == "p") {  // P.  = Panini
-  $dir = "https://ashtadhyayi.com/sutraani";
-  $href = "$dir/$imandala/$ihymn/$iverse";
- }
- dbgprint($dbg,"href=$href\n");
- return $href; 
-}
+
 public function ls_callback_mw($matches) {
  // Try to also handle ap90, ben
  // Two situations envisioned:
@@ -560,34 +557,6 @@ public function ls_callback_ap90_href($code,$n,$data) {
    return $href;
  }
  return $href; 
-}
-public function unused_ls_callback_mw_version0($matches) {
- /* <ls>AR</ls>  A = $abbrv, R = $rest */
- $ans = $matches[0];
- $abbrv = $matches[1];
- $rest = $matches[2];
- $dbg=false;
- dbgprint($dbg,"ls_callback: abbrv=$abbrv, rest=$rest\n");
- if (!$this->dal_auth->status) {
-  return $ans;
- }
- $table = $this->dal_auth->tabname;
- $result = $this->dal_auth->getgeneral($abbrv,$table);
- if (count($result) != 1) { // unknown abbreviation
-  $title = "Unknown literary source";
-  $type = "Unknown type";
- } else {
-  $rec = $result[0];
-  list($cid,$abbrv1,$title,$type) = $rec;
- }
- $text = "$title ($type)";
- // The tooltip might be malformed for an html attribute. Try to fix
- $tooltip = $this->htmlspecial($text);
- # reconstruct the ls element with an n attribute
- $ans = "<ls n='$tooltip'><lshead>$abbrv</lshead>$rest</ls>";
- dbgprint($dbg,"  lsnew=$ans\n");
-  dbgprint($dbg,"ls_callback_mw: ans=$ans\n");
- return $ans;
 }
 
  public function abbrv_callback($matches) {
@@ -857,121 +826,6 @@ public function roman_int($roman) {
  }
  return 0;
 }
-public function unused_ls_rv_callback_mw($matches0) {
-/*  modeled after avveda_verse_callback
-    Adds 'gralink' elements to xml. These need
-    to be converted to html in basicdisplay.php
-    Basic form of $x1 is m,h,v  (mandala, hymn, verse)
-    where mandala is in lower-case roman numerals :
-     i,ii,iii,iv,v,vi,vii,viii,ix,x
-*/
- $dbg=false;
- $x0 = $matches0[0];
- $x1 = $matches0[1];
- dbgprint($dbg,"ls_rv_callback_mw: x0=$x0\n");
- if(! preg_match('|^RV[.] *([^ ,]+)[ ,]+([0-9]+)[ ,]+([0-9]+)(.*)$|',$x1,$matches)) {
-  dbgprint($dbg,"ls_rv_callback_mw (1): cannot parse. x1=$x1\n");
-  return $x0;
- }
- $gra1r = $matches[1];  // mandala, in Roman numerals (1-10)
- $gra2 = $matches[2];  // hymn
- $gra3 = $matches[3];  // verse
- $gra4 = $matches[4];  // rest of stuff before closing 
- // convert Roman numeral to integer
- $gra1 = $this->roman_int($gra1r);
- dbgprint($dbg,"ls_rv_callback_mw: gra1=$gra1, gra2=$gra2, gra3=$gra3\n");
-
- $imandala = (int)$gra1;
- $ihymn = (int)$gra2;
- $hymnfilepfx = sprintf("rv%02d.%03d",$imandala,$ihymn);
- $hymnfile = "$hymnfilepfx.html";
- $iverse = (int)$gra3;
- $versesfx = sprintf("%02d",$iverse);
- $anchor = "$hymnfilepfx.$versesfx";
-
- # 2018-08-30  use github location
- $dir = "https://sanskrit-lexicon.github.io/rvlinks/rvhymns";
- $href = "$dir/$hymnfile#$anchor";
- $tooltip = sprintf("Rg Veda %02d.%03d.%02d",$imandala,$ihymn,$iverse);
- // 04-03-2021
- $x = "<gralink href='$href' n='$tooltip'>$x1</gralink>";
- dbgprint($dbg,"ls_rv_callback_mw returns $x\n");
- return $x;
-}
-
-public function unused_ls_av_callback_mw($matches0) {
-/*  modeled after ls_rv_callback_mw
-    Adds 'gralink' elements to xml. These need
-    to be converted to html in basicdisplay.php
-    Basic form of $x1 is m,h,v  (mandala, hymn, verse)
-    where mandala is in lower-case roman numerals :
-     i,ii,iii,iv,v,vi,vii,viii,ix,x,  xi,...,xx
-*/
- $dbg=false;
- $x0 = $matches0[0];
- $x1 = $matches0[1];
- dbgprint($dbg,"ls_av_callback_mw: x0=$x0\n");
- if(! preg_match('|^AV[.] *([^ ,]+)[ ,]+([0-9]+)[ ,]+([0-9]+)(.*)$|',$x1,$matches)) {
-  dbgprint($dbg,"ls_av_callback_mw (1): cannot parse. x1=$x1\n");
-  return $x0;
- }
- $gra1r = $matches[1];  // mandala, in Roman numerals (1-10)
- $gra2 = $matches[2];  // hymn
- $gra3 = $matches[3];  // verse
- $gra4 = $matches[4];  // rest of stuff before closing 
- // convert Roman numeral to integer
- $gra1 = $this->roman_int($gra1r);
- dbgprint($dbg,"ls_av_callback_mw: gra1=$gra1, gra2=$gra2, gra3=$gra3\n");
-
- $imandala = (int)$gra1;
- $ihymn = (int)$gra2;
- $hymnfilepfx = sprintf("av%02d.%03d",$imandala,$ihymn);
- $hymnfile = "$hymnfilepfx.html";
- $iverse = (int)$gra3;
- $versesfx = sprintf("%02d",$iverse);
- $anchor = "$hymnfilepfx.$versesfx";
-
- # 2018-08-30  use github location
- $dir = "https://sanskrit-lexicon.github.io/avlinks/avhymns";
- $href = "$dir/$hymnfile#$anchor";
- $tooltip = sprintf("Atharva Veda %02d.%03d.%02d",$imandala,$ihymn,$iverse);
- // 04-03-2021
- $x = "<gralink href='$href' n='$tooltip'>$x1</gralink>";
- dbgprint($dbg,"ls_av_callback_mw returns $x\n");
- return $x;
-}
-
-public function unused_ls_pan_callback_mw($matches0) {
-/*  modeled after ls_av_callback_mw
-    Adds 'gralink' elements to xml. These need
-    to be converted to html in basicdisplay.php
-    Basic form of $x1 is c-s,v  (chapter,section, verse)
-*/
- $dbg=false;
- $x0 = $matches0[0];
- $x1 = $matches0[1];
- dbgprint($dbg,"ls_pan_callback_mw: x0=$x0\n");
- if(! preg_match('|^Pāṇ[.] *([0-9]+)-([0-9]+)[ ,]+([0-9]+)(.*)$|',$x1,$matches)) {
-  dbgprint($dbg,"ls_pan_callback_mw (1): cannot parse. x1=$x1\n");
-  return $x0;
- }
- $gra1 = $matches[1];  // chapter
- $gra2 = $matches[2];  // section
- $gra3 = $matches[3];  // verse
- $gra4 = $matches[4];  // rest of stuff before closing 
-
- // construct https://ashtadhyayi.com/sutraani/c/s/v
- $ic = (int)$gra1;
- $is = (int)$gra2;
- $iv = (int)$gra3;
- $dir = "https://ashtadhyayi.com/sutraani";
- $href = "$dir/$ic/$is/$iv";
- $tooltip = sprintf("Pāṇini %d.%d.%d",$ic,$is,$iv);
- $x = "<gralink href='$href' n='$tooltip'>$x1</gralink>";
- dbgprint($dbg,"ls_av_callback_mw returns $x\n");
- return $x;
-}
-
 public function lanman_link_callback($matches) {
 /* 
     Adds 'lanlink' or 'wglink'  elements to xml. These need
