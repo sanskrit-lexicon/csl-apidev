@@ -333,6 +333,16 @@ public function ls_callback_pwg_href($code,$data) {
   dbgprint($dbg,"Spr: href=$href\n");
   return $href;
  }
+ if (preg_match('|^(MBH[.]) *([0-9]+) *, *([0-9]+)[.]?$|',$data,$matches)) {
+  // Mahabharata, Calcutta edition for pwg.
+  // Note that PW refs to MBH are different, using 3 parameters
+  $pfx = $matches[1];
+  $parvan = $matches[2];
+  $verse = $matches[3];
+  $href = "https://sanskrit-lexicon-scans.github.io/mbhcalc?$parvan.$verse";
+  dbgprint($dbg,"$pfx: href=$href\n");
+  return $href;
+ }
  if (!preg_match('|^(.*?)[.] *([0-9]+)[ ,]+([0-9]+)[ ,]+([0-9]+)(.*)$|',$data,$matches)) {
   return $href;
  }
@@ -384,10 +394,7 @@ public function ls_callback_mw($matches) {
   $data1 = $data0;
   $data = $data0;
  }
- //$dbg = true;
  dbgprint($dbg,"\nls_callback_mw BEGIN: ndata=$ndata, n=$n, data0=$data0\n");
- //dbgprint($dbg,"ls_callback_mw : n=$n, data=$data\n");
- $dbg = false;
  if (!$this->dal_auth->status) {
   return $ans;
  }
@@ -421,7 +428,6 @@ public function ls_callback_mw($matches) {
   //dbgprint(true,"datanew=$datanew\n");
   # be sure there is no xml in the text
   $text = preg_replace('/<.*?>/',' ',$text);
-  //dbgprint($dbg," ls_callback_mw. text after removing tags: \n$text\n");
   # convert special characters to html entities
   # for instance, this handles cases when $tran has single (or double) quotes
   $tooltip = $this->htmlspecial($text);
@@ -454,9 +460,10 @@ public function ls_callback_mw_href($code,$n,$data) {
  $href = null; // default if no success
  $dbg = false;
  dbgprint($dbg,"ls_callback_mw_href. code=$code, n='$n', data='$data'\n");
- $dbg = false;
- $code_to_pfx = array('RV.' => 'rv', 'AV.' => 'av', 'Pāṇ.' => 'p');
+ $code_to_pfx = array('RV.' => 'rv', 'AV.' => 'av', 'Pāṇ.' => 'p',
+  'MBh.' => 'MBH.');
  if (!isset($code_to_pfx[$code])) {
+  dbgprint($dbg,"ls_callback_mw_hrev. Code is unknown:'$code'\n");
   return $href;
  }
  $pfx = $code_to_pfx[$code];
@@ -487,7 +494,7 @@ public function ls_callback_mw_href($code,$n,$data) {
   return $href;
  } // end for rv, av
  if (in_array($pfx,array('p'))) {
-  //if(! preg_match('|^(.*?)[.] *([0-9]+)-([0-9]+)[ ,]+([0-9]+)(.*)$|',$data1,$matches)) {
+  //if(! preg_match('|^(.*?)[.] *([0-9]+)-([0-9]+)[ ,]+([0-9]+)(.*)$|',$data1,$matches)) 
   // Panini for mw.   10-07-2021
   if(! preg_match('|^(.*?)[.] *([iv]+)[ ,]+([0-9]+)[ ,]+([0-9]+)(.*)$|',$data1,$matches)) {
     return $href;
@@ -502,6 +509,18 @@ public function ls_callback_mw_href($code,$n,$data) {
    $href = "$dir/$ic/$is/$iv";
    return $href;
  }
+ dbgprint($dbg,"ls_callback_mw_href: data1=$data1\n");
+ if (preg_match('|^(MBh[.]) *([^ ,]+) *, *([0-9]+)[.]?$|',$data1,$matches)) {
+  // Mahabharata, Calcutta edition for mw.
+  $pfx = $matches[1];
+  $parvan_roman = $matches[2];
+  $parvan = $this->roman_int($parvan_roman);
+  $verse = $matches[3];
+  $href = "https://sanskrit-lexicon-scans.github.io/mbhcalc?$parvan.$verse";
+  dbgprint($dbg,"$pfx: href=$href\n");
+  return $href;
+ }
+
  return $href; 
 }
 public function ls_callback_ap90_href($code,$n,$data) {
