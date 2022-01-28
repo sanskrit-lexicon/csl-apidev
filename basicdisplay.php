@@ -651,6 +651,12 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
     */
    }
   } else if ($this->parentEl == "key1"){ // nothing printed
+  } else if ($this->parentEl == "pb") {
+   if (in_array($this->dict,array("pwg"))) {
+    $hrefdata = $this->getHrefPage($data);
+    $style = "font-size:smaller; font-weight:bold;";
+    $this->row .= "<span style='$style'> $hrefdata</span>";   
+   }
   } else if ($this->parentEl == "pc") {
    $hrefdata = $this->getHrefPage($data);
    $style = "font-size:normal; color:rgb(160,160,160);";
