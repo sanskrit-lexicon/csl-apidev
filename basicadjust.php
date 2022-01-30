@@ -53,7 +53,8 @@ class BasicAdjust {
  $line = preg_replace('/¦/',' ',$line);
  $line = preg_replace_callback('|<s>(.*?)</s>|','BasicAdjust::s_callback',$line);
  $line = preg_replace_callback('|<key2>(.*?)</key2>|','BasicAdjust::key2_callback',$line);
- $line = preg_replace("|\[Page.*?\]|",  "<pb>$0</pb>",$line);
+ //$line = preg_replace("|\[Page.*?\]|",  "<pb>$0</pb>",$line);
+ $line = preg_replace("|\[(Page.*?)\]|",  "<pb>$1</pb>",$line);
 
  $line = preg_replace('/<pc>Page(.*)<\/pc>/',"<pc>\\1</pc>",$line);
 

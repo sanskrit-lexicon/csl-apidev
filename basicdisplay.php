@@ -15,8 +15,8 @@ error_reporting( error_reporting() & ~E_NOTICE );
 // constructor is either a string or an array of strings.
 */
 require_once("dbgprint.php");
+require_once("parm.php");
 class BasicDisplay {
-
  public $parentEl;
  public $row;
  public $row1;
@@ -30,10 +30,20 @@ class BasicDisplay {
  public $sdata; // class to use for Sanskrit
  public $filterin; // transcoding for output
  public $key; // the original key being searched for
+ public $basicOption,$serve;
 public function __construct($key,$string_or_array,$filterin,$dict) {
+ 
  $this->key = $key;
  $this->dict = $dict;
  $this->filterin = $filterin;
+ $this->getParms = new Parm();
+ $this->basicOption = $this->getParms->basicOption;
+ if ($this->basicOption) {
+  $this->serve = "../webtc/servepdf.php";
+ } else {
+  $this->serve = "servepdf.php";
+ }
+ 
  $this->pagecol="";
  $this->dbg=false; #false;
  $this->inSanskrit=false;
@@ -652,7 +662,7 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
    }
   } else if ($this->parentEl == "key1"){ // nothing printed
   } else if ($this->parentEl == "pb") {
-   if (in_array($this->dict,array("pwg"))) {
+   if (true) { // (in_array($this->dict,array("pwg"))) {
     $hrefdata = $this->getHrefPage($data);
     $style = "font-size:smaller; font-weight:bold;";
     $this->row .= "<span style='$style'> $hrefdata</span>";   
@@ -741,15 +751,16 @@ public function getHrefPage($data) {
 */
   $ans="";
  //$lnums = preg_split('/[,-]/',$data);
+ $serve = $this->serve;
  $lnums = preg_split('/[,]/',$data);  //%{pfx}
- $serve = "../webtc/servepdf.php";
  foreach($lnums as $lnum) {
   #list($page,$col) =  preg_split('/[-]/',$lnum);
   $page = $lnum; # this may be dictionary specific.
   if ($ans == "") {
-   $args = "page=$page";
+   $dict = $this->dict;
+   $args = "dict=$dict&page=$page";
    #$ans = "<a href='$serve?$args' target='_Blank'>$lnum</a>";
-   $dictup = strtoupper($this->dict);
+   $dictup = strtoupper($dict);
    $style = "color:rgb(130,130,130);";
    $ans = "<a href='$serve?$args' target='_$dictup' style='$style'>$lnum</a>";
   }else {
