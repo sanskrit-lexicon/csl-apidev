@@ -355,9 +355,10 @@ public function ls_callback_pwg_href($code,$data) {
  if (!preg_match('|^(.*?)[.] *([0-9]+)[ ,]+([0-9]+)[ ,]+([0-9]+)(.*)$|',$data,$matches)) {
   return $href;
  }
- // links for Rigveda, Atharvaveda, or Panini
+ // links for Rigveda, Atharvaveda, or Panini,
+ // Ramayana Gorresio
  $code_to_pfx = array('ṚV.' => 'rv', 'AV.' => 'av', 'P.' => 'p',
-  'Spr.' => 'Spr');
+  'Spr.' => 'Spr', 'R. GORR.' => 'rgorr');
  if (!isset($code_to_pfx[$code])) {
   return $href;
  }
@@ -380,6 +381,10 @@ public function ls_callback_pwg_href($code,$data) {
  }else if ($pfx == "p") {  // P.  = Panini
   $dir = "https://ashtadhyayi.com/sutraani";
   $href = "$dir/$imandala/$ihymn/$iverse";
+ }else if (in_array($pfx,array('rgorr'))) { 
+  $dir = "https://sanskrit-lexicon-scans.github.io/ramayanagorr";
+  $href = "$dir/?$imandala,$ihymn,$iverse";
+  return $href;
  }
  dbgprint($dbg,"href=$href\n");
  return $href; 
