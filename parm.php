@@ -172,6 +172,7 @@ class Parm {
  // return urldecode($x);
   $hex = "0123456789abcdefABCDEF";
   $x1 = $x;
+  if (! $x1) {$x1 = "";}
   if ($filterin == 'roman') {
    $x1 = preg_replace("/\xf1/","%u00f1",$x);
   }

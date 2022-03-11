@@ -74,7 +74,11 @@ function parse_uri($htaccess) {
  $phpvals = array();
  for($i=0;$i<count($keys);$i++) {
   $key=$keys[$i];
-  $val=$parms[$key];
+  if (isset($parms[$key])){
+   $val=$parms[$key];
+  }else {
+   $val="";
+  }
   if ($key == 'key') { //12-03-2020
    $val1 = urldecode($val);  // from uri-encoding to utf-8
    $phpvals[$key] = $val1;

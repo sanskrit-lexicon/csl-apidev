@@ -15,10 +15,14 @@ function getword_simpleslp1($word) {
   $cmd = "python3 $query3 $word";
   dbgprint($dbg,"calling shell exec: $cmd\n");
   $out = shell_exec($cmd);
+  if ($out == null) {
+   $out = '{"status": 404, "result": []}';
+  }
   dbgprint($dbg,"back from shell exec. out=$out\n");
  }catch(Exception $e) {
   // default json string indicating error
   $out = '{"status": 404, "result": []}';
+  dbgprint($dbg,"error from simpleslp/query3.php\n");
   return $out;
  }
  return $out;

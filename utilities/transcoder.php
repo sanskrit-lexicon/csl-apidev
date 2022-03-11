@@ -422,6 +422,7 @@ function transcoder_standardize_filter($filter) {
   "IAST" => "roman",
   "SLP1" => "slp1"
  );
+if (! $filter) {$filter = "";}
 $filter = strtoupper($filter);
 $result=$standard_hash[$filter];
 if (!$result) {$result="slp1";}
