@@ -356,9 +356,9 @@ public function ls_callback_pwg_href($code,$data) {
   return $href;
  }
  // links for Rigveda, Atharvaveda, or Panini,
- // Ramayana Gorresio
+ // Ramayana Gorresio, Ramayana Schlegel
  $code_to_pfx = array('ṚV.' => 'rv', 'AV.' => 'av', 'P.' => 'p',
-  'Spr.' => 'Spr', 'R. GORR.' => 'rgorr');
+  'Spr.' => 'Spr', 'R. GORR.' => 'rgorr','R.' => 'rschl');
  if (!isset($code_to_pfx[$code])) {
   return $href;
  }
@@ -383,6 +383,10 @@ public function ls_callback_pwg_href($code,$data) {
   $href = "$dir/$imandala/$ihymn/$iverse";
  }else if (in_array($pfx,array('rgorr'))) { 
   $dir = "https://sanskrit-lexicon-scans.github.io/ramayanagorr";
+  $href = "$dir/?$imandala,$ihymn,$iverse";
+  return $href;
+ }else if (in_array($pfx,array('rschl'))) { 
+  $dir = "https://sanskrit-lexicon-scans.github.io/ramayanaschl";
   $href = "$dir/?$imandala,$ihymn,$iverse";
   return $href;
  }
