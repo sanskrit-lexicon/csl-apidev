@@ -27,7 +27,7 @@ class BasicAdjust {
   $key = $getParms->key;
   $this->dbg=false;
   $this->dal_ab = new Dal($dict,"ab");
-  if (in_array($dict,array('pwg','pw'))) {
+  if (in_array($dict,array('pwg','pw','pwkvn'))) {
    $this->dal_auth = new Dal($dict,"bib");  # pwgbib
    dbgprint(false,"basicadjust: bib file open? " . $this->dal_auth->status ."\n");
   }else if (in_array($dict,array('mw','ap90','ben'))){
@@ -66,7 +66,7 @@ class BasicAdjust {
  /*  Replace the 'title' part of a known ls with its capitalized form
      This is probably particular to pwg and/or pw
  */
- if (in_array($this->getParms->dict,array('pw','pwg'))) {
+ if (in_array($this->getParms->dict,array('pw','pwg','pwkvn'))) {
   $line = preg_replace_callback('|<ls(.*?)>(.*?)</ls>|',
       "BasicAdjust::ls_callback_pwg",$line);
   
@@ -219,7 +219,7 @@ class BasicAdjust {
   if (!preg_match("|^([^ .,']+)|",$data,$matches)) {
    return $ans;
   }
-  //$tabid = 'code'; // pw, pwg
+  //$tabid = 'code'; // pw, pwg, pwkvn
   $key = $matches[1];
   $key1 = $key . '%';
   $sql = "select * from $table where $fieldname LIKE '$key1'";
