@@ -53,7 +53,7 @@ class GetsuggestClass {
   $matches = array();
   if ($nresults1 == 0) {
    // $hw = "$key??";
-   $hw = "$key??";
+   $hw = "$key";
    $data = "";
    $matches[] = "$hw : $data";
   }
