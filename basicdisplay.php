@@ -684,11 +684,8 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
    // probably not needed
    $this->row .= "<span class='$sdata'><SA>$data</SA></span>";
   } else if ($this->parentEl == "hom") {
-   /* For stc, we omit showing 'hom'. It is already printed as part of
-      The first entry.
-   */
-   if ($this->dict == "mw") {
-    /* For mw, we show 'hom'. */
+   /* for some dictionaries, show hom elements*/
+   if (in_array($this->dict,array('mw','pwkvn'))) {
     $this->row .= "<span class='hom' title='Homonym'>$data</span>";
    }
   } else if ($this->parentEl == 'div') { 
