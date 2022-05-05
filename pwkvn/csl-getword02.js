@@ -25,7 +25,7 @@ class cslGetword02 extends LitElement {
     this.key  = 'guru';
     this.input = 'slp1';
     this.output = 'deva';  // fixed
-    this.accent = 'no';
+    this.accent = 'yes';
     this.result = '... working ...';
   }
   urlbaseF = function () {
@@ -48,7 +48,7 @@ class cslGetword02 extends LitElement {
   url_apidev = '../' ;  // when running app in subfolder of csl-apidev
   //const baseurl = 'https://sanskrit-lexicon.uni-koeln.de/scans/csl-apidev/getword.php';
   const baseurl = `${url_apidev}/getword.php`;
-    const url = `${baseurl}?dict=${this.dict}&key=${this.key}&input=${this.input}&output=${this.output}&dispopt=3`
+    const url = `${baseurl}?dict=${this.dict}&key=${this.key}&input=${this.input}&output=${this.output}&dispopt=3&accent=${this.accent}`
     //console.log('updated. url=',url);
     await fetch(url)
       .then(r => r.text())
