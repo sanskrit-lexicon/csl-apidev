@@ -2,20 +2,25 @@ import { html, css, LitElement,unsafeHTML } from './lit-element-2.3.1.js';
 import  './csl-input.js';
 import  './my-app.js';
 import './csl-citation.js';
+import './csl-accent.js';
+
+// (setq js-indent-level 1)
 
 class myApp1 extends LitElement {
   static get properties() {
     return {
      input: { type: String },
      key: { type: String },
-     output: { type: String }
+     output: { type: String },
+     accent: { type: String }
      }
   }
   constructor() {
     super();
    this.input = 'slp1';
    this.output = 'deva';
-    this.key = '';
+   this.key = '';
+   this.accent = 'yes';
   }
   static get styles() {
     return [
@@ -71,11 +76,17 @@ class myApp1 extends LitElement {
    @new-output="${(e) => {this.output=e.detail.output;}}" 
   ></csl-output>
 
+  <csl-accent 
+   accent="${this.accent}" style="display:inline-block; padding-left:10px;"
+   @new-accent="${(e) => {this.accent=e.detail.accent;}}" 
+  ></csl-accent>
+
   <div class="grid-container" >
    <div class="grid-item1" >
     <my-app id="app1"  suggest="yes" dict="pw"
     input="${this.input}"
     output="${this.output}"
+    accent="${this.accent}"
     key="${this.key}"
     height="535px" width="400px"
     > </my-app>
@@ -84,6 +95,7 @@ class myApp1 extends LitElement {
     <my-app id="app2" suggest="yes" dict="sch"
     input="${this.input}"
     output="${this.output}"
+    accent="${this.accent}"
     key="${this.key}"
     height="250px" width="400px"
     > </my-app>
@@ -92,6 +104,7 @@ class myApp1 extends LitElement {
     <my-app id="app3" suggest="yes" dict="pwkvn"
     input="${this.input}"
     output="${this.output}"
+    accent="${this.accent}"
     key="${this.key}"
     height="250px"  width="400px"
     > </my-app>

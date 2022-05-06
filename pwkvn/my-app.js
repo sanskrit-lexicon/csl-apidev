@@ -6,7 +6,7 @@ import  './csl-citation.js';
 import  './csl-dict.js';
 import  './csl-input.js';
 import  './csl-output.js';
-
+import  './csl-accent.js';
 class myApp extends LitElement {
   /* id ref:https://stackoverflow.com/questions/12378909/how-can-i-count-the-instances-of-an-object*/
   static get styles() {
@@ -64,7 +64,8 @@ https://stackoverflow.com/questions/43352501/css-grid-content-to-use-free-space-
       key:  { type: String },
       dict: { type: String },
       input: { type: String },
-      output: { type: String },
+     output: { type: String },
+     accent: { type: String },
       appname: { type: String },
       servercode: { type: String },
       height: {type: String },
@@ -80,6 +81,7 @@ https://stackoverflow.com/questions/43352501/css-grid-content-to-use-free-space-
     this.dict = 'mw'; // default
     this.input = 'slp1';
     this.output = 'iast';
+    this.accent = 'yes';
     this.appname = ++myApp.currentId;
     this.servercode='my-app-no-servercode';
     this.height='400px';
@@ -122,7 +124,10 @@ https://stackoverflow.com/questions/43352501/css-grid-content-to-use-free-space-
      <csl-output output="${this.output}" style="display:none;"
       @new-output="${(e) => {this.output=e.detail.output;}}" >
      </csl-output>
-    
+     <csl-accent accent="${this.accent}" style="display:none;"
+      @new-accent="${(e) => {this.accent=e.detail.accent;}}" >
+     </csl-accent>
+
     <csl-citation 
      appname="${this.appname}" key="${this.key}" style="display:none;"
      dict="${this.dict}" input="${this.input}"
@@ -140,7 +145,8 @@ https://stackoverflow.com/questions/43352501/css-grid-content-to-use-free-space-
      <div>
       <csl-getword  
        dict="${this.dict}" key="${this.key}"
-       input="${this.input}" output="${this.output}" 
+       input="${this.input}" output="${this.output}"
+       accent="${this.accent}"
       servercode="${this.servercode}">
       </csl-getword>
      </div>

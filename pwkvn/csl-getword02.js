@@ -49,11 +49,14 @@ class cslGetword02 extends LitElement {
   //const baseurl = 'https://sanskrit-lexicon.uni-koeln.de/scans/csl-apidev/getword.php';
   const baseurl = `${url_apidev}/getword.php`;
     const url = `${baseurl}?dict=${this.dict}&key=${this.key}&input=${this.input}&output=${this.output}&dispopt=3&accent=${this.accent}`
-    //console.log('updated. url=',url);
+   //console.log('updated. dict=',this.dict);
+   /* for some unknown reason, this code is being executed multiple times.
+    Often, twice for each of the dictionaries.
+   */
     await fetch(url)
       .then(r => r.text())
       .then(async data => {
-        //console.log('csl-getword02: updated result=','found'); //data);
+        //console.log('csl-getword02: updated result',data); //data);
         this.result = data;
       });
   }
