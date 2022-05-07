@@ -1,0 +1,27 @@
+/* The font faces used by csl-getword 
+  There are two possible choices.  First is a local installation.
+  If this is not available, then the cologne server location is used.
+*/
+
+@font-face { 
+ src: url(http://localhost/cologne/csl-apidev/fonts/siddhanta.ttf),
+      url(https://sanskrit-lexicon.uni-koeln.de/scans/csl-apidev/fonts/siddhanta.ttf );
+ font-family: siddhanta_deva;
+}
+
+@font-face { 
+ src: url(http://localhost/cologne/csl-apidev/fonts/oldstandard.otf),
+       url(https://sanskrit-lexicon.uni-koeln.de/scans/csl-apidev/fonts/oldstandard.otf);
+ font-family: oldstandard;
+}
+@font-face { 
+ src: url(http://localhost/cologne/csl-apidev/fonts/oldstandarditalic.otf),
+      url(https://sanskrit-lexicon.uni-koeln.de/scans/csl-apidev/fonts/oldstandarditalic.otf);
+ font-family: oldstandard_i;
+}
+
+@font-face {
+ src: url(http://localhost/cologne/csl-apidev/fonts/CharterIndoCapital.otf),
+      url(https://sanskrit-lexicon.uni-koeln.de/scans/csl-apidev/fonts/CharterIndoCapital.otf);
+ font-family: charterindocapital;
+}

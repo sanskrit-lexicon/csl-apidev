@@ -1,6 +1,6 @@
-import { html, css, LitElement,unsafeHTML } from './lit-element-2.3.1.js';
+import { html, css, LitElement,unsafeHTML } from '../js/lit-element-2.3.1.js';
 
-class cslOutput extends LitElement {
+class cslAccent extends LitElement {
   static get styles() {
    return [
     
@@ -9,27 +9,24 @@ class cslOutput extends LitElement {
   
   static get properties() {
     return {
-      output:  { type: String },
+      accent:  { type: String },
     };
   }
 
   constructor() {
     super();
-    this.output="iast";
+    this.input="yes";
   }
   itemnames = [
-  ['hk', 'Harvard Kyoto'],
-  ['slp1', 'SLP1'],
-  ['itrans', 'ITRANS'],
-  ['deva', 'Devanagari'],
-  ['iast', 'IAST'],
+  ['yes', 'Show Accent'],
+  ['no', 'Hide Accent'],
   ];
 
   itemF = function(item) {
    let value = item[0];
    let name  = item[1];
    let markup;
-   if (this.output.toLowerCase() == value.toLowerCase()) {
+   if (this.accent.toLowerCase() == value.toLowerCase()) {
     markup = html`<option value="${value}" selected>${name}</option>`;
    } else {
     markup = html`<option value="${value}">${name}</option>`;
@@ -38,18 +35,18 @@ class cslOutput extends LitElement {
   }
   onChangeF (event) {
     //event.preventDefault();
-    this.output = event.target.value;
-    //console.log('csl-output: new value of this.output=',this.output);
-    var new_event = new CustomEvent('new-output',
-     {detail: {output:this.output}
+    this.accent = event.target.value;
+    //console.log('csl-accent: new value of this.accent=',this.accent);
+    var new_event = new CustomEvent('new-accent',
+     {detail: {accent:this.accent}
      });
     this.dispatchEvent(new_event);  // this. is needed. Not sure why
   }
 
   render() {
     return html`
-<div id="outputdiv" title="output selection">
-  <select name="output" id="output" 
+<div id="accentdiv" title="accent selection">
+  <select name="accent" id="accent" 
    @change=${this.onChangeF}
   >
    ${this.itemnames.map(item =>this.itemF(item))}
@@ -59,5 +56,7 @@ class cslOutput extends LitElement {
   }
 }
 
-customElements.define('csl-output', cslOutput);
+
+customElements.define('csl-accent', cslAccent);
+
 

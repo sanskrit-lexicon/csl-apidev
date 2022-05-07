@@ -1,4 +1,4 @@
-import { html, css, LitElement,unsafeHTML } from './lit-element-2.3.1.js';
+import { html, css, LitElement,unsafeHTML } from '../js/lit-element-2.3.1.js';
 import  './csl-input.js';
 import  './my-app.js';
 import './csl-citation.js';
@@ -30,15 +30,23 @@ class myApp1 extends LitElement {
   grid-gap: 10px;
   grid-template-columns: auto auto;
 }
-.grid-item1 { /* pw */
+.grid-item1 { /* pwg */
   grid-row-start: 1;
+  grid-row-end: 2;
+  grid-column-start: 1;
+  grid-column-end: 2;
+  width:400px;
+  padding: 10px;
+}
+.grid-item2 { /* pw */
+  grid-row-start: 2;
   grid-row-end: 3;
   grid-column-start: 1;
   grid-column-end: 2;
   width:400px;
   padding: 10px;
 }
-.grid-item2 { /* sch */
+.grid-item3 { /* pwkvn */
   grid-row-start: 1;
   grid-row-end: 2;
   grid-column-start: 2;
@@ -46,7 +54,7 @@ class myApp1 extends LitElement {
   width:400px;
   padding: 10px;
 }
-.grid-item3 { /* pwkvn */
+.grid-item4 { /* sch */
   grid-row-start: 2;
   grid-row-end: 3;
   grid-column-start: 2;
@@ -83,16 +91,16 @@ class myApp1 extends LitElement {
 
   <div class="grid-container" >
    <div class="grid-item1" >
-    <my-app id="app1"  suggest="yes" dict="pw"
+    <my-app id="apppwg"  suggest="yes" dict="pwg"
     input="${this.input}"
     output="${this.output}"
     accent="${this.accent}"
     key="${this.key}"
-    height="535px" width="400px"
+    height="250px" width="400px"
     > </my-app>
    </div>
-   <div class="grid-item2">
-    <my-app id="app2" suggest="yes" dict="sch"
+   <div class="grid-item2" >
+    <my-app id="apppw"  suggest="yes" dict="pw"
     input="${this.input}"
     output="${this.output}"
     accent="${this.accent}"
@@ -101,7 +109,16 @@ class myApp1 extends LitElement {
     > </my-app>
    </div>
    <div class="grid-item3">
-    <my-app id="app3" suggest="yes" dict="pwkvn"
+    <my-app id="apppwkvn" suggest="yes" dict="pwkvn"
+    input="${this.input}"
+    output="${this.output}"
+    accent="${this.accent}"
+    key="${this.key}"
+    height="250px" width="400px"
+    > </my-app>
+   </div>
+   <div class="grid-item4">
+    <my-app id="appsch" suggest="yes" dict="sch"
     input="${this.input}"
     output="${this.output}"
     accent="${this.accent}"

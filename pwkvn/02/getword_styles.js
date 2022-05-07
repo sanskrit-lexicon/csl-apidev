@@ -1,6 +1,62 @@
+import { css, unsafeCSS} from '../js/lit-element-2.3.1.js';
+/* Adaptaion of csl-apidev/css/basic.css. Almost identical.
+*/
+/*
+const urlbaseF = function () {
+  let origin = window.location.origin;  
+  if (origin.indexOf("sanskrit-lexicon.uni-koeln.de") >= 0)  {
+   return css`https://sanskrit-lexicon.uni-koeln.de/scans`;
+  }else {
+   //return origin + "/cologne";
+   return css`http://localhost/cologne`;
+  }
+ }
+*/
+const urlbaseF = function () {
+  let origin = window.location.origin;  
+   return css`https://sanskrit-lexicon.uni-koeln.de/scans`;
+  if (origin.indexOf("sanskrit-lexicon.uni-koeln.de") >= 0)  {
+   return css`https://sanskrit-lexicon.uni-koeln.de/scans`;
+  }else {
+   //return origin + "/cologne";
+   return css`http://localhost/cologne`;
+  }
+ }
+const urlbase = urlbaseF();
+const url_apidev = css`${urlbase}/csl-apidev`;
+const fontUrl = css`${url_apidev}/fonts`;
+//console.log('getword_styles.js. fontUrl=',fontUrl);
+
+export const getwordStyles = css`
+/* Web-font locations
+siddhanta : devanagari text
+oldstandard: for normal text in pwg
+oldstandarditalic : same as above?
+charterindocapital: for 'ls' text in pwg
+       Jul 18, 2015. font family for capitalization, only SNP 
+NOTE:  font-faces are NOT loaded when these are in the shadow dom.
+   These font-face statements must be in the regular ('light') dom.
+Ref: https://medium.com/rate-engineering/winning-the-war-of-css-conflicts-through-the-shadow-dom-de6c797b5cba
+@font-face { 
+ src: url(${fontUrl}/siddhanta.ttf);
+ font-family: siddhanta_deva;
+}
+@font-face { 
+ src: url(${fontUrl}/oldstandard.otf);
+ font-family: oldstandard;
+}
+@font-face { 
+ src: url(${fontUrl}/oldstandarditalic.otf);
+ font-family: oldstandard_i;
+}
+@font-face {
+ src: url(${fontUrl}/CharterIndoCapital.otf);
+ font-family: charterindocapital;
+}
+*/
 /* Aug 15, 2015
   Make everything a descendant of #CologneBasic.
-  Then, in disp.php give parent element this id.
+   Jul 20, 2020.  Adapted for web-components
 */
 #CologneBasic {
 	color: black; background-color: white; /*#DBE4ED; */
@@ -11,27 +67,12 @@
  font-family: Gentium, Palatino Linotype, Arial Unicode MS;
  font-size: 12pt;
 }
+#CologneBasic {padding-right: 25px;}
 #CologneBasic .g {font-size:smaller;font-style:italic;}
 #CologneBasic .lang {font-size:smaller;font-style:italic;}
 #CologneBasic .hrefdata {font-size:smaller;}
 #CologneBasic .lnum {font-size:smaller;}
 /*.sdata {color:black;font-size:larger;} */ /* for devanagari */
-@font-face { 
-    /*src: url(../fonts/siddhanta.ttf);*/
-    /* 08-17-2021 change to siddhanta1.ttf.
-     Ref: https://github.com/sanskrit-lexicon/pwg/issues/5 */
- src: url(../fonts/siddhanta1.ttf); /* relative to this css file */
- font-family: siddhanta_deva;
-}
-@font-face { /* for normal text in pwg */
- src: url(../fonts/oldstandard.otf);
- font-family: oldstandard;
-}
-@font-face { 
- /*src: url(../fonts/oldstandarditalic.otf);*/
- src: url(../fonts/CharisSIL-I.woff);
- font-family: oldstandard_i;
-}
 
 /*#CologneBasic .sdata {color:teal;}*/
 /*#CologneBasic .sdatadeva {color:teal;font-size:larger;}*/
@@ -43,19 +84,12 @@
  /*font-size:larger;*/
  font-family: siddhanta_deva;
 }
-#CologneBasic i {
- font-family: oldstandard_i;
-}
-#CologneBasic .sdata_italic_iast i { 
- color:teal; 
- font-family: oldstandard_i;
-}
 
 #CologneBasic .asdata {color:blue;font-size:larger;}
 #CologneBasic .pb {font-size:smaller; }
 #CologneBasic .hom {color:red;}
 #CologneBasic .footnote {font-size:smaller;}
-#CologneBasic .ls {color:gray; font-size:11pt; font-family: charterindocapital;}
+#CologneBasic .ls {color:gray; font-size:smaller;}
 #CologneBasic .gram {font-weight:bold;}
 #CologneBasic .divm {font-weight:bold;}
 #CologneBasic .wide {font-stretch:wider;}
@@ -71,13 +105,14 @@
   margin-right:    15px; /*5px;*/
   
   margin-top: 10px; /* 20px; Dec 5, 2013 */
-  font-size: 11pt;  
+  font-size: 14px;  
   padding-right: 15px ;/*15px;*/ /* 04-18-2017 For AP display, with indenting */
 }
 #CologneBasic td, th {
-  padding-left:10px; padding-right:         35px;
+  padding-left,padding-right:         15px;
   padding-top: 5px;
   text-align:      left;
+  display: block; /* added to basic.css */
 }
 
 #CologneBasic plex {
@@ -120,11 +155,6 @@
 	background-color: #ffffcc;
 	color: #000033;
 }
-/* Jul 18, 2015. font family for capitalization, only SNP */
-@font-face { /* for 'ls' text in pwg */
- src: url(../fonts/CharterIndoCapital.otf);
- font-family: charterindocapital;
-}
 #CologneBasic .botcap {
 color:gray; 
 font-family:charterindocapital;
@@ -140,3 +170,4 @@ font-family:charterindocapital;
  font-family: siddhanta_deva;
  /*color:red;*/
 }
+`;

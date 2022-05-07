@@ -1,4 +1,4 @@
-import { html, css, LitElement,unsafeHTML } from './lit-element-2.3.1.js';
+import { html, css, LitElement,unsafeHTML } from '../js/lit-element-2.3.1.js';
 
 class cslDict extends LitElement {
   static get styles() {

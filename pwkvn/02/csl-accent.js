@@ -1,6 +1,6 @@
-import { html, css, LitElement,unsafeHTML } from './lit-element-2.3.1.js';
+import { html, css, LitElement,unsafeHTML } from '../js/lit-element-2.3.1.js';
 
-class cslInput extends LitElement {
+class cslAccent extends LitElement {
   static get styles() {
    return [
     
@@ -9,27 +9,24 @@ class cslInput extends LitElement {
   
   static get properties() {
     return {
-      input:  { type: String },
+      accent:  { type: String },
     };
   }
 
   constructor() {
     super();
-    this.input="hk";
+    this.input="yes";
   }
   itemnames = [
-  ['hk', 'Harvard Kyoto'],
-  ['slp1', 'SLP1'],
-  ['itrans', 'ITRANS'],
-  ['deva', 'Devanagari'],
-  ['iast', 'IAST'],
+  ['yes', 'Show Accent'],
+  ['no', 'Hide Accent'],
   ];
 
   itemF = function(item) {
    let value = item[0];
    let name  = item[1];
    let markup;
-   if (this.input.toLowerCase() == value.toLowerCase()) {
+   if (this.accent.toLowerCase() == value.toLowerCase()) {
     markup = html`<option value="${value}" selected>${name}</option>`;
    } else {
     markup = html`<option value="${value}">${name}</option>`;
@@ -38,18 +35,18 @@ class cslInput extends LitElement {
   }
   onChangeF (event) {
     //event.preventDefault();
-    this.input = event.target.value;
-    //console.log('csl-input: new value of this.input=',this.input);
-    var new_event = new CustomEvent('new-input',
-     {detail: {input:this.input}
+    this.accent = event.target.value;
+    //console.log('csl-accent: new value of this.accent=',this.accent);
+    var new_event = new CustomEvent('new-accent',
+     {detail: {accent:this.accent}
      });
     this.dispatchEvent(new_event);  // this. is needed. Not sure why
   }
 
   render() {
     return html`
-<div id="inputdiv" title="input selection">
-  <select name="input" id="input" 
+<div id="accentdiv" title="accent selection">
+  <select name="accent" id="accent" 
    @change=${this.onChangeF}
   >
    ${this.itemnames.map(item =>this.itemF(item))}
@@ -60,6 +57,6 @@ class cslInput extends LitElement {
 }
 
 
-customElements.define('csl-input', cslInput);
+customElements.define('csl-accent', cslAccent);
 
 

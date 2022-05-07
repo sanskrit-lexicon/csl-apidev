@@ -1,4 +1,4 @@
-import { css, unsafeCSS} from './lit-element-2.3.1.js';
+import { css, unsafeCSS} from '../js/lit-element-2.3.1.js';
 /* Adaptaion of csl-apidev/css/basic.css. Almost identical.
 */
 /*

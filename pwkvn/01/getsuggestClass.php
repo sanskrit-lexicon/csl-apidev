@@ -6,10 +6,10 @@ error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
 //getsuggestClass.php 04-19-2022
 // Read a list of headwords from a text file
 // and return first few that start with a given string.
-require_once('../utilities/transcoder.php'); // initializes transcoder
-require_once("../dbgprint.php");
+require_once('../../utilities/transcoder.php'); // initializes transcoder
+require_once("../../dbgprint.php");
 
-require_once('../parm.php');
+require_once('../../parm.php');
 class GetsuggestClass {
  public $matches,$json;
  public function __construct() {
@@ -28,7 +28,7 @@ class GetsuggestClass {
   $more = True;
   $max = 10;  # max number of return results
   $maxlike=100;
-  $filename = "mergehw.txt";
+  $filename = "../mergehw/mergehw.txt";
   $lines = file($filename,FILE_IGNORE_NEW_LINES);
   $results1 = array();
   $keymatch = $key;
