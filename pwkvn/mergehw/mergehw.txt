@@ -1669,6 +1669,7 @@ adUra svp
 adUraja s
 adUrabAnDava sv
 adUre v
+adUrebAnDava v
 adUzaka sv
 adUzya sv
 adfggocara sv
@@ -6398,9 +6399,7 @@ aSokaSrI sv
 aSokAKya sv
 aSokI sv
 aSocya svp
-aSocyaM v
 aSocyatA v
-aSocyatva v
 aSoPayuta sv
 aSOklya sv
 aSOca svp
@@ -13561,9 +13560,7 @@ garBiRikAvarja s
 garBita sp
 garBIkfta s
 garmut svp
-garmuti v
 garmud svp
-garmudi v
 garva svp
 garvaBARqa s
 garvara sp

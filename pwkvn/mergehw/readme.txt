@@ -1,3 +1,4 @@
+sh redo.sh
 cp /c/xampp/htdocs/cologne/sch/pywork/schhw.txt temp_schhw.txt
 cp /c/xampp/htdocs/cologne/pwkvn/pywork/pwkvnhw.txt temp_pwkvnhw.txt
 
