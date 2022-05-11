@@ -99,7 +99,6 @@ akAmin sv
 akAmya sv
 akAraRa svp
 akAraRaka sv
-akAraRatas v
 akAraRabanDu sv
 akArAdiniGaRwu sv
 akArpaRya svp
@@ -176,7 +175,7 @@ akftrimAlApatva s
 akftsnavid sv
 akfpa sv
 akfpaRa svp
-akfpaRam sv
+akfpaRam s
 akfmiparisfpta sv
 akfSalakzmI sv
 akfSAnekakaRwaka sv
@@ -198,7 +197,6 @@ akkA svp
 akti sv
 akratusaMyukta sv
 akrama svp
-akramam v
 akramaSas v
 akramoQA sv
 akraSita s
@@ -258,7 +256,6 @@ akzamin sv
 akzaya svp
 akzayavawa sv
 akzayya svp
-akzayyodaka v
 akzara svp
 akzarakara sv
 akzaracCedinI s
@@ -273,7 +270,6 @@ akzarasaDAtu sv
 akzarAkzara sv
 akzaresTA sv
 akzarya svp
-akzaryaM v
 akzavawa s
 akzavatI svp
 akzavalaya s
@@ -503,7 +499,7 @@ agnisaMcaya sv
 agnisaMyoga s
 agnisaha s
 agnisAkzika vp
-agnisAkzikam sv
+agnisAkzikam s
 agnisAttva s
 agnisidDa s
 agnisparSa sv
@@ -770,7 +766,7 @@ acintyaja sv
 acira vp
 acirakAnti s
 aciraja s
-aciratas sv
+aciratas s
 aciratna s
 aciraruc s
 aciraruci sv
@@ -1400,7 +1396,7 @@ atiSAta sv
 atiSAdvala sv
 atiSizwa sv
 atiSIGra vp
-atiSIGram sv
+atiSIGram s
 atiSIta sv
 atiSItA s
 atiSuBra sv
@@ -1668,7 +1664,6 @@ adUka s
 adUra svp
 adUraja s
 adUrabAnDava sv
-adUre v
 adUrebAnDava v
 adUzaka sv
 adUzya sv
@@ -1740,7 +1735,6 @@ adroGam v
 adva sv
 advayavAda sv
 advayavAdin sp
-advayos v
 advAdaSAha sv
 advitIya svp
 advivarza sv
@@ -1789,7 +1783,6 @@ aDarasTita s
 aDarAt svp
 aDarAmbara sv
 aDariRI s
-aDarita v
 aDarima sv
 aDarIkf s
 aDaroccaBAva s
@@ -2972,7 +2965,6 @@ anupADika s
 anupADyAya sv
 anupAya svp
 anupAyin sv
-anupAyena v
 anupArata sv
 anupAlaBya sv
 anupASraya sv
@@ -4669,7 +4661,6 @@ aBramAtaNga sp
 aBramu sp
 aBramujIviteSa sv
 aBramupriya svp
-aBramupriyatama v
 aBramuvallaBa sv
 aBramUpati sv
 aBravAwika svp
@@ -4680,7 +4671,7 @@ aBrasinDu s
 aBrAtar svp
 aBrAnta sv
 aBrAy vp
-aBrAyita sv
+aBrAyita s
 aBriya sp
 ama sp
 amaNgalika sv
@@ -6380,7 +6371,6 @@ aSuBAtmaka sv
 aSulka s
 aSUka s
 aSUnyArTa v
-aSUnyArTam v
 aSfNKala s
 aSfRya sv
 aSezamAtar s
@@ -6998,7 +6988,6 @@ asva svp
 asvaka sp
 asvatantrIkfta s
 asvaDarma sv
-asvaptum v
 asvarUpa sv
 asvarga sv
 asvarya sv
@@ -8140,7 +8129,6 @@ AvirBUtatva sv
 AvirBUti s
 AvirBUya sv
 AvirmaRqala sv
-Avirhita v
 AvivarRayizu s
 Avivedayizu s
 AviSam svp
@@ -8528,7 +8516,6 @@ iBikA s
 iBI s
 im sv
 ima svp
-imezu v
 iyakz svp
 iyata sv
 iyadAveSa s
@@ -8597,7 +8584,6 @@ IqyataratA s
 IdfgavasTa sv
 IdfSaBUta sv
 Iyakz sv
-IyakzamARa v
 Ir svp
 Ira svp
 Iraka s
@@ -9717,7 +9703,6 @@ umApratimAsTa s
 umAmaheSvarAyamARa s
 umeSvara sv
 umBana s
-umBita v
 ummARI s
 uyamAnavaDana v
 uyamAnavarDana s
@@ -9845,7 +9830,6 @@ UQa svp
 UQapUrvA sv
 UQAtpraBfti v
 UtimatI sv
-UDas v
 UnadvivArzika sv
 UnavAda sv
 UnaviMSativarzopasaMpAdana sv
@@ -9867,7 +9851,6 @@ Urjapatya sv
 Urjay svp
 Urjaspati sv
 UrjAhuti svp
-Urjitam v
 UrRamrada sv
 UrRalatA s
 UrRAparikarmaRa sv
@@ -10236,7 +10219,6 @@ etadupanizad sv
 etadyoni sv
 etadvid sv
 eD svp
-eDita v
 eDin s
 eraka svp
 eraRqa svp
@@ -10270,7 +10252,6 @@ evam svp
 evamAyuzpramARa sv
 evamAyuzyaparyanta sv
 evamAyuzyapramARa v
-evamevo v
 evAza sv
 ez svp
 ezwar svp
@@ -11707,7 +11688,6 @@ kAlidAsapaYcASat v
 kAlin sp
 kAlindIsodara sp
 kAliya svp
-kAliyAri v
 kAliSaMkara sv
 kAlI sp
 kAlInAga s
@@ -11736,7 +11716,6 @@ kAvyamaya sv
 kAvyalakzaRa sv
 kAvyaSilpin s
 kAvyasaMgraha sv
-kAvyasyASayajYaH v
 kAvyA s
 kAvyAdarSikA sv
 kAvyAlaMkArakAmaDenu v
@@ -11981,7 +11960,6 @@ kuRapASin s
 kuRW svp
 kuRWarava sv
 kuRWASmamAlAmaya sv
-kuRWita v
 kuRqa svp
 kuRqamARqahomaviDi sv
 kuRqala svp
@@ -12396,7 +12374,6 @@ kftAYjalI s
 kftAntAy v
 kftAntAyate s
 kftAya svp
-kftAvakuRWana v
 kftAvadAna s
 kftAvaDi s
 kftAvasakTika svp
@@ -12738,7 +12715,6 @@ kOravapARqavIya sv
 kOravyAyaRa svp
 kOrukzetra sv
 kOrpa sv
-kOrpya v
 kOrma sp
 kOrmaka s
 kOla svp
@@ -15102,7 +15078,6 @@ Cid svp
 Cidi sp
 CidrakarRa sv
 CidrAnusArin sv
-CindatprARi v
 CinnakarRa svp
 CinnapAdin s
 Cinnaplotika sv
@@ -15535,7 +15510,6 @@ jIvanASa sv
 jIvanta svp
 jIvantaka svp
 jIvantiSUlA sv
-jIvantI v
 jIvaputra svp
 jIvamezaka sv
 jIvavizARa svp
@@ -16392,7 +16366,6 @@ tfzRatva s
 tfzRABUti s
 tfzRAlutA s
 tfzRAvArin s
-te v
 teja svp
 tejana svp
 tejaska sv
@@ -16825,7 +16798,6 @@ dalatA s
 dalavIwaka sv
 dalaSas svp
 dalADISvara sv
-dalita v
 davad s
 davara sv
 davaraka v
@@ -18015,7 +17987,6 @@ nagnaSravaRa sp
 nagnAcArya sp
 naGuza sp
 naw svp
-nawita v
 naqaneri sv
 naqin s
 nataBrU s
@@ -18649,7 +18620,6 @@ nirjalamInAy v
 nirjalamInAyate s
 nirjalIkaraRa s
 nirjAqya sv
-nirjAta v
 nirjigIzutA s
 nirjIva sp
 nirJara sp
@@ -19606,7 +19576,6 @@ parikzati sv
 parikzepa sp
 pariKaRqa sv
 parigamya sv
-pariguRqita v
 parigfdDa sv
 parigfha s
 parigfhyA svp
@@ -23136,7 +23105,6 @@ masUrikA s
 masfRIkfta s
 masyaYjana s
 maha svp
-mahatas v
 mahattama s
 mahattamapada sv
 mahattaraka sp
@@ -24552,7 +24520,6 @@ retaHpravAha s
 retaScyuti s
 retas sp
 retovasikta sv
-reBamARa v
 reBin svp
 rerihARa sp
 revatI s
@@ -25054,7 +25021,6 @@ varANgA s
 varAwaka sp
 varArohA s
 varArDya s
-varASi vp
 varAhakarRa sp
 varAhaGAta s
 varAhaGAtaka s
@@ -25744,7 +25710,6 @@ vinItApura s
 vinIti sp
 vinIlaka sv
 vinIvaraRa sv
-vinuqya v
 vinuti s
 vineya svp
 vinoda sp
@@ -25812,7 +25777,6 @@ viplava svp
 viplavAwwahAsa sv
 viplAvaka sp
 viplAvana sv
-viplIyante v
 viplutabanDa s
 vipluz svp
 viPala sp
@@ -26225,7 +26189,6 @@ vfTA svp
 vfTAdAna sv
 vfdDayuvatI sv
 vfdDAnta svp
-vfdDApacAyitva v
 vfdDAvasyandin s
 vfntAka sp
 vfndAwavI s
@@ -27420,7 +27383,6 @@ saMtAnaka sp
 saMtAnika sp
 saMtApaka s
 saMtApatA s
-saMtfqya v
 saMtfdya sv
 saMtozitva s
 saMdaMSa sp
