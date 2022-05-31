@@ -312,7 +312,7 @@ public function ls_callback_pwg_href($code,$data) {
  $dbg = false;
  dbgprint($dbg,"ls_callback_pwg_href. data=$data\n");
  if (preg_match('|^(Spr[.]) ([0-9]+)|',$data,$matches)) {
-  if ($this->dict == 'pw') {
+  if (in_array($this->dict,array('pw'))) {
    // Indische Sprüche in pw
    $pfx = $matches[1];
    $verse = $matches[2];
@@ -456,6 +456,8 @@ public function ls_callback_mw($matches) {
    $href = $this->ls_callback_mw_href($code,$n,$data);
   }else if ($this->dict == 'ap90') {
    $href = $this->ls_callback_ap90_href($code,$n,$data);
+  }else if ($this->dict == 'sch') {
+   $href = $this->ls_callback_sch_href($code,$n,$data);
   }
   if ($href != null) {
    // link
@@ -547,6 +549,102 @@ public function ls_callback_mw_href($code,$n,$data) {
   return $href;
  }
 
+ return $href; 
+}
+public function ls_callback_sch_href($code,$n,$data) {
+ $href = null; // default if no success
+ $dbg = false;
+ dbgprint($dbg,"ls_callback_sch_href. code=$code, n=$n, data=$data\n");
+ if (preg_match('|^(Spr[.]) ([0-9]+)|',$data,$matches)) {
+   // Indische Sprüche in sch is assumed to be volume 2
+   $pfx = $matches[1];
+   $verse = $matches[2];
+   $href = "https://funderburkjim.github.io/boesp-prep/web1/boesp.html?$verse";
+   dbgprint($dbg,"Spr: href=$href\n");
+   return $href;
+  }
+ $code_to_pfx = array('ṚV.' => 'rv', 'AV.' => 'av', 'P.' => 'p', 'Hariv.' => 'hariv', 'R. Gorr.' => 'rgorr','R.' => 'rschl');
+ if (!isset($code_to_pfx[$code])) {
+  return $href;
+ }
+ $pfx = $code_to_pfx[$code];
+ if ($n == '') {
+  $data1 = $data;
+ }else {
+  $data1 = "$n $data";
+ }
+ if (in_array($pfx,array('rv','av'))) {
+  // #, #, #  (three decimal numbers, separated by commas)
+  if (!preg_match('|^(.*?)[.] *([0-9]+)[,] +([0-9]+)[,] +([0-9]+)(.*)$|',$data1,$matches)) {
+   return $href;
+  }
+  $code0 = $matches[1];
+  $imandala = (int)$matches[2];
+  $ihymn = (int)$matches[3];
+  $iverse = (int)$matches[4];
+  dbgprint($dbg,"ls_callback_ap90_href. $code0, $mandala, $ihymn, $iverse\n");
+  $rest = $matches[5];
+  $hymnfilepfx = sprintf("%s%02d.%03d",$pfx,$imandala,$ihymn);
+  $hymnfile = "$hymnfilepfx.html";
+  $versesfx = sprintf("%02d",$iverse);
+  $anchor = "$hymnfilepfx.$versesfx";
+  $versesfx = sprintf("%02d",$iverse);
+  $anchor = "$hymnfilepfx.$versesfx";
+  $dir = sprintf("https://sanskrit-lexicon.github.io/%slinks/%shymns",$pfx,$pfx);
+  $href = "$dir/$hymnfile#$anchor";
+  return $href;
+ } // end for rv, av
+ if (in_array($pfx,array('p'))) {
+  // #, #, # (three decimal numbers, separated by commas)
+  if(!preg_match('|^(.*?)[.] *([0-9]+)[,] +([0-9]+)[,] +([0-9]+)(.*)$|',$data1,$matches)) {
+    return $href;
+   }
+   $code0 = $matches[1];
+   $ic = (int)$matches[2];
+   $is = (int)$matches[3];
+   $iv = (int)$matches[4];
+   $dir = "https://ashtadhyayi.com/sutraani";
+   $href = "$dir/$ic/$is/$iv";
+   return $href;
+ }
+ if (in_array($pfx,array('hariv'))) {
+  // ## one decimal numbers
+  if(!preg_match('|^(.*?)[.] *([0-9]+)(.*)$|',$data1,$matches)) {
+    return $href;
+   }
+  // Mahabharata, Calcutta edition for harivamsa
+  $pfx = $matches[1];
+  $verse = $matches[2];
+  $href = "https://sanskrit-lexicon-scans.github.io/hariv?$verse";
+  dbgprint($dbg,"$pfx: href=$href\n");
+  return $href;
+ }
+ if (in_array($pfx,array('rgorr'))) {
+  // #, #, # (three decimal numbers, separated by commas)
+  if(!preg_match('|^(.*?)[.] *([0-9]+)[,] +([0-9]+)[,] +([0-9]+)(.*)$|',$data1,$matches)) {
+    return $href;
+   }
+   $code0 = $matches[1];
+   $ic = (int)$matches[2];
+   $is = (int)$matches[3];
+   $iv = (int)$matches[4];
+   $dir = "https://sanskrit-lexicon-scans.github.io/ramayanagorr";
+   $href = "$dir/?$ic,$is,$iv";
+   return $href;
+ }
+ if (in_array($pfx,array('rschl'))) {
+  // #, #, # (three decimal numbers, separated by commas)
+  if(!preg_match('|^(.*?)[.] *([0-9]+)[,] +([0-9]+)[,] +([0-9]+)(.*)$|',$data1,$matches)) {
+    return $href;
+   }
+   $code0 = $matches[1];
+   $ic = (int)$matches[2];
+   $is = (int)$matches[3];
+   $iv = (int)$matches[4];
+   $dir = "https://sanskrit-lexicon-scans.github.io/ramayanaschl";
+   $href = "$dir/?$ic,$is,$iv";
+   return $href;
+ }
  return $href; 
 }
 public function ls_callback_ap90_href($code,$n,$data) {
