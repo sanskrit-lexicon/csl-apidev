@@ -30,7 +30,7 @@ class BasicAdjust {
   if (in_array($dict,array('pwg','pw','pwkvn'))) {
    $this->dal_auth = new Dal($dict,"bib");  # pwgbib
    dbgprint(false,"basicadjust: bib file open? " . $this->dal_auth->status ."\n");
-  }else if (in_array($dict,array('mw','ap90','ben'))){
+  }else if (in_array($dict,array('mw','ap90','ben','sch'))){
    $this->dal_auth = new Dal($dict,"authtooltips");
   }else {
    $this->dal_auth = null;
@@ -71,7 +71,7 @@ class BasicAdjust {
       "BasicAdjust::ls_callback_pwg",$line);
   
       
- }else if (in_array($this->getParms->dict,array('mw','ap90','ben'))){
+ }else if (in_array($this->getParms->dict,array('mw','ap90','ben','sch'))){
   $line = preg_replace_callback('|<ls(.*?)>(.*?)</ls>|',
       "BasicAdjust::ls_callback_mw",$line);
 
@@ -432,7 +432,7 @@ public function ls_callback_mw($matches) {
   if ($this->dict == 'mw') {
    list($cid,$code,$title,$type) = $rec;
    $text = "$title ($type)";
-  } else if (in_array($this->dict,array('ap90','ben'))) {
+  } else if (in_array($this->dict,array('ap90','ben','sch'))) {
    list($code,$text) = $rec;
   }
   # Add lshead, so as to be able to style
