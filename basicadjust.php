@@ -358,7 +358,9 @@ public function ls_callback_pwg_href($code,$data) {
  // links for Rigveda, Atharvaveda, or Panini,
  // Ramayana Gorresio, Ramayana Schlegel
  $code_to_pfx = array('ṚV.' => 'rv', 'AV.' => 'av', 'P.' => 'p',
-  'Spr.' => 'Spr', 'R. GORR.' => 'rgorr','R.' => 'rschl');
+  'Spr.' => 'Spr',
+  'R. GORR.' => 'rgorr', 'R. ed. GORR.' => 'rgorr', 'GORR.' => 'rgorr',
+  'R.' => 'rschl');
  if (!isset($code_to_pfx[$code])) {
   return $href;
  }
