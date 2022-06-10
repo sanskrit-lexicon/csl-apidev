@@ -360,7 +360,7 @@ public function ls_callback_pwg_href($code,$data) {
  $code_to_pfx = array('ṚV.' => 'rv', 'AV.' => 'av', 'P.' => 'p',
   'Spr.' => 'Spr',
   'R. GORR.' => 'rgorr', 'R. ed. GORR.' => 'rgorr', 'GORR.' => 'rgorr',
-  'R.' => 'rschl');
+  'R.' => 'rschl','R. SCHL.' => 'rschl');
  if (!isset($code_to_pfx[$code])) {
   return $href;
  }
