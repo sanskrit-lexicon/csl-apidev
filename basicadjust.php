@@ -387,8 +387,16 @@ public function ls_callback_pwg_href($code,$data) {
   $dir = "https://sanskrit-lexicon-scans.github.io/ramayanagorr";
   $href = "$dir/?$imandala,$ihymn,$iverse";
   return $href;
- }else if (in_array($pfx,array('rschl'))) { 
-  $dir = "https://sanskrit-lexicon-scans.github.io/ramayanaschl";
+ }else if (in_array($pfx,array('rschl'))) {
+  /* 06-13-2022. rschl is appropriate when $imandala is 1 or 2
+  Otherwise ($imandala 3,4,5,6,7)rschl should change to rgorr
+   This is known to be appropriate for pwg dictionary.
+  */
+  if (in_array($imandala,array(1,2))) {
+   $dir = "https://sanskrit-lexicon-scans.github.io/ramayanaschl";
+  }else {
+   $dir = "https://sanskrit-lexicon-scans.github.io/ramayanagorr";
+  }
   $href = "$dir/?$imandala,$ihymn,$iverse";
   return $href;
  }
