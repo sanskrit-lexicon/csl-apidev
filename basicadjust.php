@@ -503,25 +503,45 @@ public function ls_callback_mw_href($code,$n,$data) {
   $data1 = "$n $data";
  }
  if (in_array($pfx,array('rv','av'))) {
-  if (!preg_match('|^(.*?)[.] *([^ ,]+)[ ,]+([0-9]+)[ ,]+([0-9]+)(.*)$|',$data1,$matches)) {
+  if (preg_match('|^(.*?)[.] *([^ ,]+)[ ,]+([0-9]+)[ ,]+([0-9]+)(.*)$|',$data1,$matches)) {
+   $code0 = $matches[1];
+   $mandala = $matches[2];  // in lower-case roman numerals for mw
+   $imandala = $this->roman_int($mandala);
+   $ihymn = (int)$matches[3];
+   $iverse = (int)$matches[4];
+   dbgprint($dbg,"ls_callback_mw_href. $code0, $mandala, $ihymn, $iverse\n");
+   $rest = $matches[5];
+   $hymnfilepfx = sprintf("%s%02d.%03d",$pfx,$imandala,$ihymn);
+   $hymnfile = "$hymnfilepfx.html";
+   $versesfx = sprintf("%02d",$iverse);
+   $anchor = "$hymnfilepfx.$versesfx";
+   $versesfx = sprintf("%02d",$iverse);
+   $anchor = "$hymnfilepfx.$versesfx";
+   $dir = sprintf("https://sanskrit-lexicon.github.io/%slinks/%shymns",$pfx,$pfx);
+   $href = "$dir/$hymnfile#$anchor";
    return $href;
+  }else if (preg_match('|^(.*?)[.] *([^ ,]+)[ ,]+([0-9]+)(.*)$|',$data1,$matches))
+  { // two parameter version. Supply verse number = 1
+   $code0 = $matches[1];
+   $mandala = $matches[2];  // in lower-case roman numerals for mw
+   $imandala = $this->roman_int($mandala);
+   if ($imandala == 0) {return $href;}
+   $ihymn = (int)$matches[3];
+   $iverse = 1;  // line to verse 1.
+   dbgprint($dbg,"ls_callback_mw_href. $code0, $mandala, $ihymn, $iverse\n");
+   $rest = $matches[5];
+   $hymnfilepfx = sprintf("%s%02d.%03d",$pfx,$imandala,$ihymn);
+   $hymnfile = "$hymnfilepfx.html";
+   $versesfx = sprintf("%02d",$iverse);
+   $anchor = "$hymnfilepfx.$versesfx";
+   $versesfx = sprintf("%02d",$iverse);
+   $anchor = "$hymnfilepfx.$versesfx";
+   $dir = sprintf("https://sanskrit-lexicon.github.io/%slinks/%shymns",$pfx,$pfx);
+   $href = "$dir/$hymnfile#$anchor";
+   return $href;
+  }else {
+   return $href; // failure to match
   }
-  $code0 = $matches[1];
-  $mandala = $matches[2];  // in lower-case roman numerals for mw
-  $imandala = $this->roman_int($mandala);
-  $ihymn = (int)$matches[3];
-  $iverse = (int)$matches[4];
-  dbgprint($dbg,"ls_callback_mw_href. $code0, $mandala, $ihymn, $iverse\n");
-  $rest = $matches[5];
-  $hymnfilepfx = sprintf("%s%02d.%03d",$pfx,$imandala,$ihymn);
-  $hymnfile = "$hymnfilepfx.html";
-  $versesfx = sprintf("%02d",$iverse);
-  $anchor = "$hymnfilepfx.$versesfx";
-  $versesfx = sprintf("%02d",$iverse);
-  $anchor = "$hymnfilepfx.$versesfx";
-  $dir = sprintf("https://sanskrit-lexicon.github.io/%slinks/%shymns",$pfx,$pfx);
-  $href = "$dir/$hymnfile#$anchor";
-  return $href;
  } // end for rv, av
  if (in_array($pfx,array('p'))) {
   //if(! preg_match('|^(.*?)[.] *([0-9]+)-([0-9]+)[ ,]+([0-9]+)(.*)$|',$data1,$matches)) 
