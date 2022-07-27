@@ -140,3 +140,6 @@ font-family:charterindocapital;
  font-family: siddhanta_deva;
  /*color:red;*/
 }
+.dotunder {
+  border-bottom: 1px dotted #000;  
+}

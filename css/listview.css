@@ -100,3 +100,40 @@ font-family:charterindocapital;
  color:red;
  line-height:130%;
 }
+Capital.otf);
+ font-family: charterindocapital;
+}
+/* 01-05-2018 */
+@font-face { /* for normal text in pwg */
+ src: url(../fonts/oldstandard.otf);
+ font-family: oldstandard;
+}
+@font-face { 
+ src: url(../fonts/oldstandarditalic.otf);
+ font-family: oldstandard_i;
+}
+
+#CologneListview .botcap {
+color:gray; 
+font-family:charterindocapital;
+}
+
+#CologneListview .cssshade {
+ background-color:#EAEAEA; /* light gray */
+}
+@font-face { 
+ src: url(../fonts/siddhanta.ttf);
+ font-family: siddhanta_deva;
+}
+#CologneListview .sdata {
+ font-family: siddhanta_deva;
+/* color:red; */
+}
+#CologneListview .dispdivlist {
+ font-family: siddhanta_deva;
+ color:red;
+ line-height:130%;
+}
+.dotunder {
+  border-bottom: 1px dotted #000;  
+}

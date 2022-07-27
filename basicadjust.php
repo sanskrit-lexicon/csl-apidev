@@ -422,7 +422,7 @@ public function ls_callback_mw($matches) {
   $data1 = $data0;
   $data = $data0;
  }
- dbgprint($dbg,"\nls_callback_mw BEGIN: ndata=$ndata, n=$n, data0=$data0\n");
+ dbgprint($dbg,"\nls_callback_mw BEGIN: ndata=$ndata, n=$n, data0=$data0, data1=$data1\n");
  if (!$this->dal_auth->status) {
   return $ans;
  }
@@ -436,22 +436,30 @@ public function ls_callback_mw($matches) {
  }
  $result = $this->ls_matchabbr($fieldname,$fieldidx,$data1);
  if (count($result) == 0) {
+  dbgprint($dbg,"ls_matchabbr returns no results\n");
   return $ans; // failure
  }
   $rec = $result[0];
   if ($this->dict == 'mw') {
    list($cid,$code,$title,$type) = $rec;
    $text = "$title ($type)";
+   dbgprint($dbg,"ls_matchabbr returns: cid=$cid, code=$code, title=$title, type=$type\n");
   } else if (in_array($this->dict,array('ap90','ben','sch'))) {
    list($code,$text) = $rec;
   }
   # Add lshead, so as to be able to style
   // for mw and ap90, codecap = code
+  dbgprint($dbg,"data=$data\n");
   $codecap = $code;
+  $ncode = strlen($code); // use substr_replace in case $code has parens
   if ($n != '') {
-   $datanew = preg_replace("/^$code/","<lshead></lshead>",$data);
+   //$datanew = preg_replace("/^$code/","<lshead></lshead>",$data);
+   $datanew = substr_replace($data,"<lshead></lshead>",0,$ncode);
+   dbgprint($dbg,"lshead: n=$n: datanew=$datanew\n");
   } else {
-   $datanew = preg_replace("/^$code/","<lshead>$codecap</lshead>",$data);
+   //$datanew = preg_replace("/^$code/","<lshead>$codecap</lshead>",$data);
+   $datanew = substr_replace($data,"<lshead>$codecap</lshead>",0,$ncode);
+   dbgprint($dbg,"lshead: n=$n: datanew=$datanew\n");
   }
   //dbgprint(true,"datanew=$datanew\n");
   # be sure there is no xml in the text
