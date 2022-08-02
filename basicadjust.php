@@ -436,7 +436,7 @@ public function ls_callback_mw($matches) {
  }
  $result = $this->ls_matchabbr($fieldname,$fieldidx,$data1);
  if (count($result) == 0) {
-  dbgprint($dbg,"ls_matchabbr returns no results\n");
+  dbgprint($dbg,"ls_callback_mw : ls_matchabbr returns no results\n");
   return $ans; // failure
  }
   $rec = $result[0];
@@ -449,12 +449,12 @@ public function ls_callback_mw($matches) {
   }
   # Add lshead, so as to be able to style
   // for mw and ap90, codecap = code
-  dbgprint($dbg,"data=$data\n");
+  dbgprint($dbg,"ls_callback_mw : n=$n, data=$data\n");
   $codecap = $code;
   $ncode = strlen($code); // use substr_replace in case $code has parens
   if ($n != '') {
    //$datanew = preg_replace("/^$code/","<lshead></lshead>",$data);
-   $datanew = substr_replace($data,"<lshead></lshead>",0,$ncode);
+   $datanew = substr_replace($data,"<lshead>$data</lshead>",0,$ncode);
    dbgprint($dbg,"lshead: n=$n: datanew=$datanew\n");
   } else {
    //$datanew = preg_replace("/^$code/","<lshead>$codecap</lshead>",$data);
@@ -477,9 +477,11 @@ public function ls_callback_mw($matches) {
   }else if ($this->dict == 'sch') {
    $href = $this->ls_callback_sch_href($code,$n,$data);
   }
+  dbgprint($dbg,"ls_callback_mw: href=$href\n");
   if ($href != null) {
    // link
    //$ans = "<gralink href='$href' n='$tooltip'><ls>$datanew</ls></gralink>";
+   dbgprint($dbg,"ls_callback_mw: n=$n, datanew=$datanew\n");
    if ($n == '') {
     $datanew1 = preg_replace("|</lshead>(.*)$|",'</lshead><span class="ls">${1}</span>',$datanew);
    }else {
@@ -491,7 +493,6 @@ public function ls_callback_mw($matches) {
    $ans = "<ls n='$tooltip'><span class='dotunder'>$datanew</span></ls>";
   }
   dbgprint($dbg,"ls_callback_mw: ans=$ans\n");
- 
  return $ans;
 }
 public function ls_callback_mw_href($code,$n,$data) {
@@ -499,12 +500,15 @@ public function ls_callback_mw_href($code,$n,$data) {
  $dbg = false;
  dbgprint($dbg,"ls_callback_mw_href. code=$code, n='$n', data='$data'\n");
  $code_to_pfx = array('RV.' => 'rv', 'AV.' => 'av', 'Pāṇ.' => 'p',
-  'MBh.' => 'MBH.','Hariv.' => 'hariv');
+  'MBh.' => 'MBH.','Hariv.' => 'hariv',
+  'MBh. (ed. Calc.)' => 'MBHC', 'MBh. (ed. Bomb.)' => 'MBHB');
+ //hrefs for MBHC, MBHB not implemented. MBHC is same as MBH.(?)
  if (!isset($code_to_pfx[$code])) {
-  dbgprint($dbg,"ls_callback_mw_hrev. Code is unknown:'$code'\n");
+  dbgprint($dbg,"ls_callback_mw_href. Code is unknown:'$code'\n");
   return $href;
  }
  $pfx = $code_to_pfx[$code];
+ dbgprint($dbg,"ls_callback_mw_href: code=$code, pfx=$pfx\n");
  if ($n == '') {
   $data1 = $data;
  }else {
@@ -575,7 +579,7 @@ public function ls_callback_mw_href($code,$n,$data) {
   $parvan = $this->roman_int($parvan_roman);
   $verse = $matches[3];
   $href = "https://sanskrit-lexicon-scans.github.io/mbhcalc?$parvan.$verse";
-  dbgprint($dbg,"$pfx: href=$href\n");
+  dbgprint($dbg,"ls_callback_mw_href: $pfx: href=$href\n");
   return $href;
  }
  if (preg_match('|^(Hariv[.]) *([0-9]+)[.]?$|',$data,$matches)) {
