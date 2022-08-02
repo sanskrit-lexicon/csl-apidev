@@ -501,7 +501,9 @@ public function ls_callback_mw_href($code,$n,$data) {
  dbgprint($dbg,"ls_callback_mw_href. code=$code, n='$n', data='$data'\n");
  $code_to_pfx = array('RV.' => 'rv', 'AV.' => 'av', 'Pāṇ.' => 'p',
   'MBh.' => 'MBH.','Hariv.' => 'hariv',
-  'MBh. (ed. Calc.)' => 'MBHC', 'MBh. (ed. Bomb.)' => 'MBHB');
+  'MBh. (ed. Calc.)' => 'MBHC', 'MBh. (ed. Bomb.)' => 'MBHB',
+  'R.' => 'R', 'R. G.' => 'R', 'R. (G)' => 'R', 'R. (G.)' => 'R', 'R. [G]' => 'R',
+  'R. ed. Gorresio' => 'R');
  //hrefs for MBHC, MBHB not implemented. MBHC is same as MBH.(?)
  if (!isset($code_to_pfx[$code])) {
   dbgprint($dbg,"ls_callback_mw_href. Code is unknown:'$code'\n");
@@ -569,6 +571,24 @@ public function ls_callback_mw_href($code,$n,$data) {
    $iv = (int)$matches[4];
    $dir = "https://ashtadhyayi.com/sutraani";
    $href = "$dir/$ic/$is/$iv";
+   return $href;
+ }
+ if (in_array($pfx,array('R'))) {
+  // Ramayana, Goressio. Similar to 'p' (Panini), except for '$dir'
+  dbgprint($dbg,"ls_callback_mw_href: data1=$data1\n");
+  // data1 = code + data2.
+  $data2 = substr_replace($data1,"",0,strlen($code));
+  //$data2 = trim($data2);
+  dbgprint($dbg,"ls_callback_mw_href: data2=$data2\n");
+  if(! preg_match('| *([iv]+)[ ,]+([0-9]+)[ ,]+([0-9]+)(.*)$|',$data2,$matches)) {
+    return $href;
+   }
+   $romanlo = $matches[1];
+   $ic = $this->roman_int($romanlo); 
+   $is = (int)$matches[2];
+   $iv = (int)$matches[3];
+   $dir = "https://sanskrit-lexicon-scans.github.io/ramayanagorr";
+   $href = "$dir/?$ic,$is,$iv";
    return $href;
  }
  dbgprint($dbg,"ls_callback_mw_href: data1=$data1\n");
