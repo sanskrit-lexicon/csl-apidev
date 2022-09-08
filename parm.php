@@ -82,6 +82,7 @@ class Parm {
   $this->english = $this->dictinfo->english;
   if (isset($_REQUEST['key'])) {
    $tempkey = $_REQUEST['key'];
+   $tempkey = $this->init_inputs_key($tempkey);
   }else {
    $tempkey = 'guru';  // arbitrary
   }
@@ -99,7 +100,13 @@ class Parm {
   dbgprint($dbg,"parm construct key = {$this->key}\n");
   dbgprint($dbg,"leave parm construct\n");
  }
-
+ public function init_inputs_key($x) {
+ // word = citation.
+ $ans = "";
+ $invalid_characters = array("$", "%", "#", "<", ">", "=", "(", ")", '"');
+ $ans = str_replace($invalid_characters, "", $x);
+ return $ans;
+}
  public function getsuggestParms() {
   if (! isset($_REQUEST['term'])) {
    $this->getsuggestTerm = '';
