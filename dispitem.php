@@ -25,10 +25,32 @@ class DispItem { // info to construct a row of the display table
   $this->dictup = strtoupper($dict);
   $this->err = False;
   list($this->key,$this->lnum,$rec) = $dbrec;
-  $dbg=False;
-  dbgprint($dbg,"rec=\n$rec\n");
-  if (!preg_match('|<info>(.*?)</info><body>(.*?)</body>|',$rec,$matchrec)) {
+  $dbg=false;
+  $reclen=strlen($rec);dbgprint($dbg,"  DispItem reclen = $reclen\n");
+  //dbgprint($dbg,"dispitem: rec=\n$rec\n");
+  /* $rec is a string. It can be large. php has a parameter that
+   controls whether the preg_match will work for the string. The default
+   for the parameter is 1000000 (one million).
+  */
+  $ok = false;
+  if (preg_match('|<info>(.*?)</info><body>(.*?)</body>|',$rec,$matchrec)) {
+   $ok = true;
+  }else {
+   // increase the PHP parameter. Not sure if  is always big enough!
+   $newlim = 1500000;
+   $oldlim = ini_get('pcre.backtrack_limit');
+   //dbgprint(true,"dispitem: oldlim=$oldlim\n");
+   ini_set('pcre.backtrack_limit',$newlim);
+   if (preg_match('|<info>(.*?)</info><body>(.*?)</body>|',$rec,$matchrec)) {
+    $ok = true;
+   }
+   ini_set('pcre.backtrack_limit',$oldlim);
+  }
+  if (! $ok) {
    $this->err = True; // rare, if ever
+   dbgprint($dbg,"DispItem: Error 1\n");
+   $reclen=strlen($rec);
+   dbgprint($dbg,"  DispItem reclen = $reclen\n");
    return;
   }
   $this->info = $matchrec[1];

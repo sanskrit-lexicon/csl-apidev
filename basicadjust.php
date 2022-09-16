@@ -258,29 +258,37 @@ class BasicAdjust {
  $data0 = $matches[2];
  if (preg_match('|n="(.*?)"|',$ndata,$matchesn)) {
   $n = $matchesn[1]; //
-  $data = "$n $data0";  // controversial.
+  // $data = "$n $data0";  // controversial.
+  $data1 = "$n $data0";
+  $data = $data0;
  } else{
   $n = '';
+  $data1 = $data0;
   $data = $data0;
  }
- dbgprint($dbg,"ls_callback_pwg BEGIN: ndata=$ndata, data0=$data0\n");
+ dbgprint($dbg,"ls_callback_pwg BEGIN: ndata=$ndata, n=$n, data0=$data0, data1=$data1\n");
  dbgprint($dbg,"ls_callback_pwg : n=$n, data=$data\n");
  if (!$this->dal_auth->status) {
   return $ans;
  }
  $fieldname = 'code';
  $fieldidx = 1;
- $result = $this->ls_matchabbr($fieldname,$fieldidx,$data);
+ $result = $this->ls_matchabbr($fieldname,$fieldidx,$data1);
  if (count($result) == 0) {
   return $ans; // failure
  }
   $rec = $result[0];
   list($n0,$code,$codecap,$text) = $rec;
-  # 12-26-2017. pwg. Add lshead, so as to be able to style
+  // 12-26-2017. pwg. Add lshead, so as to be able to style
+  $ncode = strlen($code); // use substr_replace in case $code has parens
   if ($n != '') {
-   $datanew = preg_replace("/^$code/","<lshead></lshead>",$data);
+   //$datanew = preg_replace("/^$code/","<lshead></lshead>",$data);
+   $datanew = $data;
+   dbgprint($dbg,"pwg lshead 1: n=$n: datanew=$datanew\n");
   } else {
-   $datanew = preg_replace("/^$code/","<lshead>$codecap</lshead>",$data);
+   //$datanew = preg_replace("/^$code/","<lshead>$codecap</lshead>",$data);
+   $datanew = substr_replace($data,"<lshead>$codecap</lshead>",0,$ncode);
+   dbgprint($dbg,"lshead 2: n=$n: datanew=$datanew\n");
   }
   # be sure there is no xml in the text
   $text = preg_replace('/<.*?>/',' ',$text);
@@ -292,16 +300,24 @@ class BasicAdjust {
   //dbgprint($dbg," ls_callback_pwg code=$code,  codecap=$codecap, tooltip=$tip0\n");
  // 04-14-2021.  Use 'gralink' for certain values of 'code'
   //$linkcodes = array('ṚV.','AV.','P');
-  $href = $this->ls_callback_pwg_href($code,$data);
+  $href = $this->ls_callback_pwg_href($code,$data1);
   
   if ($href != null) {
    // link
    //$ans = "<gralink href='$href' n='$tooltip'><ls>$datanew</ls></gralink>";
    $datanew1 = preg_replace("|</lshead>(.*)$|",'</lshead><span class="ls">${1}</span>',$datanew);
-   $ans = "<gralink href='$href' n='$tooltip'>$datanew1</gralink>";
+   //dbgprint(true,"datanew=$datanew\n");
+   //dbgprint(true,"datanew1=$datanew1\n");
+   if ($n == '') {
+    $ans = "<gralink href='$href' n='$tooltip'><span class='ls'>$datanew1</span></gralink>";
+    //dbgprint(true,"ans1=$ans\n");
+   } else { // currently the same
+    $ans = "<gralink href='$href' n='$tooltip'><span class='ls'>$datanew1</span></gralink>";    
+    //dbgprint(true,"ans2=$ans\n");
+   }
   }else {
    //$ans = "<ls n='$tooltip'>$datanew</ls>";
-   $ans = "<ls n='$tooltip'><span class='dotunder'>$datanew</span></ls>";
+   $ans = "<ls n='$tooltip'><span class='dotunder ls'>$datanew</span></ls>";
   }
   dbgprint($dbg,"ls_callback_pwg: ans=$ans\n");
  
@@ -453,15 +469,13 @@ public function ls_callback_mw($matches) {
   $codecap = $code;
   $ncode = strlen($code); // use substr_replace in case $code has parens
   if ($n != '') {
-   //$datanew = preg_replace("/^$code/","<lshead></lshead>",$data);
-   $datanew = substr_replace($data,"<lshead>$data</lshead>",0,$ncode);
-   dbgprint($dbg,"lshead: n=$n: datanew=$datanew\n");
+   //$datanew = substr_replace($data,"<lshead>$data</lshead>",0);
+   $datanew = $data;
+   dbgprint($dbg,"lshead 1: n=$n: datanew=$datanew\n");
   } else {
-   //$datanew = preg_replace("/^$code/","<lshead>$codecap</lshead>",$data);
    $datanew = substr_replace($data,"<lshead>$codecap</lshead>",0,$ncode);
-   dbgprint($dbg,"lshead: n=$n: datanew=$datanew\n");
+   dbgprint($dbg,"lshead 2: n=$n: datanew=$datanew\n");
   }
-  //dbgprint(true,"datanew=$datanew\n");
   # be sure there is no xml in the text
   $text = preg_replace('/<.*?>/',' ',$text);
   # convert special characters to html entities
@@ -488,9 +502,9 @@ public function ls_callback_mw($matches) {
     $datanew1 = '<span class="ls">' . $datanew . '</span>';
    }
    //dbgprint(true,"datanew1=$datanew1\n");
-   $ans = "<gralink href='$href' n='$tooltip'>$datanew1</gralink>";
+   $ans = "<gralink href='$href' n='$tooltip'><span class='ls'>$datanew1</span></gralink>";
   }else {
-   $ans = "<ls n='$tooltip'><span class='dotunder'>$datanew</span></ls>";
+   $ans = "<ls n='$tooltip'><span class='dotunder ls'>$datanew</span></ls>";
   }
   dbgprint($dbg,"ls_callback_mw: ans=$ans\n");
  return $ans;
