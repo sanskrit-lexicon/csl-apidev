@@ -11,36 +11,6 @@
 <e> <s>SKT</s> <in>bh</in> <out>B</out></e>
 <e> <s>SKT</s> <in>\u1e6dh</in> <out>W</out></e>
 <e> <s>SKT</s> <in>\u1e0dh</in> <out>Q</out></e>
-<e> <s>SKT</s> <in>\u00e1</in> <out>a/</out></e>
-<e> <s>SKT</s> <in>\u00ed</in> <out>i/</out></e>
-<e> <s>SKT</s> <in>\u00fa</in> <out>u/</out></e>
-<e> <s>SKT</s> <in>\u1e5b\u0301</in> <out>f/</out></e>
-<e> <s>SKT</s> <in>\u1e37\u0301</in> <out>x/</out></e>
-<e> <s>SKT</s> <in>\u0101\u0301</in> <out>A/</out></e>
-<e> <s>SKT</s> <in>\u012b\u0301</in> <out>I/</out></e>
-<e> <s>SKT</s> <in>\u016b\u0301</in> <out>U/</out></e>
-<e> <s>SKT</s> <in>\u1e5d\u0301</in> <out>F/</out></e>
-<e> <s>SKT</s> <in>\u1e39\u0301</in> <out>X/</out></e>
-<e> <s>SKT</s> <in>\u00e9</in> <out>e/</out></e>
-<e> <s>SKT</s> <in>\u00f3</in> <out>o/</out></e>
-<e> <s>SKT</s> <in>\u00e2</in> <out>a^</out></e>
-<e> <s>SKT</s> <in>\u1e5b\u0302</in> <out>f^</out></e>
-<e> <s>SKT</s> <in>\u1e37\u0302</in> <out>x^</out></e>
-<e> <s>SKT</s> <in>\u0101\u0302</in> <out>A^</out></e>
-<e> <s>SKT</s> <in>\u012b\u0302</in> <out>I^</out></e>
-<e> <s>SKT</s> <in>\u016b\u0302</in> <out>U^</out></e>
-<e> <s>SKT</s> <in>\u1e5d\u0302</in> <out>F^</out></e>
-<e> <s>SKT</s> <in>\u1e39\u0302</in> <out>X^</out></e>
-<e> <s>SKT</s> <in>\u00f4</in> <out>o^</out></e>
-<e> <s>SKT</s> <in>\u00e0</in> <out>a\</out></e>
-<e> <s>SKT</s> <in>\u1e5b\u0300</in> <out>f\</out></e>
-<e> <s>SKT</s> <in>\u1e37\u0300</in> <out>x\</out></e>
-<e> <s>SKT</s> <in>\u0101\u0300</in> <out>A\</out></e>
-<e> <s>SKT</s> <in>\u012b\u0300</in> <out>I\</out></e>
-<e> <s>SKT</s> <in>\u016b\u0300</in> <out>U\</out></e>
-<e> <s>SKT</s> <in>\u1e5d\u0300</in> <out>F\</out></e>
-<e> <s>SKT</s> <in>\u1e39\u0300</in> <out>X\</out></e>
-<e> <s>SKT</s> <in>\u00f2</in> <out>o\</out></e>
 <e> <s>SKT</s> <in>\u1e5b</in> <out>f</out></e>
 <e> <s>SKT</s> <in>\u1e37</in> <out>x</out></e>
 <e> <s>SKT</s> <in>\u0101</in> <out>A</out></e>
@@ -68,26 +38,17 @@
 <e> <s>SKT</s> <in>aü</in> <out>au</out></e>
 
 <!-- next added for invertibility 02-16-2022 -->
-<e> <s>SKT</s> <in>\u0061\u00ed</in> <out>E/</out></e>
-<e> <s>SKT</s> <in>\u0061\u00fa</in> <out>O/</out></e>
-<e> <s>SKT</s> <in>\u1e43\u0301</in> <out>M/</out></e>
-<e> <s>SKT</s> <in>\u1e25\u0301</in> <out>H/</out></e>
-<e> <s>SKT</s> <in>\u00ee</in> <out>i^</out></e>
-<e> <s>SKT</s> <in>\u00fb</in> <out>u^</out></e>
-<e> <s>SKT</s> <in>\u00ea</in> <out>e^</out></e>
-<e> <s>SKT</s> <in>\u0061\u00ee</in> <out>E^</out></e>
-<e> <s>SKT</s> <in>\u0061\u00fb</in> <out>O^</out></e>
-<e> <s>SKT</s> <in>\u1e43\u0302</in> <out>M^</out></e>
-<e> <s>SKT</s> <in>\u1e25\u0302</in> <out>H^</out></e>
-<e> <s>SKT</s> <in>\u00ec</in> <out>i\</out></e>
-<e> <s>SKT</s> <in>\u00f9</in> <out>u\</out></e>
-<e> <s>SKT</s> <in>\u00e8</in> <out>e\</out></e>
-<e> <s>SKT</s> <in>\u0061\u00ec</in> <out>E\</out></e>
-<e> <s>SKT</s> <in>\u0061\u00f9</in> <out>O\</out></e>
-<e> <s>SKT</s> <in>\u1e43\u0300</in> <out>M\</out></e>
-<e> <s>SKT</s> <in>\u1e25\u0300</in> <out>H\</out></e>
 <e> <s>SKT</s> <in>m̐</in> <out>~</out></e>
 <e> <s>SKT</s> <in>\u1e96</in> <out>Z</out></e>
 <e> <s>SKT</s> <in>\u1e2b</in> <out>V</out></e>
+
+<!-- 09-19-2022
+* udAtta  / 0301  COMBINING ACUTE ACCENT
+* svarita ^ 0300  COMBINING GRAVE ACCENT
+* anudAtta \ 0331 Combining Macron Below
+--> 
+<e n='116'> <s>SKT</s> <in>\u0301</in> <out>/</out> </e>
+<e n='117'> <s>SKT</s> <in>\u0300</in> <out>^</out> </e>
+<e n='118'> <s>SKT</s> <in>\u0331</in> <out>\</out> </e>
 
 </fsm>
