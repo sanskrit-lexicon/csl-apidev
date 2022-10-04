@@ -86,6 +86,8 @@ class Parm {
   }else {
    $tempkey = 'guru';  // arbitrary
   }
+  dbgprint($dbg,"parm.php. tempkey=$tempkey\n");
+  dbgprint($dbg,"  REQUEST['key']= " . $_REQUEST['key'] . "\n");
   list($this->keyin,$this->keyin1,$this->key) = $this->compute_text($tempkey);
   // check for validity of 'dict'
   #if (! isset($this->dictinfo->dictyear[$this->dictinfo->dictupper])) {
@@ -103,7 +105,11 @@ class Parm {
  public function init_inputs_key($x) {
  // word = citation.
  $ans = "";
- $invalid_characters = array("$", "%", "#", "<", ">", "=", "(", ")", '"');
+ // $invalid_characters = array("$", "%", "#", "<", ">", "=", "(", ")", '"');
+ /* keys with extended ascii (e.g. roman or deva) are, at this point in the
+   code, strings with '%' included. Thus, "%" is NOT an invalid character
+ */
+ $invalid_characters = array("$", "#", "<", ">", "=", "(", ")", '"');
  $ans = str_replace($invalid_characters, "", $x);
  return $ans;
 }
