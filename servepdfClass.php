@@ -175,7 +175,6 @@ HTML;
   $temp = new Getword_data(); // Uses key
   $recs = $temp->matches;
   $dbg = false;
-  dbgprint($dbg,count($recs). "  records for $key.\n");
   $pageinfos = array();
   foreach($recs as $dbrec) {
    $key1 = $dbrec[0];
@@ -359,7 +358,6 @@ HTML;
  }
  public function init_request($getParms,$dictinfo) {
   list($page,$key) = $getParms->servepdfParms();
-  //dbgprint(true,"init_request: page=$page, key=$key\n");
   if ($page) {
    $this->request = array('dict' => $getParms->dict,
     'page'=>$page, 

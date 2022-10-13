@@ -48,6 +48,7 @@ class DictInfo {
    $this->year = self::$dictyear[$this->dictupper];
   }else {
    $this->year = '2020';
+   $this->year = self::$dictyear[$this->dictupper]; // 
   }
   $this->english = in_array($this->dictupper,array("AE","MWE","BOR")); // boolean flag
   $this->webpath = $this->get_webPath();
