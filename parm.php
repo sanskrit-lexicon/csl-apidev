@@ -87,7 +87,7 @@ class Parm {
    $tempkey = 'guru';  // arbitrary
   }
   dbgprint($dbg,"parm.php. tempkey=$tempkey\n");
-  dbgprint($dbg,"  REQUEST['key']= " . $_REQUEST['key'] . "\n");
+  //dbgprint($dbg,"  REQUEST['key']= " . $_REQUEST['key'] . "\n");
   list($this->keyin,$this->keyin1,$this->key) = $this->compute_text($tempkey);
   // check for validity of 'dict'
   #if (! isset($this->dictinfo->dictyear[$this->dictinfo->dictupper])) {
