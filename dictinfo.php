@@ -8,6 +8,17 @@
 require_once('dbgprint.php');
 class DictInfo {  
  static public $dictyear=
+   array("ACC"=>"2020" , "AE"=>"2020" , "AP"=>"2020" , "AP90"=>"2020",
+       "BEN"=>"2020" , "BHS"=>"2020" , "BOP"=>"2020" , "BOR"=>"2020",
+       "BUR"=>"2020" , "CAE"=>"2020" , "CCS"=>"2020" , "GRA"=>"2020",
+       "GST"=>"2020" , "IEG"=>"2020" , "INM"=>"2020" , "KRM"=>"2020",
+       "MCI"=>"2020" , "MD"=>"2020" , "MW"=>"2020" , "MW72"=>"2020",
+       "MWE"=>"2020" , "PD"=>"2020" , "PE"=>"2020" , "PGN"=>"2020",
+       "PUI"=>"2020" , "PWG"=>"2020" , "PW"=>"2020" , "SCH"=>"2020",
+       "SHS"=>"2020" , "SKD"=>"2020" , "SNP"=>"2020" , "STC"=>"2020",
+       "VCP"=>"2020" , "VEI"=>"2020" , "WIL"=>"2020" , "YAT"=>"2020",
+       "LAN"=>"2020","ARMH"=>"2020","PWKVN"=>"2020", "LRV"=>"2022");
+ static public $dictyear_older=
    array("ACC"=>"2014" , "AE"=>"2014" , "AP"=>"2014" , "AP90"=>"2014",
        "BEN"=>"2014" , "BHS"=>"2014" , "BOP"=>"2014" , "BOR"=>"2014",
        "BUR"=>"2013" , "CAE"=>"2014" , "CCS"=>"2014" , "GRA"=>"2014",
@@ -18,7 +29,7 @@ class DictInfo {
        "SHS"=>"2014" , "SKD"=>"2013" , "SNP"=>"2014" , "STC"=>"2013",
        "VCP"=>"2019" , "VEI"=>"2014" , "WIL"=>"2014" , "YAT"=>"2014",
        "LAN"=>"2019","ARMH"=>"2020","PWKVN"=>"2020", "LRV"=>"2022");
- //static public $scanpath = "../..";  // scan dir.depends on loc of this file!
+  //static public $scanpath = "../..";  // scan dir.depends on loc of this file!
  //static public $scanpath = preg_replace('|/awork/apidev|','',__DIR__);
  #public $scanpath;
  #public $scanpath_server;
@@ -45,9 +56,9 @@ class DictInfo {
   }
   if ((isset($_REQUEST['version'])) &&($_REQUEST['version'] == '1')) {
    // older version -- 2014 or 2013
-   $this->year = self::$dictyear[$this->dictupper];
+   $this->year = self::$dictyear_older[$this->dictupper];
   }else {
-   $this->year = '2020';
+   // $this->year = '2020';  
    $this->year = self::$dictyear[$this->dictupper]; // 
   }
   $this->english = in_array($this->dictupper,array("AE","MWE","BOR")); // boolean flag
