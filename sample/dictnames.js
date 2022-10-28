@@ -18,6 +18,7 @@ CologneDisplays.dictionaries= {
 ['INM' , 'Index to the Names in the Mahabharata'],
 ['KRM' , 'Kṛdantarūpamālā'],
 ['LAN' , 'Lanman Sanskrit Reader Dictionary'],
+['LRV' , 'Vaidya Standard Sanskrit-English Dictionary'],
 ['MCI' , 'Mahabharata Cultural Index'],
 ['MD' , 'Macdonell Sanskrit-English Dictionary'],
 ['MW' , 'Monier-Williams Sanskrit-English Dictionary'],
