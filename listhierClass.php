@@ -118,6 +118,10 @@ class ListhierClass {
     However, just escaping doesn't solve the problem.  We removed
     the apostrophe in the 'key1' element in MWE.
    */
+   // php 8.1.10 deprecate 'null' for first parameter.
+   if ($key2 == null) {
+    $key2 = "";
+   }
    $key2 = htmlspecialchars($key2,ENT_QUOTES);
    if (preg_match('/<H.[BC]>/',$data2)) { // MW only
     // put key2show in parens
@@ -369,6 +373,10 @@ class ListhierClass {
 
  public function construct_rec1($key1,$lnum1,$data1){
   // assume this is for mw. 07-15-2018
+  // php 8.1.10 deprecates null as 2nd arg to preg_match
+  if ($data1 == null) {
+   $data1 = "";
+  }
   if (!preg_match('|<info>(.*?)</info><body>(.*?)</body>|',$data1,$matchrec))   {
    $data2 = $data1;
    $rec1 = array($key1,$lnum1,$data2);

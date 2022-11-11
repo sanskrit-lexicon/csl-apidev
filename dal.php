@@ -302,8 +302,13 @@ class Dal {
   // in mw, with L=99930.1, $lnum0 appears as if L=99930.1000000001
   // To guard against this, we round lnum0 to 3 decimal places.
   //  [This is consistent with the schema definition]
-  $lnum0 = round($lnum0,3);
-  $sql = "select * from {$this->dict} where (lnum < '$lnum0') order by lnum DESC LIMIT $max";
+  // Cannot pass null to round (php 8.1.10).
+  if ($lnum0 == null) {
+   $lnum1 = 0;
+  } else {
+   $lnum1 = round($lnum0,3);
+  }
+  $sql = "select * from {$this->dict} where (lnum < '$lnum1') order by lnum DESC LIMIT $max";
   return $this->get($sql);
  }
  public function get4b($lnum0,$max) {
@@ -311,8 +316,13 @@ class Dal {
   // in mw, with L=99930.1, $lnum0 appears as if L=99930.1000000001
   // To guard against this, we round lnum0 to 3 decimal places.
   //  [This is consistent with the schema definition]
-  $lnum0 = round($lnum0,3);
-  $sql = "select * from {$this->dict} where ('$lnum0' < lnum) order by lnum LIMIT $max";
+  // Cannot pass null to round (php 8.1.10).
+  if ($lnum0 == null) {
+   $lnum1 = 0;
+  } else {
+   $lnum1 = round($lnum0,3);
+  }
+  $sql = "select * from {$this->dict} where ('$lnum1' < lnum) order by lnum LIMIT $max";
   return $this->get($sql);
  }
  /* Alternate test version for mw
