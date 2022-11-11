@@ -244,7 +244,6 @@ class BasicAdjust {
    return $ans;
   }
   $ans = array($ansmax);
-  dbgprint($dbg,"ls_matchabbr: $data ->  $ansmax\n");
   return $ans;
  }
  public function ls_callback_pwg($matches) {
