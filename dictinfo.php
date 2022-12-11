@@ -174,11 +174,13 @@ public function get_cologne_pdfpages_url() {
   "AP90"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/AP90Scan/AP90Scanpdf" ,
   "BEN"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/BENScan/BENScanpdf" ,
   "BHS"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/BHSScan/BHSScanpdf" ,
-  "BOP"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/BOPScan/2014/web/pdfpages" ,
-  "BOR"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/BORScan/2014/web/pdfpages" ,
-  "BUR"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/BURScan/2013/web/pdfpages" ,
-  "CAE"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/CAEScan/2014/web/pdfpages" ,
-  "CCS"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/CCSScan/2014/web/pdfpages" ,
+  
+  "BOP"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/BOPScan/BOPScanpdf" ,
+  "BOR"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/BORScan/BORScanpdf" ,
+  "BUR"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/BURScan/BURScanpdf" ,
+  "CAE"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/CAEScan/CAEScanpdf" ,
+  "CCS"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/CCSScan/CCSScanpng" ,
+  
   "GRA"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/GRAScan/2014/web/pdfpages" ,
   "GST"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/GSTScan/2014/web/pdfpages" ,
   "IEG"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/IEGScan/2014/web/pdfpages" ,
