@@ -168,7 +168,7 @@ public function get_cologne_pdfpages_url() {
  /* These urls are current as of 08-31-2019
  */
  $cologne_pdfpages_urls = array(
-  "ACC"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/ACCScan/2014/web/pdfpages" ,
+  "ACC"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/ACCScan/ACCScanpdf" ,
   "AE"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/AEScan/2014/web/pdfpages" ,
   "AP"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/APScan/2014/web/pdfpages" ,
   "AP90"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/AP90Scan/2014/web/pdfpages" ,
