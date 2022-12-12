@@ -193,23 +193,22 @@ public function get_cologne_pdfpages_url() {
   "PE"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/PEScan/PEScanpdf" ,
   "PGN"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/PGNScan/PGNScanpdf" ,
   "PUI"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/PUIScan/PUIScanpdf" ,
-  
   "PWG"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/PWGScan/PWGScanpdf" ,
   "PW"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/PWScan/PWScanpng" ,
   "SCH"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/SCHScan/SCHScanpdf" ,
-  "SHS"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/SHSScan/SHSScanpdf" ,
+   "SHS"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/SHSScan/SHSScanpdf" ,
   "SKD"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/SKDScan/SKDScanpdf" ,
   "SNP"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/SNPScan/SNPScanpdf" ,
   
-  "STC"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/STCScan/2013/web/pdfpages" ,
-  "VCP"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/VCPScan/2019/web/pdfpages" ,
-  "VEI"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/VEIScan/2014/web/pdfpages" ,
-  "WIL"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/WILScan/2014/web/pdfpages" ,
-  "YAT"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/YATScan/2014/web/pdfpages" ,
-  "LAN"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/LANScan/2019/web/pdfpages" ,
-  "ARMH"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/ARMHScan/2020/web/pdfpages" ,
-  "PWKVN"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/PWScan/2014/web/pdfpages" ,
-  "LRV"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/LRVScan/pdfpages" ,
+  "STC"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/STCScan/STCScanpdf" ,
+  "VCP"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/VCPScan/VCPScanpdf" ,
+  "VEI"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/VEIScan/VEIScanpdf" ,
+  "WIL"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/WILScan/WILScanjpg" ,
+  "YAT"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/YATScan/YATScanpdf" ,
+  "LAN"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/LANScan/LANScanpdf" ,
+  "ARMH"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/ARMHScan/ARMHScanpdf" ,
+  "PWKVN"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/PWScan/PWScanpng" ,
+  "LRV"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/LRVScan/LRVScanpdf" ,
  );
  $url = $cologne_pdfpages_urls[$this->dictupper];
  return $url;
