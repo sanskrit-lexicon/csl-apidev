@@ -6,6 +6,7 @@ error_reporting(E_ALL & ~E_NOTICE );
  Previously method getword_data_html_adapter in getword_data.php
 */
 class Basic_xml_html {
+ public $html;
  public function __construct($rec,$dict,$getParms) {
   // rec is array of length 3 ($m['key'],$m['lnum'],$m['data']) 
   list($key0,$lnum0,$data0) = $rec;

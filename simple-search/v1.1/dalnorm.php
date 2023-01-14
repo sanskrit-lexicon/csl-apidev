@@ -11,7 +11,7 @@ class Dalnorm {
  public $sqlitefile; // the sqlite file path
  public $file_db;  // the sqlite connection object
  public $dbg=false;
- public $status;
+ public $status,$dict,$path;
  public function __construct($dict,$path) {
   $this->dict=strtolower($dict);
   $this->path = $path;

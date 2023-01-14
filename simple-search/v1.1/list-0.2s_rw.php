@@ -270,6 +270,7 @@ $("#dict").focus(function() {
   }) // end of $.ajax
   .done(displayOption2)
   .fail(function( jqXHR, textStatus, errorThrown){
+    console.log("list-0.2s_rw.php: Failure point:",textStatus.toString())
     $('#simpleinfo').html(
      textStatus.toString()+" "+errorThrown.toString()+"<br>");
  }); // end of $.ajax 

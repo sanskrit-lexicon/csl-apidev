@@ -34,7 +34,7 @@ class Parm {
  public $dictinfo,$english;
  public $keyin1,$key;
  public $status,$errorinfo;
- public $getsuggestTerm;
+ public $getsuggestTerm,$basicOption,$dispcss,$lnumin,$direction;
  public function __construct() {
   $this->status = 200;  // assume all is ok.
   $this->basicOption = false;

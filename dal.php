@@ -10,7 +10,7 @@ class Dal {
  public $dict;
  public $dictinfo;
  public $sqlitefile;
- public $file_db, $file_db_xml;
+ public $file_db, $file_db_xml,$status;
  public $dbg=false;
  public $dbname; 
  public $tabname;  # name of table in sqlitefile. 

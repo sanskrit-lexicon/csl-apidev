@@ -73,8 +73,8 @@ class Simple_Search{
    ["t","tt"]
  ];
  public $keysin,$keys,$normkeys;
- public $searchdict,$input_simple;
- public $dbg;
+ public $searchdict,$input_simple,$transitionTable,$dalnorm;
+ public $dbg,$partialmatches,$status,$user_keyin,$user_keyin_norm ;
  public $dict;  // 20170725
  public $badprefs; // prefixes known to be non-valid for this search
  /* input00 is the 'input_simple' from list-0.2s_rw.php.  It is the

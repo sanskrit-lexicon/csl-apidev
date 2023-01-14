@@ -7,7 +7,7 @@ require_once('parm.php');
 class Dalglob {
  #public $dict;
  #public $dictinfo;
- public $sqlitefile;
+ public $sqlitefile,$status;
  public $file_db;
  public $dbg=false;
  public $ans= array('status'=>404, 'dicts'=>array());
