@@ -20,7 +20,9 @@ error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
  $cookienames = array('dict','accent','input','output');
  foreach($cookienames as $name) {
   // use $_REQUEST, which includes $_GET and $_POST
-  setcookie($name,$_REQUEST[$name]);
+  if (isset($_REQUEST[$name])) {
+   setcookie($name,$_REQUEST[$name]);
+  }
  }
 
 ?>
