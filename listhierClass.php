@@ -63,6 +63,7 @@ class ListhierClass {
   while($i < count($listmatches)) {
    list($code,$key2,$lnum2,$data2) = $listmatches[$i];
    $hom2=$this->get_hom($data2);
+   //dbgprint(true,"listhierClass: lnum2=$lnum2, key2=$key2, data2=\n$data2\n");
    if ($i == 0) {
     //  put 'upward button'
     $spc="&nbsp;&nbsp;";
@@ -271,7 +272,7 @@ class ListhierClass {
   // since '$data1'  is now html, not xml.
   $dict = $dal->dict; // lowercase
   $matches=array(); // returned variable
-  if ($dict != 'mw') {
+  if (! in_array($dict, array('mw','md'))) {
    foreach($recarrin as $rec) {
     list($key1,$lnum1,$data1) = $rec;  // $data1 is <info>x</info><body>y</body>
     $rec1 = array($key1,$lnum1,""); // no use for data1, since not mw
@@ -374,12 +375,14 @@ class ListhierClass {
  public function construct_rec1($key1,$lnum1,$data1){
   // assume this is for mw. 07-15-2018
   // php 8.1.10 deprecates null as 2nd arg to preg_match
+  //dbgprint(true,"\nenter construct_rec1: key1=$key1, lnum1=$lnum1, data1=\n$data1\n");
   if ($data1 == null) {
    $data1 = "";
   }
   if (!preg_match('|<info>(.*?)</info><body>(.*?)</body>|',$data1,$matchrec))   {
    $data2 = $data1;
    $rec1 = array($key1,$lnum1,$data2);
+   //dbgprint(true,"leave 1: construct_rec1: key1=$key1, lnum1=$lnum1, data2=\n$data2\n");
    return $rec1;
   }
 
@@ -411,6 +414,7 @@ class ListhierClass {
 
   $data2 = join('',$out); 
   $rec1 = array($key1,$lnum1,$data2);
+  dbgprint(true,"leave 2: construct_rec1: key1=$key1, lnum1=$lnum1, data2=\n$data2\n");
   return $rec1;
  }
 }

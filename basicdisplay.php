@@ -686,7 +686,7 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
    $this->row .= "<span class='$sdata'><SA>$data</SA></span>";
   } else if ($this->parentEl == "hom") {
    /* for some dictionaries, show hom elements*/
-   if (in_array($this->dict,array('mw','pwkvn'))) {
+   if (in_array($this->dict,array('mw','pwkvn','md'))) {
     $this->row .= "<span class='hom' title='Homonym'>$data</span>";
    }
   } else if ($this->parentEl == 'div') { 

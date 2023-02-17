@@ -107,7 +107,7 @@ class BasicAdjust {
  // 2018-07-07  Handle lex tag.  
  $line = preg_replace_callback('|<lex(.*?)>(.*?)</lex>|',"BasicAdjust::add_lex_markup",$line);
  
-  if ($this->getParms->dict == "mw") {
+  if (in_array($this->getParms->dict, array("mw","md"))) {
    $line = $this->move_L_mw($line);
    # remove <hom>X</hom> within head portion
    $line = preg_replace("|<key2>(.*?)<hom>.*?</hom>(.*?<body>)|","<key2>$1$2",$line); 
