@@ -557,6 +557,14 @@ class Simple_Search{
    $wordin2 = $this->clean_slp1($wordin1);
    return $wordin2;
   }
+  // 03-01-2023.  detect cyrillic (e.g. Russian)by converting to slp1
+  $wordin1 = transcoder_processString($wordin,'cyrillic','slp1');
+  if ($wordin1 != $wordin) {
+   // Assume $wordin is spelled in cyrillic
+   $wordin2 = $this->clean_slp1($wordin1);
+   return $wordin2;
+  }
+  
   // $wordin might have letters with diacritics.
   // We will lower-case the string first. Try to handle diacritics.
   $wordin0 = mb_strtolower($wordin, 'UTF-8');
