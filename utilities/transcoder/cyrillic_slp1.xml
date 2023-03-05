@@ -71,7 +71,7 @@
  -->
 <e> <s>INIT</s> <in>джня</in> <out>jY</out> <next>INIT</next></e>
 <!-- ignore these cyrillic characters -->
-<e> <s>INIT</s> <in>ь</in> <out></out> <next>INIT</next></e> 
+<e> <s>INIT</s> <in>ь</in> <out></out> <next>INIT</next></e>  
 
 
 </fsm>
