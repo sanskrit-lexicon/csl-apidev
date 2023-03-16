@@ -49,13 +49,15 @@ error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
 </div>
 </div>
 
-<?php 
+<?php
+/* 03-16-2023 remove piwik section
  $piwik = 
 '<script src="//www.sanskrit-lexicon.uni-koeln.de/js/piwik_analytics.js"></script>';
  include('dictinfowhich.php');
  if ($dictinfowhich == "cologne") {
   echo "$piwik\n";
  }
+*/
 ?>
  <script type="text/javascript" src="js/orphus.customized.js"></script>
 
