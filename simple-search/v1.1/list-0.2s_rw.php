@@ -25,6 +25,7 @@ if (false) {
 <!DOCTYPE html>
 <html>
 <head>
+<!-- simple-search version 1.1 -->
 <META charset="UTF-8">
 <title>Cologne Sanskrit Simple Search</title>
 <!-- ref=https://www.w3.org/TR/html4/struct/links.html#edef-BASE -->
