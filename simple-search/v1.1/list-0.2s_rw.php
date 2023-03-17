@@ -197,8 +197,13 @@ $(document).ready(function() {
   var output = $('#output').val();
   var accent = $('#accent').val();
   var urlbase="../../listview.php";
+  /* correct error in Cologne display when input=iast
+   This generated a '400 Bad output' error. Not sure why.
+   The correction is simply not to escape (key)
+   Ref: https://github.com/sanskrit-lexicon/MWS/issues/157
+  */
   var url =  urlbase +  
-   "?key=" +escape(key) + 
+   "?key=" + key + //escape(key) + 
    "&output=" +escape(output) +
    "&dict=" + escape(dict) +
    "&accent=" + escape(accent) +
