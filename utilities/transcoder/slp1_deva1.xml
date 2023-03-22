@@ -136,11 +136,11 @@ Experiment 08-06-2021. Ref https://github.com/sanskrit-lexicon/pwg/issues/5
 
 <e> <s>INIT,SKT</s> <in>-</in> <out>-</out> <next>INIT</next></e>
 <!-- anudAtta accent: 0952 -->
-<e n='122'> <s>INIT,SKT</s> <in>\</in> <out>\u0952</out>  <next>SKT</next></e>
-<!-- udAtta accent (per pwg): ua8eb -->
-<e n='123'> <s>INIT,SKT</s> <in>/</in> <out>\ua8eb</out>  <next>SKT</next></e>
+<e n='122'> <s>INIT,SKT</s> <in>\</in> <out>\u0952</out> <next>INIT</next> </e>
+<!-- udAtta accent : ua8eb -->
+<e n='123'> <s>INIT,SKT</s> <in>/</in> <out>\ua8eb</out>  <next>INIT</next> </e>
 <!--  svarita accent (per pwg)-->
-<e n='124'> <s>INIT,SKT</s> <in>^</in> <out>\u0951</out> <next>SKT</next> </e>
+<e n='124'> <s>INIT,SKT</s> <in>^</in> <out>\u0951</out> <next>INIT</next> </e>
 
 <!-- candrabindu, anunasika -->
 <e> <s>INIT,SKT</s> <in>~</in> <out>\u0901</out> <next>INIT</next> </e>
