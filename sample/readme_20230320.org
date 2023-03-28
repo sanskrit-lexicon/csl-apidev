@@ -1,0 +1,45 @@
+readme_20230320.org
+Notes regarding dalglob1.php
+
+* reorg
+dalglob1.css style file extracted from dalglob1.php
+still_wrong_getdataForkeyDict remove unused function from dalglob1.
+dalglob1_v01.php
+
+* local resources
+<link rel="stylesheet" type="text/css" href="../css/basic.css">
+<link rel="stylesheet" type="text/css" href="dalglob1.css">
+csl-apidev/dalglob.php
+csl-apidev/getword.php
+
+* web resources
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.css">
+<script type="text/javascript" src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+
+//www.sanskrit-lexicon.uni-koeln.de/
+//www.sanskrit-lexicon.uni-koeln.de/images/cologne_univ_seal.gif
+
+* csl-apidev/dalglob.php
+ csl-apidev/dalglobClass.php
+ csl-apidev/dictinfowhich.php
+ access PARENT/hwnorm2/keydoc_glob1.sqlite
+ where PARENT is the parent of csl-apidev 
+php modules:  (within csl-apidev)
+ csl-apidev/dbgprint.php
+ csl-apidev/parm.php
+  csl-apidev/utilities/transcoder.php
+  csl-apidev/dictinfo.php
+
+  
+* dalglob1.php
+* basic.css  correction
+  Change in makeRequest javascript function (in dalglob1.php)
+  The request url ../getWord.php returns html.
+  This html has a stylesheet href 'css/basic.css', assuming
+   the html has its base in csl-apidev.
+  However, we are in csl-apidev/sample.
+  So the reference should be '../css/basic.css'
+  This is corrected by a string replacement
+   let text1 = text.replace("css/basic.css","../css/basic.css");
