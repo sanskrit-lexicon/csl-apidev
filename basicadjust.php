@@ -300,7 +300,7 @@ class BasicAdjust {
  // 04-14-2021.  Use 'gralink' for certain values of 'code'
   //$linkcodes = array('ṚV.','AV.','P');
   $href = $this->ls_callback_pwg_href($code,$data1);
-  
+  dbgprint($dbg,"ls_callback_pwg. code=$code, data1=$data1, href=$href\n");
   if ($href != null) {
    // link
    //$ans = "<gralink href='$href' n='$tooltip'><ls>$datanew</ls></gralink>";
@@ -367,6 +367,21 @@ public function ls_callback_pwg_href($code,$data) {
   dbgprint($dbg,"$pfx: href=$href\n");
   return $href;
  }
+ 
+ if (preg_match('|^(Chr[.]) *([0-9]+)|',$data,$matches)) {
+  // Boehtlingk Chrestomathie, 2nd edition.
+  if (! in_array($this->dict,array('pw'))) {
+   // PWG refers under N. (Nalopakhyana), maybe others.
+   // Not yet handled.
+   return $href;
+  }
+  $pfx = $matches[1];
+  $verse = $matches[2]; // page
+  $href = "https://sanskrit-lexicon-scans.github.io/bchrest/index.html?$verse";
+  dbgprint($dbg,"$pfx: href=$href\n");
+  return $href;
+ }
+
  if (!preg_match('|^(.*?)[.] *([0-9]+)[ ,]+([0-9]+)[ ,]+([0-9]+)(.*)$|',$data,$matches)) {
   return $href;
  }
