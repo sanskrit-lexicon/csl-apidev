@@ -209,6 +209,7 @@ public function get_cologne_pdfpages_url() {
   "ARMH"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/ARMHScan/ARMHScanpdf" ,
   "PWKVN"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/PWScan/PWScanpng" ,
   "LRV"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/LRVScan/LRVScanpdf" ,
+  "ABCH"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/ABCHScan/pdfpages" ,
  );
  $url = $cologne_pdfpages_urls[$this->dictupper];
  return $url;
