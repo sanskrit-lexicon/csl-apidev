@@ -30,7 +30,7 @@ class BasicAdjust {
   if (in_array($dict,array('pwg','pw','pwkvn'))) {
    $this->dal_auth = new Dal($dict,"bib");  # pwgbib
    dbgprint(false,"basicadjust: bib file open? " . $this->dal_auth->status ."\n");
-  }else if (in_array($dict,array('mw','ap90','ben','sch'))){
+  }else if (in_array($dict,array('mw','ap90','ben','sch','gra'))){
    $this->dal_auth = new Dal($dict,"authtooltips");
   }else {
    $this->dal_auth = null;
@@ -51,7 +51,10 @@ class BasicAdjust {
  public function line_adjust($line) {
  $dbg = false;
  $line = preg_replace('/¦/',' ',$line);
- $line = preg_replace_callback('|<s>(.*?)</s>|','BasicAdjust::s_callback',$line);
+ $line = preg_replace_callback('|<chg +type="(.*?)" +n="(.*?)" src="(.*?)">(.*?)</chg>|',"BasicAdjust::chg_markup",$line);
+ $line = preg_replace_callback('|<info vn="(.*?)"/>|',"BasicAdjust::infovn_markup",$line);
+           
+$line = preg_replace_callback('|<s>(.*?)</s>|','BasicAdjust::s_callback',$line);
  $line = preg_replace_callback('|<key2>(.*?)</key2>|','BasicAdjust::key2_callback',$line);
  //$line = preg_replace("|\[Page.*?\]|",  "<pb>$0</pb>",$line);
  $line = preg_replace("|\[(Page.*?)\]|",  "<pb>$1</pb>",$line);
@@ -71,12 +74,22 @@ class BasicAdjust {
       "BasicAdjust::ls_callback_pwg",$line);
   
       
- }else if (in_array($this->getParms->dict,array('mw','ap90','ben','sch'))){
+ }else if (in_array($this->getParms->dict,array('mw','ap90','ben','sch','gra'))){
+  //dbgprint(true,"before ls_callback_mw: $line\n");
   $line = preg_replace_callback('|<ls(.*?)>(.*?)</ls>|',
       "BasicAdjust::ls_callback_mw",$line);
+  //dbgprint(true,"after ls_callback_mw: $line\n");
 
   $line = preg_replace('|<ls>ib[.]|','<ls><ab>ib.</ab>',$line);    
  }
+ if ($this->getParms->dict == 'gra') {
+  // 06-15-2023. Treat <pe> and <lang> tags like ab
+  $line1 = preg_replace('|<pe(.*?)>(.*?)</pe>|', '<ab\1>\2</ab>',$line);
+  $line1 = preg_replace('|<lang(.*?)>(.*?)</lang>|', '<ab\1>\2</ab>',$line1);
+  // if ($line1 != $line) {dbgprint(true," dbg: line=$line\nline1=$line1\n");}
+  $line = $line1;
+ }
+
  /* 12-14-2017
   'local' abbreviation handled here. Generate an n attribute if one
    is not present
@@ -84,11 +97,15 @@ class BasicAdjust {
  $line = preg_replace_callback('|<ab(.*?)>(.*?)</ab>|',"BasicAdjust::abbrv_callback",$line);
  
  // Revised 04-05-2021, 04-09-2021 for AV
+ // Revised 06-16-2023 for AV.
+ // old format: {AV. 1,2,3}
+ // new format: <ls>AV. 1 2 3</ls>
  $dbg=false;
  dbgprint($dbg,"BasicAdjust dict={$this->getParms->dict}\n");
  if ($this->getParms->dict == 'gra') {
   dbgprint($dbg,"BasicAdjust before rgveda, avveda: $line\n");
-  $line = preg_replace_callback('|[{](AV[.] .*?)[}]|',"BasicAdjust::avveda_verse_callback",$line);
+  // $line = preg_replace_callback('|[{](AV[.] .*?)[}]|',"BasicAdjust::avveda_verse_callback",$line);
+  // $line = preg_replace_callback('|<ls>(AV[.] .*?)</ls>|',"BasicAdjust::avveda_verse_callback",$line);
   $line = preg_replace_callback('|[{](.*?)[}]|',"BasicAdjust::rgveda_verse_callback",$line);
   dbgprint($dbg,"BasicAdjust after rgveda: $line\n");
  }
@@ -202,6 +219,8 @@ class BasicAdjust {
    */
   $line = preg_replace('|(<div n="vp"/> *)(<ab.*?</ab>)|',"\\1<b>\\2</b>",$line);
   }
+
+
  return $line;
 }
 
@@ -474,12 +493,13 @@ public function ls_callback_mw($matches) {
    list($cid,$code,$title,$type) = $rec;
    $text = "$title ($type)";
    dbgprint($dbg,"ls_matchabbr returns: cid=$cid, code=$code, title=$title, type=$type\n");
-  } else if (in_array($this->dict,array('ap90','ben','sch'))) {
+  } else if (in_array($this->dict,array('ap90','ben','sch','gra'))) {
    list($code,$text) = $rec;
   }
   # Add lshead, so as to be able to style
   // for mw and ap90, codecap = code
   dbgprint($dbg,"ls_callback_mw : n=$n, data=$data\n");
+  if ($code == null) {$code = "";}
   $codecap = $code;
   $ncode = strlen($code); // use substr_replace in case $code has parens
   if ($n != '') {
@@ -491,6 +511,7 @@ public function ls_callback_mw($matches) {
    dbgprint($dbg,"lshead 2: n=$n: datanew=$datanew\n");
   }
   # be sure there is no xml in the text
+  if ($text == null) {$text = "";}
   $text = preg_replace('/<.*?>/',' ',$text);
   # convert special characters to html entities
   # for instance, this handles cases when $tran has single (or double) quotes
@@ -502,6 +523,8 @@ public function ls_callback_mw($matches) {
    $href = $this->ls_callback_mw_href($code,$n,$data);
   }else if ($this->dict == 'ap90') {
    $href = $this->ls_callback_ap90_href($code,$n,$data);
+  }else if ($this->dict == 'gra') {
+   $href = $this->ls_callback_mw_href($code,$n,$data);
   }else if ($this->dict == 'sch') {
    $href = $this->ls_callback_sch_href($code,$n,$data);
   }
@@ -547,8 +570,13 @@ public function ls_callback_mw_href($code,$n,$data) {
  if (in_array($pfx,array('rv','av'))) {
   if (preg_match('|^(.*?)[.] *([^ ,]+)[ ,]+([0-9]+)[ ,]+([0-9]+)(.*)$|',$data1,$matches)) {
    $code0 = $matches[1];
-   $mandala = $matches[2];  // in lower-case roman numerals for mw
-   $imandala = $this->roman_int($mandala);
+   $mandala = $matches[2];  
+   if ($this->dict == 'mw') {
+    // in lower-case roman numerals for mw
+    $imandala = $this->roman_int($mandala);
+   }else if ($this->dict == 'gra') {
+    $imandala = (int)($mandala);
+   }
    $ihymn = (int)$matches[3];
    $iverse = (int)$matches[4];
    dbgprint($dbg,"ls_callback_mw_href. $code0, $mandala, $ihymn, $iverse\n");
@@ -804,6 +832,9 @@ public function ls_callback_ap90_href($code,$n,$data) {
  if(preg_match('/n="(.*?)"/',$a,$matches1)) {
   dbgprint($dbg," abbrv_callback case 1\n");
   $ans = $x;
+ }else if (preg_match('|^br|',$a)) {
+  // <abbr> is used in chg_markup. Don't change it!
+  return $x;
  }else {
   $tran = $this->getABdata($data);  
   # convert special characters to html entities
@@ -1126,6 +1157,64 @@ public function htmlspecial($text) {
  $tooltip = preg_replace('/&#039;/','&#8217;',$tooltip);
  return $tooltip;
 }
+ public function infovn_markup($matches) {
+  /* As of 5-2-2023, only present in 'gra' dictionary
+   <info vn="X"/>
+    [vn X]
+  */
+  $vn = $matches[1];
+  $ans = "<span style='color:red;'>[vn $vn]</span>";
+  return $ans;
+ }
+ public function chg_markup($matches) {
+ /* <chg type="TYPE" n="CHGID" src="SRC">{chgdata}</chg>
+   attrib:  ' type="TYPE" n="CHGID" src="SRC"
+ */
+ $dbg = false;
+ $x = $matches[0]; // full <chg>Z</chg> string
+ $type = $matches[1];
+ $chgid = $matches[2];
+ $src = $matches[3];
+ $chgdata = $matches[4];
+ dbgprint($dbg,"chg_markup: type=$type, chgid=$chgid, src=$src\n  chgdata=$chgdata\n");
+ if ($type == 'chg') {
+  // $anshead = "CHG type=$type, chgid=$chgid, src=$src";
+  $anshead = '';
+  if (preg_match('|<old>(.*?)</old> *<new>(.*?)</new>|',$chgdata,$matches1)) {
+   $old = $matches1[1];
+   $new = $matches1[2];
+   $styleold = 'text-decoration:line-through;';
+   $ansold = "<span style='$styleold'>$old</span>";
+   $stylenew = 'color:green;';
+   $msgstyle = "color:red; display:inline; text-decoration:underline red dotted;";
+   $ansnew = "<abbr title='source=$src' style='$msgstyle'>[Correction: </abbr><span style='$stylenew'>$new</span><span style='color:red;'>]</span>";
+   $ans = "$anshead : $ansold $ansnew";
+   dbgprint($dbg,"ansold=$ansold\nansnew=$ansnew\n");
+   return $ans;
+  }else {
+   return $x; // form not recognized
+  }
+ }else  if ($type == 'del') {
+  // $anshead = "CHG type=$type, chgid=$chgid, src=$src";
+  $anshead = '';
+  if (preg_match('|<old>(.*?)</old>|',$chgdata,$matches1)) {
+   $old = $matches1[1];
+   $styleold = 'text-decoration:line-through;';
+
+   $msgstyle = "color:red; display:inline;";
+   $ansold = "<abbr title='source=$src' style='$msgstyle'>Deletion: </abbr><span style='$styleold'>$old</span><span style='color:red;'>]</span>";
+   $ans = "$ansold";
+   dbgprint($dbg,"Deletion: ansold=$ansold\n");
+   return $ans;
+  }else {
+   return $x; // form not recognized
+  }
+ }else { // unknown type
+  return $x; 
+ }
+ $dbg=false;
+ }
+
 }
 
 class BasicAdjustLexParser{
@@ -1163,6 +1252,7 @@ class BasicAdjustLexParser{
   $this->result = $this->row;
   dbgprint($dbg,"BasicAdjustLexParser: result={$this->result}\n");
  }
+ 
  public function sthndl($xp,$el,$attribs) {
   if ($el == "lex") {
    // nothing.  don't output the lex tag to html

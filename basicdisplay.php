@@ -197,14 +197,15 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
  }
  public function sthndl_div($attribs) {
   // 07-05-2018. This function is still dictionary specific
+  // 07-06-2023. Change indent code for gra (see also endhdl function
    $n=$attribs['n'];
    if ($this->dict == 'gra') {
     if ($n == 'H') {$indent = "1.0em";}
     else if ($n == 'P') {$indent = "2.0em"; }
     else if ($n == 'P1') {$indent = "3.0em";}
     else {$indent = "";}
-    $style="position:relative; left:$indent;";
-    return "<br/><span style='$style'>";
+    $style="padding-left:$indent;";
+    return "<div style='$style'>";
    }else if ($this->dict == 'bur') {
     if (($n == '2')) {
      $style="position:relative; left:1.0em;";
@@ -575,7 +576,13 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
   } else if ($el == "type") {
     // displayed in chrhndl
   } else {
-    $this->row .= "<br/>&lt;$el&gt;";
+   // $this->row .= "<br/>&lt;$el&gt;";
+   $a = array();
+   foreach($attribs as $key=>$value) {
+    $a[] = "$key='$value'";
+   }
+   $astring = join(" ",$a);
+   $this->row .= "<$el $astring>";
   }
 
   $this->parentEl = $el;
@@ -614,6 +621,9 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
    if ($this->dict == "skd") {
     #$this->row .= " ( Footnote End)</strong>";
     $this->row .= "]</span>&nbsp;<br/>";
+   }else if ($this->dict == "gra") {
+    // 07-06-2023 close the div 
+    $this->row .= "</div>";
    }else {
    // close the div span
     $this->row .= "</span>";
@@ -641,6 +651,8 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
    $this->row .= "</span>";
   } else if ($el == "etym") {
     $this->row .= "</i>";
+  } else {
+   $this->row .= "</$el>";
  }
 }
 
@@ -686,7 +698,7 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
    $this->row .= "<span class='$sdata'><SA>$data</SA></span>";
   } else if ($this->parentEl == "hom") {
    /* for some dictionaries, show hom elements*/
-   if (in_array($this->dict,array('mw','pwkvn','md'))) {
+   if (in_array($this->dict,array('mw','pwkvn','md','gra'))) {
     $this->row .= "<span class='hom' title='Homonym'>$data</span>";
    }
   } else if ($this->parentEl == 'div') { 
