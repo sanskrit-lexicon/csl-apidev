@@ -207,65 +207,40 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
     $style="padding-left:$indent;";
     return "<div style='$style'>";
    }else if ($this->dict == 'bur') {
-    if (($n == '2')) {
-     $style="position:relative; left:1.0em;";
-     $ans = "<br/><span style='$style'>";
-    } else if (($n == 'P')) {
-     $style="";
-     $ans = "<br/><span style='$style'>";
-    } else if (($n == '3')) {
-     $style="position:relative; left:2.0em;";
-     $ans = "<br/><span style='$style'>";
+   // 07-13-2023
+    if ($n == '2') {
+     $indent = "1.0em";
+    } else if ($n == '3') {
+     $indent = "2.0em";
     } else {
-     // e.g. n="3"
-     $style="";
-     $ans = "<br/><span style='$style'>";
+     $indent = "0.1em";
     }
-    return $ans;
+    $style="padding-left:$indent;";
+    return "<div style='$style'>";
    }else if ($this->dict == 'stc') {
-     if (($n == 'P')) {
-      $style="position:relative; left:1.5em;";
-     }else {
-      $style="";
-     }
-     $ans = "<br/><span style='$style'>";
-     return $ans;
+    if ($n == 'P') {
+     $indent = "1.5em"; 
+    }else {
+     $indent = "0.1em";
+    }
+    $style="padding-left:$indent;";
+    return "<div style='$style'>";    
    }else if ($this->dict == 'pwg') {
      if ($n == '1') {$indent = "1.0em";}
      else if ($n == '2') {$indent = "2.0em"; }
      else if ($n == '3') {$indent = "3.0em";}
-     else {$indent = "";}
-     $style="position:relative; left:$indent;";
-     $ans = "<br/><span style='$style'>";
-     return $ans;
-   }else if ($this->dict == 'skd') {
-    // for skd (only for n="F", 5 cases as of 8/23/2017)
-    // also endhndl
-    // Treat the same as "<F>"
-    $ans = "<br/>";
-    if ($n == "F") {
-     #$ans .= "<strong>Footnote: ";
-     $ans .= "<br/>&nbsp;<span class='footnote'>[Footnote: ";
-    }
-    return $ans; 
-   }else if ($this->dict == 'krm') {
-    if ($n == "F") {
-     $ans = "<br/><b>Footnote </b> <span>";
-    }else {
-     // krm: n=lb, NI, P
-     $ans = "<br/><span>";
-    }
-    return $ans; 
+     else {$indent = "0.1em";}
+     $style="padding-left:$indent;";
+     return "<div style='$style'>";
    }else if ($this->dict == 'pw') {
     //  n = 1 (number div), n = 2 (English letter), n = 3 (Greek letter)
     //  n = p (prefixed form, in verbs
     if ($n == '1') {$indent = "1.5em";}
     else if ($n == '2') {$indent = "3.0em";}
     else if ($n == '3') {$indent = "4.5em";}
-    else {$indent = "";}
-    $style = "position:relative; left:$indent;";
-    $ans = "<br/><span style='$style'>";
-    return $ans;
+    else {$indent = "0.1em";}
+    $style = "padding-left:$indent;";
+    return "<div style='$style'>";
    }else if ($this->dict == 'ap') {
     // line break, and 
     // indent, whether 'n' is '2' or 'P' (only values allowed) 05-04-2017
@@ -274,20 +249,20 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
     //  n=P paRqitasvAmin
     //  n=3 agastyasaMhitA
     if ($n == '3') {
-     $style="position:relative; left:2em;";
-    }else if ($n == '2') {
-     $style="position:relative; left:1em;";
+     $indent = "2.0em";
+    } else if ($n == '2') {
+     $indent = "1.0em";
     }else {
-     $style="";
+     $indent = "0.1em";
     }
-    $ans = "<br/><span style='$style'>";
-    return $ans;
+    $style = "padding-left:$indent;";
+    return "<div style='$style'>";
    }else if (in_array($this->dict,array('pd','bhs','mwe','mw72','sch','snp','vei'))) {
     //  n = lb (line break)
     //  But for 'sch', there is no n attribute  (so $n is null or undefined).
     // snp has n=lb, P, HI.  Currently all are rendered as line break.
     // vei has n=lb, P.  Both are rendered as line break.
-    $ans = "<br/><span>";
+    $ans = "<div>";
     return $ans;
    }else if (in_array($this->dict,array('wil','shs'))) {
     // line break, and 
@@ -295,77 +270,76 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
     // no indent if n='1' , 'E', 'lex' (for wil)
     //              n='1' , 'E', 'Poem' (for wil)
     if ($n == '2') {
-     $style="position:relative; left:1.5em;";
+     $indent="1.5em;";
     } else {
-     $style="";
+     $indent="0.1em";
     }
-     $ans = "<br/><span style='$style'>";
-    return $ans;
+    $style = "padding-left:$indent;";
+    return "<div style='$style'>";
    }else if (in_array($this->dict,array('gst','ieg','inm','mci'))) {
     if ($n == 'P') {$indent = "1.0em";}
-    #else if ($n == 'lb') {$indent = "0.0em"; }
-    else {$indent = "0.0em"; }
-    $style="position:relative; left:$indent;";
-    $ans = "<br/><span style='$style'>";
-    return $ans;
+    else {$indent = "0.1em"; }
+    $style = "padding-left:$indent;";
+    return "<div style='$style'>";
    }else if (in_array($this->dict,array('ben','pui'))) {
     // in ben, this div is an empty div. The display
     // should begin a new indented paragraph.
     // Example under dIkz and garj.
-    if ($n == 'P') {
-     $ans = "<br/>&nbsp;&nbsp;&nbsp;<span>";
-    } else { // doesn't occur for ben
-     $ans = "<br/><span>";
-    } 
-    return $ans;
+    if ($n == 'P') {$indent = "1.0em";}
+    else {$indent = "0.1em";}
+    $style = "padding-left:$indent;";
+    return "<div style='$style'>";
+   }else if (in_array($this->dict,array('skd','krm'))) {
+    // for skd (only for n="F", 5 cases as of 8/23/2017)
+    // Treat the same as "<F>"
+    if ($n == "F") {
+     $indent = "1.0em";
+     $style = "padding-left:$indent;";
+     return "<div style='$style' class='footnote'><b>Footnote</b> ";
+    } else {
+     return "<div>";
+    }
    }else if ($this->dict == 'vcp') {
+    // vcp needs further revision, by change to make_xml.py
+    // <Picture> should not be changed to div
     if ($n == 'Picture') {
-     $ans = "<br/> &nbsp;<span style='font-size:smaller;'>(Picture)";
+     $ans = "<div style='font-size:smaller;padding-left:1.0em;'>(Picture)";
     } else { //P, H, HI
-     $ans = "<br/> <span>";
+     $ans = "<div>";
     }
     return $ans;  
    }else if ($this->dict == 'bop') {
-    // n = "lb" or "pfx".  Currently always a line break
-    $ans = "<br/> <span>";
-    return $ans;  
+    // n = "pfx".  Currently always a line break
+    return "<div>";  
    }else if ($this->dict == 'bor') {
-    if ($n == "lb") {  // 
-     $ans = "<br/> <span>";   
+    // could be better.
+    if ($n == "lb") {
+     return "<div>";
     } else {
-     $ans = "<span>";
-    }
-    return $ans;  
+     return "<div style='display:inline;'>";
+    } 
    }else if ($this->dict == 'pe') {
     // the div tag is empty for pe.
-    // hence, indentation doesn't work using the position:relative trick.
     if ($n == 'P') {
-     // line break plus indent. Since div is empty tag, it has no
-     // content. Thus, position:relative; left:3.0em  doesn't indent.
-     // Instead, use several &nbsp;
-     $ans= "<br/><span>&nbsp;&nbsp;&nbsp;"; 
+     // line break plus indent. 
+     return "<br/>&nbsp;&nbsp;&nbsp;"; 
     }else if ($n == 'NI') {
      // two line breaks, no indent
-     $ans = "<br/><br/><span>";
+     return "<br/><br/>"; 
     }else { 
      // $n == "lb" . line break, no indent
-     $ans = "<br/><span>";
+     return "<br/>"; 
     }
-    return $ans;  
-    } else if ($this->dict == 'pgn') {
+   } else if ($this->dict == 'pgn') {
     // the div tag is empty for pgn.
-    // hence, indentation doesn't work using the position:relative trick.
     if ($n == 'P') {
-     // line break plus indent. Since div is empty tag, it has no
-     // content. Thus, position:relative; left:3.0em  doesn't indent.
-     // Instead, use several &nbsp;
-     $ans= "<br/><span>&nbsp;&nbsp;&nbsp;"; 
+     // line break plus indent. 
+     return "<br/>&nbsp;&nbsp;&nbsp;"; 
     }else { 
      // $n == "lb" . line break, no indent
-     $ans = "<br/><span>";
+     return "<br/>"; 
     }
-    return $ans;  
-    } else if ($this->dict == 'acc') {
+   } else if ($this->dict == 'acc') {
      // line break, and 
      // indent, whether 'n' is '2' or 'P' (only values allowed) 05-04-2017
      // also, n='3' 05-21-2017 
@@ -373,25 +347,17 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
      //  n=P paRqitasvAmin
      //  n=3 agastyasaMhitA
      if (($n == '2') || ($n=='P')) {
-      $style="position:relative; left:1.5em;";
-      $ans = "<br/><span style='$style'>";
-     } else {
-     // e.g. n="3"
-     $style="";
-     $ans = "<br/><span style='$style'>";
-   }
-    return $ans;  
+      return "<div style='padding-left:1.5em'>";
+     }else {
+      return "<div>";
+     }
   }else { // default
     // currently applies to:
     // cae with <div n="p"/>
     // mw 
     // ap90 with <div n="1"/> or <div n="P"/>. See basicadjust
-    #$style="position:relative; top:1.0em";
-    #$ans = "<br/><span>";
-    $style="margin-top:0.6em;";
-    $ans = "<div style='$style'></div><span>";
-    return $ans;
-   }
+    return "<div style='margin-top:0.6em;'></div>";
+  }
  }
  public function sthndl($xp,$el,$attribs) {
 
@@ -618,16 +584,8 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
    $this->inkey2 = false;
   } else if ($el == "symbol") {
   } else if ($el == "div") {
-   if ($this->dict == "skd") {
-    #$this->row .= " ( Footnote End)</strong>";
-    $this->row .= "]</span>&nbsp;<br/>";
-   }else if ($this->dict == "gra") {
-    // 07-06-2023 close the div 
-    $this->row .= "</div>";
-   }else {
-   // close the div span
-    $this->row .= "</span>";
-   }
+   // 07-12-2023 close the div 
+   $this->row .= "</div>";
   } else if ($el == "alt") {
    // close the span, and introduce line break
    $this->row .= ")</span><br/>";
