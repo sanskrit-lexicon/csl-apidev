@@ -30,7 +30,7 @@ class BasicAdjust {
   if (in_array($dict,array('pwg','pw','pwkvn'))) {
    $this->dal_auth = new Dal($dict,"bib");  # pwgbib
    dbgprint(false,"basicadjust: bib file open? " . $this->dal_auth->status ."\n");
-  }else if (in_array($dict,array('mw','ap90','ben','sch','gra'))){
+  }else if (in_array($dict,array('mw','ap90','ben','sch','gra','bhs'))){
    $this->dal_auth = new Dal($dict,"authtooltips");
   }else {
    $this->dal_auth = null;
@@ -74,7 +74,8 @@ $line = preg_replace_callback('|<s>(.*?)</s>|','BasicAdjust::s_callback',$line);
       "BasicAdjust::ls_callback_pwg",$line);
   
       
- }else if (in_array($this->getParms->dict,array('mw','ap90','ben','sch','gra'))){
+ }else if (in_array($this->getParms->dict,
+           array('mw','ap90','ben','sch','gra','bhs'))){
   //dbgprint(true,"before ls_callback_mw: $line\n");
   $line = preg_replace_callback('|<ls(.*?)>(.*?)</ls>|',
       "BasicAdjust::ls_callback_mw",$line);
@@ -90,6 +91,29 @@ $line = preg_replace_callback('|<s>(.*?)</s>|','BasicAdjust::s_callback',$line);
   $line = $line1;
  }
 
+ /* 08-02-2023
+    For bhs,  change <lex>X</lex>, <lang>X</lang>, <ed>X</ed>, <ms>X</ms>
+    to <ab>X</ab>
+    Similarly <lex n="T">X</lex> etc.
+ */
+ if (in_array($this->getParms->dict,array('bhs'))) {
+  $line = preg_replace('|<lex>|','<ab>',$line);
+  $line = preg_replace('|<lex |','<ab ',$line);
+  $line = preg_replace('|</lex>|','</ab>',$line);
+  
+  $line = preg_replace('|<lang>|','<ab>',$line);
+  $line = preg_replace('|<lang |','<ab ',$line);
+  $line = preg_replace('|</lang>|','</ab>',$line);
+
+  $line = preg_replace('|<ed>|','<ab>',$line);
+  $line = preg_replace('|<ed |','<ab ',$line);
+  $line = preg_replace('|</ed>|','</ab>',$line);
+
+  $line = preg_replace('|<ms>|','<ab>',$line);
+  $line = preg_replace('|<ms |','<ab ',$line);
+  $line = preg_replace('|</ms>|','</ab>',$line);
+
+ }
  /* 12-14-2017
   'local' abbreviation handled here. Generate an n attribute if one
    is not present
@@ -480,7 +504,7 @@ public function ls_callback_mw($matches) {
  $fieldname = 'key';
  if ($this->dict == 'mw') {
   $fieldidx = 1;
- }else { // ap90, ben
+ }else { // ap90, ben, bhs
   $fieldidx = 0;
  }
  $result = $this->ls_matchabbr($fieldname,$fieldidx,$data1);
@@ -493,7 +517,7 @@ public function ls_callback_mw($matches) {
    list($cid,$code,$title,$type) = $rec;
    $text = "$title ($type)";
    dbgprint($dbg,"ls_matchabbr returns: cid=$cid, code=$code, title=$title, type=$type\n");
-  } else if (in_array($this->dict,array('ap90','ben','sch','gra'))) {
+  } else if (in_array($this->dict,array('ap90','ben','sch','gra','bhs'))) {
    list($code,$text) = $rec;
   }
   # Add lshead, so as to be able to style
@@ -524,6 +548,8 @@ public function ls_callback_mw($matches) {
   }else if ($this->dict == 'ap90') {
    $href = $this->ls_callback_ap90_href($code,$n,$data);
   }else if ($this->dict == 'gra') {
+   $href = $this->ls_callback_mw_href($code,$n,$data);
+  }else if ($this->dict == 'bhs') {
    $href = $this->ls_callback_mw_href($code,$n,$data);
   }else if ($this->dict == 'sch') {
    $href = $this->ls_callback_sch_href($code,$n,$data);

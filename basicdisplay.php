@@ -456,9 +456,16 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
   } else if ($el == "lang") {
     // nothing special here  Greek remains to be filled in
     // Depends on whether the text is filled in
-    $n = $attribs['n'];
+    if (isset($attribs['n'])) {
+     $n = $attribs['n'];
+    }else {
+     $n = "";
+    }
     if (in_array($this->dict,array('pwg','mw','pw','wil','md','yat','mw72','snp','stc','gra','lan','inm','bur','bop','ben','sch'))) {
-     # nothing to do.  Greek (and other) unicode has been provided.
+     // nothing to do.  Greek (and other) unicode has been provided.
+    }else if ($this->dict == 'bhs') {
+     // nothing to do. text in <lang>text</lang> is the name or abbreviation of
+     // a language.
     }else {
      # put a placeholder where the greek, arabic, etc. needs to be provided.
      $this->row .= " ($n) ";
@@ -501,9 +508,26 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
    $this->row  .= "<span style='$style' class='ls'>";
   } else if ($el == "is") {
     //pwg, pw
-   #$this->row .= "<span style='font-style: normal; color:teal'>";
-   $this->row .= "<span style='letter-spacing:2px;'>"; # this is more like the text
-  } else if ($el == "bot") {
+   if (isset($attribs['n'])) {
+    $tooltip = $attribs['n'];
+    $style = 'letter-spacing:2px; text-decoration: none; border-bottom: 1px dotted #000;';
+    $spantext .= " title='$tooltip' style='$style'";
+   }else {
+    $style = 'letter-spacing:2px;';
+    $spantext = "style='$style'";
+   }
+   $this->row .= "<span $spantext>"; 
+   } else if ($el == "bot") {
+    // 07-25-2023 allow tooltip at attribute n
+   if (isset($attribs['n'])) {
+    $tooltip = $attribs['n'];
+    $style = 'color: brown; text-decoration: none; border-bottom: 1px dotted #000;';
+    $spantext .= " title='$tooltip' style='$style'";
+   }else {
+    $style = 'color: brown;';
+    $spantext = "style='$style'";
+   }
+   $this->row .= "<span $spantext>"; # this is more like the text
    $this->row .= "<span style='color: brown'>";
   } else if ($el == "bio") {
    $this->row .= "<span style='color: brown'>";
@@ -541,6 +565,18 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
    }
   } else if ($el == "type") {
     // displayed in chrhndl
+  } else if ($el == "fr") {
+   $this->row .= "<span style='color: brown;' title='French language'>";
+  } else if ($el == "ger") {
+   $this->row .= "<span style='color: brown;' title='German language'>";
+  } else if ($el == "tib") {
+   $this->row .= "<span style='color: brown;' title='Tibetan language'>";
+  } else if ($el == "toch") {
+   $this->row .= "<span style='color: brown;' title='Tocharian language'>";
+  } else if ($el == "lat") {
+   $this->row .= "<span style='color: brown;' title='Latin language'>";
+  } else if ($el == "gk") {
+   $this->row .= "<span style='color: brown;' title='Greek language'>";
   } else {
    // $this->row .= "<br/>&lt;$el&gt;";
    $a = array();
@@ -609,6 +645,8 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
    $this->row .= "</span>";
   } else if ($el == "etym") {
     $this->row .= "</i>";
+  } else if (in_array($el,array('fr','ger','tib'))) {
+   $this->row .= "</span>";   
   } else {
    $this->row .= "</$el>";
  }
