@@ -645,7 +645,7 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
    $this->row .= "</span>";
   } else if ($el == "etym") {
     $this->row .= "</i>";
-  } else if (in_array($el,array('fr','ger','tib'))) {
+  } else if (in_array($el,array('fr','ger','tib','toch','lat','gk'))) {
    $this->row .= "</span>";   
   } else {
    $this->row .= "</$el>";
