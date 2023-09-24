@@ -849,6 +849,7 @@ public function ls_callback_ap90_href($code,$n,$data) {
  public function abbrv_callback($matches) {
  /* <ab n="{tran>}">{data}</ab>
   <ab{attrib}>{data)</ab>
+  |<ab(.*?)>(.*?)</ab>|
  */
  $x = $matches[0]; // full string
  $a = $matches[1];
@@ -857,7 +858,14 @@ public function ls_callback_ap90_href($code,$n,$data) {
  dbgprint($dbg,"abbrv_callback: a=$a, data=$data\n");
  if(preg_match('/n="(.*?)"/',$a,$matches1)) {
   dbgprint($dbg," abbrv_callback case 1\n");
-  $ans = $x;
+  $ans = $x; // local abbreviation
+  // for pwk, prepare for displaying the tooltip without the abbreviation
+  if (in_array($this->dict,array('pwg','pw','pwkvn'))) {
+   $tip = $matches1[1];
+   $style = "color:blue;";
+   $tipa = "$tip";  // for debugging use "@$tip"
+   $ans = "<span style='$style'>$tipa</span>";
+  }
  }else if (preg_match('|^br|',$a)) {
   // <abbr> is used in chg_markup. Don't change it!
   return $x;
