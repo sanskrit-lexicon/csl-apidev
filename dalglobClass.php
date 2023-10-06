@@ -77,7 +77,7 @@ class Dalglob {
    }
   } else {
    $this->file_db = null;
-   #dbgprint($dbg,"dal.php: Cannot open " . $this->sqlitefile . "\n");
+   #dbgprint($dbg,"dalglobClass.php: Cannot open " . $this->sqlitefile . "\n");
    $this->status=false;
    return ;
   } 
