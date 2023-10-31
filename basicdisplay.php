@@ -693,10 +693,13 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
    // probably not needed
    $this->row .= "<span class='$sdata'><SA>$data</SA></span>";
   } else if ($this->parentEl == "hom") {
-   /* for some dictionaries, show hom elements*/
+   /* for some dictionaries, show hom elements
    if (in_array($this->dict,array('mw','pwkvn','md','gra'))) {
     $this->row .= "<span class='hom' title='Homonym'>$data</span>";
    }
+   10-31-2023. For ALL dictionaries, show hom element
+   */
+    $this->row .= "<span class='hom' title='Homonym'>$data</span>";
   } else if ($this->parentEl == 'div') { 
    $this->row .= $data;
   } else if ($this->parentEl == 'pb') { 

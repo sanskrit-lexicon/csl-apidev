@@ -143,11 +143,12 @@ $line = preg_replace_callback('|<s>(.*?)</s>|','BasicAdjust::s_callback',$line);
   dbgprint($dbg,"BasicAdjust after lanman_link: $line\n");
  }
 
- //$line = preg_replace('|- <br/>|','',$line);
- //$line = preg_replace('|<br/>|',' ',$line);
- // 2018-07-07  Handle lex tag.  
  $line = preg_replace_callback('|<lex(.*?)>(.*?)</lex>|',"BasicAdjust::add_lex_markup",$line);
- 
+  // 10-31-2023  remove <hom>X</hom> within head portion
+  if (in_array($this->getParms->dict, array("pw","pwkvn"))) {
+   $line = preg_replace("|<key2>(.*?)<hom>.*?</hom>(.*?<body>)|","<key2>$1$2",$line);
+  }
+  //
   if (in_array($this->getParms->dict, array("mw","md"))) {
    $line = $this->move_L_mw($line);
    # remove <hom>X</hom> within head portion
