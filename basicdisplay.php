@@ -13,6 +13,7 @@ error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
 // for this to work for all Cologne dictionaries.
 // Aug 7, 2020.  Restructure under assumption that input to
 // constructor is either a string or an array of strings.
+// Nov 20, 2023. abch
 */
 require_once("dbgprint.php");
 require_once("parm.php");
@@ -31,7 +32,8 @@ class BasicDisplay {
  public $filterin; // transcoding for output
  public $key; // the original key being searched for
  public $basicOption,$serve;
- public $getParms,$status,$mwx,$html;
+ public $getParms,$status,$html;
+ public $mwx; // whitney/westergaard links
 public function __construct($key,$string_or_array,$filterin,$dict) {
  
  $this->key = $key;
@@ -46,12 +48,12 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
  }
  
  $this->pagecol="";
- $this->dbg=false; #false;
+ $this->dbg=false;
  $this->inSanskrit=false;
  if ($filterin == "deva") {
  /* use $filterin to generate the class to use for Sanskrit (<s>) text 
-    This was previously done in main_webtc.js.
     This let's us use siddhanta font for Devanagari.
+    $this->sdata is used later.
  */
   $this->sdata = "sdata_siddhanta"; // consistent with font.css
  }else if (($filterin == 'roman')&&($this->dict == 'mw')) {
@@ -60,16 +62,17 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
   $this->sdata = "sdata"; // default.
  }
  $sdata = $this->sdata;
- // 
+
+ // The constructed html is in public variable $table.
+ // $this->table is the instance variable
  if (in_array($this->dict,array('ae','mwe','bor'))) {
   // no transliteration of $key for English headword
   $this->table = "<h1>&nbsp;$key</h1>\n";
  }else {
   $this->table = "<h1 class='$sdata'>&nbsp;<SA>$key</SA></h1>\n";
  }
-
-
  $this->table .= "<table class='display'>\n";
+
  if (is_string($string_or_array)) {
   $matches = array($string_or_array);
  }else if (is_array($string_or_array)) {
@@ -86,7 +89,7 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
  $ntot = count($matches);  // either 0 or 1.
  // Associative array. keys are:
  // status 
- // mwx  (whitney/westergaard links -- currently requires dict == mw
+ // mwx whitney/westergaard links -- currently requires dict == mw
  // 
  $this->status = true;
  $this->mwx = "";
@@ -96,6 +99,7 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
  $i = 0;
  while($i<$ntot) {
   $linein=$matches[$i];
+  // a line of data from xxx.xml, after adjustments by basicadjust.php
   $line=$linein;
   
   dbgprint($this->dbg,"basicdisplay: line[$i+1]=$line\n");
@@ -115,11 +119,14 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
   }
   $this->inSanskrit=false;
   $this->inkey2 = false;
+  // initialize parser
   $p = xml_parser_create('UTF-8');
   xml_set_element_handler($p,array($this,'sthndl'),array($this,'endhndl'));
   xml_set_character_data_handler($p,array($this,'chrhndl'));
   xml_parser_set_option($p,XML_OPTION_CASE_FOLDING,FALSE);
+  
   dbgprint($this->dbg,"chk 1\n");
+  // parse
   if (!xml_parse($p,$line)) {
    dbgprint(true,"basicdisplay.php: xml parse error\nline=$line\n");
    $row = $line;
@@ -133,7 +140,7 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
   $this->table .= "<tr>";
   $this->table .= "<td>";
   // $style = "background-color:beige";
-  $style = ""; #none  
+  $style = ""; // none  
   // Since style is "", the use of $style below has no impact on display
   // in browser.
   $row1a = "";
@@ -173,6 +180,7 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
   $i++;
  }
  $this->table .= "</table>\n";
+ // dbgprint(true,"basicdisplay: table=\n{$this->table}\n");
 }
 
  public function getline_key1($line) {
@@ -351,7 +359,15 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
      }else {
       return "<div>";
      }
-  }else { // default
+   } else if ($this->dict == 'abch') {
+    if (isset($attribs['style'])) {
+    $style=$attribs['style'];
+    $ans = "<div style='$style'>";
+    } else {
+     $ans = "<div>";
+    }
+    return $ans;
+   }else { // default
     // currently applies to:
     // cae with <div n="p"/>
     // mw 
@@ -359,8 +375,32 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
     return "<div style='margin-top:0.6em;'></div>";
   }
  }
- public function sthndl($xp,$el,$attribs) {
 
+ public function sthndl_elt_attribs($attribs,$elt) {
+  // 11-20-2023  new function used for abch.
+  // But may have general use
+  $attrib_keys = array_keys($attribs);
+  $ar = array();
+  foreach($attrib_keys as $key) {
+   $val = $attribs[$key];
+   array_push($ar," $key='$val'");
+  }
+  $a = join("",$ar);
+  $ans = "<$elt$a>";
+  if (false) {
+   $keys = join(" ",$attrib_keys);
+   echo "dbg: elt = $elt<br/>\n";
+   foreach($ar as $x) {
+    echo "   attrib: $x<br/>\n";
+   }
+   $ans1 = preg_replace('|<|','&lt;',$ans);
+   echo "ans = $ans1<br/><br/>\n";
+  }
+  return $ans;
+ }
+
+ public function sthndl($xp,$el,$attribs) {
+  // $el is one of the elements of the xml record.
   if (preg_match('/^H.+$/',$el)) {
    // In general, don't display 'H1'. But MW has different
    if ($this->dict == 'mw') {
@@ -413,15 +453,15 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
    // we just display the IAST text, so do nothing with this element
   } else if ($el == "etym") {
     $this->row .= "<i>";
-  } else if ($el == "info") { // mw no action
+  } else if ($el == "info") { 
   } else if ($el == "pc"){
-  } else if ($el == "info") { // mw no action
-  } else if ($el == "to") { // mw no action
-  } else if ($el == "ns") { // mw no action
-  } else if ($el == "shortlong") { // mw no action
-  } else if ($el == "srs") { // mw no action. Different from previous version.
-  } else if ($el == "pcol") { // mw no action. Different from previous version.
-  } else if ($el == "nsi") { // mw72 no action
+  } else if ($el == "info") { 
+  } else if ($el == "to") { 
+  } else if ($el == "ns") { 
+  } else if ($el == "shortlong") { 
+  } else if ($el == "srs") { 
+  } else if ($el == "pcol") {
+  } else if ($el == "nsi") { 
   } else if ($el == "pb"){
    if ($this->dict == "mw") {
     # do nothing.
@@ -433,7 +473,6 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
   } else if ($el == "key1"){
   } else if ($el == "hom"){ // handled wholly in chrhndl
   } else if ($el == "F"){
-   #$this->row .= "<br/>&nbsp;<span class='footnote'>[Footnote: ";
    $style = "font-weight:bold;";
    $this->row .= "<br/>[<span style='$style'>Footnote: </span><span>";
   } else if ($el == "symbol") {
@@ -535,15 +574,22 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
    // no rendering
   } else if ($el == "ab"){
     if (isset($attribs['n'])) {
+     // local abbreviation <ab n="tooltip for X.">X.</ab>
      $tran = $attribs['n'];
-     #dbgprint(true," sthndl. ab. tran=$tran\n");
-     #$this->row .= "<span title='$tran' style='text-decoration:underline'>";
-     # this style provides a 'dotted underline'
+     // this style provides a 'dotted underline'
      $style = "border-bottom: 1px dotted #000; text-decoration: none;";
      $this->row .= "<span title='$tran' style='$style'>";
     }else {
+     // <ab>X.</ab>  tooltip from dictionary abbreviations database
      $this->row .= "<span>";
     }
+  } else if (in_array($el,array("table","tr","td","th"))) {
+    $elt_with_attribs = $this->sthndl_elt_attribs($attribs,$el);
+    $this->row .= $elt_with_attribs;
+  } else if (in_array($el,array("hr"))) {
+    // empty elements
+    $elt_with_attribs = $this->sthndl_elt_attribs($attribs,$el);
+    $this->row .= $elt_with_attribs;
   } else if ($el == "vlex"){ // no display
   } else if ($el == "mark"){ 
    // skd. n = H,P
@@ -578,6 +624,7 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
   } else if ($el == "gk") {
    $this->row .= "<span style='color: brown;' title='Greek language'>";
   } else {
+    // $el unrecognized
    // $this->row .= "<br/>&lt;$el&gt;";
    $a = array();
    foreach($attribs as $key=>$value) {
@@ -587,7 +634,7 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
    $this->row .= "<$el $astring>";
   }
 
-  $this->parentEl = $el;
+  $this->parentEl = $el;  // used by chrhndl
 }
 
  public function endhndl($xp,$el) {
@@ -609,9 +656,7 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
   } else if ($el == "i"){
    $this->row .= "</i>"; 
   } else if ($el == "pb"){
-   if ($this->dict == "mw") {
-    # do nothing.
-   }else if (in_array($this->dict,array("bur","stc"))) {
+   if (in_array($this->dict,array("mw","bur","stc","abch"))) {
     # do nothing
    }else {
     $this->row .= "<br/>";
@@ -620,7 +665,7 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
    $this->inkey2 = false;
   } else if ($el == "symbol") {
   } else if ($el == "div") {
-   // 07-12-2023 close the div 
+   // close the div 
    $this->row .= "</div>";
   } else if ($el == "alt") {
    // close the span, and introduce line break
@@ -647,6 +692,14 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
     $this->row .= "</i>";
   } else if (in_array($el,array('fr','ger','tib','toch','lat','gk'))) {
    $this->row .= "</span>";   
+  } else if ($el == "table"){
+    $this->row .= " </table> ";
+  } else if ($el == "tr"){
+    $this->row .= " </tr> ";
+  } else if ($el == "td"){
+    $this->row .= " </td> ";
+  } else if ($el == "br") {
+    // nothing 
   } else {
    $this->row .= "</$el>";
  }
@@ -654,33 +707,20 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
 
  public function chrhndl($xp,$data) {
   $sdata = $this->sdata;
-  if ($this->inkey2) {
-   //$data = strtolower($data);
-   if ($this->dict == 'mw') {
-    // don't show
-   }else {
-    // 08-07-2020 also don't show for other dictionaries.
-    /*
-    if (in_array($this->dict,array('ae','mwe','bor'))) {
-     // no transliteration of $key for English headword
-     $this->row1 .= "&nbsp;<span class='$sdata'>$data</span>";
-    }else {
-     $this->row1 .= "&nbsp;<span class='$sdata'><SA>$data</SA></span>";
-    }
-    */
-   }
+  if ($this->inkey2) { // no action
   } else if ($this->parentEl == "key1"){ // nothing printed
+  } else if ($this->parentEl == "key2"){ // nothing printed
   } else if ($this->parentEl == "pb") {
-   if (true) { // (in_array($this->dict,array("pwg"))) {
-    $hrefdata = $this->getHrefPage($data);
-    $style = "font-size:smaller; font-weight:bold;";
-    $this->row .= "<span style='$style'> $hrefdata</span>";   
-   }
+   $hrefdata = $this->getHrefPage($data);
+   $style = "font-size:smaller; font-weight:bold;";
+   $this->row .= "<span style='$style'> $hrefdata</span>";   
   } else if ($this->parentEl == "pc") {
+   // 10-30-2023 Believed to be unused - handled in dispitem.php
    $hrefdata = $this->getHrefPage($data);
    $style = "font-size:normal; color:rgb(160,160,160);";
    $this->row1 .= "<span style='$style'> [Printed book page $hrefdata]</span>";
   } else if ($this->parentEl == "L") {
+   // 10-30-2023 Believed to be unused - handled in dispitem.php
    $style = "font-size:normal; color:rgb(160,160,160);";
    $this->row1 .= "<span style='$style'> [Cologne record ID=$data]</span>";
   } else if ($this->parentEl == "L1") {
@@ -720,30 +760,15 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
    }
   } else if ($this->parentEl == "ab") {
    $this->row .= "$data";
-   /* not used 12-14-2017
-   $tran = getABdata($data);
-   $dbg = false;
-   dbgprint($dbg,"getABdata: $data -> $tran\n");
-   if ($tran == "") {
-   $this->row .= "$data";
-   }else {
-   $this->row .= "<span  title='$tran' style='text-decoration:underline'>";
-   $this->row .= "$data";
-   $this->row .= "</span>";
-   }
-   */
   }else if ($this->parentEl == "ls") { 
-   #$data1 = format_ls($data);
-   #$this->row .= $data1;
    $this->row .= $data;
   } else if ($this->parentEl == "type") {
     // 08-07-2020: Which dictionaries have 'type' tag?  SCH?
     // prepend to $row1, so it precedes key2
-    // Note: $row1 is null in this routine.  change to $this->row1
-    //$this->row1 = "<strong>$data</strong> " . $row1;
     $this->row1 = "<strong>$data</strong> " . $this->row1;
   } else { // Arbitrary other text
    $this->row .= $data;
+   dbgprint($this->dbg,"chrhdl: data = $data, parentEl = {$this->parentEl}\n");
   }
 }
 public function getHrefPage($data) {
@@ -836,8 +861,8 @@ public function mw_extra_line($line) {
   }
   $ans1a = join(", ",$elts);
   $ans1 = "<em>Whitney Roots links:</em> " . $ans1a;
-  #$ans1 = $ans1 . '  <br/>'; # dbg
-  #dbgprint($dbg,"basicdisplay.php mw_extra_line: ans1=$ans1\n");
+  //$ans1 = $ans1 . '  <br/>'; # dbg
+  //dbgprint($dbg,"basicdisplay.php mw_extra_line: ans1=$ans1\n");
  }
  if (preg_match('|<info westergaard="(.*?)"/>|',$line,$matches)) {
   $x = $matches[1];
