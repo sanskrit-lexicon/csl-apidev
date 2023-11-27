@@ -623,6 +623,12 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
    $this->row .= "<span style='color: brown;' title='Latin language'>";
   } else if ($el == "gk") {
    $this->row .= "<span style='color: brown;' title='Greek language'>";
+  } else if ($el == "arab") {
+   $this->row .= "<span style='color: brown;' title='Arabic language'>";
+  } else if ($el == "rus") {
+   $this->row .= "<span style='color: brown;' title='Russian language'>";
+  } else if ($el == "mong") {
+   $this->row .= "<span style='color: brown;' title='Mongolian language'>";
   } else {
     // $el unrecognized
    // $this->row .= "<br/>&lt;$el&gt;";
@@ -690,7 +696,7 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
    $this->row .= "</span>";
   } else if ($el == "etym") {
     $this->row .= "</i>";
-  } else if (in_array($el,array('fr','ger','tib','toch','lat','gk'))) {
+  } else if (in_array($el,array('fr','ger','tib','toch','lat','gk','arab','rus','mong'))) {
    $this->row .= "</span>";   
   } else if ($el == "table"){
     $this->row .= " </table> ";
