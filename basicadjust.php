@@ -53,7 +53,7 @@ class BasicAdjust {
 
  public function line_adjust($line) {
  $dbg = false;
- if (in_array($this->dict,array('abch'))) {
+ if (in_array($this->dict,array('abch', 'acph', 'acsj'))) {
   // for koshas like abch
   $line = preg_replace('|<hwdetails>(.*?)</hwdetails>|',
          '<div style="background-color: beige;">\1</div>',$line);
