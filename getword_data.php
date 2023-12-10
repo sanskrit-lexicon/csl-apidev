@@ -1,5 +1,5 @@
 <?php
-error_reporting(E_ALL & ~E_NOTICE &~E_WARNING);
+error_reporting(E_ALL & ~E_NOTICE);
 ?>
 <?php 
 /* getword_data.php
@@ -51,6 +51,12 @@ class Getword_data {
    list($key0,$lnum0,$xmldata0) = $xmlmatch;
    $adjxmldata0 = $adjmatches[$i];
    $html = $this->getword_data_html_adapter($key0,$lnum0,$adjxmldata0,$dict,$getParms,$xmldata0);
+   // 10-23-2023 For dict abch, use $L instead of $lnum0.
+   if (in_array($dict,['abch', 'acph', 'acsj'])) {
+    if(preg_match('|<L>(.*?)</L>|',$xmldata0,$tempmatch)) {
+     $lnum0 = $tempmatch[1];
+    }
+   }
    $htmlmatches[] = array($key0,$lnum0,$html);
   }
  if ($dbg) {
@@ -92,12 +98,16 @@ public function getword_data_html_adapter($key,$lnum,$adjxml,$dict,$getParms,$xm
  dbgprint($dbg,"info = $info\n");
  dbgprint($dbg,"body = $body\n");
 
- # adjust body
- $body = preg_replace('|<td.*?>|','',$body);
- $body = preg_replace('|</td></tr>|','',$body);
- if ($dict == 'mw') {
-  // in case of MW, we remove [ID=...]</span>
-  $body = preg_replace('|<span class=\'lnum\'.*?\[ID=.*?\]</span>|','',$body);
+ if (in_array($dict,['abch', 'acph', 'acsj'])) {
+  // no adjust body
+ }else {
+  // adjust body
+  $body = preg_replace('|<td.*?>|','',$body);
+  $body = preg_replace('|</td></tr>|','',$body);
+  if ($dict == 'mw') {
+   // in case of MW, we remove [ID=...]</span>
+   $body = preg_replace('|<span class=\'lnum\'.*?\[ID=.*?\]</span>|','',$body);
+  }
  }
  # adjust $info - keep only the displayed page
  if ($dict == 'mw') {
