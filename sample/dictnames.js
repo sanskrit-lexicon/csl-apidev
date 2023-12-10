@@ -4,6 +4,8 @@ CologneDisplays.dictionaries= {
 [ /*['AP' , 'Practical Sanskrit-English Dictionary'],*/
 ['ABCH' , 'Abhidhānacintāmaṇi of Hemacandrācārya'],
 ['ACC' , 'Aufrecht Catalogus Catalogorum'],	
+['ACPH' , 'Abhidhānacintāmaṇipariśiṣṭa of Hemacandrācārya'],
+['ACSJ' , 'Abhidhānacintāmaṇiśiloñcha of Jinadeva'],
 ['AP90' , 'Apte Practical Sanskrit-English Dictionary'],
 ['ARMH' , 'Abhidhānaratnamālā of Halāyudha'],
 ['BEN' , 'Benfey Sanskrit-English Dictionary'],

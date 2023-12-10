@@ -18,7 +18,7 @@ class DictInfo {
        "SHS"=>"2020" , "SKD"=>"2020" , "SNP"=>"2020" , "STC"=>"2020",
        "VCP"=>"2020" , "VEI"=>"2020" , "WIL"=>"2020" , "YAT"=>"2020",
        "LAN"=>"2020","ARMH"=>"2020","PWKVN"=>"2020", "LRV"=>"2022",
-       "ABCH"=>"2023");
+       "ABCH"=>"2023", "ACPH"=>"2023", "ACSJ"=>"2023");
  static public $dictyear_older=
    array("ACC"=>"2014" , "AE"=>"2014" , "AP"=>"2014" , "AP90"=>"2014",
        "BEN"=>"2014" , "BHS"=>"2014" , "BOP"=>"2014" , "BOR"=>"2014",
@@ -211,6 +211,8 @@ public function get_cologne_pdfpages_url() {
   "PWKVN"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/PWScan/PWScanpng" ,
   "LRV"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/LRVScan/LRVScanpdf" ,
   "ABCH"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/ABCHScan/pdfpages" ,
+  "ACPH"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/ACPHScan/pdfpages" ,
+  "ACSJ"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/ACSJScan/pdfpages" ,
  );
  $url = $cologne_pdfpages_urls[$this->dictupper];
  return $url;
