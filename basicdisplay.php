@@ -556,8 +556,9 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
     $spantext = "style='$style'";
    }
    $this->row .= "<span $spantext>"; 
-   } else if ($el == "bot") {
+   } else if (in_array($el,array("bot","zoo"))) {
     // 07-25-2023 allow tooltip at attribute n
+    // 12-23-2023 treat zoo like bot
    if (isset($attribs['n'])) {
     $tooltip = $attribs['n'];
     $style = 'color: brown; text-decoration: none; border-bottom: 1px dotted #000;';
@@ -567,7 +568,6 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
     $spantext = "style='$style'";
    }
    $this->row .= "<span $spantext>"; # this is more like the text
-   $this->row .= "<span style='color: brown'>";
   } else if ($el == "bio") {
    $this->row .= "<span style='color: brown'>";
   } else if ($el == "sic") {
@@ -684,7 +684,7 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
    $this->row .= "</span>";
   } else if ($el == "is") {
    $this->row .= "</span>";
-  } else if ($el == "bot") {
+  } else if (in_array($el,array("bot","zoo"))) {
    $this->row .= "</span>";
   } else if ($el == "bio") {
    $this->row .= "</span>";

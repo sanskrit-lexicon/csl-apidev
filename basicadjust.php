@@ -106,11 +106,12 @@ class BasicAdjust {
 
   $line = preg_replace('|<ls>ib[.]|','<ls><ab>ib.</ab>',$line);    
  }
- if ($this->getParms->dict == 'gra') {
+ if (in_array($this->getParms->dict,array('gra', 'md'))) {
   // 06-15-2023. Treat <pe> and <lang> tags like ab
+  // 12-23-2023. Also for md. And also <cl>
   $line1 = preg_replace('|<pe(.*?)>(.*?)</pe>|', '<ab\1>\2</ab>',$line);
   $line1 = preg_replace('|<lang(.*?)>(.*?)</lang>|', '<ab\1>\2</ab>',$line1);
-  // if ($line1 != $line) {dbgprint(true," dbg: line=$line\nline1=$line1\n");}
+  $line1 = preg_replace('|<cl(.*?)>(.*?)</cl>|', '<ab\1>\2</ab>',$line1);
   $line = $line1;
  }
  // 11-26-2023
@@ -168,7 +169,7 @@ class BasicAdjust {
   $line = preg_replace_callback('|<ls n="(.*?)">(.*?)</ls>|',"BasicAdjust::lanman_link_callback",$line);
   dbgprint($dbg,"BasicAdjust after lanman_link: $line\n");
  }
-
+ // Get tooltip for <lex>X</lex>, for all dictionaries
  $line = preg_replace_callback('|<lex(.*?)>(.*?)</lex>|',"BasicAdjust::add_lex_markup",$line);
   // 10-31-2023  remove <hom>X</hom> within head portion
   if (in_array($this->getParms->dict, array("pw","pwkvn"))) {
