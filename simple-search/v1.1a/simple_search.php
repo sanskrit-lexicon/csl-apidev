@@ -22,36 +22,8 @@ require_once($dirpfx . "simple-search/simpleslp/query3.php");
 require_once('dalnorm.php');
 
 class Simple_Search{
- /*
- public $transitionTable_default_orig = [
-   // The spellings are in slp1, but they are to applied when
-   // the user input spelling is default
-   ["a","A","ah"],  // ah tamilish ?
-   ["i","I"],
-   ["u","U"], 
-   ["o","O"],
-   ["e","E"],
-   ["r","f","F","ri","ar","ru","rI","R","RI"],
-   ["l","x","X","lri"],
-   
-   ["h","H"],
-   ["n","Y","N","m","R","M"],  
-   ["S","z","s","zh","sh"],
-   ["b","v"],
-   ["k","K"],
-   ["g","G"],
-   ["c","C","Ch","ch","cC"],
-   ["j","J"],
-   ["jy","jY"],
-   ["w","W","t","T"],
-   ["q","Q","d","D"],
-   //["p","P","f","b","B"],
-   ["p","P"],
-   ["b","B","v","V"],
-   ["t","tt"]
- ];
- */
- public $transitionTable_default = [  /// in process -- not used 02-13-2021 3PM
+
+ public $transitionTable_default = [  _def
    // The spellings are in slp1, but they are to applied when
    // the user input spelling is default
    ["r","f","F","ri","ar","ru","rI","R","RI"],
@@ -621,8 +593,8 @@ class Simple_Search{
    return $wordin2;
   }
   // $wordin might have letters with diacritics.
-  // We will lower-case the string first, a
-  dbgprint($this->dbg,"convert_nonascii calling tokenizer_default: $wordin1\n");
+  // We will lower-case the string first.
+  dbgprint($this->dbg,"convert_nonascii calling tokenizer_default: $wordin\n");
   $wordin1 = $this->tokenizer_default($wordin);
   $wordin2 = $this->clean_slp1($wordin1);
   //dbgprint($this->dbg,"wordin=$wordin, wordin1=$wordin1, wordin2=$wordin2\n");
