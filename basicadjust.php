@@ -697,6 +697,10 @@ public function ls_callback_mw_href($code,$n,$data) {
    $is = (int)$matches[2];
    $iv = (int)$matches[3];
    $dir = "https://sanskrit-lexicon-scans.github.io/ramayanagorr";
+   // 01-19-2024. Ref: https://github.com/sanskrit-lexicon/MWS/issues/151
+   if (($this->dict == 'mw') && (in_array($ic,array(1,2)))) {
+    $dir = "https://sanskrit-lexicon-scans.github.io/ramayanaschl";
+   }
    $href = "$dir/?$ic,$is,$iv";
    return $href;
  }
