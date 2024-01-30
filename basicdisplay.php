@@ -89,7 +89,7 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
  $ntot = count($matches);  // either 0 or 1.
  // Associative array. keys are:
  // status 
- // mwx whitney/westergaard links -- currently requires dict == mw
+ // mw whitney/westergaard links -- currently requires dict == mw
  // 
  $this->status = true;
  $this->mwx = "";

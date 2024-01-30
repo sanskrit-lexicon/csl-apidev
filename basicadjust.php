@@ -396,6 +396,7 @@ public function ls_callback_pwg_href($code,$data) {
  $href = null; // default if no success
  $dbg = false;
  dbgprint($dbg,"ls_callback_pwg_href. data=$data\n");
+ /******* link to Spruche 2nd edition in pw***********/
  if (preg_match('|^(Spr[.]) ([0-9]+)|',$data,$matches)) {
   if (in_array($this->dict,array('pw'))) {
    // Indische Sprüche in pw
@@ -411,6 +412,7 @@ public function ls_callback_pwg_href($code,$data) {
    return $href;
   }
  }
+ /******* link to Spruche 2nd edition in pwg***********/
  if (preg_match('|^(Spr[.]) \(II\) ([0-9]+)|',$data,$matches)) {
   // Indische Sprüche in pwg (2nd edition)
   $pfx = $matches[1];
@@ -419,6 +421,7 @@ public function ls_callback_pwg_href($code,$data) {
   dbgprint($dbg,"Spr: href=$href\n");
   return $href;
  }
+ /******* link to Mahabharata ***********/
  if (preg_match('|^(MBH[.]) *([0-9]+) *, *([0-9]+)[.]?$|',$data,$matches)) {
   // Mahabharata, Calcutta edition for pwg.
   // Some PW refs to MBH are different, using 3 parameters (Bombay)
@@ -429,6 +432,7 @@ public function ls_callback_pwg_href($code,$data) {
   dbgprint($dbg,"$pfx: href=$href\n");
   return $href;
  }
+ /******* link to Harivamsa ***********/
  if (preg_match('|^(HARIV[.]) *([0-9]+)[.]?$|',$data,$matches)) {
   // Mahabharata, Calcutta edition for harivamsa
   $pfx = $matches[1];
@@ -437,7 +441,7 @@ public function ls_callback_pwg_href($code,$data) {
   dbgprint($dbg,"$pfx: href=$href\n");
   return $href;
  }
- 
+ /******* link to B. Chrestomathie ***********/
  if (preg_match('|^(Chr[.]) *([0-9]+)|',$data,$matches)) {
   // Boehtlingk Chrestomathie, 2nd edition.
   if (! in_array($this->dict,array('pw'))) {
@@ -451,7 +455,21 @@ public function ls_callback_pwg_href($code,$data) {
   dbgprint($dbg,"$pfx: href=$href\n");
   return $href;
  }
-
+ /******* link to Westergaard Dhatupatha  ***********/
+ if(preg_match('|^(DHĀTUP[.]) *([0-9]+)(.*)$|',$data,$matches)) {
+  $pfx = $matches[1];
+  $section = $matches[2];  // int
+  if ($section == 0) {
+   // error condition
+   return $href;
+  }
+  $dir = "https://www.sanskrit-lexicon.uni-koeln.de/scans/csl-westergaard/disp/index.php";
+  $href = "$dir?section=$section";
+  return $href;
+ }
+ 
+ /******* link to Rgveda, Atharvaveda, or Panini ***********/
+ // NOTE: This code needs to be re-arranged for easier comprehension
  if (!preg_match('|^(.*?)[.] *([0-9]+)[ ,]+([0-9]+)[ ,]+([0-9]+)(.*)$|',$data,$matches)) {
   return $href;
  }
@@ -607,7 +625,7 @@ public function ls_callback_mw_href($code,$n,$data) {
   'MBh.' => 'MBH.','Hariv.' => 'hariv',
   'MBh. (ed. Calc.)' => 'MBHC', 'MBh. (ed. Bomb.)' => 'MBHB',
   'R.' => 'R', 'R. G.' => 'R', 'R. (G)' => 'R', 'R. (G.)' => 'R', 'R. [G]' => 'R',
-  'R. ed. Gorresio' => 'R');
+  'R. ed. Gorresio' => 'R', 'Dhātup.' => 'dp', 'Dhāt.' => 'dp', );
  //hrefs for MBHC, MBHB not implemented. MBHC is same as MBH.(?)
  if (!isset($code_to_pfx[$code])) {
   dbgprint($dbg,"ls_callback_mw_href. Code is unknown:'$code'\n");
@@ -620,6 +638,8 @@ public function ls_callback_mw_href($code,$n,$data) {
  }else {
   $data1 = "$n $data";
  }
+ dbgprint($dbg,"  n = '$n', data1 = '$data1'\n");
+ /******* link to Rgveda, Atharvaveda ***********/
  if (in_array($pfx,array('rv','av'))) {
   if (preg_match('|^(.*?)[.] *([^ ,]+)[ ,]+([0-9]+)[ ,]+([0-9]+)(.*)$|',$data1,$matches)) {
    $code0 = $matches[1];
@@ -666,6 +686,7 @@ public function ls_callback_mw_href($code,$n,$data) {
    return $href; // failure to match
   }
  } // end for rv, av
+ /******* link to Panini ***********/
  if (in_array($pfx,array('p'))) {
   //if(! preg_match('|^(.*?)[.] *([0-9]+)-([0-9]+)[ ,]+([0-9]+)(.*)$|',$data1,$matches)) 
   // Panini for mw.   10-07-2021
@@ -682,6 +703,7 @@ public function ls_callback_mw_href($code,$n,$data) {
    $href = "$dir/$ic/$is/$iv";
    return $href;
  }
+ /******* link to Ramayana, Gorresio or Schlegel edition  ***********/
  if (in_array($pfx,array('R'))) {
   // Ramayana, Goressio. Similar to 'p' (Panini), except for '$dir'
   dbgprint($dbg,"ls_callback_mw_href: data1=$data1\n");
@@ -705,6 +727,7 @@ public function ls_callback_mw_href($code,$n,$data) {
    return $href;
  }
  dbgprint($dbg,"ls_callback_mw_href: data1=$data1\n");
+ /******* link to  Mahabharata, Calcutta edition for mw. ***********/
  if (preg_match('|^(MBh[.]) *([^ ,]+) *, *([0-9]+)[.]?$|',$data1,$matches)) {
   // Mahabharata, Calcutta edition for mw.
   $pfx = $matches[1];
@@ -715,6 +738,7 @@ public function ls_callback_mw_href($code,$n,$data) {
   dbgprint($dbg,"ls_callback_mw_href: $pfx: href=$href\n");
   return $href;
  }
+ /******* link to harivamsa  ***********/
  if (preg_match('|^(Hariv[.]) *([0-9]+)[.]?$|',$data,$matches)) {
   // Mahabharata, Calcutta edition for harivamsa. For MW.
   $pfx = $matches[1];
@@ -723,7 +747,25 @@ public function ls_callback_mw_href($code,$n,$data) {
   dbgprint($dbg,"$pfx: href=$href\n");
   return $href;
  }
-
+ /******* link to Westergaard Dhatupatha  ***********/
+ if (in_array($pfx,array('dp'))) {
+  // ## one roman numeral 
+  if(!preg_match('|^(.*?)[.] *([ixv]+)(.*)$|',$data1,$matches)) {
+    return $href;
+   }
+  $pfx = $matches[1];
+  $section_roman = $matches[2];
+  $section = $this->romanToInt($section_roman);
+  
+  if ($section == 0) {
+   // error condition
+   return $href;
+  }
+  $dir = "https://www.sanskrit-lexicon.uni-koeln.de/scans/csl-westergaard/disp/index.php";
+  $href = "$dir?section=$section";
+  return $href;
+ }
+ 
  return $href; 
 }
 public function ls_callback_sch_href($code,$n,$data) {
@@ -748,6 +790,7 @@ public function ls_callback_sch_href($code,$n,$data) {
  }else {
   $data1 = "$n $data";
  }
+ /******* link to Rgveda, Atharvaveda ***********/
  if (in_array($pfx,array('rv','av'))) {
   // #, #, #  (three decimal numbers, separated by commas)
   if (!preg_match('|^(.*?)[.] *([0-9]+)[,] +([0-9]+)[,] +([0-9]+)(.*)$|',$data1,$matches)) {
@@ -769,6 +812,7 @@ public function ls_callback_sch_href($code,$n,$data) {
   $href = "$dir/$hymnfile#$anchor";
   return $href;
  } // end for rv, av
+ /******* link to Panini ***********/
  if (in_array($pfx,array('p'))) {
   // #, #, # (three decimal numbers, separated by commas)
   if(!preg_match('|^(.*?)[.] *([0-9]+)[,] +([0-9]+)[,] +([0-9]+)(.*)$|',$data1,$matches)) {
@@ -782,6 +826,7 @@ public function ls_callback_sch_href($code,$n,$data) {
    $href = "$dir/$ic/$is/$iv";
    return $href;
  }
+ /******* link to HarivaMSa ***********/
  if (in_array($pfx,array('hariv'))) {
   // ## one decimal numbers
   if(!preg_match('|^(.*?)[.] *([0-9]+)(.*)$|',$data1,$matches)) {
@@ -794,6 +839,7 @@ public function ls_callback_sch_href($code,$n,$data) {
   dbgprint($dbg,"$pfx: href=$href\n");
   return $href;
  }
+ /******* link to Ramayana, Gorresio edition  ***********/
  if (in_array($pfx,array('rgorr'))) {
   // #, #, # (three decimal numbers, separated by commas)
   if(!preg_match('|^(.*?)[.] *([0-9]+)[,] +([0-9]+)[,] +([0-9]+)(.*)$|',$data1,$matches)) {
@@ -807,6 +853,7 @@ public function ls_callback_sch_href($code,$n,$data) {
    $href = "$dir/?$ic,$is,$iv";
    return $href;
  }
+ /******* link to Ramayana, Schlegel edition  ***********/
  if (in_array($pfx,array('rschl'))) {
   // #, #, # (three decimal numbers, separated by commas)
   if(!preg_match('|^(.*?)[.] *([0-9]+)[,] +([0-9]+)[,] +([0-9]+)(.*)$|',$data1,$matches)) {
@@ -822,6 +869,42 @@ public function ls_callback_sch_href($code,$n,$data) {
  }
  return $href; 
 }
+public function romanToInt($s0) {
+ // suggested by edge copilot, with additional error checking
+ $s = strtoupper($s0);
+ $romans = array(
+     'I' => 1,
+     'V' => 5,
+     'X' => 10,
+     'L' => 50,
+     'C' => 100,
+     'D' => 500,
+     'M' => 1000
+ );
+ $result = 0;
+ for ($i = 0; $i < strlen($s); $i++) {
+  $si = $s[$i];
+  if (! array_key_exists($si,$romans)) {
+   // input error condition. Return 0
+   return 0;
+  }
+  $ri = $romans[$si];
+  if ($i == 0) {
+   $result += $ri;
+   continue;
+  }
+  $j = $i - 1;
+  $sj = $s[$j];
+  $rj = $romans[$sj];
+  if ($i > 0 && $ri > $rj) {
+      $result += $ri - 2 * $rj;
+  } else {
+      $result += $ri;
+  }
+ }
+ return $result;
+}
+
 public function ls_callback_ap90_href($code,$n,$data) {
  $href = null; // default if no success
  $dbg = false;
