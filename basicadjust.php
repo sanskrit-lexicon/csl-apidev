@@ -772,15 +772,7 @@ public function ls_callback_sch_href($code,$n,$data) {
  $href = null; // default if no success
  $dbg = false;
  dbgprint($dbg,"ls_callback_sch_href. code=$code, n=$n, data=$data\n");
- if (preg_match('|^(Spr[.]) ([0-9]+)|',$data,$matches)) {
-   // Indische Sprüche in sch is assumed to be volume 2
-   $pfx = $matches[1];
-   $verse = $matches[2];
-   $href = "https://funderburkjim.github.io/boesp-prep/web1/boesp.html?$verse";
-   dbgprint($dbg,"Spr: href=$href\n");
-   return $href;
-  }
- $code_to_pfx = array('ṚV.' => 'rv', 'AV.' => 'av', 'P.' => 'p', 'Hariv.' => 'hariv', 'R. Gorr.' => 'rgorr','R.' => 'rschl');
+ $code_to_pfx = array('ṚV.' => 'rv', 'AV.' => 'av', 'P.' => 'p', 'Hariv.' => 'hariv', 'R. Gorr.' => 'rgorr','R.' => 'rschl', 'Dhātup.' => 'dp', 'Spr.' => 'spr');
  if (!isset($code_to_pfx[$code])) {
   return $href;
  }
@@ -789,6 +781,17 @@ public function ls_callback_sch_href($code,$n,$data) {
   $data1 = $data;
  }else {
   $data1 = "$n $data";
+ }
+ if (in_array($pfx,array('sch'))) {
+  if (!preg_match('|^(Spr[.]) ([0-9]+)|',$data,$matches)) {
+   return $href;
+  }
+  // Indische Sprüche in sch is assumed to be volume 2
+  $code0 = $matches[1];
+  $verse = $matches[2];
+  $href = "https://funderburkjim.github.io/boesp-prep/web1/boesp.html?$verse";
+  dbgprint($dbg,"Spr: href=$href\n");
+  return $href;
  }
  /******* link to Rgveda, Atharvaveda ***********/
  if (in_array($pfx,array('rv','av'))) {
@@ -866,6 +869,20 @@ public function ls_callback_sch_href($code,$n,$data) {
    $dir = "https://sanskrit-lexicon-scans.github.io/ramayanaschl";
    $href = "$dir/?$ic,$is,$iv";
    return $href;
+ }
+ /******* link to Westergaard Dhatupatha  ***********/
+ if (in_array($pfx,array('dp'))) {
+  if(preg_match('|^(Dhātup[.]) *([0-9]+)(.*)$|',$data1,$matches)) {
+   $pfx = $matches[1];
+   $section = $matches[2];  // int
+   if ($section == 0) {
+    // error condition
+    return $href;
+   }
+   $dir = "https://www.sanskrit-lexicon.uni-koeln.de/scans/csl-westergaard/disp/index.php";
+   $href = "$dir?section=$section";
+   return $href;
+  }
  }
  return $href; 
 }
