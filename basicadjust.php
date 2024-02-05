@@ -107,9 +107,8 @@ class BasicAdjust {
   $line = preg_replace('|<ls>ib[.]|','<ls><ab>ib.</ab>',$line);    
  }
  if (in_array($this->getParms->dict,array('gra', 'md'))) {
-  // 06-15-2023. Treat <pe> and <lang> tags like ab
-  // 12-23-2023. Also for md. And also <cl>
-  $line1 = preg_replace('|<pe(.*?)>(.*?)</pe>|', '<ab\1>\2</ab>',$line);
+  // 02-05-2024 Treat <per>, <lang>, <cl> tags like ab
+  $line1 = preg_replace('|<per(.*?)>(.*?)</per>|', '<ab\1>\2</ab>',$line);
   $line1 = preg_replace('|<lang(.*?)>(.*?)</lang>|', '<ab\1>\2</ab>',$line1);
   $line1 = preg_replace('|<cl(.*?)>(.*?)</cl>|', '<ab\1>\2</ab>',$line1);
   $line = $line1;
