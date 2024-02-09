@@ -89,6 +89,11 @@ class BasicAdjust {
    $line = preg_replace('/<pc>(.*)<\/pc>/','',$line);
   }else {$this->pagecol = $matches[1];}
  }
+ if (in_array($this->getParms->dict,array('pw'))) {
+  // supplement note for entries merged into pw. 02-08-2024
+  $line = preg_replace_callback('|<info n="sup_(.*?)"/>|',
+      "BasicAdjust::infovn_markup_pw",$line);
+ }
  /*  Replace the 'title' part of a known ls with its capitalized form
      This is probably particular to pwg and/or pw
  */
@@ -107,8 +112,9 @@ class BasicAdjust {
   $line = preg_replace('|<ls>ib[.]|','<ls><ab>ib.</ab>',$line);    
  }
  if (in_array($this->getParms->dict,array('gra', 'md'))) {
-  // 02-05-2024 Treat <per>, <lang>, <cl> tags like ab
-  $line1 = preg_replace('|<per(.*?)>(.*?)</per>|', '<ab\1>\2</ab>',$line);
+  // 06-15-2023. Treat <pe> and <lang> tags like ab
+  // 12-23-2023. Also for md. And also <cl>
+  $line1 = preg_replace('|<pe(.*?)>(.*?)</pe>|', '<ab\1>\2</ab>',$line);
   $line1 = preg_replace('|<lang(.*?)>(.*?)</lang>|', '<ab\1>\2</ab>',$line1);
   $line1 = preg_replace('|<cl(.*?)>(.*?)</cl>|', '<ab\1>\2</ab>',$line1);
   $line = $line1;
@@ -1330,6 +1336,14 @@ public function htmlspecial($text) {
   $ans = "<span style='color:red;'>[vn $vn]</span>";
   return $ans;
  }
+ public function infovn_markup_pw($matches) {
+  /* <info n="sup_1"/> 
+  */
+  $vol = $matches[1];
+  $ans = "<span style='color:red; font-size: smaller;'> [supplement volume $vol]</span>";
+  return $ans;
+ }
+ 
  public function chg_markup($matches) {
  /* <chg type="TYPE" n="CHGID" src="SRC">{chgdata}</chg>
    attrib:  ' type="TYPE" n="CHGID" src="SRC"
