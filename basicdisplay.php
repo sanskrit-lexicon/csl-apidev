@@ -48,7 +48,7 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
  }
  
  $this->pagecol="";
- $this->dbg=false;
+ $this->dbg=true; //false;
  $this->inSanskrit=false;
  if ($filterin == "deva") {
  /* use $filterin to generate the class to use for Sanskrit (<s>) text 
@@ -622,7 +622,12 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
   } else if ($el == "lat") {
    $this->row .= "<span style='color: brown;' title='Latin language'>";
   } else if ($el == "gk") {
-   $this->row .= "<span style='color: brown;' title='Greek language'>";
+   // 04-08-2024 different title for MW
+   if (in_array($this->getParms->dict,array('mw'))) {
+    $this->row .= "<span style='color: brown;' title='Greek script'>";
+   } else {
+    $this->row .= "<span style='color: brown;' title='Greek language'>";
+   }
   } else if ($el == "arab") {
    $this->row .= "<span style='color: brown;' title='Arabic language'>";
   } else if ($el == "rus") {
