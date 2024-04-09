@@ -48,7 +48,7 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
  }
  
  $this->pagecol="";
- $this->dbg=true; //false;
+ $this->dbg=false;
  $this->inSanskrit=false;
  if ($filterin == "deva") {
  /* use $filterin to generate the class to use for Sanskrit (<s>) text 
