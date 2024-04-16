@@ -629,7 +629,12 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
     $this->row .= "<span style='color: brown;' title='Greek language'>";
    }
   } else if ($el == "arab") {
-   $this->row .= "<span style='color: brown;' title='Arabic language'>";
+   if (isset($attribs['lang'])) {
+    $lang = $attribs['lang'];
+    $this->row .= "<span style='color: brown;' title='Arabic script, $lang language'>";
+   } else {
+    $this->row .= "<span style='color: brown;' title='Arabic language'>";
+   }
   } else if ($el == "rus") {
    $this->row .= "<span style='color: brown;' title='Russian language'>";
   } else if ($el == "mong") {

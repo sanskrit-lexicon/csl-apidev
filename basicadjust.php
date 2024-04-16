@@ -112,11 +112,13 @@ class BasicAdjust {
   $line = preg_replace('|<ls>ib[.]|','<ls><ab>ib.</ab>',$line);    
  } 
  if (in_array($this->getParms->dict,array('mw'))) {
-  // 04-08-2024
-  $line1 = preg_replace('|<lang n="greek">(.*?)</lang>|',
+  /* 04-16-2024  This change already present in mw.txt
+  $line1 = preg_replace('|<lang n="greek">(.*?)</lang>@|',
                         '<i><gk>\1</gk></i>',$line);
-  $line1 = preg_replace('|<lang>(.*?)</lang>|', '<ab>\1</ab>',$line1);
-  $line = $line1;			
+  */
+  // 04-08-2024
+  $line1 = preg_replace('|<lang(.*?)>(.*?)</lang>|', '<ab\1>\2</ab>',$line);
+  $line = $line1;
  }
  if (in_array($this->getParms->dict,array('gra', 'md'))) {
   // 06-15-2023. Treat <pe> and <lang> tags like ab
