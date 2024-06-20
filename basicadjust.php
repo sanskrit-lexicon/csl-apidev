@@ -187,7 +187,8 @@ class BasicAdjust {
  // Get tooltip for <lex>X</lex>, for all dictionaries
  $line = preg_replace_callback('|<lex(.*?)>(.*?)</lex>|',"BasicAdjust::add_lex_markup",$line);
   // 10-31-2023  remove <hom>X</hom> within head portion
-  if (in_array($this->getParms->dict, array("pw","pwkvn"))) {
+  // 06-20-2024  Also for pwg.
+  if (in_array($this->getParms->dict, array("pw","pwkvn","pwg"))) {
    $line = preg_replace("|<key2>(.*?)<hom>.*?</hom>(.*?<body>)|","<key2>$1$2",$line);
   }
   //
