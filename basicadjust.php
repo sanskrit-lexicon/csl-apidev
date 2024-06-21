@@ -187,8 +187,12 @@ class BasicAdjust {
  // Get tooltip for <lex>X</lex>, for all dictionaries
  $line = preg_replace_callback('|<lex(.*?)>(.*?)</lex>|',"BasicAdjust::add_lex_markup",$line);
   // 10-31-2023  remove <hom>X</hom> within head portion
-  // 06-20-2024  Also for pwg.
-  if (in_array($this->getParms->dict, array("pw","pwkvn","pwg"))) {
+  // 06-21-2024  For all dictionaries with some metaline with <h>
+  $dicts_with_h = array("ap90", "bhs", "bop", "cae", "ccs",
+                        "gra", "gst", "inm", "mci", "md",
+			"mw", "mw72", "pe", "pui", "pwg",
+			"stc", "vei", "lan");
+  if (in_array($this->getParms->dict, $dicts_with_h)) {
    $line = preg_replace("|<key2>(.*?)<hom>.*?</hom>(.*?<body>)|","<key2>$1$2",$line);
   }
   //
