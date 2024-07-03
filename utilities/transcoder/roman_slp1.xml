@@ -29,9 +29,12 @@
 <e> <s>SKT</s> <in>\u1e41</in> <out>M</out></e> <!-- ṁ -->
 <e> <s>SKT</s> <in>\u1e43</in> <out>M</out></e> <!-- ṃ -->
 <e> <s>SKT</s> <in>'</in> <out>'</out></e>
-<!-- next non-standard. See comment in slp1_roman.xml  -->
+<!-- next non-standard. See comment in slp1_roman.xml  
 <e> <s>SKT</s> <in>\u0142</in> <out>L</out></e>
 <e> <s>SKT</s> <in>\u0142h</in> <out>|</out></e>
+-->
+<e> <s>SKT</s> <in>\u1e3b</in> <out>L</out></e>
+<e> <s>SKT</s> <in>\u1e3bh</in> <out>|</out></e>
 
 <!-- next non-standard for diaresis -->
 <e> <s>SKT</s> <in>aï</in> <out>ai</out></e>

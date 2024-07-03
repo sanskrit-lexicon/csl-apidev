@@ -50,9 +50,13 @@
 \u1e39 already represents slp1 X.
 We choose \u0142  Latin small letter L with stroke
           \u0141  is capitalized form
--->
 <e> <s>SKT</s> <in>L</in> <out>\u0142</out> </e>
 <e> <s>SKT</s> <in>|</in> <out>\u0142h</out> </e>
+
+07-03-2024: use ḻ  (\u1e3b)  LATIN SMALL LETTER L WITH LINE BELOW 
+-->
+<e> <s>SKT</s> <in>L</in> <out>\u1e3b</out> </e>
+<e> <s>SKT</s> <in>|</in> <out>\u1e3bh</out> </e>
 
 <!-- ~ candrabindu.  Use m with combining candrabindu 
 Another possibility is \u0303 (combining tilde) but this is hard to enter
