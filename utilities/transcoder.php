@@ -21,7 +21,6 @@ $transcoder_dir=dirname(__FILE__); //use php magic constant
 //$transcoder_dir =dirname($transcoder_dir); // go up one level
 //$transcoder_dir .= "/data/transcoder";
 $transcoder_dir .="/transcoder";
-//echo "transcoder_dir = " . $transcoder_dir . "\n"; //dbg
 $transcoder_fsmarr = array();
 function transcoder_fsm($from,$to) {
 // Uses xml file from_to.xml (in transcoder_dir) to initialize a
@@ -35,7 +34,6 @@ function transcoder_fsm($from,$to) {
   return;
  }
  $filein = $transcoder_dir . "/" . $fromto . ".xml";
- //echo "transcoder debug: filein = $filein\n";
  if (!file_exists($filein)) {return;}
  // The php routine simplexml_load_file  parses the xml file.
  // It was discovered that unicode values expressed as html entities
@@ -64,6 +62,7 @@ function transcoder_fsm($from,$to) {
    //    Note that the last 3 elements '^', '/', and '\' are present only
    //    because of accents. 
    if ( ($fromto != 'slp1_deva') && ($fromto != 'slp1_deva1')&& 
+        ($fromto != 'slp1_deva2')&& 
         ($fromto != 'hkt_tamil')&&
         ($fromto != 'deva_slp1')) {continue;}
    $inval = $matches[1];
@@ -336,7 +335,8 @@ function transcoder_processString_match($line,$n,$m,$fsmentry) {
   if ($n1 == $m) {return $match;} 
   $d = $line[$n1];
   if (($fsmentry['regex'] == 'slp1_deva') || 
-     ($fsmentry['regex'] == 'slp1_deva1')) {
+     ($fsmentry['regex'] == 'slp1_deva1') ||
+     ($fsmentry['regex'] == 'slp1_deva2')) {
    if (preg_match('/[^aAiIuUfFxXeEoO^\/\\\\]/',$d)) {return $match;}
    return "";
   }
@@ -344,8 +344,9 @@ function transcoder_processString_match($line,$n,$m,$fsmentry) {
    if (preg_match('/[^aAiIuUeEoO]/',$d)) {return $match;}
    return "";
   }
-  if (($fsmentry['regex'] == 'deva_slp1') || 
-     ($fsmentry['regex'] == 'slp1_deva1')) {
+  if (($fsmentry['regex'] == 'deva_slp1') ||  
+     ($fsmentry['regex'] == 'slp1_deva1') ||
+     ($fsmentry['regex'] == 'slp1_deva2')) {
    // u094d is virama, the rest are vowel signs
    $vowel_signs = array('\u094d','\u093e','\u093f','\u0940','\u0941','\u0942','\u0943','\u0944','\u0962','\u0963','\u0947','\u0948','\u094b','\u094c');
    foreach ($vowel_signs as $vowel_sign) {

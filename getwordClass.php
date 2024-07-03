@@ -41,13 +41,19 @@ class GetwordClass {
    dbgprint($dbg,"getword\n$table\n\n");
    $filter = $getParms->filter;
    $dict = strtoupper($getParms->dict);
-   if (in_array($dict,array('PWG','PW','PWKVN','MW')) && ($filter == 'deva') && ($getParms->accent == 'yes')) {
+   $accent = $getParms->accent;
+   if (in_array($dict,array('PWG','PW','PWKVN')) &&
+               ($filter == 'deva') && ($accent == 'yes')) {
     // Causes display of udatta accent to be superscript Devanagari 'u'
     // As occurs in the print of these dictionaries. So slp1_deva1.xml is
     // used as the transcoder file.
     $filter = 'deva1';
+   } else if (in_array($dict,array('MW')) &&
+                       ($filter == 'deva') && ($accent == 'yes')) {
+    // deva2 is like deva1, except udAtta accent not displayed
+    $filter = 'deva2';
    }
-   $table1 = transcoder_processElements($table,"slp1",$filter,"SA");
+    $table1 = transcoder_processElements($table,"slp1",$filter,"SA");
   }
   return $table1;
  }
