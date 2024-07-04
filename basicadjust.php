@@ -74,6 +74,7 @@ class BasicAdjust {
  } else {
  // All other dictionaries
  $line = preg_replace('/¦/',' ',$line);
+ // chg_markup currently only applies to gra dictionary
  $line = preg_replace_callback('|<chg +type="(.*?)" +n="(.*?)" src="(.*?)">(.*?)</chg>|',"BasicAdjust::chg_markup",$line);
  $line = preg_replace_callback('|<info vn="(.*?)"/>|',"BasicAdjust::infovn_markup",$line);
            
@@ -158,9 +159,13 @@ class BasicAdjust {
  }
  /* 12-14-2017
   'local' abbreviation handled here. Generate an n attribute if one
-   is not present
+   is not present.  The 'chg_markup' callback above may introduce the 'abbr' tag.
+   Since abbrv_callback is confused by this, we temporarily change '<abbr' to '<_abbr'.
+   Then we do the abbrv_callback.  Then we replace '<_abbr' with '<abbr'
  */
+ $line = preg_replace("|<abbr|", "<_abbr",$line);
  $line = preg_replace_callback('|<ab(.*?)>(.*?)</ab>|',"BasicAdjust::abbrv_callback",$line);
+ $line = preg_replace("|<_abbr|", "<abbr",$line);
  
  // Revised 04-05-2021, 04-09-2021 for AV
  // Revised 06-16-2023 for AV.
@@ -1028,7 +1033,7 @@ public function ls_callback_ap90_href($code,$n,$data) {
  $a = $matches[1];
  $data = $matches[2];
  $dbg=false;
- dbgprint($dbg,"abbrv_callback: a=$a, data=$data\n");
+ dbgprint($dbg,"  abbrv_callback: \n  x=$x\n a=$a,\n   data=$data\n"); // 07-04-2024
  if(preg_match('/n="(.*?)"/',$a,$matches1)) {
   dbgprint($dbg," abbrv_callback case 1\n");
   $ans = $x; // local abbreviation
@@ -1039,9 +1044,6 @@ public function ls_callback_ap90_href($code,$n,$data) {
    $tipa = "$tip";  // for debugging use "@$tip"
    $ans = "<span style='$style'>$tipa</span>";
   }
- }else if (preg_match('|^br|',$a)) {
-  // <abbr> is used in chg_markup. Don't change it!
-  return $x;
  }else {
   $tran = $this->getABdata($data);  
   # convert special characters to html entities
