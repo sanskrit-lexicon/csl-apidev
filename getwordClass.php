@@ -14,8 +14,8 @@ class GetwordClass {
  public $xmlmatches;
  public function __construct($basicOption = true) {
   $this->getParms = new Parm();
-  // $this->basicOption = $this->getParms->basicOption;
-  $this->basicOption = $basicOption; // 06-19-2024 Refer webtc1/
+  $this->basicOption = $this->getParms->basicOption;
+  // $this->basicOption = $basicOption; // 06-19-2024 Refer webtc1/
   $temp = new Getword_data($basicOption);
   $this->matches = $temp->matches; 
   $this->table1 = $this->getword_html();
