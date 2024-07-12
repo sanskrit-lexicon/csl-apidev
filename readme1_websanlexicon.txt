@@ -30,12 +30,17 @@ Some csl-apidev vs. csl-websanlexicon  diffs as of 07-11-2024
 -----------------------------------------------
 getwordClass.php
 
-$ diff getwordClass.php /c/xampp/htdocs/cologne/csl-websanlexicon/v02/makotemplates/web/webtc/getwordClass.php > tempdiff_getwordClass_work.txt
-
-103,104d102  csl-apidev
+$  diff getwordClass.php /c/xampp/htdocs/cologne/csl-websanlexicon/v02/makotemplates/web/webtc/getwordClass.php
+17,18c17,18
+<   $this->basicOption = $this->getParms->basicOption;
+<   // $this->basicOption = $basicOption; // 06-19-2024 Refer webtc1/
+---
+>   // $this->basicOption = $this->getParms->basicOption;
+>   $this->basicOption = $basicOption; // 06-19-2024 Refer webtc1/
+103,104d102
 <  } else {
 <   $linkcss = "<link rel='stylesheet' type='text/css' href='css/basic.css' />";
-105a104  csl-web
+105a104
 >  $linkcss = ""; // 06-19-2024
 
 Note: linkcss is used ONLY in csl-apidev.
