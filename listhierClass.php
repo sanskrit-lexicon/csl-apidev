@@ -87,13 +87,24 @@ class ListhierClass {
    else {$c="color:black";}
    // Apr 7, 2013.  Color Supplement records 
    // Aug 13, 2019. Changed test
+   /*
    if (preg_match('/<info n="sup"/',$data2,$matches)) {
     $c = "color:red";
    }
    if (preg_match('/<info n="rev"/',$data2,$matches)) {
     $c = "color:green";
    }
-
+   */
+  // 07-07-2024  revsup   
+  $revsup = "";
+  if (in_array($getParms->dict,array('mw'))) {
+   if (preg_match('|<info n="sup"/>|',$data2,$matches)) {
+    $revsup = "&nbsp;<span title='supplement' style='font-size:11px; color:red;'>Ⓢ</span>";
+   }
+   else if (preg_match('|<info n="rev"|',$data2,$matches)) {
+    $revsup = "&nbsp;<span title='revision' style='font-size:11px; color:red;'>Ⓡ</span>";
+   }
+  }   
    if (preg_match('/^<H([2])/',$data2,$matches)) {
     $spc="$spcchar";
    }else if(preg_match('/^<H([3])/',$data2,$matches)) {
@@ -128,8 +139,9 @@ class ListhierClass {
     // put key2show in parens
     $key2show = "($key2show)";
    }
-   $out1 = "$spc<a  onclick='getWordAlt_keyboard(\"$key2\");'>$key2show$hom2</a><br/>\n";
- 
+   //$out1 = "$spc<a  onclick='getWordAlt_keyboard(\"$key2\");'>$key2show$hom2</a><br/>\n";
+   // 07-07-2024
+   $out1 = "$spc<a  onclick='getWordAlt_keyboard(\"$key2\");'>$key2show$hom2 $revsup</a><br/>\n";
    $table .= $out1;
    dbgprint($dbg,"Listhier extra: out1=$out1\n");
    if ($i == count($listmatches)) {

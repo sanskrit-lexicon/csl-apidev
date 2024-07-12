@@ -576,6 +576,11 @@ public function ls_callback_mw($matches) {
   $data1 = $data0;
   $data = $data0;
  }
+ if (preg_match('|tit="(.*?)"|',$ndata,$matchesn)) {
+  $titular = true;
+ } else {
+  $titular = false;
+ }
  dbgprint($dbg,"\nls_callback_mw BEGIN: ndata=$ndata, n=$n, data0=$data0, data1=$data1\n");
  if (!$this->dal_auth->status) {
   return $ans;
@@ -601,26 +606,36 @@ public function ls_callback_mw($matches) {
   } else if (in_array($this->dict,array('ap90','ben','sch','gra','bhs'))) {
    list($code,$text) = $rec;
   }
-  # Add lshead, so as to be able to style
-  // for mw and ap90, codecap = code
+  // be sure there is no xml in the text
+  if ($text == null) {$text = "";}
+  $text = preg_replace('/<.*?>/',' ',$text);
+  // convert special characters to html entities
+  // for instance, this handles cases when $text has single (or double) quotes
+  $tooltip = $this->htmlspecial($text);
   dbgprint($dbg,"ls_callback_mw : n=$n, data=$data\n");
   if ($code == null) {$code = "";}
   $codecap = $code;
   $ncode = strlen($code); // use substr_replace in case $code has parens
+  if (! $titular) {
+   if ($code == $data0) {
+    $titular = true;
+   }
+  }
+  if ($titular) {
+   // 07-05-2024. display of 'empty' ls 
+   // $style = 'font-size: 11pt; font-family:charterindocapital; border-bottom: 1px dotted #000; ';
+   $style = 'border-bottom: 1px dotted #000; color:#8080ff;';
+   $ans = "<span title='$tooltip' style='$style'>$code</span>";
+   return $ans;
+  } 
+ 
   if ($n != '') {
-   //$datanew = substr_replace($data,"<lshead>$data</lshead>",0);
    $datanew = $data;
    dbgprint($dbg,"lshead 1: n=$n: datanew=$datanew\n");
   } else {
    $datanew = substr_replace($data,"<lshead>$codecap</lshead>",0,$ncode);
    dbgprint($dbg,"lshead 2: n=$n: datanew=$datanew\n");
   }
-  # be sure there is no xml in the text
-  if ($text == null) {$text = "";}
-  $text = preg_replace('/<.*?>/',' ',$text);
-  # convert special characters to html entities
-  # for instance, this handles cases when $tran has single (or double) quotes
-  $tooltip = $this->htmlspecial($text);
   // --------------------------------------------------------------
   $href = null;
   //dbgprint(true,"before ls_callback_mw_href, dict=" . $this->dict . "\n");
@@ -1337,15 +1352,34 @@ public function move_L_mw($line) {
   name of the <L> tag to <L1>
  */
  $dbg=false;
- dbgprint($dbg,"basicadjust.move_L_mw enter: line=\n$line\n");
- if (preg_match('|<(H[1-4].)>.*(<L>.*?</L>)|',$line,$matches)) {
-  $H = $matches[1];
-  $Ltag = $matches[2];
+ $dict = $this->getParms->dict;
+ dbgprint($dbg,"basicadjust.move_L_mw enter: dict=$dict, line=\n$line\n");
+ //if (preg_match('|<(H[1-4].)>.*(<L>.*?</L>)|',$line,$matches)) {
+ if (preg_match('|(<L>.*?</L>)|',$line,$matches)) {
+  //$H = $matches[1];
+  $Ltag = $matches[1];
+  $revsup = "";
+  if ($dict == "mw") { // 07-07-2024
+   // Add markers for rev or sup Ⓡ, Ⓢ
+   if (preg_match('|<info n="sup"/>|',$line,$matches1)) {
+    $revsup = " sup";
+   } else if (preg_match('|<info n="rev" pc="(.*?)"/>|',$line,$matches1)) {
+    $pc = $matches1[1];
+    $revsup = " rev ($pc)";
+   } else {
+    $revsup = "";
+   }
+  }
+
   // remove L element
   $line = preg_replace("|$Ltag|","",$line);
   // construct L1 tag
   $L1tag = preg_replace("|L>|","L1>",$Ltag);
-  //dbgprint(true,"Ltag=$Ltag,  L1tag=$L1tag\n");
+  // add in $revsup
+  if ($revsup != "") {
+   $L1tag = preg_replace("|</L1>|", "$revsup</L1>",$L1tag);
+  }
+  dbgprint(false,"basicadjust: Ltag=$Ltag,  revsup=$revsup, L1tag=$L1tag\n");
   // Insert L1tag before end of tail -- so at end of display
   $line = preg_replace("|</tail>|","$L1tag</tail>",$line);
  }

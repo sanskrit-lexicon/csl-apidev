@@ -1,5 +1,5 @@
 <?php
-error_reporting(E_ALL & ~E_NOTICE);
+error_reporting(E_ALL & ~E_NOTICE );
 ?>
 <?php 
 /* getword_data.php
@@ -17,16 +17,16 @@ class Getword_data {
    - lnum (cologne id)
    - computed html string
  */
- public $matches;  
+ public $matches, $basicOption;
  public $xmlmatches;
- public function __construct() {
+ //public $basicdisplaydbg;
+ public function __construct($basicOption = true) {
  $dbg=false;
  $getParms = new Parm();
+ $this->basicOption = $basicOption;
  $dict = $getParms->dict;
- dbgprint($dbg,"getword_data.php #1 getword_data_html\n");
  $dal = new Dal($dict);
  $key = $getParms->key;
- dbgprint($dbg,"getword_data.php #2: key=$key, dict=$dict \n");
   // xmlmatches is array of records rec, where
   // rec is array with 3 items:
   //  0: key0  the headword of the record (usu. but not always same as key)
@@ -42,29 +42,44 @@ class Getword_data {
    list($key0,$lnum0,$xmldata0) = $xmlmatch;
    $xmldata[] = $xmldata0;
   }
+  
   $adjxml = new BasicAdjust($getParms,$xmldata);
   $adjmatches = $adjxml->adjxmlrecs;
-
   $htmlmatches = [];
+  //$htmlbasics = []; // for debugging
   for($i=0;$i<count($xmlmatches);$i++) {
    $xmlmatch = $xmlmatches[$i];
    list($key0,$lnum0,$xmldata0) = $xmlmatch;
    $adjxmldata0 = $adjmatches[$i];
    $html = $this->getword_data_html_adapter($key0,$lnum0,$adjxmldata0,$dict,$getParms,$xmldata0);
-   // 10-23-2023 For dict abch, use $L instead of $lnum0.
-   if (in_array($dict,['abch', 'acph', 'acsj'])) {
-    if(preg_match('|<L>(.*?)</L>|',$xmldata0,$tempmatch)) {
+   dbgprint(false,"getword_data:  html=\n  $html\n");
+   //$htmlbasics[] = $this->basicdisplaydbg;
+   $html1 = $html;
+   // dbgprint(false,"getword_data: i = $i, html=\n$html\n\n");
+   // 10-23-2023 For koshas, use $L instead of $lnum0.
+   // 07-09-2024 For koshas, use $L1
+   // Also,use L1 for mw (to get sup,rev)
+   if (in_array($dict,array('mw','abch', 'acph', 'acsj'))) {
+    if(preg_match('|<L1>(.*?)</L1>|',$html,$tempmatch)) {
      $lnum0 = $tempmatch[1];
+     // remove L1 element from html1
+     $html1 = preg_replace('|<L1>(.*?)</L1>|','',$html);
     }
    }
-   $htmlmatches[] = array($key0,$lnum0,$html);
+   $htmlmatches[] = array($key0,$lnum0,$html1);    
   }
  if ($dbg) {
   dbgprint($dbg,"getword_data returns:\n");
   for($i=0;$i<count($htmlmatches);$i++) {
-   dbgprint($dbg,"record $i = {$htmlmatches[$i][2]}\n"); 
+    dbgprint($dbg,"xmldata[$i]=\n  {$xmldata[$i]}\n\n");
+    dbgprint($dbg,"adjmatches[$i]=\n  {$adjmatches[$i]}\n\n");
+    // dbgprint($dbg,"htmlbasics[$i]=\n  {$htmlbasics[$i]}\n\n");
+    dbgprint($dbg,"htmlmatches[$i][0]= {$htmlmatches[$i][0]}\n"); 
+    dbgprint($dbg,"htmlmatches[$i][1]= {$htmlmatches[$i][1]}\n"); 
+    dbgprint($dbg,"htmlmatches[$i][2]=\n {$htmlmatches[$i][2]}\n"); 
+   }
+   
   }
- }
  $this->matches = $htmlmatches;
 }
 /* ------------------------------
@@ -72,17 +87,12 @@ class Getword_data {
 */
 public function getword_data_html_adapter($key,$lnum,$adjxml,$dict,$getParms,$xmldata)
 {
- // 08-07-2020.  This is the only place where BasicAdjust and
- // BasicDisplay are called.
+ // 08-07-2020.  This is the only place where  BasicDisplay is called.
  // We don't need to have arrays of strings, but only one string
- //  ($data is a string, one record  from xxx.xml)
  // BasicDisplay is written to allow a string for the second argument.
- /*
- $matches1=array($data);
- $adjxml = new BasicAdjust($getParms,$matches1);
- $matches = $adjxml->adjxmlrecs;
- */
+
  $filter = $getParms->filter;
+ dbgprint(false,"getword_data_html_adapter, adjxml=\n  $adjxml\n");
  $display = new BasicDisplay($key,array($adjxml),$filter,$dict);
  $row1 = $display->row1;
  $row1x = $display->row1x; 
@@ -97,7 +107,7 @@ public function getword_data_html_adapter($key,$lnum,$adjxml,$dict,$getParms,$xm
  dbgprint($dbg,"adapter\n");
  dbgprint($dbg,"info = $info\n");
  dbgprint($dbg,"body = $body\n");
-
+ // $this->basicdisplaydbg = $body;
  if (in_array($dict,['abch', 'acph', 'acsj'])) {
   // no adjust body
  }else {
@@ -109,10 +119,10 @@ public function getword_data_html_adapter($key,$lnum,$adjxml,$dict,$getParms,$xm
    $body = preg_replace('|<span class=\'lnum\'.*?\[ID=.*?\]</span>|','',$body);
   }
  }
- # adjust $info - keep only the displayed page
+ // adjust $info - keep only the dislayed page
  if ($dict == 'mw') {
   if(!preg_match('|>([^<]*?)</a>,(.*?)\]|',$info,$matches)) {
-   dbgprint(true,"html ERROR 2: \n" . $info . "\n");
+   dbgprint(false,"html ERROR 2: \n" . $info . "\n");
    exit(1);
   }
   $page=$matches[1];
@@ -120,7 +130,7 @@ public function getword_data_html_adapter($key,$lnum,$adjxml,$dict,$getParms,$xm
   $pageref = "$page,$col";
  }else {
   if(!preg_match('|>([^<]*?)</a>|',$info,$matches)) {
-   dbgprint(true,"html ERROR 2: \n" . $info . "\n");
+   dbgprint(false,"html ERROR 2: \n" . $info . "\n");
    exit(1);
   }
   $pageref=$matches[1];
@@ -128,7 +138,9 @@ public function getword_data_html_adapter($key,$lnum,$adjxml,$dict,$getParms,$xm
  if ($dict == 'mw') {
   list($hcode,$key2,$hom) = $this->adjust_info_mw($xmldata); 
   # construct return value as colon-separated values
-  if ($getParms->basicOption) {
+  
+  if ($this->basicOption) {
+   //dbgprint(false,"getword_data: changing hom to blank; $key2,$hom\n");
    $hom="";
   }
   $infoval = "$pageref:$hcode:$key2:$hom";
@@ -170,7 +182,7 @@ public function adjust_key2_mw($key2) {
  $ans1 = preg_replace('|</?hom>|','',$ans1);
  $ans1 = preg_replace('|<shortlong/>|','',$ans1);
  if (preg_match('|<|',$ans1)) {
-  #dbgprint(true,"adjust_key2: $ans1\n");
+  //dbgprint(false,"adjust_key2: $ans1\n");
   exit(1);
  }
  return $ans;

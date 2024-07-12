@@ -446,7 +446,8 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
   } else if ($el == "tail"){
   } else if ($el == "L"){
   } else if ($el == "L1"){
-   // for MW only, work done in chrhndl 
+   // for MW only, work done elsewhere
+   $this->row .= "<L1>";
   } else if ($el == "s1") {
    // currently only MW.  This has an 'slp1' attribute which could be
    // used to replace the IAST text with Devanagari. However currently
@@ -455,7 +456,6 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
     $this->row .= "<i>";
   } else if ($el == "info") { 
   } else if ($el == "pc"){
-  } else if ($el == "info") { 
   } else if ($el == "to") { 
   } else if ($el == "ns") { 
   } else if ($el == "shortlong") { 
@@ -531,15 +531,22 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
     $this->row .= "&nbsp;<span class='ls'>";   
    }
   } else if ($el == "span") {
+   // This could be generalized to do any attribute.
+   $temp = "<span";
    if (isset($attribs['class'])) {
     $class = $attribs['class'];
-    $this->row .= "<span class='$class'>";
-   } else if (isset($attribs['style'])) {
-    $style = $attribs['style'];
-    $this->row .= "<span style='$style'>";
-   } else {
-   $this->row .= "<span>";
+    $temp .= " class='$class'";
    }
+   if (isset($attribs['style'])) {
+    $style = $attribs['style'];
+    $temp .= " style='$style'";
+   }
+   if (isset($attribs['title'])) {
+    $title = $attribs['title'];
+    $temp .= " title='$title'";
+   }
+   $temp .= ">";  // close the span
+   $this->row .= $temp;
   } else if ($el == "lshead") {
    // pwg, pw
    $style = "color:blue; border-bottom: 1px dotted #000; text-decoration: none;";
@@ -715,6 +722,9 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
   } else if ($el == "td"){
     $this->row .= " </td> ";
   } else if ($el == "br") {
+    // nothing
+  } else if (in_array($el,array("L","key1","h","info","tail","pc",
+                       "body"))) {
     // nothing 
   } else {
    $this->row .= "</$el>";
@@ -740,9 +750,12 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
    $style = "font-size:normal; color:rgb(160,160,160);";
    $this->row1 .= "<span style='$style'> [Cologne record ID=$data]</span>";
   } else if ($this->parentEl == "L1") {
-    // only applies to MW. L1 tag generated in basicadjust. 
-   $style = "font-size:normal; color:rgb(160,160,160);";
-   $this->row .= "<span class='lnum' style='$style'> [ID=$data]</span>";
+    // only applies to MW. L1 tag generated in basicadjust.
+    // This code is not used -- somehow over-riddenn by dispitem.php
+   
+   // $style = "font-size:normal; color:rgb(160,160,160);";
+   //$this->row .= "<span class='lnum' style='$style'> [ID=$data]</span>";
+   $this->row .= $data;
   } else if ($this->parentEl == 's') {
    $this->row .= "<span class='$sdata'><SA>$data</SA></span>";
   } else if ($this->inSanskrit) {

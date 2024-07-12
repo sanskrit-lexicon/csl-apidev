@@ -1,6 +1,7 @@
 <?php
 // Exclude WARNING messages also, to solve Peter Scharf Mac version.
-error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
+// 12-01-2022. Disable exclusions of error_reporting
+//error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
 ?>
 <?php
 require_once('dbgprint.php');
@@ -11,15 +12,16 @@ require_once('dispitem.php');
 class GetwordClass {
  public $getParms,$matches,$table1,$status,$basicOption;
  public $xmlmatches;
- public function __construct() {
+ public function __construct($basicOption = true) {
   $this->getParms = new Parm();
-  $this->basicOption = $this->getParms->basicOption;
-  $temp = new Getword_data();
+  // $this->basicOption = $this->getParms->basicOption;
+  $this->basicOption = $basicOption; // 06-19-2024 Refer webtc1/
+  $temp = new Getword_data($basicOption);
   $this->matches = $temp->matches; 
   $this->table1 = $this->getword_html();
   $this->xmlmatches = $temp->xmlmatches;
-  $nxml = count($this->xmlmatches);
-  if ($nxml == 0) {
+  $nmatches = count($this->matches);
+  if ($nmatches == 0) {
    $this->status = false;
   }else {
    $this->status = true;
@@ -37,11 +39,13 @@ class GetwordClass {
    $table1 = '';
    $table1 .= "<h2>not found: '$keyin' (slp1 = $key)</h2>\n";
   }else {
+   //$dbg = true;
    $table = $this->getwordDisplay($getParms,$matches);
-   dbgprint($dbg,"getword\n$table\n\n");
+   dbgprint($dbg,"getword table\n$table\n\n");
    $filter = $getParms->filter;
    $dict = strtoupper($getParms->dict);
    $accent = $getParms->accent;
+   //dbgprint(true,"getwordClass before: dict=$dict, accent=$accent, filter=$filter\n");
    if (in_array($dict,array('PWG','PW','PWKVN')) &&
                ($filter == 'deva') && ($accent == 'yes')) {
     // Causes display of udatta accent to be superscript Devanagari 'u'
@@ -53,7 +57,9 @@ class GetwordClass {
     // deva2 is like deva1, except udAtta accent not displayed
     $filter = 'deva2';
    }
-    $table1 = transcoder_processElements($table,"slp1",$filter,"SA");
+   $table1 = transcoder_processElements($table,"slp1",$filter,"SA");
+   dbgprint($dbg,"getword table1\n$table1\n\n");
+
   }
   return $table1;
  }
@@ -80,6 +86,9 @@ class GetwordClass {
  /* 
     Sep 2, 2018. output link to basic.css depending on $parms->dispcss.
     Aug 4, 2020.  For webtc, never put out basic.css
+    Jun 19, 2024. Always $lincss = "": Not sure what this is for!
+       Reason: "css/basic.css" is not available and generates error
+        message in console.
  */
  $dictinfo = $parms->dictinfo;
  $webpath =  $dictinfo->get_webPath();
@@ -91,6 +100,8 @@ class GetwordClass {
  }
  if ($this->basicOption) {
   $linkcss = "";
+ } else {
+  $linkcss = "<link rel='stylesheet' type='text/css' href='css/basic.css' />";
  }
 if ($options == '3') {
  $output = '';
@@ -112,7 +123,8 @@ EOT;
 */
  if (($options == '1')||($options == '2')) {
   $table = "<div id='CologneBasic'>\n";
-  if ($this->basicOption) {
+  //if ($this->basicOption) {
+  if (true) {  // 06-19-2024
    if ($english) {
     $table = "<div id='CologneBasic'>\n<h1>&nbsp;$key</h1>\n";
    } else {
@@ -128,7 +140,8 @@ EOT;
  }else if ($options == '3') {
   $table = "<div id='CologneBasic'>\n";  
  }else {
-  $table = "<div id='CologneBasic'>\n";  
+  $table = "<div id='CologneBasic'>\n"; 
+
  }
 
  $table .= "<table class='display'>\n";
@@ -137,9 +150,12 @@ EOT;
  $dbg=false;
  for($i=0;$i<$ntot;$i++) {
   $dbrec = $matches[$i];
-  dbgprint($dbg,"disp.php. matches[$i] = \n");
-  for ($j=0;$j<count($dbrec);$j++) {
-   dbgprint($dbg,"  [$j] = {$dbrec[$j]}\n");
+  if ($dbg) {
+   dbgprint($dbg,"getwordClass dbrec[$i] = \n");
+   for ($j=0;$j<count($dbrec);$j++) {
+    dbgprint($dbg,"  [$j] = {$dbrec[$j]}\n");
+   }
+   dbgprint($dbg,"GETWORDCLASS: dbrec = " . $dbrec[2] . "\n\n");
   }
   $dispItem = new DispItem($dict,$dbrec);
   if ($dispItem->err) {
@@ -192,13 +208,15 @@ EOT;
  $dispItemPrev=null;
  for($i=0;$i<$ntot;$i++) {
   $dispItem = $dispItems[$i];
+  $dispItem1 = "";
   if ($options == '1') {
-   $table .= $dispItem->basicDisplayRecord1($dispItemPrev);
+   $dispItem1 = $dispItem->basicDisplayRecord1($dispItemPrev);
   }else if ($options == '2') {
-   $table .= $dispItem->basicDisplayRecord2($dispItemPrev);
+   $dispItem1 = $dispItem->basicDisplayRecord2($dispItemPrev);
   }else{
-   $table .= $dispItem->basicDisplayRecordDefault($dispItemPrev);
+   $dispItem1 = $dispItem->basicDisplayRecordDefault($dispItemPrev);
   }
+  $table .= $dispItem1;
   $dispItemPrev=$dispItem;
  }
  $table .= "</table>\n";
