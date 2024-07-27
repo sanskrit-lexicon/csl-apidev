@@ -477,6 +477,18 @@ public function ls_callback_pwg_href($code,$data) {
    return $href;
   }
  }
+ /******* link to kaTAsaritsAgara  ***********/
+ $temparr = array("KATHĀS.");
+ foreach($temparr as $temp) {
+  if (preg_match("|^($temp) *([0-9]+), *([0-9]+)|",$data,$matches)) {
+   $t = $matches[2]; // taranga
+   $s = $matches[3]; // shloka
+   $href = "https://sanskrit-lexicon-scans.github.io/kss/index.html?$t,$s";
+   //$href = "http://localhost/sanskrit-lexicon-scans/kss/index.html?$t,$s"; //dbg
+   dbgprint($dbg,"$pfx: href=$href\n");
+   return $href;
+  }
+ }
  /******* link to B. Chrestomathie ***********/
  if (preg_match('|^(Chr[.]) *([0-9]+)|',$data,$matches)) {
   // Boehtlingk Chrestomathie, 2nd edition.
