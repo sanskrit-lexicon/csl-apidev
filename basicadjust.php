@@ -688,7 +688,8 @@ public function ls_callback_mw_href($code,$n,$data) {
   'MBh.' => 'MBH.','Hariv.' => 'hariv',
   'MBh. (ed. Calc.)' => 'MBHC', 'MBh. (ed. Bomb.)' => 'MBHB',
   'R.' => 'R', 'R. G.' => 'R', 'R. (G)' => 'R', 'R. (G.)' => 'R', 'R. [G]' => 'R',
-  'R. ed. Gorresio' => 'R', 'Dhātup.' => 'dp', 'Dhāt.' => 'dp', );
+  'R. ed. Gorresio' => 'R', 'Dhātup.' => 'dp', 'Dhāt.' => 'dp',
+   'Kathās.' => 'kathas');
  //hrefs for MBHC, MBHB not implemented. MBHC is same as MBH.(?)
  if (!isset($code_to_pfx[$code])) {
   dbgprint($dbg,"ls_callback_mw_href. Code is unknown:'$code'\n");
@@ -828,7 +829,30 @@ public function ls_callback_mw_href($code,$n,$data) {
   $href = "$dir?section=$section";
   return $href;
  }
- 
+ /******* link to Katha Sarit Sagara  ***********/
+ if (in_array($pfx,array('kathas'))) {
+  // ## two parameters 
+  if(!preg_match("|^$code +([^.,]+), *([0-9]+)|",$data1,$matches)) {
+    return $href;
+   }
+  $taranga_raw = $matches[1];
+  $s = $matches[2];
+  // normally, in mw taranga is in lower-case roman numeral,
+  // but in a few cases, taranga is a digit sequence
+  // The link target requires digit sequence
+  if (preg_match("|^[0-9]+$|",$taranga_raw,$matches_temp)) {
+   $t = $taranga_raw;
+  } else {
+   $t = $this->romanToInt($taranga_raw);
+   if ($t == 0) {
+    // error condition
+    return $href;
+   }
+  }
+  $href = "https://sanskrit-lexicon-scans.github.io/kss/index.html?$t,$s";
+  return $href;
+ }
+
  return $href; 
 }
 public function ls_callback_sch_href($code,$n,$data) {
