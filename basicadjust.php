@@ -98,7 +98,7 @@ class BasicAdjust {
  /*  Replace the 'title' part of a known ls with its capitalized form
      This is probably particular to pwg and/or pw
  */
- if (in_array($this->getParms->dict,array('pw','pwg','pwkvn'))) {
+ if (in_array($this->getParms->dict,array('pw','pwg','pwkvn'))) { 
   $line = preg_replace_callback('|<ls(.*?)>(.*?)</ls>|',
       "BasicAdjust::ls_callback_pwg",$line);
   
@@ -571,7 +571,7 @@ public function ls_callback_pwg_href($code,$data) {
 }
 
 public function ls_callback_mw($matches) {
- // Try to also handle ap90, ben
+ // Try to also handle ap90, ben, sch
  // Two situations envisioned:
  // <ls>X</ls>  
  // <ls n="C">Y</ls>
@@ -836,7 +836,7 @@ public function ls_callback_sch_href($code,$n,$data) {
  $dbg = false;
  dbgprint($dbg,"ls_callback_sch_href. code=$code, n=$n, data=$data\n");
  $code_to_pfx = array('ṚV.' => 'rv', 'AV.' => 'av', 'P.' => 'p', 'Hariv.' => 'hariv', 'R. Gorr.' => 'rgorr','R.' => 'rschl', 'Dhātup.' => 'dp', 'Spr.' => 'spr',
- 'Verz. d. Oxf. H.' => 'verzoxf');
+ 'Verz. d. Oxf. H.' => 'verzoxf', 'Kathās.' => 'kathas');
  if (!isset($code_to_pfx[$code])) {
   return $href;
  }
@@ -866,6 +866,18 @@ public function ls_callback_sch_href($code,$n,$data) {
    return $href;
   }
  }
+ /******* link to kathasaritsagara (for sch) ***********/
+ $temparr = array("Kathās.");
+ foreach($temparr as $temp) {
+  if (preg_match("|^($temp) *([0-9]+), *([0-9]+)|",$data,$matches)) {
+   $t = $matches[2]; // taranga
+   $s = $matches[3]; // shloka
+   $href = "https://sanskrit-lexicon-scans.github.io/kss/index.html?$t,$s";
+   dbgprint($dbg,"$pfx: href=$href\n");
+   return $href;
+  }  
+ }
+
 } // end of links for dictionary sch
  /******* link to Rgveda, Atharvaveda ***********/
  if (in_array($pfx,array('rv','av'))) {
