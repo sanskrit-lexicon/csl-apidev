@@ -136,14 +136,15 @@ public function getword_data_html_adapter($key,$lnum,$adjxml,$dict,$getParms,$xm
   $pageref=$matches[1];
  }
  if ($dict == 'mw') {
-  list($hcode,$key2,$hom) = $this->adjust_info_mw($xmldata); 
-  # construct return value as colon-separated values
+  // 08-17-2024. $hui 
+  list($hcode,$key2,$hom,$hui) = $this->adjust_info_mw($xmldata); 
+  // construct return value as colon-separated values
   
   if ($this->basicOption) {
    //dbgprint(false,"getword_data: changing hom to blank; $key2,$hom\n");
    $hom="";
   }
-  $infoval = "$pageref:$hcode:$key2:$hom";
+  $infoval = "$pageref:$hcode:$key2:$hom:$hui";
   $ans = "<info>$infoval</info><body>$body</body>";
  }else {
   # construct return value
@@ -166,8 +167,14 @@ public function adjust_info_mw($data) {
  if (preg_match('|<key2>(.*?)</key2>|',$data,$matches)) {
   $key2 = $matches[1];
  }
+ // 08-17-2024
+ $hui = '';
+ if (preg_match('|<info hui="(.*?)"/>|',$data,$matches)) {
+  $hui = $matches[1];
+ }
+
  $key2a = $this->adjust_key2_mw($key2);
- return array($hcode,$key2a,$hom);
+ return array($hcode,$key2a,$hom,$hui);
 }
 public function adjust_key2_mw($key2) {
  $ans = preg_replace('|--+|','-',$key2);  // only 1 dash

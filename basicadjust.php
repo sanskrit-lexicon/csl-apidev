@@ -134,6 +134,10 @@ class BasicAdjust {
  if (in_array($this->getParms->dict,array('pw'))) {
   $line = preg_replace('|<lang(.*?)>(.*?)</lang>|', '<ab\1>\2</ab>',$line);
  }
+ // 08-21-2024 Change <s1 n="X">Y</s1> to <ab n="X">Y</ab> for tooltip
+ if (in_array($this->getParms->dict,array('mw'))) {
+  $line = preg_replace('|<s1( n=".*?")>(.*?)</s1>|', '<ab\1>\2</ab>',$line);
+ }
  /* 08-02-2023
     For bhs,  change <lex>X</lex>, <lang>X</lang>, <ed>X</ed>, <ms>X</ms>
     to <ab>X</ab>
