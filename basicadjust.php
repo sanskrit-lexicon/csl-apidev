@@ -493,6 +493,17 @@ public function ls_callback_pwg_href($code,$data) {
    return $href;
   }
  }
+ /******* link to Manava DharmaSastra  ***********/
+ $temparr = array("M.");
+ foreach($temparr as $temp) {
+  if (preg_match("|^($temp) *([0-9]+), *([0-9]+)|",$data,$matches)) {
+   $a = $matches[2]; // adhyaya
+   $s = $matches[3]; // shloka
+   $href = "https://sanskrit-lexicon-scans.github.io/manu/index.html?$a,$s";
+   dbgprint($dbg,"$pfx: href=$href\n");
+   return $href;
+  }
+ }
  /******* link to B. Chrestomathie ***********/
  if (preg_match('|^(Chr[.]) *([0-9]+)|',$data,$matches)) {
   // Boehtlingk Chrestomathie, 2nd edition.
