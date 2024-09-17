@@ -602,7 +602,8 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
    // skd. n = H,P
    $n = $attribs['n'];
    $row .= "<strong>($n) </strong>";   
-  } else if ( ($el == "pic")&&($this->dict == "ben")) {
+  // } else if ( ($el == "pic")&&($this->dict == "ben")) {
+  } else if ($el == "pic") {
    $filename = $attribs['name'];
    $path = "../../web/images/$filename";
    $this->row .= "<img src='$path'/>";   
