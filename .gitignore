@@ -2,8 +2,9 @@
 *~
 # temp files
 temp*
-# dev (development) versions
-dev*
+# dev (development) versions commented out 09-28-2024
+#dev*
+dev_dalglob1.php
 # old files and directories
 old*
 # test files
