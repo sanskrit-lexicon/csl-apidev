@@ -199,7 +199,7 @@ class BasicAdjust {
   // 06-21-2024  For all dictionaries with some metaline with <h>
   $dicts_with_h = array("ap90", "bhs", "bop", "cae", "ccs",
                         "gra", "gst", "inm", "mci", "md",
-			"mw", "mw72", "pe", "pui", "pwg",
+			"mw", "mw72", "pe", "pui", "pwg","pw","pwkvn",
 			"stc", "vei", "lan");
   if (in_array($this->getParms->dict, $dicts_with_h)) {
    $line = preg_replace("|<key2>(.*?)<hom>.*?</hom>(.*?<body>)|","<key2>$1$2",$line);

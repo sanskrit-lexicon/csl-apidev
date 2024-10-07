@@ -454,7 +454,21 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
    // we just display the IAST text, so do nothing with this element
   } else if ($el == "etym") {
     $this->row .= "<i>";
-  } else if ($el == "info") { 
+  } else if ($el == "info") {
+   // 10-05-2024
+   if (in_array($this->dict,array('pwg'))) {
+    $attrval = $attribs["n"];
+    $x = '';  // text to add
+    if (in_array($attrval,array("rev","sup"))) {
+     if ($attrval == "rev") {
+      $y = "revision";
+     }else if ($attrval == "sup") {
+      $y = "supplement";
+     }
+     $x = "<span style='color:red'> ($y)</span>";
+    }
+    $this->row .= $x;
+   }
   } else if ($el == "pc"){
   } else if ($el == "to") { 
   } else if ($el == "ns") { 
@@ -463,9 +477,7 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
   } else if ($el == "pcol") {
   } else if ($el == "nsi") { 
   } else if ($el == "pb"){
-   if ($this->dict == "mw") {
-    # do nothing.
-   }else if (in_array($this->dict,array("bur","stc"))) {
+   if (in_array($this->dict,array("bur","stc","mw","pwg"))) {
     # do nothing
    }else {
     $this->row .= "<br/>";
@@ -680,7 +692,7 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
   } else if ($el == "i"){
    $this->row .= "</i>"; 
   } else if ($el == "pb"){
-   if (in_array($this->dict,array("mw","bur","stc","abch","acph","acsj"))) {
+   if (in_array($this->dict,array("mw","bur","stc","abch","acph","acsj","pwg"))) {
     # do nothing
    }else {
     $this->row .= "<br/>";
