@@ -532,10 +532,7 @@ public function ls_callback_pwg_href($code,$data) {
  }
  
  /******* link to Rgveda, Atharvaveda, or Panini ***********/
- // NOTE: This code needs to be re-arranged for easier comprehension
- if (!preg_match('|^(.*?)[.] *([0-9]+)[ ,]+([0-9]+)[ ,]+([0-9]+)(.*)$|',$data,$matches)) {
-  return $href;
- }
+ // 10-08-2024 code rearranged to allow 2 parameters
  // links for Rigveda, Atharvaveda, or Panini,
  // Ramayana Gorresio, Ramayana Schlegel
  $code_to_pfx = array('ṚV.' => 'rv', 'AV.' => 'av', 'P.' => 'p',
@@ -546,12 +543,25 @@ public function ls_callback_pwg_href($code,$data) {
   return $href;
  }
  $pfx = $code_to_pfx[$code];
- $code0 = $matches[1];
- $imandala = (int)$matches[2]; 
- $ihymn = (int)$matches[3];
- $iverse = (int)$matches[4];
+ 
+ if (preg_match('|^(.*?)[.] *([0-9]+)[ ,]+([0-9]+)[ ,]+([0-9]+)(.*)$|',$data,$matches)) {
+  // code with 3 parameters
+  $code0 = $matches[1];
+  $imandala = (int)$matches[2]; 
+  $ihymn = (int)$matches[3];
+  $iverse = (int)$matches[4];
+ } else if (preg_match('|^(.*?)[.] *([0-9]+)[ ,]+([0-9]+)(.*)$|',$data,$matches)) {
+  // code with 2 parameters
+  $code0 = $matches[1];
+  $imandala = (int)$matches[2]; 
+  $ihymn = (int)$matches[3];
+  $iverse = 1; // Assume verse 1
+ } else {
+  return $href;
+ }
+
  dbgprint($dbg,"ls_callback_pwg_href. $code0, $imandala, $ihymn, $iverse\n");
- $rest = $matches[5];
+ // $rest = $matches[5]; not used
  if (in_array($pfx,array('rv','av'))) {
   $hymnfilepfx = sprintf("%s%02d.%03d",$pfx,$imandala,$ihymn);
   $hymnfile = "$hymnfilepfx.html";
