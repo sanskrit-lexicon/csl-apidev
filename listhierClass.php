@@ -104,6 +104,12 @@ class ListhierClass {
    else if (preg_match('|<info n="rev"|',$data2,$matches)) {
     $revsup = "&nbsp;<span title='revision' style='font-size:11px; color:red;'>Ⓡ</span>";
    }
+   else if (preg_match('|<listinfo n="sup"/>|',$data2,$matches)) {
+    $revsup = "&nbsp;<span title='supplement' style='font-size:11px; color:red;'>Ⓢ</span>";
+   }
+   else if (preg_match('|<listinfo n="rev"|',$data2,$matches)) {
+    $revsup = "&nbsp;<span title='revision' style='font-size:11px; color:red;'>Ⓡ</span>";
+   }
   }   
    if (preg_match('/^<H([2])/',$data2,$matches)) {
     $spc="$spcchar";
