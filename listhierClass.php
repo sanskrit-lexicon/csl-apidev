@@ -95,21 +95,23 @@ class ListhierClass {
     $c = "color:green";
    }
    */
-  // 07-07-2024  revsup   
+  // 07-07-2024  revsup   . 10-25-2024. Allow both rev AND sup
   $revsup = "";
+  $revsups = array();
   if (in_array($getParms->dict,array('mw'))) {
    if (preg_match('|<info n="sup"/>|',$data2,$matches)) {
-    $revsup = "&nbsp;<span title='supplement' style='font-size:11px; color:red;'>Ⓢ</span>";
+    $revsups[] = "&nbsp;<span title='supplement' style='font-size:11px; color:red;'>Ⓢ</span>";
    }
    else if (preg_match('|<info n="rev"|',$data2,$matches)) {
-    $revsup = "&nbsp;<span title='revision' style='font-size:11px; color:red;'>Ⓡ</span>";
+    $revsups[] = "&nbsp;<span title='revision' style='font-size:11px; color:red;'>Ⓡ</span>";
    }
-   else if (preg_match('|<listinfo n="sup"/>|',$data2,$matches)) {
-    $revsup = "&nbsp;<span title='supplement' style='font-size:11px; color:red;'>Ⓢ</span>";
+   if (preg_match('|<listinfo n="sup"/>|',$data2,$matches)) {
+    $revsups[] = "&nbsp;<span title='supplement' style='font-size:11px; color:red;'>Ⓢ</span>";
    }
    else if (preg_match('|<listinfo n="rev"|',$data2,$matches)) {
-    $revsup = "&nbsp;<span title='revision' style='font-size:11px; color:red;'>Ⓡ</span>";
+    $revsup[s] = "&nbsp;<span title='revision' style='font-size:11px; color:red;'>Ⓡ</span>";
    }
+   $revsup = join(" ",$revsups);
   }   
    if (preg_match('/^<H([2])/',$data2,$matches)) {
     $spc="$spcchar";
