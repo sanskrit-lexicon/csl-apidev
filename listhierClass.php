@@ -109,7 +109,7 @@ class ListhierClass {
     $revsups[] = "&nbsp;<span title='supplement' style='font-size:11px; color:red;'>Ⓢ</span>";
    }
    else if (preg_match('|<listinfo n="rev"|',$data2,$matches)) {
-    $revsup[s] = "&nbsp;<span title='revision' style='font-size:11px; color:red;'>Ⓡ</span>";
+    $revsups[] = "&nbsp;<span title='revision' style='font-size:11px; color:red;'>Ⓡ</span>";
    }
    $revsup = join(" ",$revsups);
   }   
