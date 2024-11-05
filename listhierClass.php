@@ -111,6 +111,12 @@ class ListhierClass {
    else if (preg_match('|<listinfo n="rev"|',$data2,$matches)) {
     $revsups[] = "&nbsp;<span title='revision' style='font-size:11px; color:red;'>Ⓡ</span>";
    }
+   if (count($revsups) == 2) {
+    # S S -> S, and R R -> R
+    if ($revsups[0] == $revsups[1]) {
+     $revsups = array($revsups[0]);
+    }
+   }
    $revsup = join(" ",$revsups);
   }   
    if (preg_match('/^<H([2])/',$data2,$matches)) {
