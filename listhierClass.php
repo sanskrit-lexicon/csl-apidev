@@ -386,15 +386,29 @@ class ListhierClass {
    $listmatches[]=array(-1,$key2,$lnum2,$data2);
    $i++;
   }
-  // The center value 
-  list($key2,$lnum2,$data2) = $this->construct_rec1($key1,$lnum1,$data1);
-  $listmatches[]=array(0,$key2,$lnum2,$data2);
+  // The center value
+  /* 11-07-2024. Change for consistency with webtc1/listhiermodel.php */
+  //x list($key2,$lnum2,$data2) = $this->construct_rec1($key1,$lnum1,$data1);
+  //x $listmatches[]=array(0,$key2,$lnum2,$data2);
+  $listmatches[]=array(0,$key1,$lnum1,$data1); //xnew
   $i=0;
   while($i < $nmatches2) {
    list($key2,$lnum2,$data2) = $matches2[$i];
    $listmatches[]=array(1,$key2,$lnum2,$data2);
    $i++;
   }
+  $dbg = true;
+  if ($dbg) {
+   dbgprint($dbg,"\nkey1=$key1, lnum1=$lnum1, nprev=$nprev, nnext=$nnext\n");
+   $i = 0;
+   $n = count($listmatches);
+   while($i < $n) {
+    list($dir,$key,$lnum,$data) = $listmatches[$i];
+    dbgprint($dbg,"lsthiermodel: i=$i, dir=$dir, key=$key, lnum=$lnum\n");
+    $i = $i + 1;
+   }
+  }
+
   return $listmatches;
  }
 
