@@ -397,7 +397,7 @@ class ListhierClass {
    $listmatches[]=array(1,$key2,$lnum2,$data2);
    $i++;
   }
-  $dbg = true;
+  $dbg = false;
   if ($dbg) {
    dbgprint($dbg,"\nkey1=$key1, lnum1=$lnum1, nprev=$nprev, nnext=$nnext\n");
    $i = 0;
