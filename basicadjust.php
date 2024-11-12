@@ -75,6 +75,7 @@ class BasicAdjust {
  // All other dictionaries
  $line = preg_replace('/¦/',' ',$line);
  // chg_markup currently only applies to gra dictionary
+ // Nov. 2024. Also used in mw dictionary
  $line = preg_replace_callback('|<chg +type="(.*?)" +n="(.*?)" src="(.*?)">(.*?)</chg>|',"BasicAdjust::chg_markup",$line);
  $line = preg_replace_callback('|<info vn="(.*?)"/>|',"BasicAdjust::infovn_markup",$line);
            
@@ -1480,7 +1481,7 @@ public function move_L_mw($line) {
     $revsup = "";
    }
   }
-
+  //dbgprint(true,"basicadjust: revsup = '$revsup'\n");
   // remove L element
   $line = preg_replace("|$Ltag|","",$line);
   // construct L1 tag

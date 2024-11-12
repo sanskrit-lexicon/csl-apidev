@@ -208,31 +208,64 @@ dbgprint($dbg,"dispitem. key2=$key2\n");
   $ans = "<span class='hrefdata'><span style='$style'> [Printed book page $hrefdata]</span></span>";
   return $ans;
  }
+ public function get_lnumshow_id_href($revsup) {
+  //11-11-2024. Modeled after basicdisplay.php: getHrefPage
+  // revsup=' rev (1329,1)' or ' rev (cdsl)' or something else.
+  $style = "font-size:normal; color:red;";
+  if ($revsup == ' rev (cdsl)') {
+   $ans = "<span style='$style'>$revsup</span>";
+   return $ans;
+  }
+  if (!preg_match("|^ rev \(([0-9]+),([0-9])\)$|",$revsup,$matches)) {
+   return $revsup;
+  }
+  $page = $matches[1];
+  $col = $matches[2];
+  // $getParms = new Parm();
+  // $basicOption = $this->getParms->basicOption;
+  $basicOption = false;  // difference from csl-websanlexicon/.../dispitem.php
+  if ($basicOption) {
+   $serve = "../webtc/servepdf.php";
+  } else {
+   $serve = "servepdf.php";
+  }
+  $dict = $this->dict;
+  $args = "dict=$dict&page=$page,$col";
+  $dictup = strtoupper($dict);
+  
+  $ans = "<span style='$style'>rev </span><a href='$serve?$args' target='_$dictup'><span style='$style'>($page</span></a><span style='$style'>,$col)</span>";
+
+  return $ans;
+ }
  public function get_lnumshow_id($lnum0) {
   // 08-04-2020
   // 07-08-2024
+  // 11-11-2024
   // dbgprint(true,"dispitem:get_lnumshow_id: html= \n{$this->html}\n");
   //if (preg_match("|<L1>(.*?)</L1>|",$this->html,$matches)) {
   //if (preg_match("|<L1>([0-9.]+)(.*?)</L1>|",$this->html,$matches)) {
+  
   if (preg_match("|^([0-9.]+)(.*?)$|",$lnum0,$matches)) {
    $lnum = $matches[1];
    $revsup = $matches[2];
-   dbgprint(false," NO match for revsup\n");
   } else {
    $lnum = $lnum0;
    $revsup = "";
   }
-  dbgprint(false,"lnum0='$lnum0', lnum='$lnum', revsup='$revsup'\n");
-  //$style1 = "font-size:normal; color:rgb(160,160,160);";
-  //$ans = "[<span title='Cologne record ID' style='$style'>ID=$lnum</span>]";
-  $ans = "[" .
-         "<span title='Cologne record ID' style='font-size:normal; color:rgb(160,160,160);'>ID=$lnum</span>" .
-         "<span style='font-size:normal; color:red;'>$revsup</span>" . "]";
+  //dbgprint(true,"lnum0='$lnum0', lnum='$lnum', revsup='$revsup'\n");
+  $revsup1 = $revsup;
+  if (in_array($this->dictlo, array("mw"))) {
+   $revsup1 = $this->get_lnumshow_id_href($revsup);
+  }
+  //dbgprint(true,"revsup1 = '$revsup1'\n");
+  $ans_ID = "<span title='Cologne record ID' style='font-size:normal; color:rgb(160,160,160);'>ID=$lnum</span>";
+
+  $ans = "[$ans_ID $revsup1]";
   if (in_array($this->dictlo, array("abch", "acph", "acsj"))) {
    // 10-30-2023
    $ans .= "<hr style='height:3px;border-width:0;color:gray;background-color:gray'>";
   }
-  //dbgprint(false,"get_lnumshow_id. dict={$this->dict}, ans=\n$ans\n\n");
+  dbgprint(false,"get_lnumshow_id. dict={$this->dict}, ans=\n$ans\n\n");
   return $ans;   
  }
  public function basicRow1Default($prev) {
