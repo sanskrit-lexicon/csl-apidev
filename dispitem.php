@@ -221,14 +221,7 @@ dbgprint($dbg,"dispitem. key2=$key2\n");
   }
   $page = $matches[1];
   $col = $matches[2];
-  // $getParms = new Parm();
-  // $basicOption = $this->getParms->basicOption;
-  $basicOption = false;  // difference from csl-websanlexicon/.../dispitem.php
-  if ($basicOption) {
-   $serve = "../webtc/servepdf.php";
-  } else {
-   $serve = "servepdf.php";
-  }
+  $serve = $this->getHrefPage_serve();
   $dict = $this->dict;
   $args = "dict=$dict&page=$page,$col";
   $dictup = strtoupper($dict);
@@ -344,13 +337,8 @@ dbgprint($dbg,"dispitem. key2=$key2\n");
   dbgprint($dbg,"basicDisplayRecord2: pre = $pre\n");
    return $ans;
 } // basicDisplayRecord2
-public function getHrefPage() {
-include('dictinfowhich.php');  
-
- $ans="";
- $data = $this->pginfo;
- $dict = $this->dict;
- $lnums = preg_split('/[,]/',$data);  
+public function getHrefPage_serve() {
+ include('dictinfowhich.php');  
  $serve = "servepdf.php";
  if ($dictinfowhich == "cologne") {
   #$serve = "//www.sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/$serve";
@@ -359,6 +347,14 @@ include('dictinfowhich.php');
   $serve = "//localhost/cologne/csl-apidev/$serve";
  }
  //dbgprint(false,"dispitem.getHrefPage: serve=$serve\n");
+ return $serve;
+}
+public function getHrefPage() {
+ $ans="";
+ $data = $this->pginfo;
+ $dict = $this->dict;
+ $lnums = preg_split('/[,]/',$data);
+ $serve = $this->getHrefPage_serve();
  foreach($lnums as $lnum) {
   if ($ans == "") {
    $args = "dict=$dict&page=$lnum"; #"page=$page";
