@@ -41,11 +41,7 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
  $this->filterin = $filterin;
  $this->getParms = new Parm();
  $this->basicOption = $this->getParms->basicOption;
- if ($this->basicOption) {
-  $this->serve = "../webtc/servepdf.php";
- } else {
-  $this->serve = "servepdf.php";
- }
+ $this->serve = $this->getHrefPage_serve();
  
  $this->pagecol="";
  $this->dbg=false;
@@ -833,6 +829,25 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
    $this->row .= $data;
    dbgprint($this->dbg,"chrhdl: data = $data, parentEl = {$this->parentEl}\n");
   }
+}
+public function getHrefPage_serve() {
+ /* 11-14-2024. Previous logic
+ */
+ include("dictinfowhich.php");
+ if ($dictinfowhich == "cologne") {
+  // use apidev, even if in basic displays
+  $serve = "//www.sanskrit-lexicon.uni-koeln.de/scans/csl-apidev/servepdf.php";
+ }
+ else { // xampp. previous logic
+  if ($this->basicOption) {
+   $serve = "../webtc/servepdf.php";
+  } else { // local csl-apidev, currently
+   $serve = "servepdf.php";
+  }
+  // $this->serve probably not needed
+  return $serve;
+ }
+ 
 }
 public function getHrefPage($data) {
 /* getHrefPage generates markup for the link to a program which displays a pdf, as
