@@ -845,8 +845,8 @@ public function getHrefPage_serve() {
    $serve = "servepdf.php";
   }
   // $this->serve probably not needed
-  return $serve;
  }
+ return $serve;
  
 }
 public function getHrefPage($data) {
