@@ -162,6 +162,11 @@ class BasicAdjust {
   $line = preg_replace('|</ms>|','</ab>',$line);
 
  }
+ if (in_array($this->getParms->dict,array('mw'))) {
+  // 11-14-2023 "<ab>p.</ab> 1234" -> "<ab>p.</ab> <pref>1234</pref>"
+  // basicdisplay will generate a link for pref. This to call before abbrv_callback
+  $line = preg_replace('|<ab>p\.</ab> ([0-9]+)|', "<ab>p.</ab> <pref>\\1</pref>", $line);
+ }
  /* 12-14-2017
   'local' abbreviation handled here. Generate an n attribute if one
    is not present.  The 'chg_markup' callback above may introduce the 'abbr' tag.
@@ -297,9 +302,8 @@ class BasicAdjust {
    $line = preg_replace('|<br/>|',' ',$line);
   }
   if ($this->getParms->dict == "mw")  {
-   /* 11-13-2018 make bold abbreviations following <div n="vp">
-   */
-  $line = preg_replace('|(<div n="vp"/> *)(<ab.*?</ab>)|',"\\1<b>\\2</b>",$line);
+   // 11-13-2018 make bold abbreviations following <div n="vp">
+   $line = preg_replace('|(<div n="vp"/> *)(<ab.*?</ab>)|',"\\1<b>\\2</b>",$line);
   }
   return $line;
  }

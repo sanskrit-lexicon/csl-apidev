@@ -758,6 +758,27 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
    $hrefdata = $this->getHrefPage($data);
    $style = "font-size:normal; color:rgb(160,160,160);";
    $this->row1 .= "<span style='$style'> [Printed book page $hrefdata]</span>";
+  } else if ($this->parentEl == 'pcol') {
+   // 11-14-2024
+   if (! preg_match('|p\. ([0-9]+), col\. ([0-9])|',$data,$matches)) {
+    return;
+   }
+   $page = $matches[1];
+   $col  = $matches[2];
+   $hrefdata =  $this->getHrefPage($page);
+   $pcoldata = "p. $hrefdata, col. $col";
+   $style = "font-size:smaller;";
+   $this->row .= "<span style='$style'> $pcoldata</span>";
+  } else if ($this->parentEl == 'pref') {
+   // 11-14-2024
+   if (! preg_match('|([0-9]+)|',$data,$matches)) {
+    return;
+   }
+   $page = $matches[1];
+   $hrefdata =  $this->getHrefPage($page);
+   $pdata = $hrefdata;
+   $style = "font-size:smaller;";
+   $this->row .= "<span style='$style'> $pdata</span>";
   } else if ($this->parentEl == "L") {
    // 10-30-2023 Believed to be unused - handled in dispitem.php
    $style = "font-size:normal; color:rgb(160,160,160);";
