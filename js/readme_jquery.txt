@@ -1,4 +1,4 @@
-readme_jquery.txt
+readme_jquery.txt 
 03-05-2023
 Reason for this note:  Github generated a message pertaining to a xss vulnerability:
   https://github.com/sanskrit-lexicon/csl-apidev/security/dependabot/1
