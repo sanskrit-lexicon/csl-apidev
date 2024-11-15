@@ -20,6 +20,7 @@ class BasicAdjust {
  public $accent;
  public $dbg;
  public $pagecol;
+ public $pagecol_pc;  //11-15-2024 for '<ab>col.</ab> n' links
  public $dict, $key;
  public function __construct($getParms,$xmlrecs) {
   $this->accent = $getParms->accent;
@@ -87,7 +88,9 @@ class BasicAdjust {
  $line = preg_replace('/<pc>Page(.*)<\/pc>/',"<pc>\\1</pc>",$line);
 
  if (preg_match('/<pc>(.*)<\/pc>/',$line,$matches)){
+  $this->pagecol_pc = $matches[1]; 
   if($this->pagecol == $matches[1]){
+   // so basicdisplay does not show repetitive "Printed book page" links
    $line = preg_replace('/<pc>(.*)<\/pc>/','',$line);
   }else {$this->pagecol = $matches[1];}
  }
@@ -163,9 +166,13 @@ class BasicAdjust {
 
  }
  if (in_array($this->getParms->dict,array('mw'))) {
-  // 11-14-2023 "<ab>p.</ab> 1234" -> "<ab>p.</ab> <pref>1234</pref>"
+  // 11-14-2024 "<ab>p.</ab> 1234" -> "<ab>p.</ab> <pref>1234</pref>"
   // basicdisplay will generate a link for pref. This to call before abbrv_callback
   $line = preg_replace('|<ab>p\.</ab> ([0-9]+)|', "<ab>p.</ab> <pref>\\1</pref>", $line);
+  // 11-15-2024
+  $pc = $this->pagecol_pc;
+  list($page,$col_unused) = preg_split("|,|",$pc);
+  $line = preg_replace('|<ab>col\.</ab> ([1-3]+)|', "<ab>col.</ab> <cref>$page \\1</cref>", $line);
  }
  /* 12-14-2017
   'local' abbreviation handled here. Generate an n attribute if one

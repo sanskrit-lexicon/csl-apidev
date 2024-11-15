@@ -775,6 +775,22 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
    $pdata = $hrefdata;
    $style = "font-size:smaller;";
    $this->row .= "<span style='$style'> $pdata</span>";
+  } else if ($this->parentEl == 'cref') {
+   // 11-15-2024
+   // dbgprint(true,"basicdisplay cref: data = $data\n");
+   if (! preg_match('|([0-9]+) ([1-3])|',$data,$matches)) {
+    return;
+   }
+   $page = $matches[1];
+   $col = $matches[2];
+   $serve = $this->serve;
+   $dict = $this->dict;
+   $dictup = strtoupper($dict);
+   $args = "dict=$dict&page=$page";
+   $style = "";
+   $link = "<a href='$serve?$args' target='_$dictup' title='page $page'>$col</a>";
+   // $this->row .= "<span style='$style'>$ans</span>";
+   $this->row .= "<span style='$style'> $link</span>";
   } else if ($this->parentEl == "L") {
    // 10-30-2023 Believed to be unused - handled in dispitem.php
    $style = "font-size:normal; color:rgb(160,160,160);";
@@ -859,14 +875,13 @@ public function getHrefPage($data) {
  The markup returned for a given $lnum in the list $data is
    <a href='$serve?page=$lnum' target='_Blank'>$lnum</a>
  It is up to $serve to associate $lnum with a file.
-
 */
   $ans="";
  //$lnums = preg_split('/[,-]/',$data);
  $serve = $this->serve;
  $lnums = preg_split('/[,]/',$data);  //%{pfx}
  foreach($lnums as $lnum) {
-  #list($page,$col) =  preg_split('/[-]/',$lnum);
+  // list($page,$col) =  preg_split('/[-]/',$lnum);
   $page = $lnum; # this may be dictionary specific.
   if ($ans == "") {
    $dict = $this->dict;
