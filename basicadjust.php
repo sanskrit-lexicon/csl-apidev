@@ -474,7 +474,7 @@ public function ls_callback_pwg_href($code,$data) {
   return $href;
  }
  /******* link to Harivamsa ***********/
- if (preg_match('|^(HARIV[.]) *([0-9]+)[.]?$|',$data,$matches)) {
+ if (preg_match('|^(HARIV[.]) *([0-9]+)[.]?|',$data,$matches)) {
   // Mahabharata, Calcutta edition for harivamsa
   $pfx = $matches[1];
   $verse = $matches[2];
