@@ -198,7 +198,6 @@ class BasicAdjust {
   dbgprint($dbg,"BasicAdjust after rgveda: $line\n");
  }
  if ($this->getParms->dict == 'lan') {
-  #$dbg=true; ###11-20
   /* Two types: <ls n="lan,16,4">16^4^</ls>
       <ls n="wg,1235">1235b</ls>
   */
@@ -542,6 +541,29 @@ public function ls_callback_pwg_href($code,$data) {
   $href = "$dir?section=$section";
   return $href;
  }
+ /******* link to Bhagavata Purana 11-27-2024**********/
+  //  pw and pwg: BHĀG. P.
+  // use '|i' for case-insensitive
+  // Three parameters,
+  if(preg_match('|^BHĀG\. P\. *([0-9]+)[ ,]+([0-9]+)[ ,]+([0-9]+)(.*)$|i',$data,$matches)) {
+  $skanda = $matches[1];
+  $adhyaya = $matches[2];
+  $verse = $matches[3];
+  $dir = "https://sanskrit-lexicon-scans.github.io/bhagp_bur/app1";
+  $href = "$dir/?$skanda,$adhyaya,$verse";
+  return $href;
+ }
+ /* This may not be required
+  // Two parameters. set verse to 1
+  if(preg_match('|^BHĀG\. P\. *([0-9]+)[ ,]+([0-9]+)(.*)$|i',$data,$matches)) {
+  $skanda = $matches[1];
+  $adhyaya = $matches[2];
+  $verse = 1;
+  $dir = "https://sanskrit-lexicon-scans.github.io/bhagp_bur/app1";
+  $href = "$dir/?$skanda,$adhyaya,$verse";
+  return $href;
+ }
+ */
  
  /******* link to Rgveda, Atharvaveda, or Panini ***********/
  // 10-08-2024 code rearranged to allow 2 parameters
@@ -639,7 +661,7 @@ public function ls_callback_mw($matches) {
  $fieldname = 'key';
  if ($this->dict == 'mw') {
   $fieldidx = 1;
- }else { // ap90, ben, bhs
+ }else { // ap90, ben, bhs,sch
   $fieldidx = 0;
  }
  $result = $this->ls_matchabbr($fieldname,$fieldidx,$data1);
@@ -726,7 +748,7 @@ public function ls_callback_mw_href($code,$n,$data) {
   'MBh. (ed. Calc.)' => 'MBHC', 'MBh. (ed. Bomb.)' => 'MBHB',
   'R.' => 'R', 'R. G.' => 'R', 'R. (G)' => 'R', 'R. (G.)' => 'R', 'R. [G]' => 'R',
   'R. ed. Gorresio' => 'R', 'Dhātup.' => 'dp', 'Dhāt.' => 'dp',
-   'Kathās.' => 'kathas', 'Mn.' => 'M.');
+   'Kathās.' => 'kathas', 'Mn.' => 'M.', 'BhP.' => 'bhp');
  //hrefs for MBHC, MBHB not implemented. MBHC is same as MBH.(?)
  if (!isset($code_to_pfx[$code])) {
   dbgprint($dbg,"ls_callback_mw_href. Code is unknown:'$code'\n");
@@ -913,6 +935,22 @@ public function ls_callback_mw_href($code,$n,$data) {
   $href = "https://sanskrit-lexicon-scans.github.io/manu/index.html?$t,$s";
   return $href;
  }
+ /******* link to Bhagavata Purana 11-27-2024 ***********/
+ if (in_array($pfx,array('bhp'))) {
+  // First parameter is lower-case roman numeral
+  if(! preg_match('|^(.*?)[.] *([ivx]+)[ ,]+([0-9]+)[ ,]+([0-9]+)(.*)$|i',$data1,$matches)) {
+    return $href;
+   }
+   $code0 = $matches[1];
+   //$ic = (int)$matches[2];
+   $roman = $matches[2];
+   $skanda = $this->romanToInt($roman); 
+   $adhyaya = $matches[3];
+   $verse = $matches[4];
+   $dir = "https://sanskrit-lexicon-scans.github.io/bhagp_bur/app1";
+   $href = "$dir/?$skanda,$adhyaya,$verse";
+   return $href;
+ }
 
  return $href; 
 }
@@ -921,7 +959,8 @@ public function ls_callback_sch_href($code,$n,$data) {
  $dbg = false;
  dbgprint($dbg,"ls_callback_sch_href. code=$code, n=$n, data=$data\n");
  $code_to_pfx = array('ṚV.' => 'rv', 'AV.' => 'av', 'P.' => 'p', 'Hariv.' => 'hariv', 'R. Gorr.' => 'rgorr','R.' => 'rschl', 'Dhātup.' => 'dp', 'Spr.' => 'spr',
- 'Verz. d. Oxf. H.' => 'verzoxf', 'Kathās.' => 'kathas', 'M.' => 'M.');
+ 'Verz. d. Oxf. H.' => 'verzoxf', 'Kathās.' => 'kathas', 'M.' => 'M.',
+ 'Bhāg. P.' => 'bhagp');
  if (!isset($code_to_pfx[$code])) {
   return $href;
  }
@@ -974,6 +1013,19 @@ public function ls_callback_sch_href($code,$n,$data) {
    dbgprint($dbg,"$pfx: href=$href\n");
    return $href;
   }  
+ }
+ /******* link to Bhagavata Purana 12-09-2024**********/
+  //  sch : Bhāg. P.
+  // use '|i' for case-insensitive
+  // Three parameters,
+  //dbgprint(true,"Bhāg. P.: data=$data\n");
+  if(preg_match('|^Bhāg\. P\. *([0-9]+)[ ,]+([0-9]+)[ ,]+([0-9]+)(.*)$|i',$data,$matches)) {
+  $skanda = $matches[1];
+  $adhyaya = $matches[2];
+  $verse = $matches[3];
+  $dir = "https://sanskrit-lexicon-scans.github.io/bhagp_bur/app1";
+  $href = "$dir/?$skanda,$adhyaya,$verse";
+  return $href;
  }
 
 } // end of links for dictionary sch
