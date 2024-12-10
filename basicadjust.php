@@ -638,10 +638,11 @@ public function ls_callback_mw($matches) {
  $ans = $matches[0];
  $ndata = $matches[1];  // empty string or ' n="C"'
  $data0 = $matches[2];
+ dbgprint($dbg,"Enter ls_callback_mw. ans=$ans AND ndata=$ndata AND data0=$data0\n");
  if (preg_match('|n="(.*?)"|',$ndata,$matchesn)) {
   $n = $matchesn[1]; //
   $data1 = "$n $data0";  // controversial.
-  $data = $data0; //10-07
+  $data = $data0; 
  } else{
   $n = '';
   $data1 = $data0;
@@ -970,8 +971,7 @@ public function ls_callback_sch_href($code,$n,$data) {
  }else {
   $data1 = "$n $data";
  }
- dbgprint($dbg,"data1=$data1\n");
- if (in_array($this->dict,array('sch'))) {
+ dbgprint($dbg,"ls_callback_sch_href: data1=$data1\n");
   if (preg_match('|^(Spr[.]) ([0-9]+)|',$data1,$matches)) { // 09-08-2024
    // Indische Sprüche in sch is assumed to be volume 2
    $code0 = $matches[1];
@@ -1015,24 +1015,30 @@ public function ls_callback_sch_href($code,$n,$data) {
   }  
  }
  /******* link to Bhagavata Purana 12-09-2024**********/
+ if ($pfx == 'bhagp') {
   //  sch : Bhāg. P.
   // use '|i' for case-insensitive
   // Three parameters,
   //dbgprint(true,"Bhāg. P.: data=$data\n");
-  if(preg_match('|^Bhāg\. P\. *([0-9]+)[ ,]+([0-9]+)[ ,]+([0-9]+)(.*)$|i',$data,$matches)) {
+  if(preg_match("|^$code ([0-9]+)[ ,]+([0-9]+)[ ,]+([0-9]+)(.*)$|i",$data1,$matches)) {
   $skanda = $matches[1];
   $adhyaya = $matches[2];
   $verse = $matches[3];
   $dir = "https://sanskrit-lexicon-scans.github.io/bhagp_bur/app1";
   $href = "$dir/?$skanda,$adhyaya,$verse";
-  return $href;
  }
+ return $href;
+}
 
-} // end of links for dictionary sch
  /******* link to Rgveda, Atharvaveda ***********/
+ //$dbg = true;
+ dbgprint($dbg,"pfx=$pfx, data1=::$data1::, code=$code\n");
  if (in_array($pfx,array('rv','av'))) {
   // #, #, #  (three decimal numbers, separated by commas)
-  if (!preg_match('|^(.*?)[.] *([0-9]+)[,] +([0-9]+)[,] +([0-9]+)(.*)$|',$data1,$matches)) {
+  $regex = "|^($code) *([0-9]+)[,] *([0-9]+)[,] *([0-9]+)(.*)$|";
+  if (!preg_match($regex,$data1,$matches)) {
+   dbgprint($dbg,"No match to data1\n");
+   dbgprint($dbg,"regex=$regex\n");
    return $href;
   }
   $code0 = $matches[1];
@@ -1054,7 +1060,9 @@ public function ls_callback_sch_href($code,$n,$data) {
  /******* link to Panini ***********/
  if (in_array($pfx,array('p'))) {
   // #, #, # (three decimal numbers, separated by commas)
-  if(!preg_match('|^(.*?)[.] *([0-9]+)[,] +([0-9]+)[,] +([0-9]+)(.*)$|',$data1,$matches)) {
+  //if(!preg_match('|^(.*?)[.] *([0-9]+)[,] +([0-9]+)[,] +([0-9]+)(.*)$|',$data1,$matches)) {
+  $regex = "|^($code) *([0-9]+)[,] *([0-9]+)[,] *([0-9]+)(.*)$|";
+  if (!preg_match($regex,$data1,$matches)) {
     return $href;
    }
    $code0 = $matches[1];
@@ -1081,7 +1089,7 @@ public function ls_callback_sch_href($code,$n,$data) {
  /******* link to Ramayana, Gorresio edition  ***********/
  if (in_array($pfx,array('rgorr'))) {
   // #, #, # (three decimal numbers, separated by commas)
-  if(!preg_match('|^(.*?)[.] *([0-9]+)[,] +([0-9]+)[,] +([0-9]+)(.*)$|',$data1,$matches)) {
+  if(!preg_match('|^(.*?)[.] *([0-9]+)[,] *([0-9]+)[,] *([0-9]+)(.*)$|',$data1,$matches)) {
     return $href;
    }
    $code0 = $matches[1];
@@ -1095,20 +1103,26 @@ public function ls_callback_sch_href($code,$n,$data) {
  /******* link to Ramayana, Schlegel edition  ***********/
  if (in_array($pfx,array('rschl'))) {
   // #, #, # (three decimal numbers, separated by commas)
-  if(!preg_match('|^(.*?)[.] *([0-9]+)[,] +([0-9]+)[,] +([0-9]+)(.*)$|',$data1,$matches)) {
+  if(!preg_match('|^(.*?)[.] *([0-9]+)[,] *([0-9]+)[,] *([0-9]+)(.*)$|',$data1,$matches)) {
     return $href;
    }
    $code0 = $matches[1];
    $ic = (int)$matches[2];
    $is = (int)$matches[3];
    $iv = (int)$matches[4];
-   $dir = "https://sanskrit-lexicon-scans.github.io/ramayanaschl";
+   if (in_array($ic,array(1,2))) {
+    $dir = "https://sanskrit-lexicon-scans.github.io/ramayanaschl";
+   } else {
+    $dir = "https://sanskrit-lexicon-scans.github.io/ramayanagorr";
+   }
    $href = "$dir/?$ic,$is,$iv";
    return $href;
  }
  /******* link to Westergaard Dhatupatha  ***********/
  if (in_array($pfx,array('dp'))) {
   if(preg_match('|^(Dhātup[.]) *([0-9]+)(.*)$|',$data1,$matches)) {
+   // the 'subsection' number is present in the reference, but unused here
+   // Example: <ls>Dhātup. 10,18.</ls>  Only 10 is used in link, 18 ignored.
    $pfx = $matches[1];
    $section = $matches[2];  // int
    if ($section == 0) {
