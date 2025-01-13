@@ -62,6 +62,7 @@ class ListhierClass {
   dbgprint($dbg,"Extra listhier: listmatches = " . count($listmatches) . "\n");
   while($i < count($listmatches)) {
    list($code,$key2,$lnum2,$data2) = $listmatches[$i];
+   if ($data2 == null) {$data2 = "";} //01-13-2025
    $hom2=$this->get_hom($data2);
    //dbgprint(true,"listhierClass: lnum2=$lnum2, key2=$key2, data2=\n$data2\n");
    if ($i == 0) {
@@ -367,6 +368,7 @@ class ListhierClass {
 
  public function get_hom($data) {
   $hom="";
+  if ($data == null) {return $hom;}
   if (preg_match('|<hom>(.*?)</hom>.*?</h>|',$data,$matches)) {
    $hom = $matches[1];
   }
