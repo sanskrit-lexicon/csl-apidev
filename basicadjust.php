@@ -549,21 +549,37 @@ public function ls_callback_pwg_href($code,$data) {
   $skanda = $matches[1];
   $adhyaya = $matches[2];
   $verse = $matches[3];
-  $dir = "https://sanskrit-lexicon-scans.github.io/bhagp_bur/app1";
+  /* 01-13-2025 when skandha is 1-9, PWG links to bhagp_bur
+    and for 10-12, PWG links to bhagp_bom
+  */
+  $iskanda = intval($skanda);
+  if (in_array($iskanda,array(10,11,12))) {
+   $dir = "https://sanskrit-lexicon-scans.github.io/bhagp_bom/app1";
+  } else {
+   $dir = "https://sanskrit-lexicon-scans.github.io/bhagp_bur/app1";
+  }
   $href = "$dir/?$skanda,$adhyaya,$verse";
   return $href;
  }
- /* This may not be required
+ 
   // Two parameters. set verse to 1
   if(preg_match('|^BHĀG\. P\. *([0-9]+)[ ,]+([0-9]+)(.*)$|i',$data,$matches)) {
   $skanda = $matches[1];
   $adhyaya = $matches[2];
   $verse = 1;
-  $dir = "https://sanskrit-lexicon-scans.github.io/bhagp_bur/app1";
+  // 01-13-2025 when skandha is 1-9, PWG links to bhagp_bur
+  //  and for 10-12, PWG links to bhagp_bom
+  //
+  $iskanda = intval($skanda);
+  if (in_array($iskanda,array(10,11,12))) {
+   $dir = "https://sanskrit-lexicon-scans.github.io/bhagp_bom/app1";
+  } else {
+   $dir = "https://sanskrit-lexicon-scans.github.io/bhagp_bur/app1";
+  }
   $href = "$dir/?$skanda,$adhyaya,$verse";
   return $href;
  }
- */
+
  
  /******* link to Rgveda, Atharvaveda, or Panini ***********/
  // 10-08-2024 code rearranged to allow 2 parameters
@@ -948,7 +964,15 @@ public function ls_callback_mw_href($code,$n,$data) {
    $skanda = $this->romanToInt($roman); 
    $adhyaya = $matches[3];
    $verse = $matches[4];
+  /* 01-13-2025 when skandha is 1-9, PWG links to bhagp_bur
+    and for 10-12, PWG links to bhagp_bom
+  */
+  $iskanda = intval($skanda);
+  if (in_array($iskanda,array(10,11,12))) {
+   $dir = "https://sanskrit-lexicon-scans.github.io/bhagp_bom/app1";
+  } else {
    $dir = "https://sanskrit-lexicon-scans.github.io/bhagp_bur/app1";
+  }
    $href = "$dir/?$skanda,$adhyaya,$verse";
    return $href;
  }
@@ -1025,6 +1049,15 @@ public function ls_callback_sch_href($code,$n,$data) {
   $adhyaya = $matches[2];
   $verse = $matches[3];
   $dir = "https://sanskrit-lexicon-scans.github.io/bhagp_bur/app1";
+  /* 01-13-2025 when skandha is 1-9, PWG links to bhagp_bur
+    and for 10-12, PWG links to bhagp_bom
+  */
+  $iskanda = intval($skanda);
+  if (in_array($iskanda,array(10,11,12))) {
+   $dir = "https://sanskrit-lexicon-scans.github.io/bhagp_bom/app1";
+  } else {
+   $dir = "https://sanskrit-lexicon-scans.github.io/bhagp_bur/app1";
+  }
   $href = "$dir/?$skanda,$adhyaya,$verse";
  }
  return $href;
