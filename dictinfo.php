@@ -4,6 +4,7 @@
  This code depends on the organization of files on the server,
  and specifically depends on the orgranization at Cologne sanskrit-lexicon.
  // VCP changed from 2013 to 2019 03-12-2021
+ // FRI  02-01-202r
 */
 require_once('dbgprint.php');
 class DictInfo {  
@@ -18,7 +19,8 @@ class DictInfo {
        "SHS"=>"2020" , "SKD"=>"2020" , "SNP"=>"2020" , "STC"=>"2020",
        "VCP"=>"2020" , "VEI"=>"2020" , "WIL"=>"2020" , "YAT"=>"2020",
        "LAN"=>"2020","ARMH"=>"2020","PWKVN"=>"2020", "LRV"=>"2022",
-       "ABCH"=>"2023", "ACPH"=>"2023", "ACSJ"=>"2023");
+       "ABCH"=>"2023", "ACPH"=>"2023", "ACSJ"=>"2023","FRI"=>"2025",
+       );
  static public $dictyear_older=
    array("ACC"=>"2014" , "AE"=>"2014" , "AP"=>"2014" , "AP90"=>"2014",
        "BEN"=>"2014" , "BHS"=>"2014" , "BOP"=>"2014" , "BOR"=>"2014",
@@ -213,6 +215,7 @@ public function get_cologne_pdfpages_url() {
   "ABCH"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/ABCHScan/pdfpages" ,
   "ACPH"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/ACPHScan/pdfpages" ,
   "ACSJ"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/ACSJScan/pdfpages" ,
+  "FRI"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/FRIScan/2025/web/pdfpages",
  );
  $url = $cologne_pdfpages_urls[$this->dictupper];
  return $url;

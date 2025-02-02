@@ -15,6 +15,7 @@ CologneDisplays.dictionaries= {
 ['BUR' , 'Burnouf Dictionnaire Sanscrit-Français'],
 ['CAE' , 'Cappeller Sanskrit-English Dictionary'],
 ['CCS' , 'Cappeller Sanskrit Wörterbuch'],
+['FRI' , 'Frisch Sanskrit Reader Vocabulary, 1956'],    
 ['GRA' , 'Grassmann Wörterbuch zum Rig Veda'],
 ['GST' , 'Goldstücker Sanskrit-English Dictionary'],
 ['IEG' , 'Indian Epigraphical Glossary'],
