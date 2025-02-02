@@ -215,7 +215,7 @@ public function get_cologne_pdfpages_url() {
   "ABCH"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/ABCHScan/pdfpages" ,
   "ACPH"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/ACPHScan/pdfpages" ,
   "ACSJ"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/ACSJScan/pdfpages" ,
-  "FRI"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/FRIScan/2025/web/pdfpages",
+  "FRI"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/FRIScan/2025/pdfpages",
  );
  $url = $cologne_pdfpages_urls[$this->dictupper];
  return $url;
