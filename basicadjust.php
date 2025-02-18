@@ -436,10 +436,9 @@ public function ls_callback_pwg_href($code,$data) {
  $href = null; // default if no success
  $dbg = false;
  dbgprint($dbg,"ls_callback_pwg_href. data=$data\n");
- /******* link to Spruche 2nd edition in pw***********/
  if (preg_match('|^(Spr[.]) ([0-9]+)|',$data,$matches)) {
   if (in_array($this->dict,array('pw'))) {
-   // Indische Sprüche in pw
+   // link to Spruche 2nd edition in pw
    $pfx = $matches[1];
    $verse = $matches[2];
    $href = "https://funderburkjim.github.io/boesp-prep/web1/boesp.html?$verse";
@@ -447,8 +446,10 @@ public function ls_callback_pwg_href($code,$data) {
    return $href;
   }
   if ($this->dict == 'pwg') {
-   // This is a reference to 1st edition of Indische Spruche in pwg.
-   // Link to boesp as above is not correct.
+   // link to Spruche 1st edition in pw
+   $pfx = $matches[1];
+   $verse = $matches[2];
+   $href = "https://sanskrit-lexicon-scans.github.io/boesp1/app1/?$verse";
    return $href;
   }
  }
