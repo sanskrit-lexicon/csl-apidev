@@ -791,7 +791,7 @@ public function ls_callback_mw_href($code,$n,$data) {
   'R.' => 'R', 'R. G.' => 'R', 'R. (G)' => 'R', 'R. (G.)' => 'R', 'R. [G]' => 'R',
   'R. ed. Gorresio' => 'R', 'Dhātup.' => 'dp', 'Dhāt.' => 'dp',
    'Kathās.' => 'kathas', 'Mn.' => 'M.', 'BhP.' => 'bhp',
-   'Yājñ.' => 'yajn', 'RAGH.' => 'ragh');
+   'Yājñ.' => 'yajn', 'Ragh.' => 'ragh');
  //hrefs for MBHC, MBHB not implemented. MBHC is same as MBH.(?)
  if (!isset($code_to_pfx[$code])) {
   dbgprint($dbg,"ls_callback_mw_href. Code is unknown:'$code'\n");
@@ -1059,7 +1059,7 @@ public function ls_callback_sch_href($code,$n,$data) {
  dbgprint($dbg,"ls_callback_sch_href. code=$code, n=$n, data=$data\n");
  $code_to_pfx = array('ṚV.' => 'rv', 'AV.' => 'av', 'P.' => 'p', 'Hariv.' => 'hariv', 'R. Gorr.' => 'rgorr','R.' => 'rschl', 'Dhātup.' => 'dp', 'Spr.' => 'spr',
  'Verz. d. Oxf. H.' => 'verzoxf', 'Kathās.' => 'kathas', 'M.' => 'M.',
- 'Bhāg. P.' => 'bhagp','Yājñ.' => 'yajn', 'RAGH.' => 'ragh');
+ 'Bhāg. P.' => 'bhagp','Yājñ.' => 'yajn', 'Ragh.' => 'ragh');
  if (!isset($code_to_pfx[$code])) {
   return $href;
  }
