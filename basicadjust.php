@@ -540,6 +540,25 @@ public function ls_callback_pwg_href($code,$data) {
    return $href;
   }
  }
+ /******* link to sāhityadarpaṇa  ***********/
+ // pwg,pw,pwkvn  SĀH. D. N,N  or SĀH. D. N
+ $temparr = array("SĀH. D.");
+ foreach($temparr as $temp) {
+  if (preg_match("|^($temp) *([0-9]+), *([0-9]+)|",$data,$matches)) {
+   $t = $matches[2]; // adhyAya
+   $s = $matches[3]; // verse
+   $href = "https://sanskrit-lexicon-scans.github.io/sahityadarpana/app1?$t,$s";
+   dbgprint($dbg,"$pfx: href=$href\n");
+   return $href;
+  }
+  if (preg_match("|^($temp) *([0-9]+)|",$data,$matches)) {
+   $t = $matches[2]; // ipage
+   $href = "https://sanskrit-lexicon-scans.github.io/sahityadarpana/app1?$t";
+   dbgprint($dbg,"$pfx: href=$href\n");
+   return $href;
+  }
+ }
+
  /******* link to B. Chrestomathie ***********/
  if (preg_match('|^(Chr[.]) *([0-9]+)|',$data,$matches)) {
   // Boehtlingk Chrestomathie, 2nd edition.
@@ -791,7 +810,7 @@ public function ls_callback_mw_href($code,$n,$data) {
   'R.' => 'R', 'R. G.' => 'R', 'R. (G)' => 'R', 'R. (G.)' => 'R', 'R. [G]' => 'R',
   'R. ed. Gorresio' => 'R', 'Dhātup.' => 'dp', 'Dhāt.' => 'dp',
    'Kathās.' => 'kathas', 'Mn.' => 'M.', 'BhP.' => 'bhp',
-   'Yājñ.' => 'yajn', 'Ragh.' => 'ragh');
+   'Yājñ.' => 'yajn', 'Ragh.' => 'ragh', 'Sāh.' => 'sahitya');
  //hrefs for MBHC, MBHB not implemented. MBHC is same as MBH.(?)
  if (!isset($code_to_pfx[$code])) {
   dbgprint($dbg,"ls_callback_mw_href. Code is unknown:'$code'\n");
@@ -1002,6 +1021,35 @@ public function ls_callback_mw_href($code,$n,$data) {
   $href = "https://sanskrit-lexicon-scans.github.io/raghuvamsa/app1?$t,$s";
   return $href;
  }
+ /******* link to sahityadarpana for mw ***********/
+ if ( (in_array($pfx,array('sahitya'))) && (in_array($this->dict,array('mw'))) ) {
+  // case R(oman),N
+  if(preg_match("|^$code +([xivcl]+), *([0-9]+)|",$data1,$matches)) { 
+   $taranga_raw = $matches[1];
+   $s = $matches[2];
+   $t = $this->romanToInt($taranga_raw);
+   if ($t == 0) {
+    // error condition tar
+    return $href;
+   }
+   // 02-27-2025 Jim doesn't know how to find this in sahityadarpana
+   return $href;
+  }
+  // case N,N
+  if(preg_match("|^$code +([0-9]+), *([0-9]+)|",$data1,$matches)) { 
+   $t = $matches[1];
+   $s = $matches[2];
+   $href = "https://sanskrit-lexicon-scans.github.io/sahityadarpana/app1?$t,$s";
+   return $href;
+  }
+  // case N
+  if(preg_match("|^$code +([0-9]+)|",$data1,$matches)) { 
+   $t = $matches[1];
+   $href = "https://sanskrit-lexicon-scans.github.io/sahityadarpana/app1?$t";
+   return $href;
+  }
+  return $href;  // no href found
+ }
 
 /******* link to manusmrti  ***********/
  if (in_array($pfx,array('M.'))) {
@@ -1059,7 +1107,7 @@ public function ls_callback_sch_href($code,$n,$data) {
  dbgprint($dbg,"ls_callback_sch_href. code=$code, n=$n, data=$data\n");
  $code_to_pfx = array('ṚV.' => 'rv', 'AV.' => 'av', 'P.' => 'p', 'Hariv.' => 'hariv', 'R. Gorr.' => 'rgorr','R.' => 'rschl', 'Dhātup.' => 'dp', 'Spr.' => 'spr',
  'Verz. d. Oxf. H.' => 'verzoxf', 'Kathās.' => 'kathas', 'M.' => 'M.',
- 'Bhāg. P.' => 'bhagp','Yājñ.' => 'yajn', 'Ragh.' => 'ragh');
+ 'Bhāg. P.' => 'bhagp','Yājñ.' => 'yajn', 'Ragh.' => 'ragh','Sāh. D.' => 'sahitya');
  if (!isset($code_to_pfx[$code])) {
   return $href;
  }
@@ -1122,6 +1170,23 @@ public function ls_callback_sch_href($code,$n,$data) {
    dbgprint($dbg,"$pfx: href=$href\n");
    return $href;
   }  
+ }
+ /******* link to sahityadarpana for sch ***********/
+ if ( (in_array($pfx,array('sahitya'))) && (in_array($this->dict,array('sch'))) ) {
+  // case N,N
+  if(preg_match("|^$code +([0-9]+), *([0-9]+)|",$data1,$matches)) { 
+   $t = $matches[1];
+   $s = $matches[2];
+   $href = "https://sanskrit-lexicon-scans.github.io/sahityadarpana/app1?$t,$s";
+   return $href;
+  }
+  // case N
+  if(preg_match("|^$code +([0-9]+)|",$data1,$matches)) { 
+   $t = $matches[1];
+   $href = "https://sanskrit-lexicon-scans.github.io/sahityadarpana/app1?$t";
+   return $href;
+  }
+  return $href;  // no href found
  }
 
  /******* link to manava dharmashastra (for sch) ***********/
