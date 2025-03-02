@@ -569,7 +569,8 @@ public function ls_callback_pwg_href($code,$data) {
   }
   $pfx = $matches[1];
   $verse = $matches[2]; // page
-  $href = "https://sanskrit-lexicon-scans.github.io/bchrest/index.html?$verse";
+  // 03-02-2025 Change repo name from 'bchrest' to 'bchrest2' 
+  $href = "https://sanskrit-lexicon-scans.github.io/bchrest2/index.html?$verse";
   dbgprint($dbg,"$pfx: href=$href\n");
   return $href;
  }
