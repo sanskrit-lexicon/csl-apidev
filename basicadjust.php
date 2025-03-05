@@ -529,6 +529,18 @@ public function ls_callback_pwg_href($code,$data) {
    return $href;
   }
  }
+ /******* link to Mugdhabodha of Vopadeva  ***********/
+ // pwg,pw,pwkvn  VOP. N,N;  
+ $temparr = array("VOP.");
+ foreach($temparr as $temp) {
+  if (preg_match("|^($temp) *([0-9]+), *([0-9]+)|",$data,$matches)) {
+   $t = $matches[2]; // adhyAya
+   $s = $matches[3]; // verse
+   $href = "https://sanskrit-lexicon-scans.github.io/mugdhabodha/app1?$t,$s";
+   dbgprint($dbg,"$pfx: href=$href\n");
+   return $href;
+  }
+ }
  /******* link to Manava DharmaSastra  ***********/
  $temparr = array("M.");
  foreach($temparr as $temp) {
@@ -811,7 +823,8 @@ public function ls_callback_mw_href($code,$n,$data) {
   'R.' => 'R', 'R. G.' => 'R', 'R. (G)' => 'R', 'R. (G.)' => 'R', 'R. [G]' => 'R',
   'R. ed. Gorresio' => 'R', 'Dhātup.' => 'dp', 'Dhāt.' => 'dp',
    'Kathās.' => 'kathas', 'Mn.' => 'M.', 'BhP.' => 'bhp',
-   'Yājñ.' => 'yajn', 'Ragh.' => 'ragh', 'Sāh.' => 'sahitya');
+   'Yājñ.' => 'yajn', 'Ragh.' => 'ragh', 'Sāh.' => 'sahitya',
+   'Vop.' => 'vop');
  //hrefs for MBHC, MBHB not implemented. MBHC is same as MBH.(?)
  if (!isset($code_to_pfx[$code])) {
   dbgprint($dbg,"ls_callback_mw_href. Code is unknown:'$code'\n");
@@ -999,7 +1012,7 @@ public function ls_callback_mw_href($code,$n,$data) {
   return $href;
  }
 
- /******* link to raghuvamsa for mw ***********/
+ /******* link to Raghuvṃśam for mw ***********/
  if ( (in_array($pfx,array('ragh'))) && (in_array($this->dict,array('mw'))) ) {
   // ## two parameters 
   if(!preg_match("|^$code +([^.,]+), *([0-9]+)|",$data1,$matches)) {
@@ -1020,6 +1033,29 @@ public function ls_callback_mw_href($code,$n,$data) {
    }
   }
   $href = "https://sanskrit-lexicon-scans.github.io/raghuvamsa/app1?$t,$s";
+  return $href;
+ }
+ /******* link to mugdhabodha for mw ***********/
+ if ( (in_array($pfx,array('vop'))) && (in_array($this->dict,array('mw'))) ) {
+  // ## two parameters 
+  if(!preg_match("|^$code +([^.,]+), *([0-9]+)|",$data1,$matches)) {
+    return $href;
+   }
+  $taranga_raw = $matches[1];
+  $s = $matches[2];
+  // normally, in mw taranga is in lower-case roman numeral,
+  // but in a few cases, taranga is a digit sequence
+  // The link target requires digit sequence
+  if (preg_match("|^[0-9]+$|",$taranga_raw,$matches_temp)) {
+   $t = $taranga_raw;
+  } else {
+   $t = $this->romanToInt($taranga_raw);
+   if ($t == 0) {
+    // error condition tar
+    return $href;
+   }
+  }
+  $href = "https://sanskrit-lexicon-scans.github.io/mugdhabodha/app1?$t,$s";
   return $href;
  }
  /******* link to sahityadarpana for mw ***********/
@@ -1108,7 +1144,7 @@ public function ls_callback_sch_href($code,$n,$data) {
  dbgprint($dbg,"ls_callback_sch_href. code=$code, n=$n, data=$data\n");
  $code_to_pfx = array('ṚV.' => 'rv', 'AV.' => 'av', 'P.' => 'p', 'Hariv.' => 'hariv', 'R. Gorr.' => 'rgorr','R.' => 'rschl', 'Dhātup.' => 'dp', 'Spr.' => 'spr',
  'Verz. d. Oxf. H.' => 'verzoxf', 'Kathās.' => 'kathas', 'M.' => 'M.',
- 'Bhāg. P.' => 'bhagp','Yājñ.' => 'yajn', 'Ragh.' => 'ragh','Sāh. D.' => 'sahitya');
+ 'Bhāg. P.' => 'bhagp','Yājñ.' => 'yajn', 'Ragh.' => 'ragh','Sāh. D.' => 'sahitya', 'Vop.' => 'vop');
  if (!isset($code_to_pfx[$code])) {
   return $href;
  }
@@ -1168,6 +1204,17 @@ public function ls_callback_sch_href($code,$n,$data) {
    $t = $matches[2]; // adhyaya
    $s = $matches[3]; // shloka
    $href = "https://sanskrit-lexicon-scans.github.io/raghuvamsa/app1?$t,$s";
+   dbgprint($dbg,"$pfx: href=$href\n");
+   return $href;
+  }  
+ }
+ /******* link to mugdhabodha (for sch) ***********/
+ $temparr = array("Vop.");
+ foreach($temparr as $temp) {
+  if (preg_match("|^($temp) *([0-9]+), *([0-9]+)|",$data1,$matches)) {
+   $t = $matches[2]; // adhyaya
+   $s = $matches[3]; // shloka
+   $href = "https://sanskrit-lexicon-scans.github.io/mugdhabodha/app1?$t,$s";
    dbgprint($dbg,"$pfx: href=$href\n");
    return $href;
   }  
