@@ -541,6 +541,53 @@ public function ls_callback_pwg_href($code,$data) {
    return $href;
   }
  }
+ /******* link to Nalopakhyana in bchrest1  ***********/
+ // pwg,pw,pwkvn  N. N,N;  
+ $temparr = array("N.");
+ foreach($temparr as $temp) {
+  if (preg_match("|^($temp) *([0-9]+), *([0-9]+)|",$data,$matches)) {
+   $t = $matches[2]; // adhyAya
+   $s = $matches[3]; // verse
+   $href = "https://sanskrit-lexicon-scans.github.io/bchrest1/app1?$t,$s";
+   dbgprint($dbg,"$pfx: href=$href\n");
+   return $href;
+  }
+ }
+/******* link to Dasharatha's death in bchrest1  ***********/
+ // pwg,pw,pwkvn  DAŚ. N,N;  
+ $temparr = array("DAŚ.");
+ foreach($temparr as $temp) {
+  if (preg_match("|^($temp) *([0-9]+), *([0-9]+)|",$data,$matches)) {
+   $t = $matches[2]; // adhyAya
+   $s = $matches[3]; // verse
+   $href = "https://sanskrit-lexicon-scans.github.io/bchrest1/app2?$t,$s";
+   dbgprint($dbg,"$pfx: href=$href\n");
+   return $href;
+  }
+ }
+/******* link to story of vidushaka in bchrest1  ***********/
+ // pwg,pw,pwkvn  VID. N;  
+ $temparr = array("VID.");
+ foreach($temparr as $temp) {
+  if (preg_match("|^($temp) *([0-9]+)|",$data,$matches)) {
+   $t = $matches[2]; // verse
+   $href = "https://sanskrit-lexicon-scans.github.io/bchrest1/app3?$t";
+   dbgprint($dbg,"$pfx: href=$href\n");
+   return $href;
+  }
+ }
+/******* link to Vishvamitra's battle in bchrest1  ***********/
+ // pwg,pw,pwkvn  VIŚV. N,N;  
+ $temparr = array("VIŚV.");
+ foreach($temparr as $temp) {
+  if (preg_match("|^($temp) *([0-9]+), *([0-9]+)|",$data,$matches)) {
+   $t = $matches[2]; // adhyAya
+   $s = $matches[3]; // verse
+   $href = "https://sanskrit-lexicon-scans.github.io/bchrest1/app4?$t,$s";
+   dbgprint($dbg,"$pfx: href=$href\n");
+   return $href;
+  }
+ }
  /******* link to Manava DharmaSastra  ***********/
  $temparr = array("M.");
  foreach($temparr as $temp) {
