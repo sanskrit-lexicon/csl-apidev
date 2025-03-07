@@ -588,6 +588,42 @@ public function ls_callback_pwg_href($code,$data) {
    return $href;
   }
  }
+ /******* link to Medinikosha   ***********/
+ // pwg,pw,pwkvn  MED. A. N;  
+ $temparr = array("MED.");
+ foreach($temparr as $temp) {
+  if (preg_match("|^($temp) *([khgṅcjñṭḍṇtdnpbmyrlvśṣsao]+)[.] *([0-9]+)|",$data,$matches)) {
+   $t = $matches[2]; // adhyAya
+   $s = $matches[3]; // verse
+   $href = "https://sanskrit-lexicon-scans.github.io/medini/app1?$t,$s";
+   dbgprint($dbg,"$pfx: href=$href\n");
+   return $href;
+  }
+ }
+ /******* link to Trikandashesha of Purushottamadeva  ***********/
+ // pwg,pw,pwkvn  TRIK. N,N,N;  
+ $temparr = array("TRIK.");
+ foreach($temparr as $temp) {
+  if (preg_match("|^($temp) *([0-9]+), *([0-9]+), *([0-9]+)|",$data,$matches)) {
+   $k = $matches[2]; // kand
+   $t = $matches[3]; // varga
+   $s = $matches[4]; // verse
+   $href = "https://sanskrit-lexicon-scans.github.io/medini/app2?$k,$t,$s";
+   dbgprint($dbg,"$pfx: href=$href\n");
+   return $href;
+  }
+ }
+ /******* link to Haravali of Purushottamadeva  ***********/
+ // pwg,pw,pwkvn  HĀR. N;  
+ $temparr = array("HĀR.");
+ foreach($temparr as $temp) {
+  if (preg_match("|^($temp) *([0-9]+)|",$data,$matches)) {
+   $t = $matches[2]; // verse
+   $href = "https://sanskrit-lexicon-scans.github.io/medini/app3?$t";
+   dbgprint($dbg,"$pfx: href=$href\n");
+   return $href;
+  }
+ }
  /******* link to Manava DharmaSastra  ***********/
  $temparr = array("M.");
  foreach($temparr as $temp) {
@@ -871,7 +907,7 @@ public function ls_callback_mw_href($code,$n,$data) {
   'R. ed. Gorresio' => 'R', 'Dhātup.' => 'dp', 'Dhāt.' => 'dp',
    'Kathās.' => 'kathas', 'Mn.' => 'M.', 'BhP.' => 'bhp',
    'Yājñ.' => 'yajn', 'Ragh.' => 'ragh', 'Sāh.' => 'sahitya',
-   'Vop.' => 'vop');
+   'Vop.' => 'vop', );
  //hrefs for MBHC, MBHB not implemented. MBHC is same as MBH.(?)
  if (!isset($code_to_pfx[$code])) {
   dbgprint($dbg,"ls_callback_mw_href. Code is unknown:'$code'\n");
@@ -1191,7 +1227,8 @@ public function ls_callback_sch_href($code,$n,$data) {
  dbgprint($dbg,"ls_callback_sch_href. code=$code, n=$n, data=$data\n");
  $code_to_pfx = array('ṚV.' => 'rv', 'AV.' => 'av', 'P.' => 'p', 'Hariv.' => 'hariv', 'R. Gorr.' => 'rgorr','R.' => 'rschl', 'Dhātup.' => 'dp', 'Spr.' => 'spr',
  'Verz. d. Oxf. H.' => 'verzoxf', 'Kathās.' => 'kathas', 'M.' => 'M.',
- 'Bhāg. P.' => 'bhagp','Yājñ.' => 'yajn', 'Ragh.' => 'ragh','Sāh. D.' => 'sahitya', 'Vop.' => 'vop');
+ 'Bhāg. P.' => 'bhagp','Yājñ.' => 'yajn', 'Ragh.' => 'ragh','Sāh. D.' => 'sahitya', 'Vop.' => 'vop',
+ 'Med.' => 'med');
  if (!isset($code_to_pfx[$code])) {
   return $href;
  }
@@ -1282,6 +1319,39 @@ public function ls_callback_sch_href($code,$n,$data) {
    return $href;
   }
   return $href;  // no href found
+ }
+ /******* link to Medinikosha (for sch) ***********/
+ $temparr = array("Med.");
+ foreach($temparr as $temp) {
+  if (preg_match("|^($temp) *([khgṅcjñṭḍṇtdnpbmyrlvśṣsao]+)[.] *([0-9]+)|",$data1,$matches)) {
+   $t = $matches[2]; // adhyaya
+   $s = $matches[3]; // shloka
+   $href = "https://sanskrit-lexicon-scans.github.io/mugdhabodha/app1?$t,$s";
+   dbgprint($dbg,"$pfx: href=$href\n");
+   return $href;
+  }  
+ }
+ /******* link to Trikandashesha (for sch) ***********/
+ $temparr = array("Trik.");
+ foreach($temparr as $temp) {
+  if (preg_match("|^($temp) *([0-9]+), *([0-9]+), *([0-9]+)|",$data1,$matches)) {
+   $k = $matches[2]; // kand
+   $t = $matches[3]; // varga
+   $s = $matches[4]; // shloka
+   $href = "https://sanskrit-lexicon-scans.github.io/medini/app2?$k,$t,$s";
+   dbgprint($dbg,"$pfx: href=$href\n");
+   return $href;
+  }  
+ }
+ /******* link to Haravali (for sch) ***********/
+ $temparr = array("Hār.");
+ foreach($temparr as $temp) {
+  if (preg_match("|^($temp) *([0-9]+)|",$data1,$matches)) {
+   $s = $matches[2]; // shloka
+   $href = "https://sanskrit-lexicon-scans.github.io/medini/app3?$s";
+   dbgprint($dbg,"$pfx: href=$href\n");
+   return $href;
+  }  
  }
 
  /******* link to manava dharmashastra (for sch) ***********/
