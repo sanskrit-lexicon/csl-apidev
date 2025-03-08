@@ -1228,7 +1228,7 @@ public function ls_callback_sch_href($code,$n,$data) {
  $code_to_pfx = array('ṚV.' => 'rv', 'AV.' => 'av', 'P.' => 'p', 'Hariv.' => 'hariv', 'R. Gorr.' => 'rgorr','R.' => 'rschl', 'Dhātup.' => 'dp', 'Spr.' => 'spr',
  'Verz. d. Oxf. H.' => 'verzoxf', 'Kathās.' => 'kathas', 'M.' => 'M.',
  'Bhāg. P.' => 'bhagp','Yājñ.' => 'yajn', 'Ragh.' => 'ragh','Sāh. D.' => 'sahitya', 'Vop.' => 'vop',
- 'Med.' => 'med');
+ 'Med.' => 'med', 'Trik.' => 'trik', 'Hār.' => 'har');
  if (!isset($code_to_pfx[$code])) {
   return $href;
  }
@@ -1326,7 +1326,7 @@ public function ls_callback_sch_href($code,$n,$data) {
   if (preg_match("|^($temp) *([khgṅcjñṭḍṇtdnpbmyrlvśṣsao]+)[.] *([0-9]+)|",$data1,$matches)) {
    $t = $matches[2]; // adhyaya
    $s = $matches[3]; // shloka
-   $href = "https://sanskrit-lexicon-scans.github.io/mugdhabodha/app1?$t,$s";
+   $href = "https://sanskrit-lexicon-scans.github.io/medini/app1?$t,$s";
    dbgprint($dbg,"$pfx: href=$href\n");
    return $href;
   }  
