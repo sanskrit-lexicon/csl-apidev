@@ -624,6 +624,28 @@ public function ls_callback_pwg_href($code,$data) {
    return $href;
   }
  }
+ /******* link to Abhidhānacintāmaṇipariśiṣṭa of Hemacandra  ***********/
+ // pwg,pw,pwkvn  H. ś. N;  
+ $temparr = array("H. ś.");
+ foreach($temparr as $temp) {
+  if (preg_match("|^($temp) *([0-9]+)|",$data,$matches)) {
+   $t = $matches[2]; // verse
+   $href = "https://sanskrit-lexicon-scans.github.io/abch2/app2?$t";
+   dbgprint($dbg,"$pfx: href=$href\n");
+   return $href;
+  }
+ }
+ /******* link to Abhidhānacintāmaṇi of Hemacandra  ***********/
+ // pwg,pw,pwkvn  H. N;  
+ $temparr = array("H.");
+ foreach($temparr as $temp) {
+  if (preg_match("|^($temp) *([0-9]+)|",$data,$matches)) {
+   $t = $matches[2]; // verse
+   $href = "https://sanskrit-lexicon-scans.github.io/abch2/app1?$t";
+   dbgprint($dbg,"$pfx: href=$href\n");
+   return $href;
+  }
+ }
  /******* link to Manava DharmaSastra  ***********/
  $temparr = array("M.");
  foreach($temparr as $temp) {
