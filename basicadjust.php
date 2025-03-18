@@ -541,6 +541,18 @@ public function ls_callback_pwg_href($code,$data) {
    return $href;
   }
  }
+/******* link to Anekārthasaṃgraha of Hemacandra  ***********/
+ // pwg,pw,pwkvn  H. an. N,N;  
+ $temparr = array("H. an.");
+ foreach($temparr as $temp) {
+  if (preg_match("|^($temp) *([0-9]+), *([0-9]+)|",$data,$matches)) {
+   $t = $matches[2]; // adhyAya
+   $s = $matches[3]; // verse
+   $href = "https://sanskrit-lexicon-scans.github.io/anekarthasamgraha/app1?$t,$s";
+   dbgprint($dbg,"$pfx: href=$href\n");
+   return $href;
+  }
+ }
  /******* link to Mugdhabodha of Vopadeva  ***********/
  // pwg,pw,pwkvn  VOP. N,N;  
  $temparr = array("VOP.");
@@ -959,6 +971,7 @@ public function ls_callback_mw_href($code,$n,$data) {
    'VarBṛS.' => 'brihatsam', 
    'MārkP.' => 'markandeyap', // mw
    'Mārk P.' => 'markandeyap', // sch
+   'H. an.' => 'anekarthaS', // sch  No references in mw
    );
  //hrefs for MBHC, MBHB not implemented. MBHC is same as MBH.(?)
  if (!isset($code_to_pfx[$code])) {
@@ -1352,7 +1365,7 @@ public function ls_callback_sch_href($code,$n,$data) {
  'Verz. d. Oxf. H.' => 'verzoxf', 'Kathās.' => 'kathas', 'M.' => 'M.',
  'Bhāg. P.' => 'bhagp','Yājñ.' => 'yajn', 'Ragh.' => 'ragh','Sāh. D.' => 'sahitya', 'Vop.' => 'vop',
  'Med.' => 'med', 'Trik.' => 'trik', 'Hār.' => 'har', 'Halāy.' => 'halay',
- 'Varāh. Bṛh. S.' => 'brihatsam', 'Mārk. P.' => 'markandeyap', 
+ 'Varāh. Bṛh. S.' => 'brihatsam', 'Mārk. P.' => 'markandeyap', 'H. an.' => 'anekarthaS',
  );
  if (!isset($code_to_pfx[$code])) {
   return $href;
@@ -1425,6 +1438,17 @@ public function ls_callback_sch_href($code,$n,$data) {
    $t = $matches[2]; // adhyaya
    $s = $matches[3]; // shloka
    $href = "https://sanskrit-lexicon-scans.github.io/markandeyapurana/app1?$t,$s";
+   dbgprint($dbg,"$pfx: href=$href\n");
+   return $href;
+  }  
+ }
+ /******* link to anekarthasamgraha (for sch) ***********/
+ $temparr = array("H. an.");
+ foreach($temparr as $temp) {
+  if (preg_match("|^($temp) *([0-9]+), *([0-9]+)|",$data1,$matches)) {
+   $t = $matches[2]; // adhyaya
+   $s = $matches[3]; // shloka
+   $href = "https://sanskrit-lexicon-scans.github.io/anekarthasamgraha/app1?$t,$s";
    dbgprint($dbg,"$pfx: href=$href\n");
    return $href;
   }  
