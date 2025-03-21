@@ -553,6 +553,21 @@ public function ls_callback_pwg_href($code,$data) {
    return $href;
   }
  }
+/******* link to ŚĀKUNTALA (Bohtlingk edition)  ***********/
+ // pwg,pw,pwkvn   
+ $temparr = array("ŚĀK.");
+ foreach($temparr as $temp) {
+  if (preg_match("|^($temp) *([0-9]+), *([0-9]+)|",$data,$matches)) {
+   $t = $matches[2]; // page
+   $s = $matches[3]; // linenum
+   $href = "https://sanskrit-lexicon-scans.github.io/shakuntala/app2?$t,$s";
+  }else if (preg_match("|^($temp) *([0-9]+)|",$data,$matches)) {
+   $t = $matches[2]; // verse
+   $href = "https://sanskrit-lexicon-scans.github.io/shakuntala/app1?$t";
+  }
+  dbgprint($dbg,"$pfx: href=$href\n");
+  return $href;
+ }
  /******* link to Mugdhabodha of Vopadeva  ***********/
  // pwg,pw,pwkvn  VOP. N,N;  
  $temparr = array("VOP.");
@@ -972,6 +987,9 @@ public function ls_callback_mw_href($code,$n,$data) {
    'MārkP.' => 'markandeyap', // mw
    'Mārk P.' => 'markandeyap', // sch
    'H. an.' => 'anekarthaS', // sch  No references in mw
+   'Śāk.' => 'shakuntala', //  sch
+   'Śak.' => 'shakuntalamw', //  mw  
+   
    );
  //hrefs for MBHC, MBHB not implemented. MBHC is same as MBH.(?)
  if (!isset($code_to_pfx[$code])) {
@@ -1366,6 +1384,7 @@ public function ls_callback_sch_href($code,$n,$data) {
  'Bhāg. P.' => 'bhagp','Yājñ.' => 'yajn', 'Ragh.' => 'ragh','Sāh. D.' => 'sahitya', 'Vop.' => 'vop',
  'Med.' => 'med', 'Trik.' => 'trik', 'Hār.' => 'har', 'Halāy.' => 'halay',
  'Varāh. Bṛh. S.' => 'brihatsam', 'Mārk. P.' => 'markandeyap', 'H. an.' => 'anekarthaS',
+ 'Śāk.' => 'shakuntala', 
  );
  if (!isset($code_to_pfx[$code])) {
   return $href;
@@ -1453,7 +1472,22 @@ public function ls_callback_sch_href($code,$n,$data) {
    return $href;
   }  
  }
-
+/******* link to ŚĀKUNTALA (Bohtlingk edition)  ***********/
+ // sch  
+ $temparr = array("Śāk.");
+ foreach($temparr as $temp) {
+  if (preg_match("|^($temp) *([0-9]+), *([0-9]+)|",$data,$matches)) {
+   $t = $matches[2]; // page
+   $s = $matches[3]; // linenum
+   $href = "https://sanskrit-lexicon-scans.github.io/shakuntala/app2?$t,$s";
+  }else if (preg_match("|^($temp) *([0-9]+)|",$data,$matches)) {
+   $t = $matches[2]; // verse
+   $href = "https://sanskrit-lexicon-scans.github.io/shakuntala/app1?$t";
+  }
+  dbgprint($dbg,"$pfx: href=$href\n");
+  return $href;
+ }
+ 
  /******* link to  VARĀHAMIHIRA'S BṚHATSAM̃HITĀ (for sch) ***********/
  $temparr = array("Varāh. Bṛh. S.");
  foreach($temparr as $temp) {
