@@ -561,12 +561,14 @@ public function ls_callback_pwg_href($code,$data) {
    $t = $matches[2]; // page
    $s = $matches[3]; // linenum
    $href = "https://sanskrit-lexicon-scans.github.io/shakuntala/app2?$t,$s";
+   dbgprint($dbg,"$pfx: href=$href\n");
+   return $href;
   }else if (preg_match("|^($temp) *([0-9]+)|",$data,$matches)) {
    $t = $matches[2]; // verse
+   dbgprint($dbg,"$pfx: href=$href\n");
    $href = "https://sanskrit-lexicon-scans.github.io/shakuntala/app1?$t";
+   return $href;
   }
-  dbgprint($dbg,"$pfx: href=$href\n");
-  return $href;
  }
  /******* link to Mugdhabodha of Vopadeva  ***********/
  // pwg,pw,pwkvn  VOP. N,N;  
@@ -576,6 +578,21 @@ public function ls_callback_pwg_href($code,$data) {
    $t = $matches[2]; // adhyAya
    $s = $matches[3]; // verse
    $href = "https://sanskrit-lexicon-scans.github.io/mugdhabodha/app1?$t,$s";
+   dbgprint($dbg,"$pfx: href=$href\n");
+   return $href;
+  }
+ }
+ /******* link to shatapathabr  ***********/
+ // pwg,pw,pwkvn  ŚAT. BR. N,N,N,N;  
+ $temparr = array("ŚAT. BR.");
+ foreach($temparr as $temp) {
+  if (preg_match("|^($temp) *([0-9]+), *([0-9]+), *([0-9]+), *([0-9]+)|",$data,$matches)) {
+   $pfx = $matches[1];
+   $k = $matches[2]; 
+   $a = $matches[3];
+   $b = $matches[4];
+   $v = $matches[5];
+   $href = "https://sanskrit-lexicon-scans.github.io/shatapathabr/app1?$k,$a,$b,$v";
    dbgprint($dbg,"$pfx: href=$href\n");
    return $href;
   }
@@ -728,7 +745,6 @@ public function ls_callback_pwg_href($code,$data) {
    return $href;
   }
  }
-
  /******* link to B. Chrestomathie ***********/
  if (preg_match('|^(Chr[.]) *([0-9]+)|',$data,$matches)) {
   // Boehtlingk Chrestomathie, 2nd edition.
@@ -987,9 +1003,10 @@ public function ls_callback_mw_href($code,$n,$data) {
    'MārkP.' => 'markandeyap', // mw
    'Mārk P.' => 'markandeyap', // sch
    'H. an.' => 'anekarthaS', // sch  No references in mw
-   'Śāk.' => 'shakuntala', //  sch
-   'Śak.' => 'shakuntalamw', //  mw  
-   
+   'Śāk.' => 'shakuntala', // sch
+   'Śak.' => 'shakuntalamw', // mw  
+   'Śat. Br.' => 'shatapathabr', // sch
+   'ŚBr.' => 'shatapathabr', // mw
    );
  //hrefs for MBHC, MBHB not implemented. MBHC is same as MBH.(?)
  if (!isset($code_to_pfx[$code])) {
@@ -1249,6 +1266,31 @@ public function ls_callback_mw_href($code,$n,$data) {
   $href = "https://sanskrit-lexicon-scans.github.io/brihatsam/app1?$t,$s";
   return $href;
  }
+ /******* link to Śatapatha-brāhmaṇa for mw ***********/
+ if ( (in_array($pfx,array('shatapathabr'))) && (in_array($this->dict,array('mw'))) ) {
+  // ## four parameters 
+  if(!preg_match("|^$code +([^.,]+), *([0-9]+), *([0-9]+), *([0-9]+)|",$data1,$matches)) {
+    return $href;
+   }
+  $k_raw = $matches[1];
+  $a = $matches[2];
+  $b = $matches[3];
+  $v = $matches[4];
+  // normally, in mw kanda is in lower-case roman numeral,
+  // but in a few cases, kanda is a digit sequence
+  // The link target requires digit sequence
+  if (preg_match("|^[0-9]+$|",$k_raw,$matches_temp)) {
+   $k = $k_raw;
+  } else {
+   $k = $this->romanToInt($k_raw);
+   if ($k == 0) {
+    // error condition tar
+    return $href;
+   }
+  }
+  $href = "https://sanskrit-lexicon-scans.github.io/shatapathabr/app1?$k,$a,$b,$v";
+  return $href;
+ }
  /******* link to mugdhabodha for mw ***********/
  if ( (in_array($pfx,array('vop'))) && (in_array($this->dict,array('mw'))) ) {
   // ## two parameters 
@@ -1384,7 +1426,7 @@ public function ls_callback_sch_href($code,$n,$data) {
  'Bhāg. P.' => 'bhagp','Yājñ.' => 'yajn', 'Ragh.' => 'ragh','Sāh. D.' => 'sahitya', 'Vop.' => 'vop',
  'Med.' => 'med', 'Trik.' => 'trik', 'Hār.' => 'har', 'Halāy.' => 'halay',
  'Varāh. Bṛh. S.' => 'brihatsam', 'Mārk. P.' => 'markandeyap', 'H. an.' => 'anekarthaS',
- 'Śāk.' => 'shakuntala', 
+ 'Śāk.' => 'shakuntala', 'Śat. Br.' => 'shatapathabr',
  );
  if (!isset($code_to_pfx[$code])) {
   return $href;
@@ -1457,6 +1499,19 @@ public function ls_callback_sch_href($code,$n,$data) {
    $t = $matches[2]; // adhyaya
    $s = $matches[3]; // shloka
    $href = "https://sanskrit-lexicon-scans.github.io/markandeyapurana/app1?$t,$s";
+   dbgprint($dbg,"$pfx: href=$href\n");
+   return $href;
+  }  
+ }
+ /******* link to shatapathabr (for sch) ***********/
+ $temparr = array("Śat. Br.");
+ foreach($temparr as $temp) {
+  if (preg_match("|^($temp) *([0-9]+), *([0-9]+), *([0-9]+), *([0-9]+)|",$data1,$matches)) {
+   $k = $matches[2]; 
+   $a = $matches[3];
+   $b = $matches[4];
+   $v = $matches[5];
+   $href = "https://sanskrit-lexicon-scans.github.io/shatapathabr/app1?$k,$a,$b,$v";
    dbgprint($dbg,"$pfx: href=$href\n");
    return $href;
   }  
