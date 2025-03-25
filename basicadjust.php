@@ -1008,6 +1008,7 @@ public function ls_callback_mw_href($code,$n,$data) {
    'Śat. Br.' => 'shatapathabr', // sch
    'ŚBr.' => 'shatapathabr', // mw
    'Sāh. D.' => 'sahityadarpana', // sch
+   'Sāh.' => 'sahitya', // mw   
    );
  //hrefs for MBHC, MBHB not implemented. MBHC is same as MBH.(?)
  if (!isset($code_to_pfx[$code])) {
@@ -1319,14 +1320,15 @@ public function ls_callback_mw_href($code,$n,$data) {
  if ( (in_array($pfx,array('sahitya'))) && (in_array($this->dict,array('mw'))) ) {
   // case R(oman),N
   if(preg_match("|^$code +([xivcl]+), *([0-9]+)|",$data1,$matches)) { 
-   $taranga_raw = $matches[1];
-   $s = $matches[2];
-   $t = $this->romanToInt($taranga_raw);
-   if ($t == 0) {
+   $p_raw = $matches[1]; // pariccheda
+   $k = $matches[2]; //kArikA
+   $p = $this->romanToInt($p_raw);
+   if ($p == 0) {
     // error condition tar
     return $href;
    }
    // 02-27-2025 Jim doesn't know how to find this in sahityadarpana
+   $href = "https://sanskrit-lexicon-scans.github.io/sahityadarpana_mw/app1?$p,$k";
    return $href;
   }
   // case N,N
