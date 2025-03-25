@@ -1007,6 +1007,7 @@ public function ls_callback_mw_href($code,$n,$data) {
    'Śak.' => 'shakuntalamw', // mw  
    'Śat. Br.' => 'shatapathabr', // sch
    'ŚBr.' => 'shatapathabr', // mw
+   'Sāh. D.' => 'sahityadarpana', // sch
    );
  //hrefs for MBHC, MBHB not implemented. MBHC is same as MBH.(?)
  if (!isset($code_to_pfx[$code])) {
@@ -1427,6 +1428,7 @@ public function ls_callback_sch_href($code,$n,$data) {
  'Med.' => 'med', 'Trik.' => 'trik', 'Hār.' => 'har', 'Halāy.' => 'halay',
  'Varāh. Bṛh. S.' => 'brihatsam', 'Mārk. P.' => 'markandeyap', 'H. an.' => 'anekarthaS',
  'Śāk.' => 'shakuntala', 'Śat. Br.' => 'shatapathabr',
+ 'Sāh. D.' => 'sahityadarpana',
  );
  if (!isset($code_to_pfx[$code])) {
   return $href;
@@ -1535,14 +1537,32 @@ public function ls_callback_sch_href($code,$n,$data) {
    $t = $matches[2]; // page
    $s = $matches[3]; // linenum
    $href = "https://sanskrit-lexicon-scans.github.io/shakuntala/app2?$t,$s";
+   dbgprint($dbg,"$pfx: href=$href\n");
+   return $href;
   }else if (preg_match("|^($temp) *([0-9]+)|",$data,$matches)) {
    $t = $matches[2]; // verse
    $href = "https://sanskrit-lexicon-scans.github.io/shakuntala/app1?$t";
+   dbgprint($dbg,"$pfx: href=$href\n");
+   return $href;
   }
-  dbgprint($dbg,"$pfx: href=$href\n");
-  return $href;
  }
- 
+/******* link to  SĀHITYADARPAṆA for sch ***********/
+ // sch  
+ $temparr = array("Sāh. D.");
+ foreach($temparr as $temp) {
+  if (preg_match("|^($temp) *([0-9]+), *([0-9]+)|",$data,$matches)) {
+   $t = $matches[2]; // page
+   $s = $matches[3]; // linenum
+   $href = "https://sanskrit-lexicon-scans.github.io/sahityadarpana/app1?$t,$s";
+   dbgprint($dbg,"$pfx: href=$href\n");
+   return $href;
+  }else if (preg_match("|^($temp) *([0-9]+)|",$data,$matches)) {
+   $t = $matches[2]; // verse
+   $href = "https://sanskrit-lexicon-scans.github.io/sahityadarpana/app1?$t";
+   dbgprint($dbg,"$pfx: href=$href\n");
+   return $href;
+  }
+ } 
  /******* link to  VARĀHAMIHIRA'S BṚHATSAM̃HITĀ (for sch) ***********/
  $temparr = array("Varāh. Bṛh. S.");
  foreach($temparr as $temp) {
