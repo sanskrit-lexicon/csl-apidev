@@ -541,6 +541,18 @@ public function ls_callback_pwg_href($code,$data) {
    return $href;
   }
  }
+ /******* link to   ***********/
+ // pwg,pw,pwkvn  BHAG. N,N;  
+ $temparr = array("BHAG.");
+ foreach($temparr as $temp) {
+  if (preg_match("|^($temp) *([0-9]+), *([0-9]+)|",$data,$matches)) {
+   $t = $matches[2]; // adhyAya
+   $s = $matches[3]; // verse
+   $href = "https://sanskrit-lexicon-scans.github.io/bhagavadgita/app1?$t,$s";
+   dbgprint($dbg,"$pfx: href=$href\n");
+   return $href;
+  }
+ }
 /******* link to Anekārthasaṃgraha of Hemacandra  ***********/
  // pwg,pw,pwkvn  H. an. N,N;  
  $temparr = array("H. an.");
@@ -1008,7 +1020,8 @@ public function ls_callback_mw_href($code,$n,$data) {
    'Śat. Br.' => 'shatapathabr', // sch
    'ŚBr.' => 'shatapathabr', // mw
    'Sāh. D.' => 'sahityadarpana', // sch
-   'Sāh.' => 'sahitya', // mw   
+   'Sāh.' => 'sahitya', // mw
+   'Bhag.' => 'bhagavadgita', // mw, sch
    );
  //hrefs for MBHC, MBHB not implemented. MBHC is same as MBH.(?)
  if (!isset($code_to_pfx[$code])) {
@@ -1194,6 +1207,29 @@ public function ls_callback_mw_href($code,$n,$data) {
    }
   }
   $href = "https://sanskrit-lexicon-scans.github.io/yajnavalkya/app1?$t,$s";
+  return $href;
+ }
+ /******* link to bhagavadgita for mw ***********/
+ if ( (in_array($pfx,array('bhagavadgita'))) && (in_array($this->dict,array('mw'))) ) {
+  // ## two parameters 
+  if(!preg_match("|^$code +([vix]+), *([0-9]+)|",$data1,$matches)) {
+    return $href;
+   }
+  $taranga_raw = $matches[1];
+  $s = $matches[2];
+  // normally, in mw taranga is in lower-case roman numeral,
+  // but in a few cases, taranga is a digit sequence
+  // The link target requires digit sequence
+  if (preg_match("|^[0-9]+$|",$taranga_raw,$matches_temp)) {
+   $t = $taranga_raw;
+  } else {
+   $t = $this->romanToInt($taranga_raw);
+   if ($t == 0) {
+    // error condition tar
+    return $href;
+   }
+  }
+  $href = "https://sanskrit-lexicon-scans.github.io/bhagavadgita/app1?$t,$s";
   return $href;
  }
 
@@ -1430,7 +1466,7 @@ public function ls_callback_sch_href($code,$n,$data) {
  'Med.' => 'med', 'Trik.' => 'trik', 'Hār.' => 'har', 'Halāy.' => 'halay',
  'Varāh. Bṛh. S.' => 'brihatsam', 'Mārk. P.' => 'markandeyap', 'H. an.' => 'anekarthaS',
  'Śāk.' => 'shakuntala', 'Śat. Br.' => 'shatapathabr',
- 'Sāh. D.' => 'sahityadarpana',
+ 'Sāh. D.' => 'sahityadarpana', 'Bhag.' => 'bhagavadgita', // sch, mw
  );
  if (!isset($code_to_pfx[$code])) {
   return $href;
@@ -1503,6 +1539,17 @@ public function ls_callback_sch_href($code,$n,$data) {
    $t = $matches[2]; // adhyaya
    $s = $matches[3]; // shloka
    $href = "https://sanskrit-lexicon-scans.github.io/markandeyapurana/app1?$t,$s";
+   dbgprint($dbg,"$pfx: href=$href\n");
+   return $href;
+  }  
+ }
+ /******* link to bhagavadgita (for sch) ***********/
+ $temparr = array("Bhag.");
+ foreach($temparr as $temp) {
+  if (preg_match("|^($temp) *([0-9]+), *([0-9]+)|",$data1,$matches)) {
+   $t = $matches[2]; // adhyaya
+   $s = $matches[3]; // shloka
+   $href = "https://sanskrit-lexicon-scans.github.io/bhagavadgita/app1?$t,$s";
    dbgprint($dbg,"$pfx: href=$href\n");
    return $href;
   }  
