@@ -582,6 +582,30 @@ public function ls_callback_pwg_href($code,$data) {
    return $href;
   }
  }
+ /******* link to PAÑCATANTRA, Kosegarten, 1849 pwg,pw,pwkvn  ***********/
+ $temparr = array("PAÑCAT.");
+ foreach($temparr as $temp) {
+  if (preg_match("|^($temp) *([0-9]+), *([0-9]+)|",$data,$matches)) {
+   $t = $matches[2]; // page
+   $s = $matches[3]; // linenum
+   $href = "https://sanskrit-lexicon-scans.github.io/pantankose/app2?$t,$s";
+   dbgprint($dbg,"$pfx: href=$href\n");
+   return $href;
+  }else if (preg_match("|^($temp) ([VI]+), *([0-9]+)|",$data,$matches)) {
+   $tantra = $matches[2]; // roman-numeral
+   $t = $this->romanToInt($tantra);
+   $v = $matches[3]; // verse
+   dbgprint($dbg,"$pfx: href=$href\n");
+   $href = "https://sanskrit-lexicon-scans.github.io/pantankose/app1?$t,$v";
+   return $href;
+  }else if (preg_match("|^($temp) *(Pr\.) *([0-9]+)|",$data,$matches)) {
+   $t = 0; // tantra = 0 is convention of app1 for prastAva
+   $v = $matches[3]; // verse
+   dbgprint($dbg,"$pfx: href=$href\n");
+   $href = "https://sanskrit-lexicon-scans.github.io/pantankose/app1?$t,$v";
+   return $href;
+  }
+ }
  /******* link to Mugdhabodha of Vopadeva  ***********/
  // pwg,pw,pwkvn  VOP. N,N;  
  $temparr = array("VOP.");
@@ -1070,6 +1094,7 @@ public function ls_callback_mw_href($code,$n,$data) {
    'Sāh.' => 'sahitya', // mw
    'Bhag.' => 'bhagavadgita', // mw, sch
    'R. ed. Bomb.' => 'ramayanabom', // mw, sch
+   'Pañcat.' => 'pantankose', // mw, wch
    );
  //hrefs for MBHC, MBHB not implemented. MBHC is same as MBH.(?)
  if (!isset($code_to_pfx[$code])) {
@@ -1211,6 +1236,31 @@ public function ls_callback_mw_href($code,$n,$data) {
    $v = (int)$matches[3];
    $href = "https://sanskrit-lexicon-scans.github.io/ramayanabom/app1/?$k,$s,$v";
    return $href;
+ }
+ /******* link to PAÑCATANTRA, Kosegarten, 1849 mw  ***********/
+ $temparr = array("Pañcat.");
+ foreach($temparr as $temp) {
+  if (preg_match("|^($temp) *([0-9]+), *([0-9]+)|",$data,$matches)) {
+   $t = $matches[2]; // page
+   $s = $matches[3]; // linenum
+   $href = "https://sanskrit-lexicon-scans.github.io/pantankose/app2?$t,$s";
+   dbgprint($dbg,"$pfx: href=$href\n");
+   return $href;
+  }else if (preg_match("|^($temp) ([vi]+), *([0-9]+)|",$data,$matches)) {
+   return $href; // pantankose not the right source !
+   $tantra = $matches[2]; // roman-numeral
+   $t = $this->romanToInt($tantra);
+   $v = $matches[3]; // verse
+   dbgprint($dbg,"$pfx: href=$href\n");
+   $href = "https://sanskrit-lexicon-scans.github.io/pantankose/app1?$t,$v";
+   return $href;
+  }else if (preg_match("|^($temp) *(Pr\.) *([0-9]+)|",$data,$matches)) {
+   $t = 0; // tantra = 0 is convention of app1 for prastAva
+   $v = $matches[3]; // verse
+   dbgprint($dbg,"$pfx: href=$href\n");
+   $href = "https://sanskrit-lexicon-scans.github.io/pantankose/app1?$t,$v";
+   return $href;
+  }
  }
 
 /******* link to  Mahabharata, Calcutta edition for mw. ***********/
@@ -1557,6 +1607,7 @@ public function ls_callback_sch_href($code,$n,$data) {
  'Śāk.' => 'shakuntala', 'Śat. Br.' => 'shatapathabr',
  'Sāh. D.' => 'sahityadarpana', 'Bhag.' => 'bhagavadgita', 
  'R. ed. Bomb.' => 'ramayanabom', 
+ 'Pañcat.' => 'pantankose',
  );
  if (!isset($code_to_pfx[$code])) {
   return $href;
@@ -1632,6 +1683,30 @@ public function ls_callback_sch_href($code,$n,$data) {
    dbgprint($dbg,"$pfx: href=$href\n");
    return $href;
   }  
+ }
+ /******* link to PAÑCATANTRA, Kosegarten, 1849 sch  ***********/
+ $temparr = array("Pañcat.");
+ foreach($temparr as $temp) {
+  if (preg_match("|^($temp) *([0-9]+), *([0-9]+)|",$data,$matches)) {
+   $t = $matches[2]; // page
+   $s = $matches[3]; // linenum
+   $href = "https://sanskrit-lexicon-scans.github.io/pantankose/app2?$t,$s";
+   dbgprint($dbg,"$pfx: href=$href\n");
+   return $href;
+  }else if (preg_match("|^($temp) ([vi]+), *([0-9]+)|",$data,$matches)) {
+   $tantra = $matches[2]; // roman-numeral
+   $t = $this->romanToInt($tantra);
+   $v = $matches[3]; // verse
+   dbgprint($dbg,"$pfx: href=$href\n");
+   $href = "https://sanskrit-lexicon-scans.github.io/pantankose/app1?$t,$v";
+   return $href;
+  }else if (preg_match("|^($temp) *(Pr\.) *([0-9]+)|",$data,$matches)) {
+   $t = 0; // tantra = 0 is convention of app1 for prastAva
+   $v = $matches[3]; // verse
+   dbgprint($dbg,"$pfx: href=$href\n");
+   $href = "https://sanskrit-lexicon-scans.github.io/pantankose/app1?$t,$v";
+   return $href;
+  }
  }
 
  /******* link to raghuvamsa (for sch) ***********/
