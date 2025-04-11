@@ -500,7 +500,17 @@ public function ls_callback_pwg_href($code,$data) {
    $t = $matches[2]; // taranga
    $s = $matches[3]; // shloka
    $href = "https://sanskrit-lexicon-scans.github.io/kss/index.html?$t,$s";
-   //$href = "http://localhost/sanskrit-lexicon-scans/kss/index.html?$t,$s"; //dbg
+   dbgprint($dbg,"$pfx: href=$href\n");
+   return $href;
+  }
+ }
+ /******* link to Vājasaneyisaṃhitā ***********/
+ $temparr = array("VS.");
+ foreach($temparr as $temp) {
+  if (preg_match("|^($temp) *([0-9]+), *([0-9]+)|",$data,$matches)) {
+   $t = $matches[2]; // adhyAya
+   $s = $matches[3]; // shloka
+   $href = "https://sanskrit-lexicon-scans.github.io/vajasasa/app1?$t,$s";
    dbgprint($dbg,"$pfx: href=$href\n");
    return $href;
   }
@@ -1094,7 +1104,8 @@ public function ls_callback_mw_href($code,$n,$data) {
    'Sāh.' => 'sahitya', // mw
    'Bhag.' => 'bhagavadgita', // mw, sch
    'R. ed. Bomb.' => 'ramayanabom', // mw, sch
-   'Pañcat.' => 'pantankose', // mw, wch
+   'Pañcat.' => 'pantankose', // mw, sch
+   'VS.' => 'vajasasa',
    );
  //hrefs for MBHC, MBHB not implemented. MBHC is same as MBH.(?)
  if (!isset($code_to_pfx[$code])) {
@@ -1186,7 +1197,7 @@ public function ls_callback_mw_href($code,$n,$data) {
   return $href;
  }
 
-/******* link to R. 7,N,N for mw (bombay editition ***********/
+/******* link to R. 7,N,N for mw (bombay edition ***********/
  if (preg_match('|^(R[.]) *(vii), *([0-9]+), *([0-9]+)[^0-9,]?|',$data1,$matches)) {
   $pfx = $matches[1];
   $kand_roman = $matches[2];
@@ -1322,6 +1333,22 @@ public function ls_callback_mw_href($code,$n,$data) {
    }
   }
   $href = "https://sanskrit-lexicon-scans.github.io/kss/index.html?$t,$s";
+  return $href;
+ }
+ /******* link to Vājasaneyisaṃhitā for mw  ***********/
+ if (in_array($pfx,array('vajasasa'))) {
+  // ## two parameters 
+  if(!preg_match("|^$code +([ivx]+), *([0-9]+)|",$data1,$matches)) {
+    return $href;
+   }
+  $adhy_raw = $matches[1];
+  $s = $matches[2];
+  $a = $this->romanToInt($adhy_raw);
+  if ($a == 0) {
+   // error condition 
+   return $href;
+  }
+  $href = "https://sanskrit-lexicon-scans.github.io/vajasasa/app1?$a,$s";
   return $href;
  }
 
@@ -1607,7 +1634,7 @@ public function ls_callback_sch_href($code,$n,$data) {
  'Śāk.' => 'shakuntala', 'Śat. Br.' => 'shatapathabr',
  'Sāh. D.' => 'sahityadarpana', 'Bhag.' => 'bhagavadgita', 
  'R. ed. Bomb.' => 'ramayanabom', 
- 'Pañcat.' => 'pantankose',
+ 'Pañcat.' => 'pantankose', 'VS.' => 'vajasasa'
  );
  if (!isset($code_to_pfx[$code])) {
   return $href;
@@ -1648,6 +1675,17 @@ public function ls_callback_sch_href($code,$n,$data) {
    dbgprint($dbg,"$pfx: href=$href\n");
    return $href;
   }  
+ }
+ /******* link to Vājasaneyisaṃhitā for sch ***********/
+ $temparr = array("VS.");
+ foreach($temparr as $temp) {
+  if (preg_match("|^($temp) *([0-9]+), *([0-9]+)|",$data,$matches)) {
+   $t = $matches[2]; // adhyAya
+   $s = $matches[3]; // shloka
+   $href = "https://sanskrit-lexicon-scans.github.io/vajasasa/app1?$t,$s";
+   dbgprint($dbg,"$pfx: href=$href\n");
+   return $href;
+  }
  }
  /******* link to yajnavalkya (for sch) ***********/
  $temparr = array("Yājñ.");
