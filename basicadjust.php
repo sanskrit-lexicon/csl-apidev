@@ -527,7 +527,7 @@ public function ls_callback_pwg_href($code,$data) {
    return $href;
   }
  }
- /******* link to Raghuvaṃśam  ***********/
+ /******* link to Raghuvaṃśa  ***********/
  // pwg,pw,pwkvn  RAGH. N,N;  
  $temparr = array("RAGH.");
  foreach($temparr as $temp) {
@@ -535,6 +535,18 @@ public function ls_callback_pwg_href($code,$data) {
    $t = $matches[2]; // adhyAya
    $s = $matches[3]; // verse
    $href = "https://sanskrit-lexicon-scans.github.io/raghuvamsa/app1?$t,$s";
+   dbgprint($dbg,"$pfx: href=$href\n");
+   return $href;
+  }
+ }
+ /******* link to Raghuvaṃśa (calcutta edition) ***********/
+ // pwg,pw,pwkvn  RAGH. N,N;  
+ $temparr = array("RAGH. ed. Calc.", "RAGH. \(ed. Calc.\)", "RAGH. \(Calc.\)");
+ foreach($temparr as $temp) {
+  if (preg_match("|^($temp) *([0-9]+), *([0-9]+)|",$data,$matches)) {
+   $t = $matches[2]; // sarga
+   $s = $matches[3]; // verse
+   $href = "https://sanskrit-lexicon-scans.github.io/raghuvamsacalc/app1?$t,$s";
    dbgprint($dbg,"$pfx: href=$href\n");
    return $href;
   }
@@ -1121,6 +1133,8 @@ public function ls_callback_mw_href($code,$n,$data) {
    'R. ed. Bomb.' => 'ramayanabom', // mw, sch
    'Pañcat.' => 'pantankose', // mw, sch
    'VS.' => 'vajasasa', 'TS.' => 'taittiriyas',
+   'Ragh. ed. Calc.' => 'raghuvamsacalc', // sch
+   'Ragh. (C)' => 'raghuvamsacalc', // mw
    );
  //hrefs for MBHC, MBHB not implemented. MBHC is same as MBH.(?)
  if (!isset($code_to_pfx[$code])) {
@@ -1448,7 +1462,7 @@ public function ls_callback_mw_href($code,$n,$data) {
   return $href;
  }
 
- /******* link to Raghuvṃśam for mw ***********/
+ /******* link to Raghuvṃśa for mw ***********/
  if ( (in_array($pfx,array('ragh'))) && (in_array($this->dict,array('mw'))) ) {
   // ## two parameters 
   if(!preg_match("|^$code +([^.,]+), *([0-9]+)|",$data1,$matches)) {
@@ -1469,6 +1483,24 @@ public function ls_callback_mw_href($code,$n,$data) {
    }
   }
   $href = "https://sanskrit-lexicon-scans.github.io/raghuvamsa/app1?$t,$s";
+  return $href;
+ }
+
+ /******* link to Raghuvṃśa Calcutta edition for mw ***********/
+ if ( (in_array($pfx,array('raghuvamsacalc'))) && (in_array($this->dict,array('mw'))) ) {
+  // ## two parameters 
+  //if (!preg_match("|^$code +([ivx]+), *([0-9]+)|",$data1,$matches)) {
+  if (!preg_match("|^Ragh. \(C\) +([ivx]+), *([0-9]+)|",$data1,$matches)) {
+    return $href;
+  }
+  $taranga_raw = $matches[1];
+  $s = $matches[2];
+  $t = $this->romanToInt($taranga_raw);
+  if ($t == 0) {
+   // error condition tar
+   return $href;
+  }
+  $href = "https://sanskrit-lexicon-scans.github.io/raghuvamsacalc/app1?$t,$s";
   return $href;
  }
 
@@ -1684,6 +1716,7 @@ public function ls_callback_sch_href($code,$n,$data) {
  'Sāh. D.' => 'sahityadarpana', 'Bhag.' => 'bhagavadgita', 
  'R. ed. Bomb.' => 'ramayanabom', 
  'Pañcat.' => 'pantankose', 'VS.' => 'vajasasa', 'TS.' => 'taittiriyas',
+ 'Ragh. ed. Calc.' => 'raghuvamsacalc',
  );
  if (!isset($code_to_pfx[$code])) {
   return $href;
@@ -1816,6 +1849,17 @@ public function ls_callback_sch_href($code,$n,$data) {
    $t = $matches[2]; // adhyaya
    $s = $matches[3]; // shloka
    $href = "https://sanskrit-lexicon-scans.github.io/raghuvamsa/app1?$t,$s";
+   dbgprint($dbg,"$pfx: href=$href\n");
+   return $href;
+  }  
+ }
+ /******* link to raghuvamsacalc (for sch) ***********/
+ $temparr = array("Ragh. ed. Calc.");
+ foreach($temparr as $temp) {
+  if (preg_match("|^($temp) *([0-9]+), *([0-9]+)|",$data1,$matches)) {
+   $t = $matches[2]; // adhyaya
+   $s = $matches[3]; // shloka
+   $href = "https://sanskrit-lexicon-scans.github.io/raghuvamsacalc/app1?$t,$s";
    dbgprint($dbg,"$pfx: href=$href\n");
    return $href;
   }  
