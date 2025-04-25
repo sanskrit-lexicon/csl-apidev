@@ -515,6 +515,17 @@ public function ls_callback_pwg_href($code,$data) {
    return $href;
   }
  }
+/******* link to rajatar RĀJATARAṄGIṆĪ  ***********/
+ $temparr = array("RĀJA-TAR.","RĀJAT.");
+ foreach($temparr as $temp) {
+  if (preg_match("|^($temp) *([0-9]+), *([0-9]+)|",$data,$matches)) {
+   $t = $matches[2]; // taranga
+   $s = $matches[3]; // shloka
+   $href = "https://sanskrit-lexicon-scans.github.io/rajatar/app1?$t,$s";
+   dbgprint($dbg,"$pfx: href=$href\n");
+   return $href;
+  }
+ }
  /******* link to YĀJÑAVALKYA'S Gesetzbuch  ***********/
  // pwg,pw,pwkvn  YĀJÑ. N,N;  
  $temparr = array("YĀJÑ.");
@@ -1135,6 +1146,7 @@ public function ls_callback_mw_href($code,$n,$data) {
    'VS.' => 'vajasasa', 'TS.' => 'taittiriyas',
    'Ragh. ed. Calc.' => 'raghuvamsacalc', // sch
    'Ragh. (C)' => 'raghuvamsacalc', // mw
+   'Rājat.' => "rajatar", //mw, sch
    );
  //hrefs for MBHC, MBHB not implemented. MBHC is same as MBH.(?)
  if (!isset($code_to_pfx[$code])) {
@@ -1380,8 +1392,9 @@ public function ls_callback_mw_href($code,$n,$data) {
   $href = "https://sanskrit-lexicon-scans.github.io/vajasasa/app1?$a,$s";
   return $href;
  }
-/******* link to Vājasaneyisaṃhitā for mw  ***********/
- if (in_array($pfx,array('vajasasa'))) {
+
+ /******* link to Rājataraṅgiṇī for mw  ***********/
+ if (in_array($pfx,array('rajatar'))) {
   // ## two parameters 
   if(!preg_match("|^$code +([ivx]+), *([0-9]+)|",$data1,$matches)) {
     return $href;
@@ -1393,7 +1406,7 @@ public function ls_callback_mw_href($code,$n,$data) {
    // error condition 
    return $href;
   }
-  $href = "https://sanskrit-lexicon-scans.github.io/vajasasa/app1?$a,$s";
+  $href = "https://sanskrit-lexicon-scans.github.io/rajatar/app1?$a,$s";
   return $href;
  }
 /******* link to Taittirīya-Sam̃hitā for mw  ***********/
@@ -1717,6 +1730,7 @@ public function ls_callback_sch_href($code,$n,$data) {
  'R. ed. Bomb.' => 'ramayanabom', 
  'Pañcat.' => 'pantankose', 'VS.' => 'vajasasa', 'TS.' => 'taittiriyas',
  'Ragh. ed. Calc.' => 'raghuvamsacalc',
+ 'Rājat.' => 'rajatar',
  );
  if (!isset($code_to_pfx[$code])) {
   return $href;
@@ -1769,6 +1783,18 @@ public function ls_callback_sch_href($code,$n,$data) {
    return $href;
   }
  }
+ /******* link to Rājataraṅgiṇī for sch ***********/
+ $temparr = array("Rājat.");
+ foreach($temparr as $temp) {
+  if (preg_match("|^($temp) *([0-9]+), *([0-9]+)|",$data,$matches)) {
+   $t = $matches[2]; // taranga
+   $s = $matches[3]; // shloka
+   $href = "https://sanskrit-lexicon-scans.github.io/rajatar/app1?$t,$s";
+   dbgprint($dbg,"$pfx: href=$href\n");
+   return $href;
+  }
+ }
+// Rājat.
 /******* link to Taittirīya-Sam̃hitā for sch ***********/
  $temparr = array("TS.");
  foreach($temparr as $temp) {
