@@ -587,8 +587,8 @@ public function ls_callback_pwg_href($code,$data) {
   }
  }
 /******* link to Anekārthasaṃgraha of Hemacandra  ***********/
- // pwg,pw,pwkvn  H. an. N,N;  
- $temparr = array("H. an.");
+ // pwg,pw,pwkvn  H. an. N,N;  Also, an. N,N
+ $temparr = array("H. an.","an.");
  foreach($temparr as $temp) {
   if (preg_match("|^($temp) *([0-9]+), *([0-9]+)|",$data,$matches)) {
    $t = $matches[2]; // adhyAya
