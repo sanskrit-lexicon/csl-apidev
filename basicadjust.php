@@ -437,7 +437,7 @@ public function ls_callback_pwg_href($code,$data) {
  $dbg = false;
  dbgprint($dbg,"ls_callback_pwg_href. data=$data\n");
  if (preg_match('|^(Spr[.]) ([0-9]+)|',$data,$matches)) {
-  if (in_array($this->dict,array('pw'))) {
+  if (in_array($this->dict,array('pw','pwkvn'))) {
    // link to Spruche 2nd edition in pw
    $pfx = $matches[1];
    $verse = $matches[2];
