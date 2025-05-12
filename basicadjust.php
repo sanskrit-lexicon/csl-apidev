@@ -441,7 +441,7 @@ public function ls_callback_pwg_href($code,$data) {
    // link to Spruche 2nd edition in pw
    $pfx = $matches[1];
    $verse = $matches[2];
-   $href = "https://funderburkjim.github.io/boesp-prep/web1/boesp.html?$verse";
+   $href = "https://sanskrit-lexicon-scans.github.io/boesp2/web1/boesp.html?$verse";
    dbgprint($dbg,"Spr: href=$href\n");
    return $href;
   }
@@ -458,7 +458,7 @@ public function ls_callback_pwg_href($code,$data) {
   // Indische Sprüche in pwg (2nd edition)
   $pfx = $matches[1];
   $verse = $matches[2];
-  $href = "https://funderburkjim.github.io/boesp-prep/web1/boesp.html?$verse";
+  $href = "https://sanskrit-lexicon-scans.github.io/boesp2/web1/boesp.html?$verse";
   dbgprint($dbg,"Spr: href=$href\n");
   return $href;
  }
@@ -1853,7 +1853,7 @@ public function ls_callback_sch_href($code,$n,$data) {
    // Indische Sprüche in sch is assumed to be volume 2
    $code0 = $matches[1];
    $verse = $matches[2];
-   $href = "https://funderburkjim.github.io/boesp-prep/web1/boesp.html?$verse";
+   $href = "https://sanskrit-lexicon-scans.github.io/boesp2/web1/boesp.html?$verse";
    dbgprint($dbg,"Spr: href=$href\n");
    return $href;
   }
