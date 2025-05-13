@@ -663,6 +663,18 @@ public function ls_callback_pwg_href($code,$data) {
    return $href;
   }
  }
+ /******* link to kumara sambhava  ***********/
+ // pwg,pw,pwkvn  KUMĀRAS. N,N;  
+ $temparr = array("KUMĀRAS.");
+ foreach($temparr as $temp) {
+  if (preg_match("|^($temp) *([0-9]+), *([0-9]+)|",$data,$matches)) {
+   $t = $matches[2]; // sarga
+   $s = $matches[3]; // verse
+   $href = "https://sanskrit-lexicon-scans.github.io/kumaras/app1?$t,$s";
+   dbgprint($dbg,"$pfx: href=$href\n");
+   return $href;
+  }
+ }
  /******* link to shatapathabr  ***********/
  // pwg,pw,pwkvn  ŚAT. BR. N,N,N,N;  
  $temparr = array("ŚAT. BR.");
@@ -1203,6 +1215,8 @@ public function ls_callback_mw_href($code,$n,$data) {
    'TBr.' => 'taittiriyabr',
    'KātyŚr.' => 'katyasr', //mw
    'Kāty. Śr.' => 'katyasr1', // sch
+   'Kumāras.' => 'kumaras', // sch
+   'Kum.' => 'kumaras', // mw
    );
  //hrefs for MBHC, MBHB not implemented. MBHC is same as MBH.(?)
  if (!isset($code_to_pfx[$code])) {
@@ -1480,7 +1494,23 @@ public function ls_callback_mw_href($code,$n,$data) {
   $href = "https://sanskrit-lexicon-scans.github.io/bhattikavya/app1?$a,$s";
   return $href;
  }
- /******* link to katyasr for mw 3 parameters ***********/
+/******* link to kumarasambhava for mw  ***********/
+ if (in_array($pfx,array('kumaras'))) {
+  // ## two parameters 
+  if(!preg_match("|^$code +([ivx]+), *([0-9]+)|",$data1,$matches)) {
+    return $href;
+   }
+  $adhy_raw = $matches[1]; // sarga
+  $s = $matches[2];
+  $a = $this->romanToInt($adhy_raw);
+  if ($a == 0) {
+   // error condition 
+   return $href;
+  }
+  $href = "https://sanskrit-lexicon-scans.github.io/kumaras/app1?$a,$s";
+  return $href;
+ }
+  /******* link to katyasr for mw 3 parameters ***********/
  if (in_array($pfx,array('katyasr1'))) {
   // ## two parameters 
   if(!preg_match("|^$code +([ivx]+), *([0-9]+), *([0-9]+)|",$data1,$matches)) {
@@ -1837,7 +1867,7 @@ public function ls_callback_sch_href($code,$n,$data) {
  'Pañcat.' => 'pantankose', 'VS.' => 'vajasasa', 'TS.' => 'taittiriyas',
  'Ragh. ed. Calc.' => 'raghuvamsacalc',
  'Rājat.' => 'rajatar', 'Bhaṭṭ.' => 'bhattikavya',
- 'Tbr.' => 'taittiriyabr','Kāty. Śr.' => 'katyasr',
+ 'Tbr.' => 'taittiriyabr','Kāty. Śr.' => 'katyasr', 'Kumāras.' => 'kumaras',
  );
  if (!isset($code_to_pfx[$code])) {
   return $href;
@@ -1908,6 +1938,17 @@ public function ls_callback_sch_href($code,$n,$data) {
    $t = $matches[2]; // sarga
    $s = $matches[3]; // shloka
    $href = "https://sanskrit-lexicon-scans.github.io/bhattikavya/app1?$t,$s";
+   dbgprint($dbg,"$pfx: href=$href\n");
+   return $href;
+  }
+ }
+ /******* link to kumaras for sch ***********/
+ $temparr = array("Kumāras.");
+ foreach($temparr as $temp) {
+  if (preg_match("|^($temp) *([0-9]+), *([0-9]+)|",$data,$matches)) {
+   $t = $matches[2]; // sarga
+   $s = $matches[3]; // shloka
+   $href = "https://sanskrit-lexicon-scans.github.io/kumaras/app1?$t,$s";
    dbgprint($dbg,"$pfx: href=$href\n");
    return $href;
   }
