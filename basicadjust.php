@@ -798,7 +798,30 @@ public function ls_callback_pwg_href($code,$data) {
    return $href;
   }
  }
- /******* link to Medinikosha   ***********/
+/******* link meghaduta ***********/
+ // pwg,pw,pwkvn  MEGH. N;  
+ $temparr = array("MEGH.");
+ foreach($temparr as $temp) {
+  if (preg_match("|^($temp) *([0-9]+)|",$data,$matches)) {
+   $t = $matches[2]; // verse
+   $href = "https://sanskrit-lexicon-scans.github.io/meghasrnga/app1?$t";
+   dbgprint($dbg,"$pfx: href=$href\n");
+   return $href;
+  }
+ }
+/******* link srngaratilaka ***********/
+ // pwg,pw,pwkvn ŚṚṄGĀRAT. N;  
+ $temparr = array("ŚṚṄGĀRAT.");
+ foreach($temparr as $temp) {
+  if (preg_match("|^($temp) *([0-9]+)|",$data,$matches)) {
+   $t = $matches[2]; // verse
+   $href = "https://sanskrit-lexicon-scans.github.io/meghasrnga/app2?$t";
+   dbgprint($dbg,"$pfx: href=$href\n");
+   return $href;
+  }
+ }
+
+/******* link to Medinikosha   ***********/
  // pwg,pw,pwkvn  MED. A. N;  
  $temparr = array("MED.");
  foreach($temparr as $temp) {
@@ -1235,6 +1258,8 @@ public function ls_callback_mw_href($code,$n,$data) {
    'Kumāras.' => 'kumaras', // sch
    'Kum.' => 'kumaras', // mw
    'Mālav.' => 'malavikagni', // mw, sch
+   'Śṛṅgār.' => 'meghasrnga', // mw
+   'Megh.' => 'meghaduta', // mw, sch
    );
  //hrefs for MBHC, MBHB not implemented. MBHC is same as MBH.(?)
  if (!isset($code_to_pfx[$code])) {
@@ -1423,6 +1448,23 @@ public function ls_callback_mw_href($code,$n,$data) {
   dbgprint($dbg,"$pfx: href=$href\n");
   return $href;
  }
+ /******* link to meghaduta for mw  ***********/
+ if (preg_match('|^(Megh[.]) *([0-9]+)[.]?$|',$data,$matches)) {
+  $pfx = $matches[1];
+  $verse = $matches[2];
+  $href = "https://sanskrit-lexicon-scans.github.io/meghasrnga/app1?$verse";
+  dbgprint($dbg,"$pfx: href=$href\n");
+  return $href;
+ }
+ /******* link to Srngatilaka for mw  ***********/
+ if (preg_match('|^(Śṛṅgār[.]) *([0-9]+)[.]?$|',$data,$matches)) {
+  $pfx = $matches[1];
+  $verse = $matches[2];
+  $href = "https://sanskrit-lexicon-scans.github.io/meghasrnga/app2?$verse";
+  dbgprint($dbg,"$pfx: href=$href\n");
+  return $href;
+ }
+
  /******* link to Westergaard Dhatupatha  ***********/
  if (in_array($pfx,array('dp'))) {
   // ## one roman numeral 
@@ -1901,7 +1943,7 @@ public function ls_callback_sch_href($code,$n,$data) {
  'Ragh. ed. Calc.' => 'raghuvamsacalc',
  'Rājat.' => 'rajatar', 'Bhaṭṭ.' => 'bhattikavya',
  'Tbr.' => 'taittiriyabr','Kāty. Śr.' => 'katyasr', 'Kumāras.' => 'kumaras',
- 'Mālav.' => 'malavikagni'
+ 'Mālav.' => 'malavikagni', 'Megh.' => 'meghaduta',
  );
  if (!isset($code_to_pfx[$code])) {
   return $href;
@@ -2369,6 +2411,18 @@ public function ls_callback_sch_href($code,$n,$data) {
    $href = "$dir/$ic/$is/$iv";
    return $href;
  }
+/******* link meghaduta sch ***********/
+ // pwg,pw,pwkvn  Megh. N;  
+ $temparr = array("Megh.");
+ foreach($temparr as $temp) {
+  if (preg_match("|^($temp) *([0-9]+)|",$data,$matches)) {
+   $t = $matches[2]; // verse
+   $href = "https://sanskrit-lexicon-scans.github.io/meghasrnga/app1?$t";
+   dbgprint($dbg,"$pfx: href=$href\n");
+   return $href;
+  }
+ }
+
  /******* link to HarivaMSa ***********/
  if (in_array($pfx,array('hariv'))) {
   // ## one decimal numbers
