@@ -786,6 +786,17 @@ public function ls_callback_pwg_href($code,$data) {
    return $href;
   }
  }
+/******* CAURAPAÑCĀŚIKĀ  ***********/
+ // pwg,pw,pwkvn  CAURAP. N;  
+ $temparr = array("CAURAP.");
+ foreach($temparr as $temp) {
+  if (preg_match("|^($temp) *([0-9]+)|",$data,$matches)) {
+   $t = $matches[2]; // verse
+   $href = "https://sanskrit-lexicon-scans.github.io/bhartrhari/app1?$t";
+   dbgprint($dbg,"$pfx: href=$href\n");
+   return $href;
+  }
+ }
 /******* link to Vishvamitra's battle in bchrest1  ***********/
  // pwg,pw,pwkvn  VIŚV. N,N;  
  $temparr = array("VIŚV.");
@@ -794,6 +805,18 @@ public function ls_callback_pwg_href($code,$data) {
    $t = $matches[2]; // adhyAya
    $s = $matches[3]; // verse
    $href = "https://sanskrit-lexicon-scans.github.io/bchrest1/app4?$t,$s";
+   dbgprint($dbg,"$pfx: href=$href\n");
+   return $href;
+  }
+ }
+/******* Bhartṛhariśataka ***********/
+ // pwg BHARTṚ.  N,N;  //(no instances in pw, pwkvn)
+ $temparr = array("BHARTṚ.");
+ foreach($temparr as $temp) {
+  if (preg_match("|^($temp) *([0-9]+), *([0-9]+)|",$data,$matches)) {
+   $t = $matches[2]; // shataka
+   $s = $matches[3]; // verse
+   $href = "https://sanskrit-lexicon-scans.github.io/bhartrhari/app2?$t,$s";
    dbgprint($dbg,"$pfx: href=$href\n");
    return $href;
   }
@@ -1260,6 +1283,9 @@ public function ls_callback_mw_href($code,$n,$data) {
    'Mālav.' => 'malavikagni', // mw, sch
    'Śṛṅgār.' => 'meghasrnga', // mw
    'Megh.' => 'meghaduta', // mw, sch
+   'Caurap. (A.)' => 'Caurapañcāśikā', // sch
+   'Caurap.'  => 'Caurapañcāśikā', // mw
+   'Bhartṛ.'  => 'Bhartṛhariśataka', // mw
    );
  //hrefs for MBHC, MBHB not implemented. MBHC is same as MBH.(?)
  if (!isset($code_to_pfx[$code])) {
@@ -1567,6 +1593,32 @@ public function ls_callback_mw_href($code,$n,$data) {
    return $href;
   }
   $href = "https://sanskrit-lexicon-scans.github.io/bhattikavya/app1?$a,$s";
+  return $href;
+ }
+ /******* link to Bhartṛhariśataka for mw  ***********/
+ if (in_array($pfx,array('Bhartṛhariśataka'))) {
+  // ## two parameters 
+  if(!preg_match("|^$code +([ivx]+), *([0-9]+)|",$data1,$matches)) {
+    return $href;
+   }
+  $adhy_raw = $matches[1];
+  $s = $matches[2];
+  $a = $this->romanToInt($adhy_raw);
+  if ($a == 0) {
+   // error condition 
+   return $href;
+  }
+  $href = "https://sanskrit-lexicon-scans.github.io/bhartrhari/app2?$a,$s";
+  return $href;
+ }
+ /******* link to Caurapañcāśikā for mw 1 parameter ***********/
+ if (in_array($pfx,array('Caurapañcāśikā'))) {
+  // ## two parameters 
+  if(!preg_match("|^$code +([0-9]+)|",$data1,$matches)) {
+    return $href;
+   }
+  $s = $matches[1];
+  $href = "https://sanskrit-lexicon-scans.github.io/bhartrhari/app1?$s";
   return $href;
  }
 /******* link to kumarasambhava for mw  ***********/
@@ -1944,6 +1996,7 @@ public function ls_callback_sch_href($code,$n,$data) {
  'Rājat.' => 'rajatar', 'Bhaṭṭ.' => 'bhattikavya',
  'Tbr.' => 'taittiriyabr','Kāty. Śr.' => 'katyasr', 'Kumāras.' => 'kumaras',
  'Mālav.' => 'malavikagni', 'Megh.' => 'meghaduta',
+ 'Caurap. (A.)' => 'Caurapañcāśikā', // sch
  );
  if (!isset($code_to_pfx[$code])) {
   return $href;
@@ -2433,6 +2486,21 @@ public function ls_callback_sch_href($code,$n,$data) {
   $pfx = $matches[1];
   $verse = $matches[2];
   $href = "https://sanskrit-lexicon-scans.github.io/hariv?$verse";
+  dbgprint($dbg,"$pfx: href=$href\n");
+  return $href;
+ }
+ /******* link to Caurapañcāśikā, Ariel edition ***********/
+ // The code is 'Caurap. (A.)'  That paren causes problems
+ if (in_array($pfx,array('Caurapañcāśikā'))) {
+  // ## one decimal numbers
+  if(!preg_match('|^(.*?) *([0-9]+)(.*)$|',$data1,$matches)) {
+    return $href;
+   }
+  // This is the Ariel edition. Currently no link target, so return null 
+  return $href;
+  $pfx = $matches[1];
+  $verse = $matches[2];
+  $href = "https://sanskrit-lexicon-scans.github.io/bhartrhari/app1?$verse";
   dbgprint($dbg,"$pfx: href=$href\n");
   return $href;
  }
