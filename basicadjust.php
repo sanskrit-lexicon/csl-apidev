@@ -462,10 +462,28 @@ public function ls_callback_pwg_href($code,$data) {
   dbgprint($dbg,"Spr: href=$href\n");
   return $href;
  }
- /******* link to Mahabharata ***********/
+ /******* link to Mahabharata Bombay edition - 3 parms ***********/
+ if (preg_match('|^(MBH[.]) *([0-9]+) *, *([0-9]+), *([0-9]+)|',$data,$matches)) {
+  $pfx = $matches[1];
+  $parvan = $matches[2];
+  $adhy = $matches[3];
+  $verse = $matches[4];
+  $href = "https://sanskrit-lexicon-scans.github.io/mbhbomb/app1?$parvan,$adhy,$verse";
+  dbgprint($dbg,"$pfx: href=$href\n");
+  return $href;
+ }
+ /******* link to Mahabharata Bombay edition - 3 parms ***********/
+ if (preg_match('|^(MBH[.] ed. Bomb.) *([0-9]+) *, *([0-9]+), *([0-9]+)|',$data,$matches)) {
+  $pfx = $matches[1];
+  $parvan = $matches[2];
+  $adhy = $matches[3];
+  $verse = $matches[4];
+  $href = "https://sanskrit-lexicon-scans.github.io/mbhbomb/app1?$parvan,$adhy,$verse";
+  dbgprint($dbg,"$pfx: href=$href\n");
+  return $href;
+ }
+ /******* link to Mahabharata Calcutta edition - 2 parms ***********/
  if (preg_match('|^(MBH[.]) *([0-9]+) *, *([0-9]+)[.]?$|',$data,$matches)) {
-  // Mahabharata, Calcutta edition for pwg.
-  // Some PW refs to MBH are different, using 3 parameters (Bombay)
   $pfx = $matches[1];
   $parvan = $matches[2];
   $verse = $matches[3];
