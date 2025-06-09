@@ -1483,7 +1483,20 @@ public function ls_callback_mw_href($code,$n,$data) {
   dbgprint($dbg,"ls_callback_mw_href: $pfx: href=$href\n");
   return $href;
  }
- /******* link to harivamsa  ***********/
+/******* link to  Mahabharata, Bombay edition for mw.  3 parameters***********/
+ if (preg_match('|^(MBh[.]) *([xiv]+), *([0-9]+), *([0-9]+)|',$data1,$matches)) {
+  // Mahabharata, Calcutta edition for mw.
+  $pfx = $matches[1];
+  $parvan_roman = $matches[2];
+  $parvan = $this->roman_int($parvan_roman);
+  $adhy = $matches[3];
+  $verse = $matches[4];
+  $href = "https://sanskrit-lexicon-scans.github.io/mbhbomb/app1/?$parvan,$adhy,$verse";
+  dbgprint($dbg,"ls_callback_mw_href: $pfx: href=$href\n");
+  return $href;
+ }
+
+/******* link to harivamsa  ***********/
  if (preg_match('|^(Hariv[.]) *([0-9]+)[.]?$|',$data,$matches)) {
   // Mahabharata, Calcutta edition for harivamsa. For MW.
   $pfx = $matches[1];
@@ -2015,6 +2028,7 @@ public function ls_callback_sch_href($code,$n,$data) {
  'Tbr.' => 'taittiriyabr','Kāty. Śr.' => 'katyasr', 'Kumāras.' => 'kumaras',
  'Mālav.' => 'malavikagni', 'Megh.' => 'meghaduta',
  'Caurap. (A.)' => 'Caurapañcāśikā', // sch
+ 'MBh.' => 'MBH', 
  );
  if (!isset($code_to_pfx[$code])) {
   return $href;
@@ -2161,14 +2175,26 @@ public function ls_callback_sch_href($code,$n,$data) {
    return $href;
   }  
  }
- /******* link to Ramayana, Bombay edition (for sch), kanda 7 ***********/
- $temparr = array("R.");
+ /******* link to Ramayana, Bombay edition (for sch) ***********/
+ $temparr = array("R. ed. Bomb.");
  foreach($temparr as $temp) {
-  if (preg_match("|^($temp) *(7), *([0-9]+), *([0-9]+)|",$data1,$matches)) {
+  if (preg_match("|^($temp) *([0-9]+), *([0-9]+), *([0-9]+)|",$data1,$matches)) {
    $k = $matches[2];
    $s = $matches[3];
    $v = $matches[4];
    $href = "https://sanskrit-lexicon-scans.github.io/ramayanabom/app1?$k,$s,$v";
+   dbgprint($dbg,"$pfx: href=$href\n");
+   return $href;
+  }  
+ }
+ /******* link to mahabharata, Bombay edition (for sch) ***********/
+ $temparr = array("MBh.");
+ foreach($temparr as $temp) {
+  if (preg_match("|^($temp) *([0-9]+), *([0-9]+), *([0-9]+)|",$data1,$matches)) {
+   $p = $matches[2]; 
+   $a = $matches[3];
+   $v = $matches[4];
+   $href = "https://sanskrit-lexicon-scans.github.io/mbhbomb/app1?$p,$a,$v";
    dbgprint($dbg,"$pfx: href=$href\n");
    return $href;
   }  
