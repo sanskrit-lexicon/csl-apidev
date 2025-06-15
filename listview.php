@@ -62,7 +62,8 @@ error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
  <script type="text/javascript" src="js/orphus.customized.js"></script>
 
 <script type="text/javascript">
-  $(window).load(function() {
+  // $(window).load(function() {
+  $(window).on("load",function() {
   //var correctionsUrl = 'https://www.sanskrit-lexicon.uni-koeln.de/php/correction_form_response.php';
   var correctionsUrl = 'https://www.sanskrit-lexicon.uni-koeln.de/scans/csl-corrections/app/correction_form_response.php';
   <?php 
