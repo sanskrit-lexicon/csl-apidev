@@ -674,6 +674,31 @@ public function ls_callback_pwg_href($code,$data) {
    return $href;
   }
  }
+/******* link to Hitopadeśa, ed. Schlegel und Lassen, 1829 pwg,pw,pwkvn  ***********/
+ $temparr = array("HIT.");
+ foreach($temparr as $temp) {
+  if (preg_match("|^($temp) *([0-9]+), *([0-9]+)|",$data,$matches)) {
+   $t = $matches[2]; // page
+   $s = $matches[3]; // linenum
+   $href = "https://sanskrit-lexicon-scans.github.io/hitopadesha/app2?$t,$s";
+   dbgprint($dbg,"$pfx: href=$href\n");
+   return $href;
+  }else if (preg_match("|^($temp) ([IV]+), *([0-9]+)|",$data,$matches)) {
+   $tantra = $matches[2]; // roman-numeral
+   $t = $this->romanToInt($tantra);
+   $v = $matches[3]; // verse
+   dbgprint($dbg,"$pfx: href=$href\n");
+   $href = "https://sanskrit-lexicon-scans.github.io/hitopadesha/app1?$t,$v";
+   return $href;
+  }else if (preg_match("|^($temp) (Pr\.) *([0-9]+)|",$data,$matches)) {
+   $tantra = $matches[2]; // prastAva
+   $t = 0; 
+   $v = $matches[3]; // verse
+   dbgprint($dbg,"$pfx: href=$href\n");
+   $href = "https://sanskrit-lexicon-scans.github.io/hitopadesha/app1?$t,$v";
+   return $href;
+  }
+ }
  /******* link to Mugdhabodha of Vopadeva  ***********/
  // pwg,pw,pwkvn  VOP. N,N;  
  $temparr = array("VOP.");
@@ -1304,6 +1329,7 @@ public function ls_callback_mw_href($code,$n,$data) {
    'Caurap. (A.)' => 'Caurapañcāśikā', // sch
    'Caurap.'  => 'Caurapañcāśikā', // mw
    'Bhartṛ.'  => 'Bhartṛhariśataka', // mw
+   'Hit.' => 'Hit.', // mw, sch
    );
  //hrefs for MBHC, MBHB not implemented. MBHC is same as MBH.(?)
  if (!isset($code_to_pfx[$code])) {
@@ -1468,6 +1494,31 @@ public function ls_callback_mw_href($code,$n,$data) {
    $v = $matches[3]; // verse
    dbgprint($dbg,"$pfx: href=$href\n");
    $href = "https://sanskrit-lexicon-scans.github.io/pantankose/app1?$t,$v";
+   return $href;
+  }
+ }
+ /******* link to Hitopadeśa, ed. Schlegel und Lassen, 1829 mw  ***********/
+ $temparr = array("Hit.");
+ foreach($temparr as $temp) {
+  if (preg_match("|^($temp) *([0-9]+), *([0-9]+)|",$data,$matches)) {
+   $t = $matches[2]; // page
+   $s = $matches[3]; // linenum
+   $href = "https://sanskrit-lexicon-scans.github.io/hitopadesha/app2?$t,$s";
+   dbgprint($dbg,"$pfx: href=$href\n");
+   return $href;
+  }else if (preg_match("|^($temp) ([iv]+), *([0-9]+)|",$data,$matches)) {
+   $tantra = $matches[2]; // roman-numeral
+   $t = $this->romanToInt($tantra);
+   $v = $matches[3]; // verse
+   dbgprint($dbg,"$pfx: href=$href\n");
+   $href = "https://sanskrit-lexicon-scans.github.io/hitopadesha/app1?$t,$v";
+   return $href;
+  }else if (preg_match("|^($temp) (Introd\.) *([0-9]+)|",$data,$matches)) {
+   $tantra = $matches[2]; // prastAva
+   $t = 0; 
+   $v = $matches[3]; // verse
+   dbgprint($dbg,"$pfx: href=$href\n");
+   $href = "https://sanskrit-lexicon-scans.github.io/hitopadesha/app1?$t,$v";
    return $href;
   }
  }
@@ -2028,7 +2079,7 @@ public function ls_callback_sch_href($code,$n,$data) {
  'Tbr.' => 'taittiriyabr','Kāty. Śr.' => 'katyasr', 'Kumāras.' => 'kumaras',
  'Mālav.' => 'malavikagni', 'Megh.' => 'meghaduta',
  'Caurap. (A.)' => 'Caurapañcāśikā', // sch
- 'MBh.' => 'MBH', 
+ 'MBh.' => 'MBH', 'Hit.' => 'Hit.',
  );
  if (!isset($code_to_pfx[$code])) {
   return $href;
@@ -2223,7 +2274,31 @@ public function ls_callback_sch_href($code,$n,$data) {
    return $href;
   }
  }
-
+/******* link to Hitopadeśa, ed. Schlegel und Lassen, 1829 sch  ***********/
+ $temparr = array("Hit.");
+ foreach($temparr as $temp) {
+  if (preg_match("|^($temp) *([0-9]+), *([0-9]+)|",$data,$matches)) {
+   $t = $matches[2]; // page
+   $s = $matches[3]; // linenum
+   $href = "https://sanskrit-lexicon-scans.github.io/hitopadesha/app2?$t,$s";
+   dbgprint($dbg,"$pfx: href=$href\n");
+   return $href;
+  }else if (preg_match("|^($temp) ([IV]+), *([0-9]+)|",$data,$matches)) {
+   $tantra = $matches[2]; // roman-numeral
+   $t = $this->romanToInt($tantra);
+   $v = $matches[3]; // verse
+   dbgprint($dbg,"$pfx: href=$href\n");
+   $href = "https://sanskrit-lexicon-scans.github.io/hitopadesha/app1?$t,$v";
+   return $href;
+  }else if (preg_match("|^($temp) (Pr\.) *([0-9]+)|",$data,$matches)) {
+   $tantra = $matches[2]; // prastAva
+   $t = 0; 
+   $v = $matches[3]; // verse
+   dbgprint($dbg,"$pfx: href=$href\n");
+   $href = "https://sanskrit-lexicon-scans.github.io/hitopadesha/app1?$t,$v";
+   return $href;
+  }
+ }
  /******* link to raghuvamsa (for sch) ***********/
  $temparr = array("Ragh.");
  foreach($temparr as $temp) {
