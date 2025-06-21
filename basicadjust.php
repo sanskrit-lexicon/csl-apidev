@@ -699,6 +699,26 @@ public function ls_callback_pwg_href($code,$data) {
    return $href;
   }
  }
+/******* link to amarakosha, deslongchamp, 1839 pwg,pw,pwkvn  ***********/
+ $temparr = array("AK.");
+ foreach($temparr as $temp) {
+  if (preg_match("|^($temp) *([0-9]+), *([0-9]+), *([0-9]+), *([0-9]+)|",$data,$matches)) {
+   $b = $matches[2]; // book
+   $c = $matches[3]; // chapter
+   $s = $matches[4]; // section
+   $v = $matches[5]; // verse
+   $href = "https://sanskrit-lexicon-scans.github.io/amara_dlc/app1?$b,$c,$s,$v";
+   dbgprint($dbg,"$pfx: href=$href\n");
+   return $href;
+  }else if (preg_match("|^($temp) *([0-9]+), *([0-9]+), *([0-9]+)|",$data,$matches)) {
+   $b = $matches[2]; // book
+   $c = $matches[3]; // chapter
+   $v = $matches[4]; // verse
+   $href = "https://sanskrit-lexicon-scans.github.io/amara_dlc/app1?$b,$c,$v";
+   dbgprint($dbg,"$pfx: href=$href\n");
+   return $href;
+  }
+ }
  /******* link to Mugdhabodha of Vopadeva  ***********/
  // pwg,pw,pwkvn  VOP. N,N;  
  $temparr = array("VOP.");
@@ -1330,6 +1350,7 @@ public function ls_callback_mw_href($code,$n,$data) {
    'Caurap.'  => 'Caurapañcāśikā', // mw
    'Bhartṛ.'  => 'Bhartṛhariśataka', // mw
    'Hit.' => 'Hit.', // mw, sch
+   'AK.' => 'AK.', // sch (none for mw)
    );
  //hrefs for MBHC, MBHB not implemented. MBHC is same as MBH.(?)
  if (!isset($code_to_pfx[$code])) {
@@ -2079,7 +2100,7 @@ public function ls_callback_sch_href($code,$n,$data) {
  'Tbr.' => 'taittiriyabr','Kāty. Śr.' => 'katyasr', 'Kumāras.' => 'kumaras',
  'Mālav.' => 'malavikagni', 'Megh.' => 'meghaduta',
  'Caurap. (A.)' => 'Caurapañcāśikā', // sch
- 'MBh.' => 'MBH', 'Hit.' => 'Hit.',
+ 'MBh.' => 'MBH', 'Hit.' => 'Hit.', 'AK.' => 'AK.',
  );
  if (!isset($code_to_pfx[$code])) {
   return $href;
@@ -2296,6 +2317,26 @@ public function ls_callback_sch_href($code,$n,$data) {
    $v = $matches[3]; // verse
    dbgprint($dbg,"$pfx: href=$href\n");
    $href = "https://sanskrit-lexicon-scans.github.io/hitopadesha/app1?$t,$v";
+   return $href;
+  }
+ }
+/******* link to amarakosha, deslongchamp, 1839 sch  ***********/
+ $temparr = array("AK.");
+ foreach($temparr as $temp) {
+  if (preg_match("|^($temp) *([0-9]+), *([0-9]+), *([0-9]+), *([0-9]+)|",$data,$matches)) {
+   $b = $matches[2]; // book
+   $c = $matches[3]; // chapter
+   $s = $matches[4]; // section
+   $v = $matches[5]; // verse
+   $href = "https://sanskrit-lexicon-scans.github.io/amara_dlc/app1?$b,$c,$s,$v";
+   dbgprint($dbg,"$pfx: href=$href\n");
+   return $href;
+  }else if (preg_match("|^($temp) *([0-9]+), *([0-9]+), *([0-9]+)|",$data,$matches)) {
+   $b = $matches[2]; // book
+   $c = $matches[3]; // chapter
+   $v = $matches[4]; // verse
+   $href = "https://sanskrit-lexicon-scans.github.io/amara_dlc/app1?$b,$c,$v";
+   dbgprint($dbg,"$pfx: href=$href\n");
    return $href;
   }
  }
