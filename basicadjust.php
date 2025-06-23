@@ -719,6 +719,17 @@ public function ls_callback_pwg_href($code,$data) {
    return $href;
   }
  }
+/******* link to gitagovinda pwg,pw,pwkvn  ***********/
+ $temparr = array("GĪT.");
+ foreach($temparr as $temp) {
+  if (preg_match("|^($temp) *([0-9]+), *([0-9]+)|",$data,$matches)) {
+   $a = $matches[2]; // adhyaya
+   $v = $matches[3]; // verse
+   $href = "https://sanskrit-lexicon-scans.github.io/gitagov/app1?$a,$v";
+   dbgprint($dbg,"$pfx: href=$href\n");
+   return $href;
+  }
+ }
  /******* link to Mugdhabodha of Vopadeva  ***********/
  // pwg,pw,pwkvn  VOP. N,N;  
  $temparr = array("VOP.");
@@ -1351,6 +1362,7 @@ public function ls_callback_mw_href($code,$n,$data) {
    'Bhartṛ.'  => 'Bhartṛhariśataka', // mw
    'Hit.' => 'Hit.', // mw, sch
    'AK.' => 'AK.', // sch (none for mw)
+   'Gīt.' => 'Gīt.', // mw, sch
    );
  //hrefs for MBHC, MBHB not implemented. MBHC is same as MBH.(?)
  if (!isset($code_to_pfx[$code])) {
@@ -1649,6 +1661,23 @@ public function ls_callback_mw_href($code,$n,$data) {
    return $href;
   }
   $href = "https://sanskrit-lexicon-scans.github.io/vajasasa/app1?$a,$s";
+  return $href;
+ }
+
+ /******* link to Gitagovinda for mw  ***********/
+ if (in_array($pfx,array('Gīt.'))) {
+  // ## two parameters 
+  if(!preg_match("|^$code +([ivx]+), *([0-9]+)|",$data1,$matches)) {
+    return $href;
+   }
+  $adhy_raw = $matches[1];
+  $v = $matches[2];
+  $a = $this->romanToInt($adhy_raw);
+  if ($a == 0) {
+   // error condition 
+   return $href;
+  }
+  $href = "https://sanskrit-lexicon-scans.github.io/gitagov/app1?$a,$v";
   return $href;
  }
  /******* link to malavikagni for mw  ***********/
@@ -2100,7 +2129,7 @@ public function ls_callback_sch_href($code,$n,$data) {
  'Tbr.' => 'taittiriyabr','Kāty. Śr.' => 'katyasr', 'Kumāras.' => 'kumaras',
  'Mālav.' => 'malavikagni', 'Megh.' => 'meghaduta',
  'Caurap. (A.)' => 'Caurapañcāśikā', // sch
- 'MBh.' => 'MBH', 'Hit.' => 'Hit.', 'AK.' => 'AK.',
+ 'MBh.' => 'MBH', 'Hit.' => 'Hit.', 'AK.' => 'AK.', 'Gīt.' => 'Gīt.',
  );
  if (!isset($code_to_pfx[$code])) {
   return $href;
@@ -2336,6 +2365,17 @@ public function ls_callback_sch_href($code,$n,$data) {
    $c = $matches[3]; // chapter
    $v = $matches[4]; // verse
    $href = "https://sanskrit-lexicon-scans.github.io/amara_dlc/app1?$b,$c,$v";
+   dbgprint($dbg,"$pfx: href=$href\n");
+   return $href;
+  }
+ }
+/******* link to gitagov, sch  ***********/
+ $temparr = array("Gīt.");
+ foreach($temparr as $temp) {
+  if (preg_match("|^($temp) *([0-9]+), *([0-9]+)|",$data,$matches)) {
+   $a = $matches[2]; // adhyaya
+   $v = $matches[3]; // verse
+   $href = "https://sanskrit-lexicon-scans.github.io/gitagov/app1?$a,$v";
    dbgprint($dbg,"$pfx: href=$href\n");
    return $href;
   }
