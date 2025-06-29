@@ -719,6 +719,26 @@ public function ls_callback_pwg_href($code,$data) {
    return $href;
   }
  }
+/******* link to amarakosha, Colebrooke 1808 pwg,pw,pwkvn  ***********/
+ $temparr = array("COL.","COLEBR.","AK. ed. COLEBR.");
+ foreach($temparr as $temp) {
+  if (preg_match("|^($temp) *([0-9]+), *([0-9]+), *([0-9]+), *([0-9]+)|",$data,$matches)) {
+   $b = $matches[2]; // book
+   $c = $matches[3]; // chapter
+   $s = $matches[4]; // section
+   $v = $matches[5]; // verse
+   $href = "https://sanskrit-lexicon-scans.github.io/amara_col/app1?$b,$c,$s,$v";
+   dbgprint($dbg,"$pfx: href=$href\n");
+   return $href;
+  }else if (preg_match("|^($temp) *([0-9]+), *([0-9]+), *([0-9]+)|",$data,$matches)) {
+   $b = $matches[2]; // book
+   $c = $matches[3]; // chapter
+   $v = $matches[4]; // verse
+   $href = "https://sanskrit-lexicon-scans.github.io/amara_col/app1?$b,$c,$v";
+   dbgprint($dbg,"$pfx: href=$href\n");
+   return $href;
+  }
+ }
 /******* link to gitagovinda pwg,pw,pwkvn  ***********/
  $temparr = array("GĪT.");
  foreach($temparr as $temp) {
