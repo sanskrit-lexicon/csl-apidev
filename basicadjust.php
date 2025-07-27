@@ -997,7 +997,7 @@ public function ls_callback_pwg_href($code,$data) {
  }
  /******* link to Abhidhānacintāmaṇipariśiṣṭa of Hemacandra  ***********/
  // pwg,pw,pwkvn  H. ś. N;  
- $temparr = array("H. ś.");
+ $temparr = array("H. ś.","ś.");
  foreach($temparr as $temp) {
   if (preg_match("|^($temp) *([0-9]+)|",$data,$matches)) {
    $t = $matches[2]; // verse
