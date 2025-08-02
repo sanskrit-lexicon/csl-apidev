@@ -1139,7 +1139,7 @@ public function ls_callback_pwg_href($code,$data) {
  */
  //  pw and pwg: BHĀG. P. ed. Bomb.
   // Three parameters,
-  if(preg_match('|^BHĀG\. P\. ed\. Bomb\. *([0-9]+)[ ,]+([0-9]+)[ ,]+([0-9]+)(.*)$',$data,$matches)) {
+  if(preg_match('|^BHĀG\. P\. ed\. Bomb\. *([0-9]+)[ ,]+([0-9]+)[ ,]+([0-9]+)(.*)$|',$data,$matches)) {
   $skanda = $matches[1];
   $adhyaya = $matches[2];
   $verse = $matches[3];
