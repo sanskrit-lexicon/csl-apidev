@@ -1100,7 +1100,7 @@ public function ls_callback_pwg_href($code,$data) {
  }
  /******* link to Bhagavata Purana 11-27-2024**********/
   //  pw and pwg: BHĀG. P.
-  // use '|i' for case-insensitive
+  // use '|i' for case-insensitive. (8-1-2025 Why?)
   // Three parameters,
   if(preg_match('|^BHĀG\. P\. *([0-9]+)[ ,]+([0-9]+)[ ,]+([0-9]+)(.*)$|i',$data,$matches)) {
   $skanda = $matches[1];
@@ -1119,6 +1119,7 @@ public function ls_callback_pwg_href($code,$data) {
   return $href;
  }
   // Two parameters. set verse to 1
+  /* 08-02-2025 jim comments out this as wrong interpretation
   if(preg_match('|^BHĀG\. P\. *([0-9]+)[ ,]+([0-9]+)(.*)$|i',$data,$matches)) {
   $skanda = $matches[1];
   $adhyaya = $matches[2];
@@ -1132,6 +1133,18 @@ public function ls_callback_pwg_href($code,$data) {
   } else {
    $dir = "https://sanskrit-lexicon-scans.github.io/bhagp_bur/app1";
   }
+  $href = "$dir/?$skanda,$adhyaya,$verse";
+  return $href;
+ }
+ */
+ //  pw and pwg: BHĀG. P. ed. Bomb.
+  // Three parameters,
+  if(preg_match('|^BHĀG\. P\. ed\. Bomb\. *([0-9]+)[ ,]+([0-9]+)[ ,]+([0-9]+)(.*)$',$data,$matches)) {
+  $skanda = $matches[1];
+  $adhyaya = $matches[2];
+  $verse = $matches[3];
+  $iskanda = intval($skanda);
+  $dir = "https://sanskrit-lexicon-scans.github.io/bhagp_bom/app1";
   $href = "$dir/?$skanda,$adhyaya,$verse";
   return $href;
  }
