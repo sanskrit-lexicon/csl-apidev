@@ -936,6 +936,17 @@ public function ls_callback_pwg_href($code,$data) {
    return $href;
   }
  }
+/******* Bhartṛhariśataka Suppl. ***********/
+ // pwg BHARTṚ. Suppl. N
+ $temparr = array("BHARTṚ. Suppl.");
+ foreach($temparr as $temp) {
+  if (preg_match("|^($temp) *([0-9]+)|",$data,$matches)) {
+   $t = $matches[2]; // section
+   $href = "https://sanskrit-lexicon-scans.github.io/bhartrhari/app3?$t";
+   dbgprint($dbg,"$pfx: href=$href\n");
+   return $href;
+  }
+ }
 /******* link meghaduta ***********/
  // pwg,pw,pwkvn  MEGH. N;  
  $temparr = array("MEGH.");
