@@ -866,7 +866,27 @@ public function ls_callback_pwg_href($code,$data) {
   }
 
  }
- /******* link to Nalopakhyana in bchrest1  ***********/
+ /******* link to vikramor  ***********/
+ // pwg,pw,pwkvn N,N or N
+ $temparr = array("VIKR.", "VIKRAM.");
+ foreach($temparr as $temp) {
+  if (preg_match("|^($temp) *([0-9]+), *([0-9]+)|",$data,$matches)) {
+   $pfx = $matches[1];
+   $p = $matches[2];
+   $l = $matches[3];
+   $href = "https://sanskrit-lexicon-scans.github.io/vikramor/app2?$p,$l";
+   dbgprint($dbg,"$pfx: href=$href\n");
+   return $href;
+  } else if (preg_match("|^($temp) +([0-9]+)|",$data,$matches)) {
+   $pfx = $matches[1];
+   $v = $matches[2]; 
+   $href = "https://sanskrit-lexicon-scans.github.io/vikramor/app1?$v";
+   dbgprint($dbg,"$pfx: href=$href\n");
+   return $href;
+  }
+ }
+
+/******* link to Nalopakhyana in bchrest1  ***********/
  // pwg,pw,pwkvn  N. N,N;  
  $temparr = array("N.");
  foreach($temparr as $temp) {
@@ -1429,6 +1449,8 @@ public function ls_callback_mw_href($code,$n,$data) {
    'AK.' => 'AK.', // sch (none for mw)
    'Gīt.' => 'Gīt.', // mw, sch
    'Pañcar.' => 'pancar', // mw, sch
+   'Vikr.' => 'vikramor', // mw, sch
+   'Vikram.' => 'vikramor', // sch
    );
  //hrefs for MBHC, MBHB not implemented. MBHC is same as MBH.(?)
  if (!isset($code_to_pfx[$code])) {
@@ -2213,6 +2235,9 @@ public function ls_callback_sch_href($code,$n,$data) {
  'Caurap. (A.)' => 'Caurapañcāśikā', // sch
  'MBh.' => 'MBH', 'Hit.' => 'Hit.', 'AK.' => 'AK.', 'Gīt.' => 'Gīt.',
  'Pañcar.' => 'pancar', 
+   'Vikr.' => 'vikramor', 
+   'Vikram.' => 'vikramor', 
+
  );
  if (!isset($code_to_pfx[$code])) {
   return $href;
@@ -2419,6 +2444,7 @@ public function ls_callback_sch_href($code,$n,$data) {
    return $href;
   }
  }
+
 /******* link to Hitopadeśa, ed. Schlegel und Lassen, 1829 sch  ***********/
  $temparr = array("Hit.");
  foreach($temparr as $temp) {
@@ -2444,6 +2470,26 @@ public function ls_callback_sch_href($code,$n,$data) {
    return $href;
   }
  }
+ /******* link to vikramor  ***********/
+ // sch N,N or N
+ $temparr = array("Vikr.", "Vikram.");
+ foreach($temparr as $temp) {
+  if (preg_match("|^($temp) *([0-9]+), *([0-9]+)|",$data,$matches)) {
+   $pfx = $matches[1];
+   $p = $matches[2];
+   $l = $matches[3];
+   $href = "https://sanskrit-lexicon-scans.github.io/vikramor/app2?$p,$l";
+   dbgprint($dbg,"$pfx: href=$href\n");
+   return $href;
+  } else if (preg_match("|^($temp) +([0-9]+)|",$data,$matches)) {
+   $pfx = $matches[1];
+   $v = $matches[2]; 
+   $href = "https://sanskrit-lexicon-scans.github.io/vikramor/app1?$v";
+   dbgprint($dbg,"$pfx: href=$href\n");
+   return $href;
+  }
+ }
+
 /******* link to amarakosha, deslongchamp, 1839 sch  ***********/
  $temparr = array("AK.");
  foreach($temparr as $temp) {
