@@ -1768,8 +1768,24 @@ public function ls_callback_mw_href($code,$n,$data) {
   $href = "https://sanskrit-lexicon-scans.github.io/gitagov/app1?$a,$v";
   return $href;
  }
- /******* link to malavikagni for mw  ***********/
- if (in_array($pfx,array('malavikagni'))) {
+ /******* link to   ***********/
+ if (in_array($pfx,array('Gīt.'))) {
+  // ## two parameters 
+  if(!preg_match("|^$code +([ivx]+), *([0-9]+)|",$data1,$matches)) {
+    return $href;
+   }
+  $adhy_raw = $matches[1];
+  $v = $matches[2];
+  $a = $this->romanToInt($adhy_raw);
+  if ($a == 0) {
+   // error condition 
+   return $href;
+  }
+  $href = "https://sanskrit-lexicon-scans.github.io/gitagov/app1?$a,$v";
+  return $href;
+ }
+ /******* mw link to Vikramorvasī by Kālidāsa, ed. Shankar P. Pandit, 1879 ***********/
+ if (in_array($pfx,array('vikramor'))) {
   if (preg_match("|^$code +([ivx]+), *([0-9]+)|",$data1,$matches)) {
    // ## two parameters anka, shloka --
    $adhy_raw = $matches[1];
@@ -1779,7 +1795,12 @@ public function ls_callback_mw_href($code,$n,$data) {
     // error condition 
     return $href;
    }
-   $href = "https://sanskrit-lexicon-scans.github.io/malavikagni/app3?$a,$s";
+   $href = "https://sanskrit-lexicon-scans.github.io/vikramor_mw/app1?$a,$s";
+   return $href;
+  } else if (preg_match("|^$code +([0-9]+)|",$data1,$matches)) {
+   // ## 1 parameter.  The verse in Bollensen edition!
+   $v = $matches[1];
+   $href = "https://sanskrit-lexicon-scans.github.io/vikramor/app1?$v";
    return $href;
   }
  }
