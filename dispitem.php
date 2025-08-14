@@ -38,7 +38,7 @@ class DispItem { // info to construct a row of the display table
    $ok = true;
   }else {
    // increase the PHP parameter. Not sure if  is always big enough!
-   $newlim = 1500000;
+   $newlim = 1600000; // changed from 1500000 for pwg-sTA. 08-13-2025
    $oldlim = ini_get('pcre.backtrack_limit');
    ini_set('pcre.backtrack_limit',$newlim);
    if (preg_match('|<info>(.*?)</info><body>(.*?)</body>|',$rec,$matchrec)) {
