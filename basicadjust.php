@@ -641,7 +641,7 @@ public function ls_callback_pwg_href($code,$data) {
    $p = $matches[2]; // pancika
    $a = $matches[3]; // adhyaya
    $k = $matches[4]; // kandika
-   $href = "https://sanskrit-lexicon-scans.github.io/aitbr/app2?$p,$a,$k";
+   //auf $href = "https://sanskrit-lexicon-scans.github.io/aitbr/app2?$p,$a,$k";
    dbgprint($dbg,"$pfx: href=$href\n");
    return $href;
   }else if (preg_match("|^($temp) *([0-9]+), *([0-9]+)|",$data,$matches)) {
@@ -1837,7 +1837,7 @@ public function ls_callback_mw_href($code,$n,$data) {
     // error condition 
     return $href;
    }
-   $href = "https://sanskrit-lexicon-scans.github.io/aitbr/app2?$p,$a,$k";
+   //auf $href = "https://sanskrit-lexicon-scans.github.io/aitbr/app2?$p,$a,$k";
    return $href;
   } else if (preg_match("|^$code +([ivx]+), *([0-9]+)|",$data1,$matches)) {
    // ## 2 parameter.  
@@ -2426,7 +2426,7 @@ public function ls_callback_sch_href($code,$n,$data) {
    $p = $matches[2]; // pancika
    $a = $matches[3]; // adhyaya
    $k = $matches[4]; // kandika
-   $href = "https://sanskrit-lexicon-scans.github.io/aitbr/app2?$p,$a,$k";
+   //auf $href = "https://sanskrit-lexicon-scans.github.io/aitbr/app2?$p,$a,$k";
    dbgprint($dbg,"$pfx: href=$href\n");
    return $href;
   }else if (preg_match("|^($temp) *([0-9]+), *([0-9]+)|",$data,$matches)) {
