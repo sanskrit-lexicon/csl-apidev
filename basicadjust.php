@@ -462,7 +462,19 @@ public function ls_callback_pwg_href($code,$data) {
   dbgprint($dbg,"Spr: href=$href\n");
   return $href;
  }
- /******* link to Mahabharata Bombay edition - 3 parms ***********/
+ /******* link to Indische Sprüche 1st edition '  pwg***********/
+ if (preg_match('|^(Spr[.] \(I\)) ([0-9]+)|',$data,$matches)) {
+  if ($this->dict != 'pwg') {
+   return $href;  // don't link unless pwg
+  }
+  $pfx = $matches[1];
+  $verse = $matches[2];
+  $href = "https://sanskrit-lexicon-scans.github.io/boesp1/app1/?$verse";
+  dbgprint($dbg,"Spr (I) pwg: href=$href\n");
+  return $href;
+ }
+
+  /******* link to Mahabharata Bombay edition - 3 parms ***********/
  if (preg_match('|^(MBH[.]) *([0-9]+) *, *([0-9]+), *([0-9]+)|',$data,$matches)) {
   $pfx = $matches[1];
   $parvan = $matches[2];
