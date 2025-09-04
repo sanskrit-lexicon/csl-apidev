@@ -1660,6 +1660,9 @@ public function ls_callback_mw_href($code,$n,$data) {
    $href = "https://sanskrit-lexicon-scans.github.io/hitopadesha/app2?$t,$s";
    dbgprint($dbg,"$pfx: href=$href\n");
    return $href;
+  }else if (preg_match("|^($temp) ([iv]+), *([0-9]+), *([0-9]+)|",$data,$matches)) {
+   // deactivate RNN (tantra, kaTA, verse)
+   return $href; // no link
   }else if (preg_match("|^($temp) ([iv]+), *([0-9]+)|",$data,$matches)) {
    $tantra = $matches[2]; // roman-numeral
    $t = $this->romanToInt($tantra);
