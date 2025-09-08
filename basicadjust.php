@@ -781,6 +781,34 @@ public function ls_callback_pwg_href($code,$data) {
    return $href;
   }
  }
+/******* link to nirukta pwg,pw,pwkvn  ***********/
+ $temparr = array("NIR.");
+ foreach($temparr as $temp) {
+  if (preg_match("|^($temp) *([0-9]+), *([0-9]+)|",$data,$matches)) {
+   $a = $matches[2]; // adhyaya
+   $v = $matches[3]; // verse
+   $href = "https://sanskrit-lexicon-scans.github.io/nirukta/app1?$a,$v";
+   dbgprint($dbg,"$pfx: href=$href\n");
+   return $href;
+  }else if (preg_match("|^($temp) *([IVXL]+)|",$data,$matches)) {
+   $praw = $matches[2]; // page in index
+   $p = strtolower($praw);
+   $href = "https://sanskrit-lexicon-scans.github.io/nirukta/app0?$p";
+   dbgprint($dbg,"$pfx: href=$href\n");
+   return $href;
+  }
+ }
+/******* link to nighantuka pwg,pw,pwkvn  ***********/
+ $temparr = array("NAIGH.");
+ foreach($temparr as $temp) {
+  if (preg_match("|^($temp) *([0-9]+), *([0-9]+)|",$data,$matches)) {
+   $a = $matches[2]; // adhyaya
+   $v = $matches[3]; // verse
+   $href = "https://sanskrit-lexicon-scans.github.io/nirukta/app2?$a,$v";
+   dbgprint($dbg,"$pfx: href=$href\n");
+   return $href;
+  }
+ }
  /******* link to Mugdhabodha of Vopadeva  ***********/
  // pwg,pw,pwkvn  VOP. N,N;  
  $temparr = array("VOP.");
@@ -1484,6 +1512,9 @@ public function ls_callback_mw_href($code,$n,$data) {
    'Vikram.' => 'vikramor', // sch
    'Ait. Br.' => 'aitbr', // sch
    'AitBr.' => 'aitbr',   // mw
+   'Nir.' => 'nir',   // sch, mw
+   'Naigh.' => 'naigh',   // mw
+   'Nigh.'  => 'naigh',   // sch
    );
  //hrefs for MBHC, MBHB not implemented. MBHC is same as MBH.(?)
  if (!isset($code_to_pfx[$code])) {
@@ -1804,8 +1835,8 @@ public function ls_callback_mw_href($code,$n,$data) {
   $href = "https://sanskrit-lexicon-scans.github.io/gitagov/app1?$a,$v";
   return $href;
  }
- /******* link to   ***********/
- if (in_array($pfx,array('Gīt.'))) {
+ /******* link to Nir. N,N mw  ***********/
+ if (in_array($pfx,array('nir'))) {
   // ## two parameters 
   if(!preg_match("|^$code +([ivx]+), *([0-9]+)|",$data1,$matches)) {
     return $href;
@@ -1817,7 +1848,39 @@ public function ls_callback_mw_href($code,$n,$data) {
    // error condition 
    return $href;
   }
-  $href = "https://sanskrit-lexicon-scans.github.io/gitagov/app1?$a,$v";
+  $href = "https://sanskrit-lexicon-scans.github.io/nirukta/app1?$a,$v";
+  return $href;
+ }
+/******* link to Naigh. N,N mw  ***********/
+ if (in_array($pfx,array('naigh'))) {
+  // ## two parameters 
+  if(!preg_match("|^$code +([ivx]+), *([0-9]+)|",$data1,$matches)) {
+    return $href;
+   }
+  $adhy_raw = $matches[1];
+  $v = $matches[2];
+  $a = $this->romanToInt($adhy_raw);
+  if ($a == 0) {
+   // error condition 
+   return $href;
+  }
+  $href = "https://sanskrit-lexicon-scans.github.io/nirukta/app2?$a,$v";
+  return $href;
+ }
+ /******* link to naighantuka N,N mw  ***********/
+ if (in_array($pfx,array('naigh.'))) {
+  // ## two parameters 
+  if(!preg_match("|^$code +([ivx]+), *([0-9]+)|",$data1,$matches)) {
+    return $href;
+   }
+  $adhy_raw = $matches[1];
+  $v = $matches[2];
+  $a = $this->romanToInt($adhy_raw);
+  if ($a == 0) {
+   // error condition 
+   return $href;
+  }
+  $href = "https://sanskrit-lexicon-scans.github.io/nirukta/app2?$a,$v";
   return $href;
  }
  /******* mw link to Vikramorvasī by Kālidāsa, ed. Shankar P. Pandit, 1879 ***********/
@@ -2322,6 +2385,8 @@ public function ls_callback_sch_href($code,$n,$data) {
    'Vikr.' => 'vikramor', 
    'Vikram.' => 'vikramor', 
    'Ait. Br.' => 'aitbr',
+   'Nir.'  => 'nir',
+   'Nigh.' => 'naigh',
 
  );
  if (!isset($code_to_pfx[$code])) {
@@ -2612,7 +2677,7 @@ public function ls_callback_sch_href($code,$n,$data) {
    return $href;
   }
  }
-/******* link to gitagov, sch  ***********/
+ /******* link to gitagov, sch  ***********/
  $temparr = array("Gīt.");
  foreach($temparr as $temp) {
   if (preg_match("|^($temp) *([0-9]+), *([0-9]+)|",$data,$matches)) {
@@ -2623,6 +2688,30 @@ public function ls_callback_sch_href($code,$n,$data) {
    return $href;
   }
  }
+ /******* link to nir N,N, sch  ***********/
+ $temparr = array("Nir.");
+ foreach($temparr as $temp) {
+  if (preg_match("|^($temp) *([0-9]+), *([0-9]+)|",$data,$matches)) {
+   $a = $matches[2]; // adhyaya
+   $v = $matches[3]; // verse
+   $href = "https://sanskrit-lexicon-scans.github.io/nirukta/app1?$a,$v";
+   dbgprint($dbg,"$pfx: href=$href\n");
+   return $href;
+  }
+ }
+
+ /******* link to naigh N,N, sch  ***********/
+ $temparr = array("Nigh.");
+ foreach($temparr as $temp) {
+  if (preg_match("|^($temp) *([0-9]+), *([0-9]+)|",$data,$matches)) {
+   $a = $matches[2]; // adhyaya
+   $v = $matches[3]; // verse
+   $href = "https://sanskrit-lexicon-scans.github.io/nirukta/app2?$a,$v";
+   dbgprint($dbg,"$pfx: href=$href\n");
+   return $href;
+  }
+ }
+
  /******* link to raghuvamsa (for sch) ***********/
  $temparr = array("Ragh.");
  foreach($temparr as $temp) {
