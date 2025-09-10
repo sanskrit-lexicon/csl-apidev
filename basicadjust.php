@@ -2533,6 +2533,12 @@ public function ls_callback_sch_href($code,$n,$data) {
   $href = "https://sanskrit-lexicon-scans.github.io/katyasr/app1?$a,$b,$c";
    dbgprint($dbg,"$pfx: href=$href\n");
    return $href;
+  } else if (preg_match("|^($temp) *([0-9]+), *([0-9]+)|",$data,$matches)) {
+   $a = $matches[2];
+   $b = $matches[3];
+  $href = "https://sanskrit-lexicon-scans.github.io/katyasr/app2?$a,$b";
+   dbgprint($dbg,"$pfx: href=$href\n");
+   return $href;
   }
  }
 /******* link to pancar for sch ***********/
