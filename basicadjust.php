@@ -891,7 +891,7 @@ public function ls_callback_pwg_href($code,$data) {
   }
  }
  /******* link to katyasr  ***********/
- // pwg,pw,pwkvn KĀTY. ŚR. N,N,N;  
+ // pwg,pw,pwkvn KĀTY. ŚR. N,N,N;  And N,N
  $temparr = array("KĀTY. ŚR.");
  foreach($temparr as $temp) {
   if (preg_match("|^($temp) *([0-9]+), *([0-9]+), *([0-9]+)|",$data,$matches)) {
@@ -900,6 +900,13 @@ public function ls_callback_pwg_href($code,$data) {
    $a = $matches[3];
    $b = $matches[4];
    $href = "https://sanskrit-lexicon-scans.github.io/katyasr/app1?$k,$a,$b";
+   dbgprint($dbg,"$pfx: href=$href\n");
+   return $href;
+  } else if (preg_match("|^($temp) *([0-9]+), *([0-9]+)|",$data,$matches)) {
+   $pfx = $matches[1];
+   $k = $matches[2]; // ipage
+   $a = $matches[3]; // lnum
+   $href = "https://sanskrit-lexicon-scans.github.io/katyasr/app2?$k,$a";
    dbgprint($dbg,"$pfx: href=$href\n");
    return $href;
   }
