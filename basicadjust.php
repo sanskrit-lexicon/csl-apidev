@@ -1825,6 +1825,22 @@ public function ls_callback_mw_href($code,$n,$data) {
   $href = "https://sanskrit-lexicon-scans.github.io/vajasasa/app1?$a,$s";
   return $href;
  }
+/******* link to malavikagni for mw  ***********/
+ if (in_array($pfx,array('malavikagni'))) {
+  // ## two parameters 
+  if(!preg_match("|^$code +([ivx]+), *([0-9]+)|",$data1,$matches)) {
+    return $href;
+   }
+  $adhy_raw = $matches[1];
+  $s = $matches[2];
+  $a = $this->romanToInt($adhy_raw);
+  if ($a == 0) {
+   // error condition 
+   return $href;
+  }
+  $href = "https://sanskrit-lexicon-scans.github.io/malavikagni/app3?$a,$s";
+  return $href;
+ }
 
  /******* link to Gitagovinda for mw  ***********/
  if (in_array($pfx,array('Gīt.'))) {
