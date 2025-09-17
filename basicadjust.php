@@ -495,7 +495,16 @@ public function ls_callback_pwg_href($code,$data) {
   return $href;
  }
  /******* link to Mahabharata Calcutta edition - 2 parms ***********/
- if (preg_match('|^(MBH[.]) *([0-9]+) *, *([0-9]+)[.]?$|',$data,$matches)) {
+ if (preg_match('|^(MBH[.]) *([0-9]+) *, *([0-9]+)|',$data,$matches)) {
+  $pfx = $matches[1];
+  $parvan = $matches[2];
+  $verse = $matches[3];
+  $href = "https://sanskrit-lexicon-scans.github.io/mbhcalc?$parvan.$verse";
+  dbgprint($dbg,"$pfx: href=$href\n");
+  return $href;
+ }
+ /******* link to Mahabharata Calcutta edition - 2 parms ***********/
+ if (preg_match('|^(MBH[.] ed. Calc.) *([0-9]+) *, *([0-9]+)|',$data,$matches)) {
   $pfx = $matches[1];
   $parvan = $matches[2];
   $verse = $matches[3];
@@ -1718,26 +1727,26 @@ public function ls_callback_mw_href($code,$n,$data) {
   }
  }
 
-/******* link to  Mahabharata, Calcutta edition for mw. ***********/
- if (preg_match('|^(MBh[.]) *([^ ,]+) *, *([0-9]+)[.]?$|',$data1,$matches)) {
-  // Mahabharata, Calcutta edition for mw.
-  $pfx = $matches[1];
-  $parvan_roman = $matches[2];
-  $parvan = $this->roman_int($parvan_roman);
-  $verse = $matches[3];
-  $href = "https://sanskrit-lexicon-scans.github.io/mbhcalc?$parvan.$verse";
-  dbgprint($dbg,"ls_callback_mw_href: $pfx: href=$href\n");
-  return $href;
- }
 /******* link to  Mahabharata, Bombay edition for mw.  3 parameters***********/
  if (preg_match('|^(MBh[.]) *([xiv]+), *([0-9]+), *([0-9]+)|',$data1,$matches)) {
-  // Mahabharata, Calcutta edition for mw.
+  // Mahabharata, Bombay edition for mw.
   $pfx = $matches[1];
   $parvan_roman = $matches[2];
   $parvan = $this->roman_int($parvan_roman);
   $adhy = $matches[3];
   $verse = $matches[4];
   $href = "https://sanskrit-lexicon-scans.github.io/mbhbomb/app1/?$parvan,$adhy,$verse";
+  dbgprint($dbg,"ls_callback_mw_href: $pfx: href=$href\n");
+  return $href;
+ }
+/******* link to  Mahabharata, Calcutta edition for mw. 2 parameters***********/
+ if (preg_match('|^(MBh[.]) *([^ ,]+) *, *([0-9]+)|',$data1,$matches)) {
+  // Mahabharata, Calcutta edition for mw.
+  $pfx = $matches[1];
+  $parvan_roman = $matches[2];
+  $parvan = $this->roman_int($parvan_roman);
+  $verse = $matches[3];
+  $href = "https://sanskrit-lexicon-scans.github.io/mbhcalc?$parvan.$verse";
   dbgprint($dbg,"ls_callback_mw_href: $pfx: href=$href\n");
   return $href;
  }
@@ -2612,6 +2621,17 @@ public function ls_callback_sch_href($code,$n,$data) {
    $a = $matches[3];
    $v = $matches[4];
    $href = "https://sanskrit-lexicon-scans.github.io/mbhbomb/app1?$p,$a,$v";
+   dbgprint($dbg,"$pfx: href=$href\n");
+   return $href;
+  }  
+ }
+ /******* link to mahabharata, Calcutta edition (for sch) ***********/
+ $temparr = array("MBh.");
+ foreach($temparr as $temp) {
+  if (preg_match("|^($temp) *([0-9]+), *([0-9]+)|",$data1,$matches)) {
+   $p = $matches[2]; 
+   $v = $matches[3];
+   $href = "https://sanskrit-lexicon-scans.github.io/mbhcalc?$p.$v";
    dbgprint($dbg,"$pfx: href=$href\n");
    return $href;
   }  
