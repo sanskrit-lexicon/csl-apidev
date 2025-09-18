@@ -1515,7 +1515,8 @@ public function ls_callback_mw_href($code,$n,$data) {
    'Kumāras.' => 'kumaras', // sch
    'Kum.' => 'kumaras', // mw
    'Mālav.' => 'malavikagni', // mw, sch
-   'Śṛṅgār.' => 'meghasrnga', // mw
+   'Śṛṅgār.' => 'srnga', // mw
+   'Śṛṅgt.' => 'srnga', // sch
    'Megh.' => 'meghaduta', // mw, sch
    'Caurap. (A.)' => 'Caurapañcāśikā', // sch
    'Caurap.'  => 'Caurapañcāśikā', // mw
@@ -1768,7 +1769,7 @@ public function ls_callback_mw_href($code,$n,$data) {
   dbgprint($dbg,"$pfx: href=$href\n");
   return $href;
  }
- /******* link to Srngatilaka for mw  ***********/
+ /******* link to Srngaratilaka for mw  ***********/
  if (preg_match('|^(Śṛṅgār[.]) *([0-9]+)[.]?$|',$data,$matches)) {
   $pfx = $matches[1];
   $verse = $matches[2];
@@ -2410,7 +2411,7 @@ public function ls_callback_sch_href($code,$n,$data) {
  'Ragh. ed. Calc.' => 'raghuvamsacalc',
  'Rājat.' => 'rajatar', 'Bhaṭṭ.' => 'bhattikavya',
  'Tbr.' => 'taittiriyabr','Kāty. Śr.' => 'katyasr', 'Kumāras.' => 'kumaras',
- 'Mālav.' => 'malavikagni', 'Megh.' => 'meghaduta',
+ 'Mālav.' => 'malavikagni', 'Megh.' => 'meghaduta', 'Śṛṅgt.' => 'srnga', 
  'Caurap. (A.)' => 'Caurapañcāśikā', // sch
  'MBh.' => 'MBH', 'Hit.' => 'Hit.', 'AK.' => 'AK.', 'Gīt.' => 'Gīt.',
  'Pañcar.' => 'pancar', 
@@ -3046,12 +3047,28 @@ public function ls_callback_sch_href($code,$n,$data) {
    return $href;
  }
 /******* link meghaduta sch ***********/
- // pwg,pw,pwkvn  Megh. N;  
  $temparr = array("Megh.");
  foreach($temparr as $temp) {
   if (preg_match("|^($temp) *([0-9]+)|",$data,$matches)) {
    $t = $matches[2]; // verse
    $href = "https://sanskrit-lexicon-scans.github.io/meghasrnga/app1?$t";
+   dbgprint($dbg,"$pfx: href=$href\n");
+   return $href;
+  }
+ }
+/******* link srngaratilaka sch Śṛṅgt N or N,N***********/
+ $temparr = array("Śṛṅgt.");
+ foreach($temparr as $temp) {
+  return $href; // link inactive, as meghasrnga is not the link target.
+  if (preg_match("|^($temp) *([0-9]+), *([0-9]+)|",$data,$matches)) {
+   $t = $matches[2]; // page ?
+   $x = $matches[3]; // linenum ?
+   $href = "https://sanskrit-lexicon-scans.github.io/meghasrnga/app2?$t";  // should be app3
+   dbgprint($dbg,"$pfx: href=$href\n");
+   return $href;
+  } else if (preg_match("|^($temp) *([0-9]+)|",$data,$matches)) {
+   $t = $matches[2]; // verse
+   $href = "https://sanskrit-lexicon-scans.github.io/meghasrnga/app2?$t";
    dbgprint($dbg,"$pfx: href=$href\n");
    return $href;
   }
