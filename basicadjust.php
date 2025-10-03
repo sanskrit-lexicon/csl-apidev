@@ -1423,7 +1423,7 @@ public function ls_callback_mw($matches) {
   // convert special characters to html entities
   // for instance, this handles cases when $text has single (or double) quotes
   $tooltip = $this->htmlspecial($text);
-  dbgprint($dbg,"ls_callback_mw : n=$n, data=$data\n");
+  dbgprint($dbg,"ls_callback_mw : n='$n' AND data='$data'\n");
   if ($code == null) {$code = "";}
   $codecap = $code;
   $ncode = strlen($code); // use substr_replace in case $code has parens
@@ -1539,7 +1539,7 @@ public function ls_callback_mw_href($code,$n,$data) {
   return $href;
  }
  $pfx = $code_to_pfx[$code];
- dbgprint($dbg,"ls_callback_mw_href: code=$code, pfx=$pfx\n");
+ dbgprint($dbg,"ls_callback_mw_href: code='$code' AND  pfx='$pfx'\n");
  if ($n == '') {
   $data1 = $data;
  }else {
@@ -1676,26 +1676,30 @@ public function ls_callback_mw_href($code,$n,$data) {
  }
  /******* link to PAÑCATANTRA, Kosegarten, 1849 mw  ***********/
  $temparr = array("Pañcat.");
+ dbgprint($dbg,"code='$code' AND data = '$data' AND data1 = '$data1'\n");
+ // 10-02-2025 use $data1 
  foreach($temparr as $temp) {
-  if (preg_match("|^($temp) *([0-9]+), *([0-9]+)|",$data,$matches)) {
+  if (preg_match("|^($temp) *([0-9]+), *([0-9]+)|",$data1,$matches)) {
    $t = $matches[2]; // page
    $s = $matches[3]; // linenum
    $href = "https://sanskrit-lexicon-scans.github.io/pantankose/app2?$t,$s";
-   dbgprint($dbg,"$pfx: href=$href\n");
+   dbgprint($dbg,"$pfx1: href=$href\n");
    return $href;
-  }else if (preg_match("|^($temp) ([vi]+), *([0-9]+)|",$data,$matches)) {
-   return $href; // pantankose not the right source !
+  }else if (preg_match("|^($temp) ([vi]+), *([0-9]+), *([0-9]+)|",$data1,$matches)) {
+   // Not Kosegarten edition. Probably 'Bombay edition'
+   return $href;
+  }else if (preg_match("|^($temp) ([vi]+), *([0-9]+)|",$data1,$matches)) {
    $tantra = $matches[2]; // roman-numeral
    $t = $this->romanToInt($tantra);
    $v = $matches[3]; // verse
-   dbgprint($dbg,"$pfx: href=$href\n");
    $href = "https://sanskrit-lexicon-scans.github.io/pantankose/app1?$t,$v";
+   dbgprint($dbg,"$pfx2: href=$href\n");
    return $href;
-  }else if (preg_match("|^($temp) *(Pr\.) *([0-9]+)|",$data,$matches)) {
+  }else if (preg_match("|^($temp) *(Introd\.) *([0-9]+)|",$data1,$matches)) {
    $t = 0; // tantra = 0 is convention of app1 for prastAva
    $v = $matches[3]; // verse
-   dbgprint($dbg,"$pfx: href=$href\n");
    $href = "https://sanskrit-lexicon-scans.github.io/pantankose/app1?$t,$v";
+   dbgprint($dbg,"$pfx3: href=$href\n");
    return $href;
   }
  }
