@@ -579,7 +579,7 @@ public function ls_callback_pwg_href($code,$data) {
  }
  /******* link to Raghuvaṃśa  ***********/
  // pwg,pw,pwkvn  RAGH. N,N;  
- $temparr = array("RAGH.");
+ $temparr = array("RAGH.","RAGH. ed. ST.");
  foreach($temparr as $temp) {
   if (preg_match("|^($temp) *([0-9]+), *([0-9]+)|",$data,$matches)) {
    $t = $matches[2]; // adhyAya
