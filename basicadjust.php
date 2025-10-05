@@ -1506,6 +1506,7 @@ public function ls_callback_mw_href($code,$n,$data) {
    'Pañcat.' => 'pantankose', // mw, sch
    'VS.' => 'vajasasa', 'TS.' => 'taittiriyas',
    'Ragh. ed. Calc.' => 'raghuvamsacalc', // sch
+   'Raghuv.' => 'raghuvamsacalc', // sch
    'Ragh. (C)' => 'raghuvamsacalc', // mw
    'Rājat.' => "rajatar", //mw, sch
    'Bhaṭṭ.' => "bhattikavya", //mw, sch
@@ -2412,7 +2413,7 @@ public function ls_callback_sch_href($code,$n,$data) {
  'Sāh. D.' => 'sahityadarpana', 'Bhag.' => 'bhagavadgita', 
  'R. ed. Bomb.' => 'ramayanabom', 
  'Pañcat.' => 'pantankose', 'VS.' => 'vajasasa', 'TS.' => 'taittiriyas',
- 'Ragh. ed. Calc.' => 'raghuvamsacalc',
+ 'Ragh. ed. Calc.' => 'raghuvamsacalc', 'Raghuv.' => 'raghuvamsacalc',
  'Rājat.' => 'rajatar', 'Bhaṭṭ.' => 'bhattikavya',
  'Tbr.' => 'taittiriyabr','Kāty. Śr.' => 'katyasr', 'Kumāras.' => 'kumaras',
  'Mālav.' => 'malavikagni', 'Megh.' => 'meghaduta', 'Śṛṅgt.' => 'srnga', 
@@ -2778,7 +2779,7 @@ public function ls_callback_sch_href($code,$n,$data) {
   }  
  }
  /******* link to raghuvamsacalc (for sch) ***********/
- $temparr = array("Ragh. ed. Calc.");
+ $temparr = array("Ragh. ed. Calc.","Raghuv.");
  foreach($temparr as $temp) {
   if (preg_match("|^($temp) *([0-9]+), *([0-9]+)|",$data1,$matches)) {
    $t = $matches[2]; // adhyaya
