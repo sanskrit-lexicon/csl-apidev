@@ -714,6 +714,24 @@ public function ls_callback_pwg_href($code,$data) {
    return $href;
   }
  }
+/******* link to PAÑCATANTRA, Kosegarten ed. orn., 1859 pwg,pw,pwkvn  ***********/
+ $temparr = array("PAÑCAT. ed. orn.","ed. orn.");
+ foreach($temparr as $temp) {
+  if (preg_match("|^($temp) *([0-9]+), *([0-9]+)|",$data,$matches)) {
+   $t = $matches[2]; // page
+   $s = $matches[3]; // linenum
+   $href = "https://sanskrit-lexicon-scans.github.io/pantankoseorn/app1?$t,$s";
+   dbgprint($dbg,"$pfx: href=$href\n");
+   return $href;
+  }else if (preg_match("|^($temp) ([VI]+), *([0-9]+)|",$data,$matches)) {
+   $tantra = $matches[2]; // roman-numeral
+   $t = $this->romanToInt($tantra);
+   $v = $matches[3]; // verse
+   dbgprint($dbg,"$pfx: href=$href\n");
+   $href = "https://sanskrit-lexicon-scans.github.io/pantankoseorn/app2?$t,$v";
+   return $href;
+  }
+ }
 /******* link to Hitopadeśa, ed. Schlegel und Lassen, 1829 pwg,pw,pwkvn  ***********/
  $temparr = array("HIT.");
  foreach($temparr as $temp) {
