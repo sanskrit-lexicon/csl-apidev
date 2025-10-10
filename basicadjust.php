@@ -559,6 +559,9 @@ public function ls_callback_pwg_href($code,$data) {
  foreach($temparr as $temp) {
   if (preg_match("|^($temp) *([0-9]+), *([0-9]+)|",$data,$matches)) {
    $t = $matches[2]; // taranga
+   if (in_array($t,array("7","8"))) {
+    return $href;  // not available in rajatar
+   }
    $s = $matches[3]; // shloka
    $href = "https://sanskrit-lexicon-scans.github.io/rajatar/app1?$t,$s";
    dbgprint($dbg,"$pfx: href=$href\n");
@@ -1999,6 +2002,10 @@ public function ls_callback_mw_href($code,$n,$data) {
    // error condition 
    return $href;
   }
+  if (in_array($a,array(7,8))) {
+   // rajatar does not have taranga 7,8
+   return $href;
+  }
   $href = "https://sanskrit-lexicon-scans.github.io/rajatar/app1?$a,$s";
   return $href;
  }
@@ -2502,6 +2509,10 @@ public function ls_callback_sch_href($code,$n,$data) {
   if (preg_match("|^($temp) *([0-9]+), *([0-9]+)|",$data,$matches)) {
    $t = $matches[2]; // taranga
    $s = $matches[3]; // shloka
+   if (in_array($t,array("7","8"))) {
+    return $href;  // not available in rajatar
+   }
+
    $href = "https://sanskrit-lexicon-scans.github.io/rajatar/app1?$t,$s";
    dbgprint($dbg,"$pfx: href=$href\n");
    return $href;
