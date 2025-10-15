@@ -1301,9 +1301,7 @@ public function ls_callback_pwg_href($code,$data) {
  }
 
 /******* link to R. 7th kanda**********/
-  //  pw and pwg: "R. 7,N,N,N" or
-  //  "R. 7,N,N  
-  // use '|i' for case-insensitive
+ // use '|i' for case-insensitive
   // Four parameters
   if(preg_match('|^R\. *(7)[ ,]+([0-9]+)[ ,]+([0-9]+)[ ,]+([0-9]+)(.*)$|i',$data,$matches)) {
    $kanda = $matches[1];
@@ -1373,9 +1371,9 @@ public function ls_callback_pwg_href($code,$data) {
   return $href;
  }else if (in_array($pfx,array('rschl'))) {
   /* 06-13-2022. rschl is appropriate when $imandala is 1 or 2
-  Otherwise ($imandala 3,4,5,6,7) rschl should change to rgorr
+  Otherwise ($imandala 3,4,5,6) rschl should change to rgorr
    This is believed to be appropriate for pwg dictionary.
-   For 
+   $imandala = 7 is handled elsewhere above
   */
   if (in_array($imandala,array(1,2))) {
    $dir = "https://sanskrit-lexicon-scans.github.io/ramayanaschl";
@@ -1507,8 +1505,18 @@ public function ls_callback_mw_href($code,$n,$data) {
  $code_to_pfx = array('RV.' => 'rv', 'AV.' => 'av', 'Pāṇ.' => 'p',
   'MBh.' => 'MBH.','Hariv.' => 'hariv',
   'MBh. (ed. Calc.)' => 'MBHC', 'MBh. (ed. Bomb.)' => 'MBHB',
-  'R.' => 'R', 'R. G.' => 'R', 'R. (G)' => 'R', 'R. (G.)' => 'R', 'R. [G]' => 'R',
-  'R. ed. Gorresio' => 'R', 'Dhātup.' => 'dp', 'Dhāt.' => 'dp',
+  'R.' => 'R', // various, depending on kanda (1,2 Schl, 3-6 Gorr, 7 = Bomb)
+  'R. G.' => 'RG',  'R. (G)' => 'RG',  'R. (ed. Gorr.)' => 'RG',
+  'R. [G]' => 'RG',  'R. ed. Gorresio' => 'RG',
+  'R. ed. Bomb.' => 'ramayanabom', // mw, sch
+  'R. (B.)' => 'ramayanabom', // mw
+  'R. (ed. Bomb.)' => 'ramayanabom',
+  'R. B.' => 'ramayanabom',
+  'R. [B.]' => 'ramayanabom',
+  'R. [B]' => 'ramayanabom',
+  'R. ed. Bombay' => 'ramayanabom',
+  
+  'Dhātup.' => 'dp', 'Dhāt.' => 'dp',
    'Kathās.' => 'kathas', 'Mn.' => 'M.', 'BhP.' => 'bhp',
    'Yājñ.' => 'yajn', 'Ragh.' => 'ragh', 'Sāh.' => 'sahitya',
    'Vop.' => 'vop', 'Halāy.' => 'halay',
@@ -1523,7 +1531,6 @@ public function ls_callback_mw_href($code,$n,$data) {
    'Sāh. D.' => 'sahityadarpana', // sch
    'Sāh.' => 'sahitya', // mw
    'Bhag.' => 'bhagavadgita', // mw, sch
-   'R. ed. Bomb.' => 'ramayanabom', // mw, sch
    'Pañcat.' => 'pantankose', // mw, sch
    'VS.' => 'vajasasa', 'TS.' => 'taittiriyas',
    'Ragh. ed. Calc.' => 'raghuvamsacalc', // sch
@@ -1632,7 +1639,7 @@ public function ls_callback_mw_href($code,$n,$data) {
    $href = "$dir/$ic/$is/$iv";
    return $href;
  }
-/******* link to R. 7,N,N,N for mw (bombay editition ***********/
+/******* link to R. 7,N,N,N for mw (bombay edition) ***********/
  if (preg_match('|^(R[.]) *(vii), *([0-9]+), *([0-9]+), *([0-9]+)[^0-9,]?|',$data1,$matches)) {
   $pfx = $matches[1];
   $kand_roman = $matches[2];
@@ -1645,7 +1652,7 @@ public function ls_callback_mw_href($code,$n,$data) {
   return $href;
  }
 
-/******* link to R. 7,N,N for mw (bombay edition ***********/
+/******* link to R. 7,N,N for mw (bombay edition) ***********/
  if (preg_match('|^(R[.]) *(vii), *([0-9]+), *([0-9]+)[^0-9,]?|',$data1,$matches)) {
   $pfx = $matches[1];
   $kand_roman = $matches[2];
@@ -1656,9 +1663,21 @@ public function ls_callback_mw_href($code,$n,$data) {
   dbgprint($dbg,"ls_callback_mw_href: $pfx: href=$href\n");
   return $href;
  }
+/******* link to "R. (B.) R,N,N"  for mw (bombay edition) ***********/
+ // R. (B.) or  R. (B)
+ if (preg_match('|^(R[.] \(B\.?\)) *(vii), *([0-9]+), *([0-9]+)[^0-9,]?|',$data1,$matches)) {
+  $pfx = $matches[1];
+  $kand_roman = $matches[2];
+  $k = $this->roman_int($kand_roman);
+  $s = $matches[3]; // sarga
+  $v = $matches[4]; // verse
+  $href = "https://sanskrit-lexicon-scans.github.io/ramayanabom/app1/?$k,$s,$v";
+  dbgprint($dbg,"ls_callback_mw_href: $pfx: href=$href\n");
+  return $href;
+ }
  /******* link to Ramayana, Gorresio or Schlegel edition  ***********/
- if (in_array($pfx,array('R'))) {
-  // Ramayana, Goressio. Similar to 'p' (Panini), except for '$dir'
+ if (in_array($pfx,array('R'))) { 
+  // Ramayana, Gorressio. Similar to 'p' (Panini), except for '$dir'
   dbgprint($dbg,"ls_callback_mw_href: data1=$data1\n");
   // data1 = code + data2.
   $data2 = substr_replace($data1,"",0,strlen($code));
@@ -1681,7 +1700,7 @@ public function ls_callback_mw_href($code,$n,$data) {
  }
  dbgprint($dbg,"ls_callback_mw_href: data1=$data1\n");
 
- /******* link to R. ed. Bomb. for mw***********/
+ /******* link to Ramayana Bombay edition for mw***********/
  if (in_array($pfx,array('ramayanabom'))) {
   $data2 = substr_replace($data1,"",0,strlen($code));
   //$data2 = trim($data2);
@@ -1696,6 +1715,22 @@ public function ls_callback_mw_href($code,$n,$data) {
    $href = "https://sanskrit-lexicon-scans.github.io/ramayanabom/app1/?$k,$s,$v";
    return $href;
  }
+ /******* link to Ramayana Gorresio edition for mw***********/
+ if (in_array($pfx,array('RG'))) {
+  $data2 = substr_replace($data1,"",0,strlen($code));
+  //$data2 = trim($data2);
+  dbgprint($dbg,"ls_callback_mw_href Gorresio: data2=$data2\n");
+  if(! preg_match('| *([iv]+)[ ,]+([0-9]+)[ ,]+([0-9]+)(.*)$|',$data2,$matches)) {
+    return $href;
+   }
+   $romanlo = $matches[1];
+   $k = $this->roman_int($romanlo); 
+   $s = (int)$matches[2];
+   $v = (int)$matches[3];
+   $href = "https://sanskrit-lexicon-scans.github.io/ramayanagorr/?$k,$s,$v";
+   return $href;
+ }
+ 
  /******* link to PAÑCATANTRA, Kosegarten, 1849 mw  ***********/
  $temparr = array("Pañcat.");
  dbgprint($dbg,"code='$code' AND data = '$data' AND data1 = '$data1'\n");
@@ -2429,7 +2464,9 @@ public function ls_callback_sch_href($code,$n,$data) {
  $href = null; // default if no success
  $dbg = false;
  dbgprint($dbg,"ls_callback_sch_href. code=$code, n=$n, data=$data\n");
- $code_to_pfx = array('ṚV.' => 'rv', 'AV.' => 'av', 'P.' => 'p', 'Hariv.' => 'hariv', 'R. Gorr.' => 'rgorr','R.' => 'rschl', 'Dhātup.' => 'dp', 'Spr.' => 'spr',
+ $code_to_pfx = array('ṚV.' => 'rv', 'AV.' => 'av', 'P.' => 'p', 'Hariv.' => 'hariv', 
+ 'R. Gorr.' => 'rgorr','R.' =>'ramayana', // 'R.' => 'rschl',  
+ 'Dhātup.' => 'dp', 'Spr.' => 'spr',
  'Verz. d. Oxf. H.' => 'verzoxf', 'Kathās.' => 'kathas', 'M.' => 'M.',
  'Bhāg. P.' => 'bhagp','Yājñ.' => 'yajn', 'Ragh.' => 'ragh','Sāh. D.' => 'sahitya', 'Vop.' => 'vop',
  'Med.' => 'med', 'Trik.' => 'trik', 'Hār.' => 'har', 'Halāy.' => 'halay',
@@ -2636,17 +2673,23 @@ public function ls_callback_sch_href($code,$n,$data) {
    return $href;
   }  
  }
- /******* link to Ramayana, Bombay edition (for sch) ***********/
- $temparr = array("R. ed. Bomb.");
+ /******* link to Ramayana (for sch) ***********/
+ $temparr = array("R.");
  foreach($temparr as $temp) {
   if (preg_match("|^($temp) *([0-9]+), *([0-9]+), *([0-9]+)|",$data1,$matches)) {
    $k = $matches[2];
    $s = $matches[3];
    $v = $matches[4];
-   $href = "https://sanskrit-lexicon-scans.github.io/ramayanabom/app1?$k,$s,$v";
-   dbgprint($dbg,"$pfx: href=$href\n");
-   return $href;
-  }  
+   if (in_array($k,array('1','2'))) {
+    $href = "https://sanskrit-lexicon-scans.github.io/ramayanaschl/?$k,$s,$v";
+   } else if (in_array($k,array('3','4','5','6'))) {
+    $href = "https://sanskrit-lexicon-scans.github.io/ramayanagorr/?$k,$s,$v";
+   } else if (in_array($k,array('7'))) {
+    $href = "https://sanskrit-lexicon-scans.github.io/ramayanabom/app1?$k,$s,$v";
+   } else {
+    return $href; // invalid
+   }
+  }
  }
  /******* link to mahabharata, Bombay edition (for sch) ***********/
  $temparr = array("MBh.");
@@ -3136,7 +3179,7 @@ public function ls_callback_sch_href($code,$n,$data) {
   dbgprint($dbg,"$pfx: href=$href\n");
   return $href;
  }
- /******* link to Ramayana, Gorresio edition  ***********/
+ /******* link to Ramayana, Gorresio edition sch ***********/
  if (in_array($pfx,array('rgorr'))) {
   // #, #, # (three decimal numbers, separated by commas)
   if(!preg_match('|^(.*?)[.] *([0-9]+)[,] *([0-9]+)[,] *([0-9]+)(.*)$|',$data1,$matches)) {
@@ -3151,7 +3194,8 @@ public function ls_callback_sch_href($code,$n,$data) {
    return $href;
  }
  /******* link to Ramayana, Schlegel edition  ***********/
- if (in_array($pfx,array('rschl'))) {
+ 
+ if (in_array($pfx,array('ramayana'))) {
   // #, #, # (three decimal numbers, separated by commas)
   if(!preg_match('|^(.*?)[.] *([0-9]+)[,] *([0-9]+)[,] *([0-9]+)(.*)$|',$data1,$matches)) {
     return $href;
