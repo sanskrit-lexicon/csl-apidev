@@ -554,16 +554,28 @@ public function ls_callback_pwg_href($code,$data) {
    return $href;
   }
  }
-/******* link to rajatar RĀJATARAṄGIṆĪ  ***********/
+/******* link to rajatar RĀJATARAṄGIṆĪ, TROYER  ***********/
  $temparr = array("RĀJA-TAR.","RĀJAT.");
  foreach($temparr as $temp) {
   if (preg_match("|^($temp) *([0-9]+), *([0-9]+)|",$data,$matches)) {
    $t = $matches[2]; // taranga
-   if (in_array($t,array("7","8"))) {
-    return $href;  // not available in rajatar
-   }
    $s = $matches[3]; // shloka
-   $href = "https://sanskrit-lexicon-scans.github.io/rajatar/app1?$t,$s";
+   if (in_array($t,array("7","8"))) {
+    $href = "https://sanskrit-lexicon-scans.github.io/rajatarcalc/app1?$t,$s";
+   } else {
+    $href = "https://sanskrit-lexicon-scans.github.io/rajatar/app1?$t,$s";
+   }
+   dbgprint($dbg,"$pfx: href=$href\n");
+   return $href;
+  }
+ }
+/******* link to rajatar RĀJATARAṄGIṆĪ, Calcutta  ***********/
+ $temparr = array("RĀJA-TAR. ed. Calc.","RĀJAT. ed. Calc.");
+ foreach($temparr as $temp) {
+  if (preg_match("|^($temp) *([0-9]+), *([0-9]+)|",$data,$matches)) {
+   $t = $matches[2]; // taranga
+   $s = $matches[3]; // shloka
+   $href = "https://sanskrit-lexicon-scans.github.io/rajatarcalc/app1?$t,$s";
    dbgprint($dbg,"$pfx: href=$href\n");
    return $href;
   }
@@ -1537,6 +1549,7 @@ public function ls_callback_mw_href($code,$n,$data) {
    'Raghuv.' => 'raghuvamsacalc', // sch
    'Ragh. (C)' => 'raghuvamsacalc', // mw
    'Rājat.' => "rajatar", //mw, sch
+   'Rājat. (C)' => "rajatarcalc", //mw
    'Bhaṭṭ.' => "bhattikavya", //mw, sch
    'TBr.' => 'taittiriyabr',
    'KātyŚr.' => 'katyasr', //mw
@@ -2038,10 +2051,27 @@ public function ls_callback_mw_href($code,$n,$data) {
    return $href;
   }
   if (in_array($a,array(7,8))) {
-   // rajatar does not have taranga 7,8
+   // use rajatarcalc for  taranga 7,8
+   $href = "https://sanskrit-lexicon-scans.github.io/rajatarcalc/app1?$a,$s";
+  } else { // 1,2,...,6
+   $href = "https://sanskrit-lexicon-scans.github.io/rajatar/app1?$a,$s";
+  }
+  return $href;
+ }
+ /******* link to rajatarcalc for mw  ***********/
+ if (in_array($pfx,array('rajatarcalc'))) {
+  // ## two parameters 
+  if(!preg_match("|^Rājat. \(C\) +([ivx]+), *([0-9]+)|",$data1,$matches)) {
+    return $href;
+   }
+  $adhy_raw = $matches[1];
+  $s = $matches[2];
+  $a = $this->romanToInt($adhy_raw);
+  if ($a == 0) {
+   // error condition 
    return $href;
   }
-  $href = "https://sanskrit-lexicon-scans.github.io/rajatar/app1?$a,$s";
+  $href = "https://sanskrit-lexicon-scans.github.io/rajatarcalc/app1?$a,$s";
   return $href;
  }
  /******* link to bhattikavya for mw  ***********/
@@ -2542,15 +2572,17 @@ public function ls_callback_sch_href($code,$n,$data) {
  }
  /******* link to Rājataraṅgiṇī for sch ***********/
  $temparr = array("Rājat.");
+ dbgprint($dbg,"Rājataraṅgiṇī for sch. data = '$data'\n");
  foreach($temparr as $temp) {
-  if (preg_match("|^($temp) *([0-9]+), *([0-9]+)|",$data,$matches)) {
+  // if (preg_match("|^($temp) *([0-9]+), *([0-9]+)|",$data,$matches)) {
+  if (preg_match("|^($temp) *([0-9]+), *([0-9]+)|",$data1,$matches)) {
    $t = $matches[2]; // taranga
    $s = $matches[3]; // shloka
    if (in_array($t,array("7","8"))) {
-    return $href;  // not available in rajatar
+    $href = "https://sanskrit-lexicon-scans.github.io/rajatarcalc/app1?$t,$s";
+   } else {
+    $href = "https://sanskrit-lexicon-scans.github.io/rajatar/app1?$t,$s";
    }
-
-   $href = "https://sanskrit-lexicon-scans.github.io/rajatar/app1?$t,$s";
    dbgprint($dbg,"$pfx: href=$href\n");
    return $href;
   }
