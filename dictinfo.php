@@ -169,6 +169,7 @@ class DictInfo {
  }
 public function get_cologne_pdfpages_url() {
  /* These urls are current as of 08-31-2019
+   PW revised 11-13-2025
  */
  $cologne_pdfpages_urls = array(
   "ACC"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/ACCScan/ACCScanpdf" ,
@@ -197,7 +198,8 @@ public function get_cologne_pdfpages_url() {
   "PGN"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/PGNScan/PGNScanpdf" ,
   "PUI"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/PUIScan/PUIScanpdf" ,
   "PWG"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/PWGScan/PWGScanpdf" ,
-  "PW"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/PWScan/PWScanpng" ,
+  // "PW"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/PWScan/PWScanpng" ,
+  "PW"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/PWScan/PWScanpdf" ,
   "SCH"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/SCHScan/SCHScanpdf" ,
    "SHS"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/SHSScan/SHSScanpdf" ,
   "SKD"=>"//www.sanskrit-lexicon.uni-koeln.de/scans/SKDScan/SKDScanpdf" ,
