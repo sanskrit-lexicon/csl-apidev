@@ -42,7 +42,7 @@ class ListhierClass {
    $matches = $this->match_key($key,$dal);
    list($key1,$lnum1,$data1) = $matches[0];
   }
-  
+  //dbgprint(true,"listhierClass: key1=$key1, lnum1=$lnum1, data1=\n$data1\n");
   // step 2:  get several keys preceding and several keys following $key1
   $nprev=12;
   $nnext=12;
@@ -64,7 +64,7 @@ class ListhierClass {
    list($code,$key2,$lnum2,$data2) = $listmatches[$i];
    if ($data2 == null) {$data2 = "";} //01-13-2025
    $hom2=$this->get_hom($data2);
-   //dbgprint(true,"listhierClass: lnum2=$lnum2, key2=$key2, data2=\n$data2\n");
+   //dbgprint(true,"listhierClass: lnum2=$lnum2, key2=$key2, hom2='$hom2'data2=\n$data2\n");
    if ($i == 0) {
     //  put 'upward button'
     $spc="&nbsp;&nbsp;";
@@ -158,7 +158,7 @@ class ListhierClass {
    // 07-07-2024
    $out1 = "$spc<a  onclick='getWordAlt_keyboard(\"$key2\");'>$key2show$hom2 $revsup</a><br/>\n";
    $table .= $out1;
-   dbgprint($dbg,"Listhier extra: out1=$out1\n");
+   //dbgprint(true,"Listhier extra: key2=$key2, hom='$hom2'\nout1=$out1\n");
    if ($i == count($listmatches)) {
     //  put 'downward button'
     $spc="&nbsp;&nbsp;";
@@ -299,7 +299,7 @@ class ListhierClass {
   // since '$data1'  is now html, not xml.
   $dict = $dal->dict; // lowercase
   $matches=array(); // returned variable
-  if (! in_array($dict, array('mw','md'))) {
+  if (! in_array($dict, array('mw','md','lrv','pwg','pw','pwkvn','sch'))) {
    foreach($recarrin as $rec) {
     list($key1,$lnum1,$data1) = $rec;  // $data1 is <info>x</info><body>y</body>
     $rec1 = array($key1,$lnum1,""); // no use for data1, since not mw
@@ -456,7 +456,7 @@ class ListhierClass {
 
   $data2 = join('',$out); 
   $rec1 = array($key1,$lnum1,$data2);
-  dbgprint(true,"leave 2: construct_rec1: key1=$key1, lnum1=$lnum1, data2=\n$data2\n");
+  //dbgprint(true,"leave 2: construct_rec1: key1=$key1, lnum1=$lnum1, data2=\n$data2\n");
   return $rec1;
  }
 }
