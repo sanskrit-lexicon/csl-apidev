@@ -5,6 +5,7 @@
                Also, revise ../ngram data
                Also, revise dalnorm.normalize_key
                Add 't,tt' transition rule.
+   12-28-2025  Change ["a","A","ah"] in $transitionTable_default
 called by getword_list_1.0_main.php, which uses public variables
 user_keyin  // in slp1
 user_keyin_norm
@@ -25,7 +26,13 @@ class Simple_Search{
  public $transitionTable_default = [
    // The spellings are in slp1, but they are to applied when
    // the user input spelling is default
-   ["a","A","ah"],  // ah tamilish ?
+   /* 12-28-2025 with ["a","A","ah"] in transition table,
+     and (input=simple, 'input simple'=default) fails at examples 
+     MW: atidAha fails with atidaha,  anirdAhuka fails with anirdahuka.
+     Removing "ah" solves this problem. Not sure why "ah" causes problems
+   */
+   //["a","A","ah"],  // ah tamilish ?
+   ["a","A"], // This removes the anirdAhuka problem
    ["i","I"],
    ["u","U"], 
    ["o","O"],
@@ -96,6 +103,7 @@ class Simple_Search{
   $dirpfx = get_parent_dirpfx("simple-search");
   $hwnorm1 = $dirpfx . "simple-search/hwnorm1";
   $this->dalnorm = new Dalnorm('hwnorm1c',$hwnorm1);
+  dbgprint($this->dbg,"dalnorm using {$this->dalnorm->sqlitefile}\n"); // 12-28-2025
   // searchdict is associative array which is modified by doVariant
   //  It's keys are the different variants
   $this->searchdict = array();
@@ -199,7 +207,6 @@ class Simple_Search{
   // normalized spellings that solve the search
   $this->normkeys = [];
   $dbg=false; #true
-  
   // $foundkeysin is associative array, to make the 
   // search for duplicate normalized keys simpler.
   $foundkeysin = array();
@@ -302,10 +309,15 @@ class Simple_Search{
   // WHAT IF THERE ARE NO VARIANTS?? CAN THIS HAPPEN?
   $varCharsData = $this->getChar($word);
   if ($this->dbg) {
+    $nvc = count($varCharsData);
+    dbgprint($this->dbg,"  $nvc variants found for $word\n");  
     $tempstrs = [];
+    $i = 0;
     foreach($varCharsData as $temp) {
      list($itransition,$varChar) = $temp;
      $tempstrs[] = "$itransition,$varChar";
+     dbgprint($this->dbg,"  varCharsData[$i] = $itransition,$varChar\n");
+     $i = $i + 1;
     }
   }
   if (count($varCharsData) == 0) {
