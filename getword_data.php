@@ -145,6 +145,7 @@ public function getword_data_html_adapter($key,$lnum,$adjxml,$dict,$getParms,$xm
    $hom="";
   }
   $infoval = "$pageref:$hcode:$key2:$hom:$hui";
+  //dbgprint(true,"getword_data.php mw infoval=$infoval\n");
   $ans = "<info>$infoval</info><body>$body</body>";
  }else if (in_array($dict,array('pwg','pw','pwkvn','sch','lrv'))) {
   $hcode = "1";

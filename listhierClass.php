@@ -64,7 +64,7 @@ class ListhierClass {
    list($code,$key2,$lnum2,$data2) = $listmatches[$i];
    if ($data2 == null) {$data2 = "";} //01-13-2025
    $hom2=$this->get_hom($data2);
-   //dbgprint(true,"listhierClass: lnum2=$lnum2, key2=$key2, hom2='$hom2'data2=\n$data2\n");
+   dbgprint($dbg,"listhierClass: lnum2=$lnum2, key2=$key2, hom2='$hom2'data2=\n$data2\n");
    if ($i == 0) {
     //  put 'upward button'
     $spc="&nbsp;&nbsp;";
@@ -370,6 +370,8 @@ class ListhierClass {
   $hom="";
   if ($data == null) {return $hom;}
   if (preg_match('|<hom>(.*?)</hom>.*?</h>|',$data,$matches)) {
+   $hom = $matches[1];
+  } else if (preg_match('|<info hui="(.*?)"/>|',$data,$matches)) { //01-04-2026
    $hom = $matches[1];
   }
   return $hom;
