@@ -145,24 +145,7 @@ public function getword_data_html_adapter($key,$lnum,$adjxml,$dict,$getParms,$xm
    $hom="";
   }
   $infoval = "$pageref:$hcode:$key2:$hom:$hui";
-  //dbgprint(true,"getword_data.php mw infoval=$infoval\n");
   $ans = "<info>$infoval</info><body>$body</body>";
- }else if (in_array($dict,array('pwg','pw','pwkvn','sch','lrv'))) {
-  $hcode = "1";
-  $key2 = "";
-  $hom = "";
-  $hui = '';
-  if (preg_match('|</key2><hom>(.*?)</hom>|',$xmldata,$matches)) {
-   $hom = $matches[1];
-  }
-  if (preg_match('|<key2>(.*?)</key2>|',$xmldata,$matches)) {
-   $key2 = $matches[1];
-  }
-  if (preg_match('|<info hui="(.*?)"/>|',$xmldata,$matches)) {
-   $hui = $matches[1];
-  }
-  $infoval = "$pageref:$hcode:$key2:$hom:$hui";
-  $ans = "<info>$pageref</info><body>$body</body>";
  }else {
   # construct return value
   $ans = "<info>$pageref</info><body>$body</body>";
