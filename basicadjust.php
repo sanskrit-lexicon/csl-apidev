@@ -33,7 +33,7 @@ class BasicAdjust {
   if (in_array($dict,array('pwg','pw','pwkvn'))) {
    $this->dal_auth = new Dal($dict,"bib");  # pwgbib
    dbgprint(false,"basicadjust: bib file open? " . $this->dal_auth->status ."\n");
-  }else if (in_array($dict,array('mw','ap90','ben','sch','gra','bhs'))){
+  }else if (in_array($dict,array('mw','ap90','ben','sch','gra','bhs','ap'))){
    $this->dal_auth = new Dal($dict,"authtooltips");
   }else {
    $this->dal_auth = null;
@@ -108,7 +108,7 @@ class BasicAdjust {
   
       
  }else if (in_array($this->getParms->dict,
-           array('mw','ap90','ben','sch','gra','bhs'))){
+           array('mw','ap90','ben','sch','gra','bhs','ap'))){
   //dbgprint(true,"before ls_callback_mw: $line\n");
   $line = preg_replace_callback('|<ls(.*?)>(.*?)</ls>|',
       "BasicAdjust::ls_callback_mw",$line);
@@ -1445,7 +1445,7 @@ public function ls_callback_mw($matches) {
    list($cid,$code,$title,$type) = $rec;
    $text = "$title ($type)";
    dbgprint($dbg,"ls_matchabbr returns: cid=$cid, code=$code, title=$title, type=$type\n");
-  } else if (in_array($this->dict,array('ap90','ben','sch','gra','bhs'))) {
+  } else if (in_array($this->dict,array('ap90','ben','sch','gra','bhs','ap'))) {
    list($code,$text) = $rec;
   }
   // be sure there is no xml in the text
