@@ -2,9 +2,10 @@ readme.org for simple-search
 
 * word_frequency.txt and word_frequency_adj.txt
 See v0.1/readme.org
-* v1.0  : current version of simple-search
+* v1.0  : older version of simple-search
 * v1.0.0 : first good version of simple-search
 * v1.0d : current dev version of simple-search
+* v1.1  : current version of simple-search (as of 02-02-2026)
 * wf0  directory:  08-17-2017  
  wf0/wf.txt is used in v1.0 as of this date.
  see wf0/readme.org for more details.
