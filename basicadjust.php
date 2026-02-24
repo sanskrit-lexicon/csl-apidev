@@ -261,13 +261,14 @@ class BasicAdjust {
   }
   else if ($this->getParms->dict == "ap") {
    // replace -- with mdash : perhaps should be part of ap.txt
-   $line = preg_replace('/--/','&#8212;',$line);
+   // 02-22-2026  change in make_xml.py of csl-pywork
+   //$line = preg_replace('/--/','&#8212;',$line);
    // 03-12-2017.  Put 'b' (bold) tag around the first word of a div
    $line = preg_replace('|(<div[^>]*>)(\(<i>.</i>\))|','\\1<b>\\2</b>',$line);
    // 11-29-2018.  Also pattern '<s>--X</b>' 
    $line = preg_replace('|(<div[^>]*>)([0-9]+)|','\\1<b>\\2</b>',$line);
    // Remove <root/> tag -- it plays no part in display
-   $line = preg_replace('|<root/>|','',$line);
+   // $line = preg_replace('|<root/>|','',$line); // removed 02-22-2026
   }
   else if ($this->getParms->dict == "yat") {
    $line = preg_replace('|- <br/>|','',$line);
