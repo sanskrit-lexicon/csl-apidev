@@ -14,6 +14,7 @@ BasicAdjust class  Takes a parameter object
 require_once('dal.php');
 require_once('dbgprint.php');
 class BasicAdjust {
+ public $lsrecs;
  public $getParms;
  public $adjxmlrecs;
  public $dal_ab, $dal_auth; // 
@@ -41,6 +42,7 @@ class BasicAdjust {
  
   $this->getParms = $getParms;
   $this->adjxmlrecs = array();
+  $this->lsrecs = array();
   $i = 0;
   foreach($xmlrecs as $line) {
    $this->pagecol = '';
@@ -171,8 +173,10 @@ class BasicAdjust {
   $line = preg_replace('|<ab>p\.</ab> ([0-9]+)|', "<ab>p.</ab> <pref>\\1</pref>", $line);
   // 11-15-2024
   $pc = $this->pagecol_pc;
-  list($page,$col_unused) = preg_split("|,|",$pc);
-  $line = preg_replace('|<ab>col\.</ab> ([1-3]+)|', "<ab>col.</ab> <cref>$page \\1</cref>", $line);
+  if ($pc != null) {
+   list($page,$col_unused) = preg_split("|,|",$pc);
+   $line = preg_replace('|<ab>col\.</ab> ([1-3]+)|', "<ab>col.</ab> <cref>$page \\1</cref>", $line);
+  }
  }
  /* 12-14-2017
   'local' abbreviation handled here. Generate an n attribute if one
@@ -364,6 +368,7 @@ class BasicAdjust {
  // <ls n="C">Y</ls>
  $dbg=false;
  $ans = $matches[0];
+ $ls_string = $matches[0];
  $ndata = $matches[1];  // empty string or ' n="C"'
  $data0 = $matches[2];
  if (preg_match('|n="(.*?)"|',$ndata,$matchesn)) {
@@ -413,6 +418,7 @@ class BasicAdjust {
   $href = $this->ls_callback_pwg_href($code,$data1);
   dbgprint($dbg,"ls_callback_pwg. code=$code, data1=$data1, href=$href\n");
   if ($href != null) {
+   $this->lsrecs[] = array($ls_string,$href);
    // link
    //$ans = "<gralink href='$href' n='$tooltip'><ls>$datanew</ls></gralink>";
    $datanew1 = preg_replace("|</lshead>(.*)$|",'</lshead><span class="ls">${1}</span>',$datanew);
@@ -1407,6 +1413,7 @@ public function ls_callback_mw($matches) {
  // <ls n="C">Y</ls>
  $dbg=false;
  $ans = $matches[0];
+ $ls_string = $matches[0];
  $ndata = $matches[1];  // empty string or ' n="C"'
  $data0 = $matches[2];
  dbgprint($dbg,"Enter ls_callback_mw. ans=$ans AND ndata=$ndata AND data0=$data0\n");
@@ -1492,6 +1499,9 @@ public function ls_callback_mw($matches) {
    $href = $this->ls_callback_mw_href($code,$n,$data);
   }else if ($this->dict == 'sch') {
    $href = $this->ls_callback_sch_href($code,$n,$data);
+  }
+  if ($href != null) {
+   $this->lsrecs[] = array($ls_string,$href);
   }
   dbgprint($dbg,"ls_callback_mw: href=$href\n");
   if ($href != null) {
@@ -3514,7 +3524,7 @@ public function remove_slp1_accent($y) {
  $data = [
   [1,191,1,1,191],
   [192,234,2,1,43],
-  [235,296,3,1,62],
+  [235,295,3,1,62],
   [297,354,4,1,58],
   [355,441,5,1,87],
   [442,516,6,1,75],
@@ -3559,6 +3569,7 @@ public function rgveda_verse_callback($matches0) {
  $dbg=false;
  $x0 = $matches0[0];
  $x1 = $matches0[1];
+ $ls_string = $matches0[0];
  if(! preg_match('|^([0-9]+)[ ,]+([0-9]+)(.*)$|',$x1,$matches)) {
   dbgprint($dbg,"rgveda_verse_callback: error. x1=$x1\n");
   return $x0;
@@ -3578,6 +3589,7 @@ public function rgveda_verse_callback($matches0) {
  $tooltip = "Rg Veda $modern1 (mandala,hymn,verse)";
  // 04-03-2021
  $x = "<gralink href='$href' n='$tooltip'>$gra1,$gra2$gra3</gralink>";
+ $this->lsrecs[] = array($ls_string,$href);
  return $x;
 }
 public function avveda_verse_callback($matches0) {
