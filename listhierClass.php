@@ -46,6 +46,7 @@ class ListhierClass {
   // step 2:  get several keys preceding and several keys following $key1
   $nprev=12;
   $nnext=12;
+  //dbgprint(true,"direction = $direction\n");
   if ($direction == 'UP') {
    $listmatches = $this->list_center($key1,$lnum1,$data1,$nprev+$nnext,0,$dal);
   }else if ($direction == 'DOWN') {
@@ -63,6 +64,7 @@ class ListhierClass {
   while($i < count($listmatches)) {
    list($code,$key2,$lnum2,$data2) = $listmatches[$i];
    if ($data2 == null) {$data2 = "";} //01-13-2025
+   //dbgprint(true,"i=$i, $code,$key2,$lnum2,data2=$data2\n");
    $hom2=$this->get_hom($data2);
    dbgprint($dbg,"listhierClass: lnum2=$lnum2, key2=$key2, hom2='$hom2'data2=\n$data2\n");
    if ($i == 0) {
@@ -129,6 +131,7 @@ class ListhierClass {
    }else {
     $spc="";
    }
+   //dbgprint(true,"listhierclass: spc='$spc' data2=$data2\n");
    if ($hom2 != "") {
     $hom2=" <span style=\"color:red; font-size:smaller\">$hom2</span>";
    }
@@ -299,7 +302,7 @@ class ListhierClass {
   // since '$data1'  is now html, not xml.
   $dict = $dal->dict; // lowercase
   $matches=array(); // returned variable
-  if (! in_array($dict, array('mw','md','lrv','pwg','pw','pwkvn','sch'))) {
+  if (! in_array($dict, array('mw','md','lrv','pwg','pw','pwkvn','sch','ap'))) {
    foreach($recarrin as $rec) {
     list($key1,$lnum1,$data1) = $rec;  // $data1 is <info>x</info><body>y</body>
     $rec1 = array($key1,$lnum1,""); // no use for data1, since not mw
@@ -403,6 +406,7 @@ class ListhierClass {
   }
   $dbg = false;
   if ($dbg) {
+   dbgprint($dbg,"list_center debug\n");
    dbgprint($dbg,"\nkey1=$key1, lnum1=$lnum1, nprev=$nprev, nnext=$nnext\n");
    $i = 0;
    $n = count($listmatches);
