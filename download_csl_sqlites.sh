@@ -10,12 +10,12 @@ FILES=(
   "keydoc_glob1.sqlite.zip"
 )
 
-# File to store last downloaded tag
 TAG_FILE=".csl_sqlite_release_tag"
 
 echo "🔍 Checking latest release..."
 
-LATEST_TAG=$(curl -s $API | grep '"tag_name"' | cut -d '"' -f 4)
+RELEASE_JSON=$(curl -s $API)
+LATEST_TAG=$(echo "$RELEASE_JSON" | grep '"tag_name"' | cut -d '"' -f 4)
 
 if [ -f "$TAG_FILE" ]; then
   LOCAL_TAG=$(cat "$TAG_FILE")
@@ -30,41 +30,19 @@ fi
 
 echo "⬇️ New version detected: $LATEST_TAG (old: $LOCAL_TAG)"
 
-# Try to fetch checksums file if exists
-CHECKSUM_URL=$(curl -s $API \
-  | grep browser_download_url \
-  | grep -i checksum \
-  | cut -d '"' -f 4 || true)
-
-if [ -n "$CHECKSUM_URL" ]; then
-  echo "📥 Downloading checksums..."
-  wget -q -O checksums.txt "$CHECKSUM_URL"
-else
-  echo "⚠️ No checksum file found in release"
-  CHECKSUM_URL=""
-fi
-
 for FILE in "${FILES[@]}"; do
   URL="https://github.com/$REPO/releases/download/$LATEST_TAG/$FILE"
 
   echo "📥 Downloading $FILE ..."
-  wget -q -O "$FILE" "$URL"
-
-  # Verify checksum if available
-  if [ -n "$CHECKSUM_URL" ]; then
-    echo "🔐 Verifying checksum for $FILE ..."
-    
-    EXPECTED=$(grep "$FILE" checksums.txt | awk '{print $1}')
-    ACTUAL=$(sha256sum "$FILE" | awk '{print $1}')
-
-    if [ "$EXPECTED" != "$ACTUAL" ]; then
-      echo "❌ Checksum failed for $FILE"
-      exit 1
-    else
-      echo "✅ Checksum OK for $FILE"
-    fi
-  fi
+  wget -O "$FILE" "$URL"
 done
+
+# Extract and organize hwnorm1c.sqlite
+echo "📦 Extracting hwnorm1c.sqlite..."
+unzip -o hwnorm1c.sqlite.zip
+mkdir -p simple-search/hwnorm1
+#mv hwnorm1c.sqlite simple-search/hwnorm1/
+rm -f hwnorm1c.sqlite.zip
 
 # Save new tag
 echo "$LATEST_TAG" > "$TAG_FILE"
