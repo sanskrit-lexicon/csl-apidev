@@ -15,3 +15,5 @@ dbg_apidev.txt
 *.pyc
 __pycache__
 
+.csl_sqlite_release_tag
+*.sqlite.zip
