@@ -18,3 +18,4 @@ __pycache__
 .csl_sqlite_release_tag
 *.sqlite.zip
 .DS_Store
+*hwnorm1c.sqlite

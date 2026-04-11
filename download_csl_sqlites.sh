@@ -7,7 +7,6 @@ API="https://api.github.com/repos/$REPO/releases/latest"
 
 FILES=(
   "hwnorm1c.sqlite.zip"
-  "keydoc_glob1.sqlite.zip"
 )
 
 TAG_FILE=".csl_sqlite_release_tag"
@@ -41,7 +40,7 @@ done
 echo "📦 Extracting hwnorm1c.sqlite..."
 unzip -o hwnorm1c.sqlite.zip
 mkdir -p simple-search/hwnorm1
-#mv hwnorm1c.sqlite simple-search/hwnorm1/
+mv hwnorm1c.sqlite simple-search/hwnorm1/
 rm -f hwnorm1c.sqlite.zip
 
 # Save new tag
