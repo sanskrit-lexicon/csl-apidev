@@ -19,3 +19,4 @@ __pycache__
 *.sqlite.zip
 .DS_Store
 *hwnorm1c.sqlite
+simple-search/hwnorm1/hwnorm1c.sqlite
