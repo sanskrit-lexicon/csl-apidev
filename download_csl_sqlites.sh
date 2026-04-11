@@ -34,7 +34,7 @@ for FILE in "${FILES[@]}"; do
   URL="https://github.com/$REPO/releases/download/$LATEST_TAG/$FILE"
 
   echo "📥 Downloading $FILE ..."
-  wget -O "$FILE" "$URL"
+  curl -L -o "$FILE" "$URL"
 done
 
 # Extract and organize hwnorm1c.sqlite
