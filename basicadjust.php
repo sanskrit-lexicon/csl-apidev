@@ -216,7 +216,7 @@ class BasicAdjust {
   $dicts_with_h = array("ap90", "bhs", "bop", "cae", "ccs",
                         "gra", "gst", "inm", "mci", "md",
 			"mw", "mw72", "pe", "pui", "pwg","pw","pwkvn",
-			"stc", "vei", "lan");
+			"stc", "vei", "lan","ap");
   if (in_array($this->getParms->dict, $dicts_with_h)) {
    $line = preg_replace("|<key2>(.*?)<hom>.*?</hom>(.*?<body>)|","<key2>$1$2",$line);
   }
