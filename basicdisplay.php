@@ -663,7 +663,11 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
     $a[] = "$key='$value'";
    }
    $astring = join(" ",$a);
-   $this->row .= "<$el $astring>";
+    if ($astring !== "") {
+     $this->row .= "<$el $astring>";
+    } else {
+     $this->row .= "<$el>";
+    }
   }
 
   $this->parentEl = $el;  // used by chrhndl

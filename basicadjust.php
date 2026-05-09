@@ -34,7 +34,7 @@ class BasicAdjust {
   if (in_array($dict,array('pwg','pw','pwkvn'))) {
    $this->dal_auth = new Dal($dict,"bib");  # pwgbib
    dbgprint(false,"basicadjust: bib file open? " . $this->dal_auth->status ."\n");
-  }else if (in_array($dict,array('mw','ap90','ben','sch','gra','bhs','ap'))){
+  }else if (in_array($dict,array('mw','ap90','ben','sch','gra','bhs','ap','lrv'))){
    $this->dal_auth = new Dal($dict,"authtooltips");
   }else {
    $this->dal_auth = null;
@@ -77,13 +77,20 @@ class BasicAdjust {
  } else {
  // All other dictionaries
  $line = preg_replace('/¦/',' ',$line);
- // chg_markup currently only applies to gra dictionary
- // Nov. 2024. Also used in mw dictionary
- $line = preg_replace_callback('|<chg +type="(.*?)" +n="(.*?)" src="(.*?)">(.*?)</chg>|',"BasicAdjust::chg_markup",$line);
- $line = preg_replace_callback('|<info vn="(.*?)"/>|',"BasicAdjust::infovn_markup",$line);
-           
- $line = preg_replace_callback('|<s>(.*?)</s>|','BasicAdjust::s_callback',$line);
- $line = preg_replace_callback('|<key2>(.*?)</key2>|','BasicAdjust::key2_callback',$line);
+  // chg_markup currently only applies to gra dictionary
+  // Nov. 2024. Also used in mw dictionary
+  // May 2026. Also used in lrv dictionary
+  // Use a two-pass approach to handle <chg> inside and outside <s>
+  // Pass 1: Handle <chg> tags inside <s> blocks
+  $line = preg_replace_callback('|<s>(.*?)</s>|',array($this,"s_chg_callback"),$line);
+  // Pass 2: Handle <chg> tags outside <s> blocks
+  $line = preg_replace_callback('|<chg (.*?)>(.*?)</chg>|',array($this,"chg_markup_outside"),$line);
+  $line = preg_replace_callback('|<info vn="(.*?)"/>|',"BasicAdjust::infovn_markup",$line);
+            
+  // $line = preg_replace_callback('|<s>(.*?)</s>|','BasicAdjust::s_callback',$line);
+  // s_callback is now handled via s_chg_callback in Pass 1 above for LRV
+  $line = preg_replace_callback('|<key2>(.*?)</key2>|','BasicAdjust::key2_callback',$line);
+
  //$line = preg_replace("|\[Page.*?\]|",  "<pb>$0</pb>",$line);
  $line = preg_replace("|\[(Page.*?)\]|",  "<pb>$1</pb>",$line);
 
@@ -110,7 +117,7 @@ class BasicAdjust {
   
       
  }else if (in_array($this->getParms->dict,
-           array('mw','ap90','ben','sch','gra','bhs','ap'))){
+           array('mw','ap90','ben','sch','gra','bhs','ap','lrv'))){
   //dbgprint(true,"before ls_callback_mw: $line\n");
   $line = preg_replace_callback('|<ls(.*?)>(.*?)</ls>|',
       "BasicAdjust::ls_callback_mw",$line);
@@ -216,7 +223,7 @@ class BasicAdjust {
   $dicts_with_h = array("ap90", "bhs", "bop", "cae", "ccs",
                         "gra", "gst", "inm", "mci", "md",
 			"mw", "mw72", "pe", "pui", "pwg","pw","pwkvn",
-			"stc", "vei", "lan","ap");
+			"stc", "vei", "lan","ap","lrv");
   if (in_array($this->getParms->dict, $dicts_with_h)) {
    $line = preg_replace("|<key2>(.*?)<hom>.*?</hom>(.*?<body>)|","<key2>$1$2",$line);
   }
@@ -1453,7 +1460,7 @@ public function ls_callback_mw($matches) {
    list($cid,$code,$title,$type) = $rec;
    $text = "$title ($type)";
    dbgprint($dbg,"ls_matchabbr returns: cid=$cid, code=$code, title=$title, type=$type\n");
-  } else if (in_array($this->dict,array('ap90','ben','sch','gra','bhs','ap'))) {
+  } else if (in_array($this->dict,array('ap90','ben','sch','gra','bhs','ap','lrv'))) {
    list($code,$text) = $rec;
   }
   // be sure there is no xml in the text
@@ -3713,17 +3720,17 @@ public function key2_callback($matches) {
  return $x;
 }
 public function remove_slp1_accent($y) {
-  #$y = preg_replace('|[\/\^\\\]|','',$y);
-  # udatta accent is '/'.  But '/' also used in xml tags (empty or closing)
-  # preadjust $y to replace these instances of '/' with '_'
-  #  assumes no tag name starts with '_', a safe assumption in this xml
-  $y = preg_replace('|</|','<_',$y);  
-  $y = preg_replace('|/>|','_>',$y);
-  $y = preg_replace('|[\/\^\\\]|','',$y);
-  # restore the '/' used in xml tags
-  $y = preg_replace('|<_|','</',$y);
-  $y = preg_replace('|_>|','/>',$y);
-  return $y;
+  $parts = preg_split('|(<.*?>)|', $y, -1, PREG_SPLIT_DELIM_CAPTURE);
+  $ans = "";
+  foreach ($parts as $part) {
+   if ($part === "") continue;
+   if ($part[0] == '<') {
+    $ans .= $part;
+   } else {
+    $ans .= preg_replace('|[\/\^\\\]|','',$part);
+   }
+  }
+  return $ans;
 }
  public function rgveda_verse_modern($gra) {
  /*Github user SergeA
@@ -3953,53 +3960,154 @@ public function htmlspecial($text) {
   return $ans;
  }
  
- public function chg_markup($matches) {
- /* <chg type="TYPE" n="CHGID" src="SRC">{chgdata}</chg>
-   attrib:  ' type="TYPE" n="CHGID" src="SRC"
- */
- $dbg = false;
- $x = $matches[0]; // full <chg>Z</chg> string
- $type = $matches[1];
- $chgid = $matches[2];
- $src = $matches[3];
- $chgdata = $matches[4];
- dbgprint($dbg,"chg_markup: type=$type, chgid=$chgid, src=$src\n  chgdata=$chgdata\n");
- if ($type == 'chg') {
-  // $anshead = "CHG type=$type, chgid=$chgid, src=$src";
-  $anshead = '';
-  if (preg_match('|<old>(.*?)</old> *<new>(.*?)</new>|',$chgdata,$matches1)) {
-   $old = $matches1[1];
-   $new = $matches1[2];
-   $styleold = 'text-decoration:line-through;';
-   $ansold = "<span style='$styleold'>$old</span>";
-   $stylenew = 'color:green;';
-   $msgstyle = "color:red; display:inline; text-decoration:underline red dotted;";
-   $ansnew = "<abbr title='source=$src' style='$msgstyle'>[Correction: </abbr><span style='$stylenew'>$new</span><span style='color:red;'>]</span>";
-   $ans = "$anshead : $ansold $ansnew";
-   dbgprint($dbg,"ansold=$ansold\nansnew=$ansnew\n");
-   return $ans;
-  }else {
-   return $x; // form not recognized
+ public function s_chg_callback($matches) {
+  $content = $matches[1];
+  if ($this->accent != "yes") {
+   $content = $this->remove_slp1_accent($content);
   }
- }else  if ($type == 'del') {
-  // $anshead = "CHG type=$type, chgid=$chgid, src=$src";
-  $anshead = '';
-  if (preg_match('|<old>(.*?)</old>|',$chgdata,$matches1)) {
-   $old = $matches1[1];
-   $styleold = 'text-decoration:line-through;';
-
-   $msgstyle = "color:red; display:inline;";
-   $ansold = "<abbr title='source=$src' style='$msgstyle'>Deletion: </abbr><span style='$styleold'>$old</span><span style='color:red;'>]</span>";
-   $ans = "$ansold";
-   dbgprint($dbg,"Deletion: ansold=$ansold\n");
-   return $ans;
-  }else {
-   return $x; // form not recognized
-  }
- }else { // unknown type
-  return $x; 
+  // Handle <chg> tags inside this <s> block
+  $content = preg_replace_callback('|<chg (.*?)>(.*?)</chg>|',array($this,"chg_markup_inside"),$content);
+  return "<s>$content</s>";
  }
- $dbg=false;
+
+ public function chg_markup_inside($matches) {
+  return $this->chg_markup_helper($matches, true);
+ }
+
+ public function chg_markup_outside($matches) {
+  return $this->chg_markup_helper($matches, false);
+ }
+
+ public function chg_markup_helper($matches, $is_inside_s) {
+  $attribs_str = $matches[1];
+  $chgdata = $matches[2];
+
+  $type = ""; if (preg_match('/type="(.*?)"/', $attribs_str, $m)) { $type = $m[1]; }
+  $chgid = ""; if (preg_match('/n="(.*?)"/', $attribs_str, $m)) { $chgid = $m[1]; }
+  $src = ""; if (preg_match('/src="(.*?)"/', $attribs_str, $m)) { $src = $m[1]; }
+  $date = ""; if (preg_match('/date="(.*?)"/', $attribs_str, $m)) { $date = $m[1]; }
+  $user = ""; if (preg_match('/user="(.*?)"/', $attribs_str, $m)) { $user = $m[1]; }
+  $href = ""; if (preg_match('/href="(.*?)"/', $attribs_str, $m)) { $href = $m[1]; }
+  $note = ""; if (preg_match('/note="(.*?)"/', $attribs_str, $m)) { $note = $m[1]; }
+
+  dbgprint($dbg,"chg_markup_helper: type=$type, chgid=$chgid, src=$src\n  chgdata=$chgdata\n");
+  
+  if (($type == 'chg') || ($type == 'add')) {
+   if (preg_match('|<old>(.*?)</old> *<new>(.*?)</new>|',$chgdata,$matches1)) {
+    $old = $matches1[1];
+    $new = $matches1[2];
+    $label = ($type == 'add') ? "Addition" : "Correction";
+    
+    if ($date != "") {
+     if ($user != "") {
+      $tooltip = "$label submitted by $user on $date.";
+     } else {
+      $tooltip = "$label submitted on $date.";
+     }
+     if ($href != "") {
+      $tooltip .= " Reference : $href.";
+     }
+     if ($note != "") {
+      $tooltip .= " Note : $note.";
+     }
+    } else {
+     $tooltip = "source=$src";
+    }
+    $tooltip = $this->htmlspecial($tooltip);
+
+    if ($is_inside_s) {
+     $old_adj = ($this->accent != "yes") ? $this->remove_slp1_accent($old) : $old;
+     $new_adj = ($this->accent != "yes") ? $this->remove_slp1_accent($new) : $new;
+     $old_content = "<SA>$old_adj</SA>";
+     $new_content = "<SA>$new_adj</SA>";
+     $class = "sdata_siddhanta";
+    } else {
+     $old_content = $old;
+     $new_content = $new;
+     $class = "";
+    }
+    $cattr = ($class != "") ? " class='$class'" : "";
+
+    $ansold = "<span style='text-decoration:line-through;'><span$cattr>$old_content</span></span>";
+    
+    $label_html = "[$label: ";
+    if ($href != "") {
+     $label_html = "<a href='$href' target='_blank' style='color:red; text-decoration:none;'>$label_html</a>";
+    }
+
+    $ansnew = "<span></span> " .
+              "<abbr title='$tooltip' style='color:red; display:inline; text-decoration:underline red dotted;'>" .
+              "<span style='color:red;'>$label_html</span></abbr> " .
+              "<span$cattr style='color:green;'>$new_content</span> " .
+              "<span style='color:red;'>]</span>";
+    
+    if ($is_inside_s) {
+     $ans = "</s>$ansold $ansnew<s>";
+    } else {
+     $ans = "$ansold $ansnew";
+    }
+    return $ans;
+   }else {
+    return $x; // form not recognized
+   }
+  }else  if ($type == 'del') {
+   if (preg_match('|<old>(.*?)</old>|',$chgdata,$matches1)) {
+    $old = $matches1[1];
+    $label = "Deletion";
+    
+    if ($is_inside_s) {
+     $old_adj = ($this->accent != "yes") ? $this->remove_slp1_accent($old) : $old;
+     $old_content = "<SA>$old_adj</SA>";
+     $class = "sdata_siddhanta";
+    } else {
+     $old_content = $old;
+     $class = "";
+    }
+    $cattr = ($class != "") ? " class='$class'" : "";
+
+    if ($date != "") {
+     if ($user != "") {
+      $tooltip = "$label submitted by $user on $date.";
+     } else {
+      $tooltip = "$label submitted on $date.";
+     }
+     if ($href != "") {
+      $tooltip .= " Reference : $href.";
+     }
+     if ($note != "") {
+      $tooltip .= " Note : $note.";
+     }
+    } else {
+     $tooltip = "source=$src";
+    }
+    $tooltip = $this->htmlspecial($tooltip);
+
+    $label_html = "[$label: ";
+    if ($href != "") {
+     $label_html = "<a href='$href' target='_blank' style='color:red; text-decoration:none;'>$label_html</a>";
+    }
+
+    $ansold = "<abbr title='$tooltip' style='color:red; display:inline; text-decoration:underline red dotted;'>" .
+              "<span style='color:red;'>$label_html</span></abbr> " .
+              "<span style='text-decoration:line-through;'><span$cattr>$old_content</span></span> " .
+              "<span style='color:red;'>]</span>";
+    
+    if ($is_inside_s) {
+     $ans = "</s>$ansold<s>";
+    } else {
+     $ans = $ansold;
+    }
+    return $ans;
+   }else {
+    return $x; // form not recognized
+   }
+  }else { // unknown type
+   return $x; 
+  }
+ }
+
+ public function chg_markup($matches) {
+  return $this->chg_markup_helper($matches, false);
  }
 
 public function slp_cmp($a,$b) {
