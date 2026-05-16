@@ -1498,7 +1498,9 @@ public function ls_callback_mw($matches) {
   //dbgprint(true,"before ls_callback_mw_href, dict=" . $this->dict . "\n");
   if ($this->dict == 'mw') {
    $href = $this->ls_callback_mw_href($code,$n,$data);
-  }else if (in_array($this->dict,array('ap','ap90'))) {
+  }else if (in_array($this->dict,array('ap'))) {
+   $href = $this->ls_callback_ap_href($code,$n,$data);
+  }else if (in_array($this->dict,array('ap90'))) {
    $href = $this->ls_callback_ap90_href($code,$n,$data);
   }else if ($this->dict == 'gra') {
    $href = $this->ls_callback_mw_href($code,$n,$data);
@@ -3315,21 +3317,17 @@ public function romanToInt($s0) {
  }
  return $result;
 }
-
-public function ls_callback_ap90_href($code,$n,$data) {
- // for both ap90 and ap
+public function ls_callback_ap_href($code,$n,$data) {
+ // for ap.  Uses ap90_
+ // uses ls_callback_ap90_href_helper
  $href = null; // default if no success
- if ($this->dict == 'ap90') {
-  return $href;  // 05-01-2026  ap90 links have not been checked
- }
  $dbg = false;
- dbgprint($dbg,"ls_callback_ap90_href. code='$code', n='$n', data='$data'\n");
+ dbgprint($dbg,"ls_callback_ap_href. code='$code', n='$n', data='$data'\n");
  if ($n == '') {
   $data1 = $data;
  }else {
   $data1 = "$n $data";
  }
-
  if ($code == 'R.') {
   // Raghuvaṃśa 2 parameters 
   if (!preg_match('|^(.*?)[.] *([0-9]+)[.] +([0-9]+)(.*)$|',$data1,$matches)) {
@@ -3533,6 +3531,138 @@ public function ls_callback_ap90_href($code,$n,$data) {
   $href = $this->ls_callback_ap90_href_helper(4,$data1,$dir);
   return $href;
  }
+ if ($code == 'Nala.') { // Nalopākhyāna, 2 parameters
+  $dir = "https://sanskrit-lexicon-scans.github.io/bchrest1/app1?";
+  $href = $this->ls_callback_ap90_href_helper(2,$data1,$dir);
+  return $href;
+ }
+
+ return $href; 
+}
+public function ls_callback_ap90_href($code,$n,$data) {
+ // for ap90
+ $href = null; // default if no success
+ $dbg = false;
+ dbgprint($dbg,"ls_callback_ap90_href. code='$code', n='$n', data='$data'\n");
+ if ($n == '') {
+  $data1 = $data;
+ }else {
+  $data1 = "$n $data";
+ }
+
+ if ($code == 'R.') {
+  // Raghuvaṃśa 2 parameters 
+  if (!preg_match('|^(.*?)[.] *([0-9]+)[.] +([0-9]+)(.*)$|',$data1,$matches)) {
+   return $href;
+  }
+  $a1 = (int)$matches[2];
+  $a2 = (int)$matches[3];
+  $dir = "https://sanskrit-lexicon-scans.github.io/raghuvamsa/app1?";
+  $href = "$dir" . "$a1,$a2";
+  return $href;
+ }
+
+ if ($code == 'Ms.') {
+  // Manusmrti 2 parameters .
+  if (!preg_match('|^(.*?)[.] +([0-9]+)[.] +([0-9]+)(.*)$|',$data1,$matches)) {
+   return $href;
+  }
+  $a1 = (int)$matches[2];
+  $a2 = (int)$matches[3];
+  $dir = "https://sanskrit-lexicon-scans.github.io/manu/index.html?";
+  $href = "$dir" . "$a1,$a2";
+  return $href;
+ }
+
+ if ($code == 'Ku.') { // Kumārasambhava 2 parameters 
+  $dir = "https://sanskrit-lexicon-scans.github.io/kumaras/app1?";
+  $href = $this->ls_callback_ap90_href_helper(2,$data1,$dir);
+  return $href;
+ }
+ if ($code == 'Bk.') { // Bhaṭṭikāvya, 2 parameters 
+  $dir = "https://sanskrit-lexicon-scans.github.io/bhattikavya/app1?";
+  $href = $this->ls_callback_ap90_href_helper(2,$data1,$dir);
+  return $href;
+ }
+ if ($code == 'Bg.') { // Bhagavadgītā, 2 parameters 
+  $dir = "https://sanskrit-lexicon-scans.github.io/bhagavadgita/app1?";
+  $href = $this->ls_callback_ap90_href_helper(2,$data1,$dir);
+  return $href;
+ }
+
+ if (in_array($code,array('Rv.'))) {
+  // #. #. #  (three numbers, or 2 numbers )
+  if (!preg_match('|^(.*?)[.] *([0-9]+)[.] +([0-9]+)[.] +([0-9]+)(.*)$|',$data1,$matches)) {
+   if (!preg_match('|^(.*?)[.] *([0-9]+)[.] +([0-9]+)(.*)$|',$data1,$matches)) {
+    dbgprint($dbg,"NO MATCH: '$data1'\n");
+    return $href;
+   } else {
+    $matches[4] = '1';
+   }
+  }
+  $code0 = $matches[1];
+  $imandala = (int)$matches[2];
+  $ihymn = (int)$matches[3];
+  $iverse = (int)$matches[4];
+  $pfx = '??';
+  if ($code == 'Rv.') {$pfx = 'rv'; }
+  dbgprint($dbg,"ls_callback_ap90_href. $code0, $mandala, $ihymn, $iverse\n");
+  $hymnfilepfx = sprintf("%s%02d.%03d",$pfx,$imandala,$ihymn);
+  $hymnfile = "$hymnfilepfx.html";
+  $versesfx = sprintf("%02d",$iverse);
+  $anchor = "$hymnfilepfx.$versesfx";
+  $versesfx = sprintf("%02d",$iverse);
+  $anchor = "$hymnfilepfx.$versesfx";
+  $dir = sprintf("https://sanskrit-lexicon.github.io/%slinks/%shymns",$pfx,$pfx);
+  $href = "$dir/$hymnfile#$anchor";
+  return $href;
+ } // end for rv
+ 
+ if ($code == 'P.') { // Pāṇiniʼs Aṣṭādhyāyī, 3 parms, 1st parm Roman
+  if(!preg_match('|^(.*?)[.] *([IV]+)[.] +([0-9]+)[.] +([0-9]+)(.*)$|',$data1,$matches)) {
+    return $href;
+   }
+   $code0 = $matches[1];
+   $roman = $matches[2];  // upper-case
+   $romanlo = strtolower($roman);
+   $ic = $this->roman_int($romanlo);
+   $is = (int)$matches[3];
+   $iv = (int)$matches[4];
+   $dir = "https://ashtadhyayi.com/sutraani";
+   $href = "$dir/$ic/$is/$iv";
+   return $href;
+ }
+
+ if ($code == 'Y.') { // Yājñavalkya Smṛti, 2 parameters 
+  $dir = "https://sanskrit-lexicon-scans.github.io/yajnavalkya/app1?";
+  $href = $this->ls_callback_ap90_href_helper(2,$data1,$dir);
+  return $href;
+ }
+
+ if ($code == 'S. D.') { // Sāhityadarpaṇa 1 parameter 
+  $dir = "https://sanskrit-lexicon-scans.github.io/sahityadarpana/app1?";
+  $href = $this->ls_callback_ap90_href_helper(1,$data1,$dir);
+  return $href;
+ }
+ 
+ if ($code == 'Rāj. T.') { // Rāj. T. 2 parameters 
+  $dir = "https://sanskrit-lexicon-scans.github.io/rajatar/app1?";
+  $href = $this->ls_callback_ap90_href_helper(2,$data1,$dir);
+  return $href;
+ }
+
+ if ($code == 'Ks.') { // Kathāsaritsāgara, 2 parameters
+  $dir = "https://sanskrit-lexicon-scans.github.io/kss/index.html?";
+  $href = $this->ls_callback_ap90_href_helper(2,$data1,$dir);
+  return $href;
+ }
+
+ if ($code == 'Bṛ. S.') { // Varāhamihiraʼs Bṛhatsamhitā, 2 parameters
+  $dir = "https://sanskrit-lexicon-scans.github.io/brihatsam/app1?";
+  $href = $this->ls_callback_ap90_href_helper(2,$data1,$dir);
+  return $href;
+ }
+
  if ($code == 'Nala.') { // Nalopākhyāna, 2 parameters
   $dir = "https://sanskrit-lexicon-scans.github.io/bchrest1/app1?";
   $href = $this->ls_callback_ap90_href_helper(2,$data1,$dir);
