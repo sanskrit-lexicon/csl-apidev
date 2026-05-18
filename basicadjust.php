@@ -321,6 +321,7 @@ class BasicAdjust {
   } else if ($this->getParms->dict == "wil") {
    $line = preg_replace('|\.²([0-9]+)|', '\1', $line);
    $line = preg_replace('| *\.²([a-z]+)|', '</div><div n="2">\1', $line);
+   $line = preg_replace('| *<ab( n=[\x27\x22][^\x27\x22]*[\x27\x22])?>E\.</ab>|', '</div><div n="1"><ab\1>E.</ab>', $line);
   }
   if ($this->getParms->dict == "mw")  {
    // 11-13-2018 make bold abbreviations following <div n="vp">
