@@ -318,6 +318,9 @@ class BasicAdjust {
    # also, remove breaks.  This is a display choice, maybe not for acc.txt,xml
    $line = preg_replace('|- <br/>|','',$line);
    $line = preg_replace('|<br/>|',' ',$line);
+  } else if ($this->getParms->dict == "wil") {
+   $line = preg_replace('|\.²([0-9]+)|', '\1', $line);
+   $line = preg_replace('| *\.²([a-z]+)|', '</div><div n="2">\1', $line);
   }
   if ($this->getParms->dict == "mw")  {
    // 11-13-2018 make bold abbreviations following <div n="vp">
