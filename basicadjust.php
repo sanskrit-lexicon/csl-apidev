@@ -77,6 +77,9 @@ class BasicAdjust {
  } else {
  // All other dictionaries
  $line = preg_replace('/¦/',' ',$line);
+ if ($this->getParms->dict == "wil") {
+  $line = preg_replace('~<lex.*?</lex>(?:(?!<lex|<div|</body>).)*~s', '<div n="1">$0</div>', $line);
+ }
   // chg_markup currently only applies to gra dictionary
   // Nov. 2024. Also used in mw dictionary
   // May 2026. Also used in lrv dictionary
