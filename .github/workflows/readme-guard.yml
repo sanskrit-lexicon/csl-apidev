@@ -1,0 +1,43 @@
+name: README manual-block guard
+
+# Fails if the hand-maintained "## Documentation" block is removed from README.md.
+# The Cologne Tooling Runbook regenerates README.md and is instructed to preserve
+# everything between the <!-- BEGIN/END MANUAL: documentation --> markers verbatim.
+# This check is the backstop for any actor that ignores the runbook.
+# See COLOGNE#249 and doc/cleanurl.md.
+
+on:
+  pull_request:
+    paths:
+      - README.md
+  push:
+    branches: [master]
+    paths:
+      - README.md
+  workflow_dispatch:
+
+jobs:
+  guard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Verify manual documentation block is present
+        run: |
+          fail=0
+          if ! grep -qF '<!-- BEGIN MANUAL: documentation' README.md; then
+            echo "::error file=README.md::Missing '<!-- BEGIN MANUAL: documentation' marker."
+            fail=1
+          fi
+          if ! grep -qF '<!-- END MANUAL: documentation -->' README.md; then
+            echo "::error file=README.md::Missing '<!-- END MANUAL: documentation -->' marker."
+            fail=1
+          fi
+          if [ "$fail" -ne 0 ]; then
+            echo ""
+            echo "The hand-maintained Documentation block was dropped from README.md."
+            echo "Restore the section and its BEGIN/END MANUAL markers. The Cologne"
+            echo "Tooling Runbook must preserve everything between them verbatim."
+            exit 1
+          fi
+          echo "OK: manual documentation block present."
