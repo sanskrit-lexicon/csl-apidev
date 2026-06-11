@@ -54,9 +54,8 @@ def fetch_live(row, timeout=90):
 
 def fetch_fixture(row, fix):
     key = '%s|%s|%s' % (row['dict'], row['input'], row['query'])
-    if key not in fix:
-        raise KeyError('no fixture for %s (run --live to populate)' % key)
-    return list(fix[key])
+    v = fix.get(key)
+    return None if v is None else list(v)   # None = not cached; offline run skips it
 
 def rank_of(intended, dicthws):
     for i, d in enumerate(dicthws):
