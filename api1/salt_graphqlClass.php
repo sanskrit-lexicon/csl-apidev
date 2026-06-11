@@ -7,21 +7,25 @@ error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
 //
 // RECOMMENDED for production: wire webonyx/graphql-php against the SDL and resolve with the
 // salt_common.php helpers (see the commented block at the bottom). The minimal hand-rolled
-// dispatcher below lets the endpoint answer the two known query shapes during the pilot
-// without adding a Composer dependency. Resolvers call the SAME salt_common helpers as the
-// REST faces, so REST and GraphQL cannot diverge.
+// dispatcher below answers the two known query shapes during the pilot without a Composer
+// dependency. Resolvers call the SAME salt_common helpers as the REST faces, so REST and
+// GraphQL cannot diverge.
+//
+// VERIFY: the naive dispatcher reads scalar args from GraphQL variables or a literal-arg
+// regex; array literals (e.g. ids: ["a","b"]) only work via variables until webonyx is wired.
 require_once(__DIR__ . '/salt_common.php');
 
 class SaltGraphqlClass {
   public $json;
+  public $parm;
 
   public function __construct() {
+    $this->parm = new Parm();                       // dict from $_REQUEST['dict']
     $body  = json_decode(file_get_contents('php://input'), true);
     $query = isset($body['query']) ? $body['query']
            : (isset($_REQUEST['query']) ? $_REQUEST['query'] : '');
     $vars  = isset($body['variables']) ? $body['variables'] : array();
 
-    // TODO: replace this naive dispatch with webonyx/graphql-php (see bottom of file).
     if ((strpos($query, 'ids') !== false) && (strpos($query, 'entries') === false)) {
       $this->json = json_encode(array('data' => array('ids' => $this->resolveIds($vars))),
                                 JSON_UNESCAPED_UNICODE);
@@ -41,26 +45,20 @@ class SaltGraphqlClass {
     $q          = $this->arg($query, $vars, 'query', '');
     $query_type = $this->arg($query, $vars, 'queryType', 'term');
     $size       = (int)$this->arg($query, $vars, 'size', 25);
-    $out = array();
-    foreach (array_slice(salt_search($field, $q, $query_type, $size), 0, $size) as $lnum) {
-      $out[] = salt_entry_build($lnum);
-    }
-    return $out;
+    return salt_search_entries($this->parm, $field, $q, $query_type, $size);
   }
 
-  // ids(ids: [String])
+  // ids(ids: [String])  — pass ids via variables until webonyx is wired
   private function resolveIds($vars) {
     $ids = isset($vars['ids']) ? $vars['ids'] : array();
     $out = array();
     foreach ($ids as $id) {
-      $lnum = salt_id_to_lnum($id);
-      if ($lnum !== null) { $out[] = salt_entry_build($lnum); }
+      foreach (salt_entries_for_id($this->parm, $id) as $e) { $out[] = $e; }
     }
     return $out;
   }
 
   // Placeholder argument reader: prefer GraphQL variables; fall back to a literal-arg regex.
-  // Real literal/variable parsing is the webonyx parser's job.
   private function arg($query, $vars, $name, $default) {
     if (isset($vars[$name])) { return $vars[$name]; }
     if (preg_match('/' . preg_quote($name, '/') . '\\s*:\\s*"?([A-Za-z0-9_\\-]+)"?/', $query, $m)) {
@@ -75,18 +73,20 @@ require_once __DIR__ . '/../vendor/autoload.php';
 use GraphQL\GraphQL;
 use GraphQL\Utils\BuildSchema;
 
+$parm   = new Parm();
 $schema = BuildSchema::build(file_get_contents(__DIR__ . '/salt-api.graphql'));  // SDL copy
 $root = array(
-  'entries' => function ($r, $a) {
-    $lnums = salt_search(
+  'entries' => function ($r, $a) use ($parm) {
+    return salt_search_entries($parm,
       isset($a['field']) ? $a['field'] : 'headword_slp1',
       $a['query'],
       isset($a['queryType']) ? $a['queryType'] : 'term',
       isset($a['size']) ? $a['size'] : 25);
-    return array_map('salt_entry_build', $lnums);
   },
-  'ids' => function ($r, $a) {
-    return array_map(function ($id) { return salt_entry_build(salt_id_to_lnum($id)); }, $a['ids']);
+  'ids' => function ($r, $a) use ($parm) {
+    $out = array();
+    foreach ($a['ids'] as $id) { foreach (salt_entries_for_id($parm, $id) as $e) { $out[] = $e; } }
+    return $out;
   },
 );
 $result = GraphQL::executeQuery($schema, $query, $root, null, $vars)->toArray();

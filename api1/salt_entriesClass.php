@@ -6,8 +6,8 @@ error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
 //
 // Thin wrapper: validates params, then calls the shared search + envelope builder in
 // salt_common.php (the same helpers used by salt_idsClass and salt_graphqlClass, so the
-// three faces cannot diverge). No new runtime: term/prefix/wildcard/regexp/fuzzy run over
-// the headword index; match/match_phrase over the body wait for Phase 4.
+// three faces cannot diverge). No new runtime: term/prefix/wildcard/fuzzy run over the
+// headword index; match/match_phrase/regexp over the body wait for Phase 4.
 //
 // Contract : doc/salt_entries.md
 // Profile  : csl-standards/docs/SALT_API_PROFILE.md  (data/schema/salt-api.openapi.yaml)
@@ -32,21 +32,15 @@ class SaltEntriesClass {
       return;
     }
     // body-text modes need an index not built for the MW pilot -> 400 (never silent-empty)
-    if (in_array($this->field, array('sense','xml'), true) &&
-        in_array($this->query_type, array('match','match_phrase'), true)) {
+    if (in_array($this->query_type, array('match','match_phrase','regexp'), true)) {
       http_response_code(400);
-      $this->json = json_encode(array('error' => 'body search not available until Phase 4'));
+      $this->json = json_encode(array('error' => "query_type '{$this->query_type}' not available until Phase 4"));
       return;
     }
 
-    // ---- search (shared) ; build one Salt entry per record (shared) ----
-    $entries = array();
-    $lnums = salt_search($this->field, $this->query, $this->query_type, $this->size);
-    foreach (array_slice($lnums, 0, $this->size) as $lnum) {
-      $entries[] = salt_entry_build($lnum);
-    }
-    $this->json = json_encode(array('data' => array('entries' => $entries)),
-                              JSON_UNESCAPED_UNICODE);
+    // ---- search + build (shared) ----
+    $entries = salt_search_entries($this->parm, $this->field, $this->query, $this->query_type, $this->size);
+    $this->json = json_encode(array('data' => array('entries' => $entries)), JSON_UNESCAPED_UNICODE);
   }
 }
 ?>

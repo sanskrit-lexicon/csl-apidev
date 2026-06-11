@@ -10,7 +10,8 @@ class SaltIdsClass {
   public $json;
 
   public function __construct() {
-    $ids = salt_multi_param('ids');                 // repeated ids= (C-SALT multi-value)
+    $parm = new Parm();                             // dict from $_REQUEST['dict']
+    $ids  = salt_multi_param('ids');                // repeated ids= (C-SALT multi-value)
     if (empty($ids)) {
       http_response_code(400);
       $this->json = json_encode(array('error' => "Missing or invalid parameter: 'ids'"));
@@ -18,10 +19,7 @@ class SaltIdsClass {
     }
     $entries = array();
     foreach ($ids as $id) {
-      $lnum = salt_id_to_lnum($id);
-      if ($lnum !== null) {
-        $entries[] = salt_entry_build($lnum);
-      }
+      foreach (salt_entries_for_id($parm, $id) as $e) { $entries[] = $e; }
     }
     $this->json = json_encode(array('data' => array('ids' => $entries)), JSON_UNESCAPED_UNICODE);
   }
