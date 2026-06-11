@@ -1,0 +1,20 @@
+# simple-search gold set  --  query <TAB> input <TAB> dict <TAB> intended_dicthw <TAB> note
+# intended_dicthw is the SLP1 headword the user most likely wants.
+# An empty intended marks a "should return nothing" (zero-result) case.
+# Seeded 2026-06-11 from live MW responses (output=iast). Expand with scholarly judgement.
+agni	default	mw	agni	exact headword
+deva	default	mw	deva	exact; 5 results (overgeneration)
+kara	default	mw	kara	overgeneration (11)
+nara	default	mw	nara	overgeneration (6)
+sana	default	mw	sana	overgeneration (18)
+manas	default	mw	manas	overgeneration (20)
+yoga	default	mw	yoga	3 results
+vishvamitra	default	mw	viSvAmitra	proper noun; 3 results
+upanishad	default	mw	upanizad	folk 'sh'; 2 results
+rama	default	mw	rAma	HARD: intended raama ranks #2 behind literal 'rama'
+buddha	default	mw	budDa	folk; 2 results
+xqzqxq	default	mw		zero-result (nonsense)
+manas	iast	mw	manas	precise -> 1 (restrict_to_user_word)
+sana	iast	mw	sana	precise -> 1
+kara	iast	mw	kara	precise -> 1
+saMskfta	iast	mw	saMskfta	precise -> 1
