@@ -275,3 +275,9 @@ is a larger data-pipeline question — out of scope here.)
    canonical form?
 7. **Collision governance.** The whitelist is the guard; do we want a regression test
    that fails if a future root directory ever equals a dict code?
+8. **Content-negotiation trigger (§0).** The unified `/{DICT}/{ref}` permalink must
+   route HTML (listview) vs JSON (`salt_entries.php`). Key the decision on the `Accept`
+   header alone, or also honor an explicit override — a `.json` suffix and/or
+   `?format=json` — for clients that can't set `Accept` (and what wins when both are
+   present)? (Recommend: `Accept` as default, explicit `.json`/`?format=` override
+   wins; relates to the suffix policy in Q6.)
