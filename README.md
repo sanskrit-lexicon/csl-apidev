@@ -2,6 +2,14 @@
 
 CDSL **web-backend** repository in the Sanskrit Lexicon project.
 
+## Documentation
+
+API endpoint docs live in [`doc/`](doc/readme.md). Of note:
+
+- [Clean-URL permalinks roadmap](doc/cleanurl.md) — path-based direct links to
+  dictionary entries, e.g. `/MW/bAQa` or `/MW/144239`
+  ([COLOGNE#249](https://github.com/sanskrit-lexicon/COLOGNE/issues/249)).
+
 ## Issues Overview
 
 **Total**: 45 | **Open**: 22 | **Closed**: 23
