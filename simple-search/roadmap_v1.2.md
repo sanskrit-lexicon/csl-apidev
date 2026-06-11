@@ -489,12 +489,74 @@ without the combinatorial walk. Treat as a separate, later milestone (Q9).
 
 ---
 
-## 12. Suggested sequencing
+## 12. Fix I — refresh the ranking frequencies from DCS 2026 (data)
+
+Result ordering is driven by `wf0/wf.txt` — a 50,474-line `slp1_key  count`
+table loaded by `init_word_frequency()` and applied in `order_by_wf()`. Many
+entries are stale or zero (`akac 0`, `akaRwakin 0`). The **VisualDCS** repo now
+carries a fresh Digital Corpus of Sanskrit (2026) lemma-frequency export —
+`src/DCS-data-2026/exports/clean/lemmas.csv` — 15,902 lemmas, IAST headword +
+corpus `token_count`:
+
+```
+lemma_id,lemma,grammar,preverbs,token_count
+37875,tad,pron,,3734
+156168,kṛ,2. Ā.,,1073
+70467,rājan,m,,588
+```
+
+**Pipeline** (one offline script; commit the output like today's wf.txt):
+
+1. For each DCS row, transcode `lemma` IAST→SLP1 with the repo transcoder
+   (`roman`→`slp1`), then `dalnorm.normalize()` into the hwnorm1c key space —
+   the *same* normalization `simple_search` uses, so the keys line up.
+2. Aggregate `token_count` by normalized key (**sum** — homonyms and derived
+   stems that collapse to one spelling add up; ranking cares only about the
+   spelling).
+3. Merge into wf: DCS count where present, fall back to the existing wf value
+   otherwise (keeps the 50k coverage, refreshes the ~16k DCS attests).
+4. Emit `wf1/wf.txt`; point `init_word_frequency()` at it.
+
+**Feasibility — measured** (approximate transcoder, *no* hwnorm normalization,
+so a **lower bound**):
+
+- **79.4%** of DCS lemmas (12,632 / 15,902) already hit an existing wf key
+  exactly; with the canonical transcoder + `dalnorm` it only goes up.
+- Those cover **93.6%** of the export's token mass.
+- The 3,270 misses are mostly DCS lemmatization artifacts — causative/derived
+  stems (`kāray`, `darśay`, `cintay`), sandhi compounds (`kaścit`, `kadācid`) —
+  not dictionary gaps; they drop harmlessly.
+- ~6 lemmas carry stray non-Sanskrit codepoints (`ﾱ`, U+FFDE) → one cleanup line.
+
+**Why it matters for §5.** Fix B scores candidates by *spelling* distance;
+frequency is the natural second axis. A high-frequency neighbour is likelier to
+be the intended word, so DCS-2026 counts sharpen both the ordering and the
+hard-drop tie-breaks: `score_final = f(edit_cost) · g(log(1 + freq))`.
+
+**Expected output (`wf1/wf.txt`):**
+
+```
+tad 3734
+ca 3385
+kf 1073
+rAjan 588
+...
+```
+
+**Caveat — provenance.** The export's counts sum to ~134k, far below the
+4.57M-token full corpus, so `lemmas.csv` (clean) is evidently a filtered slice.
+The *relative* order is clearly sound (tad, ca, na, iti, api on top), which is
+all ranking needs — but confirm whether to pull raw counts from
+`dcs_full.sqlite` instead for absolute fidelity (Q11).
+
+---
+
+## 13. Suggested sequencing
 
 | Milestone | Fixes | Effect | New data? |
 |---|---|---|---|
 | **M1** hygiene | D (dedup), E1 (NFC), A1 (precise-residue table) | correctness; smaller precise-*absent* lists (precise+exact is already 1) | none |
-| **M2** ranking — headline | B (score + hard-drop), expose `score`, A2 (soften guard) | tames `default`-mode overgeneration — the actual problem | none |
+| **M2** ranking — headline | B (score + hard-drop), expose `score`, A2, **I (DCS-2026 freq refresh)** | tames `default`-mode overgeneration; fresher lemma-based ranking | `wf1/wf.txt` |
 | **M3** precision | C (phonotactics), F (folknorm) | further `default`-mode noise drop | none |
 | **M4** coverage | E2/E3 (detect + case), G (WX, Velthuis, Brahmic) | many more spellings accepted | new tables |
 | **M5** scale | H (blur-key index) | retrieve-and-rank rewrite | rebuild index |
@@ -505,7 +567,7 @@ low-risk correctness you can ship first.
 
 ---
 
-## 13. Expected-output reference (before → after)
+## 14. Expected-output reference (before → after)
 
 `input=default&key=manas`, MW:
 
@@ -525,7 +587,7 @@ v1.2:  1–2 results (manas, +mAnasa)   — unchanged unless A2 softens the guar
 
 ---
 
-## 14. Questions
+## 15. Questions
 
 1. **Hard-drop window.** What `DELTA` (max cost above the best to keep) and
    floor count `N`? Confirm we always keep the user's exact spelling even if
@@ -550,3 +612,11 @@ v1.2:  1–2 results (manas, +mAnasa)   — unchanged unless A2 softens the guar
 10. **Case-significant ASCII.** Acceptable that HK/SLP1 capitals are folded
     when typed in `default` mode (user must pick the right mode), or do you
     want a heuristic guess?
+11. **DCS frequency source (Fix I).** Use `lemmas.csv` (clean; counts sum to
+    ~134k) or pull raw occurrence counts from `dcs_full.sqlite` (full 4.57M
+    corpus) for absolute fidelity? Relative order is sound either way.
+12. **Merge policy (Fix I).** Refresh-where-present with the old 2017 wf as
+    fallback, or go DCS-only and drop the legacy counts entirely?
+13. **Frequency × edit-score (Fix I + B).** Combine as
+    `f(edit_cost) · g(log(1+freq))`, or keep frequency only as a tie-breaker
+    after the edit-score (today's behaviour)?
