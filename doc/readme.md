@@ -29,6 +29,7 @@ and is currently one of:
 |[getsuggest](getsuggest.md) | return short list of words with a certain prefix|
 |[servepdf](servepdf.md) | generates link to scanned images for a particular page of a particular dictionary|
 |[getword_xml](getword_xml.md) | for a given headword, return matching records from <dict>.xml.  Currently not used.|
+|[cleanurl](cleanurl.md) | roadmap: clean-URL permalinks to entries, e.g. /MW/bAQa or /MW/144239 (COLOGNE#249)|
 
 [restfulparm](restfulparm.md) shows all the restful parameters used by any of the endpoints.
 
