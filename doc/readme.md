@@ -29,7 +29,7 @@ and is currently one of:
 |[getsuggest](getsuggest.md) | return short list of words with a certain prefix|
 |[servepdf](servepdf.md) | generates link to scanned images for a particular page of a particular dictionary|
 |[getword_xml](getword_xml.md) | for a given headword, return matching records from <dict>.xml.  Currently not used.|
-|[cleanurl](cleanurl.md) | roadmap: clean-URL permalinks to entries, e.g. /MW/bAQa or /MW/144239 (COLOGNE#249); subsumed by the Salt permalink, see [salt_entries](salt_entries.md) §1.3|
+|[cleanurl](cleanurl.md) | roadmap: clean-URL permalinks to entries, e.g. /MW/bAQa or /MW/144239 (COLOGNE#249); unified with the Salt permalink — cleanurl is its HTML + collision-safe-routing face, see [cleanurl](cleanurl.md) §0 and [salt_entries](salt_entries.md) §1.3/§1.7|
 |[salt_entries](salt_entries.md) | C-SALT-compatible entry search, `/dicts/{id}/restful/entries`|
 |[salt_ids](salt_ids.md) | C-SALT-compatible batch fetch by id, `/dicts/{id}/restful/ids`|
 |[salt_graphql](salt_graphql.md) | C-SALT-compatible GraphQL (`entries`, `ids`), `/dicts/{id}/graphql`|

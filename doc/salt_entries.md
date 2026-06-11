@@ -78,6 +78,16 @@ RewriteRule ^dicts/([^/]*)/restful/entries$  /scans/awork/apidev/salt_entries.ph
 RewriteRule ^([A-Za-z0-9]+)/([^/]+)$  /scans/awork/apidev/salt_entries.php?dict=$1&query=$2  [L]
 ```
 
+> **Reconciliation note — see [cleanurl](cleanurl.md) §0.** The permalink rule above is
+> collision-unsafe as written: `^([A-Za-z0-9]+)/([^/]+)$` captures *every* two-segment
+> root path (`/images/x`, `/php/x`, `/css/x`, …), not only dictionaries — reserving just
+> `restful`/`graphql` is insufficient. The unified `/{DICT}/{ref}` rewrite must
+> (a) restrict `{dict}` to the **dict-code whitelist** in [cleanurl](cleanurl.md) §4;
+> (b) **content-negotiate** — `Accept: text/html` → the listview display
+> (`cleanurl.php`), `Accept: application/json` (or `?format=json`) → `salt_entries.php`
+> as above; and (c) preserve the homonym form `/{DICT}/{KEY}/{HOM}` and decimal `lnum`
+> (`/MW/144239.1`) from [cleanurl](cleanurl.md) §3.
+
 ### 1.8. Expected output
 
 ```json

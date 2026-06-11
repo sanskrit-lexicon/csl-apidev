@@ -11,6 +11,44 @@ sends `/{DICT}/...` to a new `cleanurl.php`, which parses the path, resolves it 
 the same restful parameters [listview](listview.md) already understands, and serves
 the existing listview display.
 
+## 0. Status — unified with the Salt API permalink
+
+Since this roadmap was first written, the same user-facing permalink —
+`/{DICT}/{ref}`, `ref` = headword (any input transliteration) or `lnum` — has been
+adopted by the **Salt API** as its permalink form
+([salt_entries](salt_entries.md) §1.3, §1.7), which "subsumes" this document. The two
+are **the same URL**, resolved by **one** rewrite, and must not ship as competing
+schemes. Division of labor:
+
+- **Salt API** owns the *data* face: `Accept: application/json` (or the explicit
+  `/dicts/{id}/restful/entries` query form, or `?format=json`) → `salt_entries.php` →
+  the C-SALT-compatible JSON envelope.
+- **cleanurl** (this doc) owns the *human* face: a default browser request
+  (`Accept: text/html`) → the full **listview** display that #249 asked for. JSON in a
+  browser is not the "land on the entry" experience the issue wanted.
+
+So the single `/{DICT}/{ref}` rewrite should **content-negotiate** on `Accept` (with an
+explicit `.json` / `?format=` override), routing to `salt_entries.php` for API clients
+and to the listview render (`cleanurl.php`, below) for people.
+
+Two things this doc specifies that the current Salt draft (§1.7) **dropped** and must be
+carried back into the unified rewrite:
+
+1. **Collision-safe routing (whitelist).** Salt's rule `^([A-Za-z0-9]+)/([^/]+)$`
+   matches *any* two-segment path — it would capture `/images/x`, `/php/x`, `/css/x`,
+   `/js/x`, … not just dictionaries; reserving only `restful`/`graphql` is not enough.
+   Use the **dict-code whitelist** of §4 below so non-dictionary root paths pass through
+   untouched.
+2. **Homonyms and decimal ids.** Salt's two-segment rule cannot express the homonym
+   form `/{DICT}/{KEY}/{HOM}` (§2) and is silent on decimal `lnum` (`/MW/144239.1`).
+   Both must survive (the §3 disambiguation rules already cover them).
+
+The rest of this document — scheme grammar (§2), id-vs-headword disambiguation (§3),
+the whitelist rewrite (§4), the `cleanurl.php` router (§5), id→entry resolution (§6),
+and the lnum-stability caveat (§9) — remains the spec for the **HTML** side and for
+**safe routing**, and applies to the unified permalink regardless of which backend
+renders it.
+
 ## 1. The two requests, restated
 
 #249 asks for two link forms. We satisfy both, but with **no query string** — the
