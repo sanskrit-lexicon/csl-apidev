@@ -533,14 +533,17 @@ frequency is the natural second axis. A high-frequency neighbour is likelier to
 be the intended word, so DCS-2026 counts sharpen both the ordering and the
 hard-drop tie-breaks: `score_final = f(edit_cost) · g(log(1 + freq))`.
 
-**Expected output (`wf1/wf.txt`):**
+**Built 2026-06-11** — `simple-search/wf1/wf.txt` + `build_wf_from_dcs.py` (the
+data is shipped; only the one-line wiring in `init_word_frequency()` remains for
+Jim). 12,096 / 50,574 keys refreshed, 1,573 went from 0→positive. Sample
+(wf0 → wf1):
 
 ```
-tad 3734
-ca 3385
-kf 1073
-rAjan 588
-...
+tad   180 -> 3734
+ca    179 -> 3385
+kf    163 -> 1083
+rAjan  84 ->  588
+agni  124 ->  295
 ```
 
 **Caveat — provenance.** The export's counts sum to ~134k, far below the
