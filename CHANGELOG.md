@@ -9,7 +9,7 @@ Dates are UTC+3 (project local).
 ### Added
 - **Master handoff for Jim** (`simple-search/issue_jim_implementation.md`) — one
   ordered checklist (Phases 0–5 + DH Streams A–D), the locked decisions, and all
-  open questions; ready to open as a GitHub issue. — 2026-06-11
+  open questions; **opened as [#47](https://github.com/sanskrit-lexicon/csl-apidev/issues/47)**. — 2026-06-11
 - **DCS↔CDSL crosswalk** (`simple-search/dcs_xref/`) — `dcs_cdsl_xref.tsv` maps
   every DCS-2026 lemma to the CDSL normalized head-key the engine uses (the
   Stream B join key + a reusable LOD linkset). 15,902 lemmas, 12,946 (81.4%)
