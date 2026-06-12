@@ -1,7 +1,10 @@
 # simple-search gold set  --  query <TAB> input <TAB> dict <TAB> intended_dicthw <TAB> note
 # intended_dicthw is the SLP1 headword the user most likely wants.
 # An empty intended marks a "should return nothing" (zero-result) case.
+# Rows whose key is not in fixtures.json are scored only with --live (skipped offline).
 # Seeded 2026-06-11 from live MW responses (output=iast). Expand with scholarly judgement.
+
+# --- exact / overgeneration (default), fixtured ---
 agni	default	mw	agni	exact headword
 deva	default	mw	deva	exact; 5 results (overgeneration)
 kara	default	mw	kara	overgeneration (11)
@@ -10,11 +13,48 @@ sana	default	mw	sana	overgeneration (18)
 manas	default	mw	manas	overgeneration (20)
 yoga	default	mw	yoga	3 results
 vishvamitra	default	mw	viSvAmitra	proper noun; 3 results
-upanishad	default	mw	upanizad	folk 'sh'; 2 results
 rama	default	mw	rAma	HARD: intended raama ranks #2 behind literal 'rama'
+
+# --- folk romanization (default), fixtured ---
+upanishad	default	mw	upanizad	folk 'sh'; 2 results
 buddha	default	mw	budDa	folk; 2 results
-xqzqxq	default	mw		zero-result (nonsense)
-manas	iast	mw	manas	precise -> 1 (restrict_to_user_word)
+moksha	default	mw	mokza	folk 'ksh' -> kSa
+shiva	default	mw	Siva	folk 'sh' -> Sa
+lakshmi	default	mw	lakzmI	folk 'ksh'
+rishi	default	mw	fzi	folk 'ri'+'sh' -> vocalic r + Sa
+vishnu	default	mw	vizRu	folk 'sh' -> za
+jnana	default	mw	jYAna	folk 'jn' -> jYa
+
+# --- common headwords (default), live-only ---
+atman	default	mw	Atman	long A
+veda	default	mw	veda	exact
+mantra	default	mw	mantra	exact
+guna	default	mw	guRa	cerebral N
+surya	default	mw	sUrya	long U
+ahimsa	default	mw	ahiMsA	anusvara + long A
+samsara	default	mw	saMsAra	anusvara
+nirvana	default	mw	nirvARa	cerebral N
+prana	default	mw	prARa	cerebral N
+shanti	default	mw	SAnti	folk sh + long A
+bhakti	default	mw	Bakti	aspirate
+maya	default	mw	mAyA	long A
+purusha	default	mw	puruza	folk sh -> za
+prakriti	default	mw	prakfti	folk 'ri' -> vocalic r
+guru	default	mw	guru	exact
+
+# --- precise input -> 1 (restrict_to_user_word) ---
+manas	iast	mw	manas	precise -> 1
 sana	iast	mw	sana	precise -> 1
 kara	iast	mw	kara	precise -> 1
 saMskfta	iast	mw	saMskfta	precise -> 1
+kṛṣṇa	iast	mw	kfzRa	precise IAST diacritics, live-only
+viṣṇu	iast	mw	vizRu	precise IAST diacritics, live-only
+dharma	iast	mw	Darma	precise, live-only
+
+# --- lemmatization targets (Stream A) -- expected to MISS in v1.1, live-only ---
+gacchati	iast	mw	gam	STREAM-A: inflected (3sg pres) -> root gam
+rAmasya	slp1	mw	rAma	STREAM-A: genitive -> rAma
+
+# --- zero-result ---
+xqzqxq	default	mw		zero-result (nonsense)
+zzqzz	default	mw		zero-result (nonsense), live-only

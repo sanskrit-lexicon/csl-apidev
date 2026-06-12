@@ -82,6 +82,9 @@ def main():
     print('-' * 64)
     for row in gold:
         dh = fetch_live(row) if a.live else fetch_fixture(row, fix)
+        if dh is None:        # no fixture offline; this row is scored only with --live
+            print('%-13s %-7s  -- no fixture, skipped offline (use --live) --' % (row['query'], row['input']))
+            continue
         n = len(dh)
         if row['intended'] == '':                 # zero-result case
             correct = (n == 0)
