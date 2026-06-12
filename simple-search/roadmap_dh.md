@@ -25,6 +25,10 @@ Accessible front door to the Interoperable + Reusable data.
 3. Morphology engine = **Vidyut** (Rust, fast, embeddable, Apache-2).
 4. Build the **full evaluation harness** (gold set + precision@k / MRR). Done
    this round — see §5.
+5. **Repo boundary (decided 2026-06-11):** `csl-standards` owns the neutral
+   model + TEI/OntoLex + loss reports; `simple-search` owns **retrieve + rank +
+   address + corpus-ground**. The search consumes csl-standards' outputs; it does
+   not define a competing data model.
 
 ## 1. The picture — one query, four payoffs
 
@@ -253,6 +257,7 @@ So the order below is about dependencies, not importance.
    or only link to the workbench? id scheme? confirm TEI **Lex-0**. (C1–C3)
 4. **Eval governance** — gold-set curation owner; target thresholds; CI gate?
    (D1–D3)
-5. **Boundary with csl-standards** — agree which repo owns what: csl-standards =
-   model + TEI/OntoLex + loss; simple-search = retrieve + rank + address +
-   corpus-ground. Anything in between?
+5. **Boundary with csl-standards** — **DECIDED (2026-06-11, see §0.5):**
+   csl-standards = model + TEI/OntoLex + loss; simple-search = retrieve + rank +
+   address + corpus-ground. Still open: any *shared* component in between — e.g.
+   who owns the DCS↔CDSL crosswalk (currently `simple-search/dcs_xref/`)?

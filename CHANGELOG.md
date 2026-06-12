@@ -33,6 +33,12 @@ Dates are UTC+3 (project local).
   NFC/wider-script detect, folk-ASCII, index-side rewrite, DCS frequency.
   — 2026-06-11
 
+### Decisions
+- **Repo boundary (2026-06-11):** `csl-standards` owns model + TEI/OntoLex + loss;
+  `simple-search` owns retrieve + rank + address + corpus-ground.
+- Interoperability target = **TEI Lex-0**; morphology engine = **Vidyut**; build the
+  full evaluation harness.
+
 ### Notes
 - Overgeneration verified as a **`default`-mode** phenomenon only:
   `restrict_to_user_word` already collapses precise input to the exact word.
