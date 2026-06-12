@@ -26,16 +26,18 @@ python eval_search.py --k 5      # recall@K cutoff
   `default`-mode phenomenon (precise modes self-limit via
   `restrict_to_user_word`).
 
-## Baseline — v1.1 engine (wf0 ranking), seed gold set, 2026-06-11
+## Baseline — v1.1 engine (wf0 ranking), 43-case gold set (22 with offline fixtures), 2026-06-11
 ```
-ALL       n=16   P@1=0.94  recall@5=1.00  MRR=0.969  mean#results=5.25
-default   n=12   P@1=0.92  recall@5=1.00  MRR=0.958  mean#results=6.67
+ALL       n=22   P@1=0.95  recall@5=1.00  MRR=0.977  mean#results=4.45
+default   n=18   P@1=0.94  recall@5=1.00  MRR=0.972  mean#results=5.22
 precise   n=4    P@1=1.00  recall@5=1.00  MRR=1.000  mean#results=1.00
 ```
+(`n` counts only rows with an offline fixture; the other 21 gold rows — common
+headwords, precise IAST, Stream-A lemmatization targets — are scored on `--live`.)
 
 **Reading it.** Recall is already perfect — the engine never *loses* the
-intended word. The problem is **overgeneration**: `default` mode returns 6.7×
-more results than precise mode (6.67 vs 1.00). The single ranking miss is
+intended word. The problem is **overgeneration**: `default` mode returns ~5×
+more results than precise mode (5.22 vs 1.00). The single ranking miss is
 `rama` → intended `rAma` sits at rank 2 behind the literal headword `rama`
 (the `put_user_word_first`-vs-frequency tension; `wf1` DCS frequencies + Fix B
 scoring should fix it).
@@ -43,7 +45,7 @@ scoring should fix it).
 ## How this gates the v1.2 fixes
 Re-run after each of Fixes A–I. The targets (proposed, see roadmap Q D2):
 - **recall@5 must stay ≥ 0.98** (never trade away the right answer), AND
-- **default mean #results should fall from 6.67 toward ≤ 3**, AND
+- **default mean #results should fall from 5.22 toward ≤ 3**, AND
 - **`rama` P@1 → 1.0** once `wf1` is wired (Fix I) + Fix B scoring lands.
 
 So the harness is both a baseline and a regression gate: overgeneration down,

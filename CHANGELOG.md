@@ -17,9 +17,10 @@ Dates are UTC+3 (project local).
   to `csl-standards`, D measured quality); search framed as the discovery layer
   over the `csl-standards` interoperability stack. — 2026-06-11
 - **Evaluation harness** (`simple-search/eval/`) — `eval_search.py`
-  (P@1, recall@K, MRR, mean #results), a seed gold set, cached fixtures, readme.
-  v1.1 baseline: recall@5=1.00 but default mean #results=6.67 vs precise 1.00
-  (overgeneration quantified); regression gate for Fixes A–I. — 2026-06-11
+  (P@1, recall@K, MRR, mean #results), a **43-case gold set** (22 with offline
+  fixtures; the rest scored `--live`), cached fixtures, readme. v1.1 baseline:
+  recall@5=1.00 but default mean #results=5.22 vs precise 1.00 (overgeneration
+  quantified); regression gate for Fixes A–I. — 2026-06-11
 - **DCS-2026 frequency refresh** (`simple-search/wf1/`) — `wf.txt` drop-in for
   `wf0/wf.txt` rebuilt from the DCS-2026 lemma export; 12,096 keys refreshed,
   1,573 went 0→positive (tad 180→3734, ca 179→3385, kf 163→1083). Built by
