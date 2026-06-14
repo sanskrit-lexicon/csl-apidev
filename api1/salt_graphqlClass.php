@@ -61,7 +61,14 @@ class SaltGraphqlClass {
   // Placeholder argument reader: prefer GraphQL variables; fall back to a literal-arg regex.
   private function arg($query, $vars, $name, $default) {
     if (isset($vars[$name])) { return $vars[$name]; }
-    if (preg_match('/' . preg_quote($name, '/') . '\\s*:\\s*"?([A-Za-z0-9_\\-]+)"?/', $query, $m)) {
+    // Quoted string value: capture the FULL contents between the quotes so that
+    // wildcards (a*), diacritics, %-escapes and spaces survive — the previous
+    // [A-Za-z0-9_-]+ class silently truncated e.g. query:"a*" to "a".
+    if (preg_match('/' . preg_quote($name, '/') . '\\s*:\\s*"([^"]*)"/', $query, $m)) {
+      return $m[1];
+    }
+    // Unquoted value: GraphQL enum / number (queryType: term, size: 5).
+    if (preg_match('/' . preg_quote($name, '/') . '\\s*:\\s*([A-Za-z0-9_]+)/', $query, $m)) {
       return $m[1];
     }
     return $default;

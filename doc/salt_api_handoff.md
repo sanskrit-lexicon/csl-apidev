@@ -1,9 +1,15 @@
 # Salt API — implementation handoff (Phase 1)
 
 Status: the `api1/` controllers are a **wired skeleton** — connected to the real data layer
-(`Dal` / `Getword_data` / transcoder) but **NOT run-verified** (authored without a PHP
-runtime or the per-dict `*.sqlite` databases). This page is the one-stop guide to test,
-deploy, and finish it.
+(`Dal` / `Getword_data` / transcoder). **Partially run-verified (2026-06-14):** all eight
+files pass `php -l` (PHP 8.2) and are now linted in CI; the *data-independent* layer is
+runtime-checked — the `salt_common.php` require chain + `chdir`, the transcoder
+(`agni → अग्नि` / `agni`), `salt_multi_param` (repeated `ids=`), `salt_extract_refs` /
+`salt_scan_url`, and GraphQL literal-arg parsing all behave. A parser bug found in that pass
+— `arg()` truncating `query:"a*"` to `"a"` (wildcards/diacritics/spaces dropped) — is fixed.
+Still **NOT verified end-to-end**: the `Dal` / `Getword_data` search + envelope paths need a
+per-dict `*.sqlite` (§2) — run the smoke test on a host that has the data. This page is the
+one-stop guide to test, deploy, and finish it.
 
 - Contract (normative): [`SALT_API_PROFILE.md`](https://github.com/sanskrit-lexicon/csl-standards/blob/salt-api-profile/docs/SALT_API_PROFILE.md) · [`salt-api.openapi.yaml`](https://github.com/sanskrit-lexicon/csl-standards/blob/salt-api-profile/data/schema/salt-api.openapi.yaml) · [`salt-api.graphql`](https://github.com/sanskrit-lexicon/csl-standards/blob/salt-api-profile/data/schema/salt-api.graphql)
 - Plan: [`SALT_API_INTEGRATION_ROADMAP.md`](https://github.com/sanskrit-lexicon/csl-standards/blob/salt-api-profile/docs/SALT_API_INTEGRATION_ROADMAP.md) · Divergences: [`SALT_API_LOSS_REPORT.md`](https://github.com/sanskrit-lexicon/csl-standards/blob/salt-api-profile/docs/SALT_API_LOSS_REPORT.md)

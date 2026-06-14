@@ -25,10 +25,14 @@ class SaltEntriesClass {
     $this->size       = isset($_REQUEST['size'])       ? (int)$_REQUEST['size']  : 25;
 
     // ---- validate; 400 like C-SALT for unknown field / query_type ----
-    if (!in_array($this->field, salt_fields(), true) ||
-        !in_array($this->query_type, salt_query_types(), true)) {
+    if (!in_array($this->field, salt_fields(), true)) {
       http_response_code(400);
       $this->json = json_encode(array('error' => "Missing or invalid parameter: 'field'"));
+      return;
+    }
+    if (!in_array($this->query_type, salt_query_types(), true)) {
+      http_response_code(400);
+      $this->json = json_encode(array('error' => "Missing or invalid parameter: 'query_type'"));
       return;
     }
     // body-text modes need an index not built for the MW pilot -> 400 (never silent-empty)
