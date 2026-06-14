@@ -217,13 +217,16 @@ $("#key2").autocomplete({
  phpinit = function() {
   var names = ['key1','key2','dict1','dict2','input','output','accent'];
   var phpvals=[ // same order as names
-  "<?php echo $_GET['key1']?>",
-  "<?php echo $_GET['key2']?>",
-  "<?php echo $_GET['dict1']?>",
-  "<?php echo $_GET['dict2']?>",
-  "<?php echo $_GET['input']?>",
-  "<?php echo $_GET['output']?>",
-  "<?php echo $_GET['accent']?>"];
+  // json_encode emits a fully-quoted, escaped JS string literal so attacker-
+  // controlled GET values can no longer break out of the string / <script>
+  // block (reflected-XSS). '?? ' keeps empty-when-absent + no PHP 8 warning.
+  <?php echo json_encode($_GET['key1']   ?? '') ?>,
+  <?php echo json_encode($_GET['key2']   ?? '') ?>,
+  <?php echo json_encode($_GET['dict1']  ?? '') ?>,
+  <?php echo json_encode($_GET['dict2']  ?? '') ?>,
+  <?php echo json_encode($_GET['input']  ?? '') ?>,
+  <?php echo json_encode($_GET['output'] ?? '') ?>,
+  <?php echo json_encode($_GET['accent'] ?? '') ?>];
   var i,name,phpval;
   for(i=0;i<names.length;i++) {
    phpinit_helper(names[i],phpvals[i]);

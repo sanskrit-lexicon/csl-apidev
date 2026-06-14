@@ -227,9 +227,12 @@ getdataForkeyDict = function(parmstr) {
  phpinit = function() {
   var names = ['key','input','output'];
   var phpvals=[ // same order as names
-  "<?php echo $_GET['key']?>",
-  "<?php echo $_GET['input']?>",
-  "<?php echo $_GET['output']?>"
+  // json_encode emits a fully-quoted, escaped JS string literal so attacker-
+  // controlled GET values can no longer break out of the string / <script>
+  // block (reflected-XSS). '?? ' keeps empty-when-absent + no PHP 8 warning.
+  <?php echo json_encode($_GET['key']    ?? '') ?>,
+  <?php echo json_encode($_GET['input']  ?? '') ?>,
+  <?php echo json_encode($_GET['output'] ?? '') ?>
   ];
   console.log('phpvals=',phpvals);
   var i,name,phpval;
