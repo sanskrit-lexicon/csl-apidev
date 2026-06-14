@@ -23,7 +23,7 @@ function getwordCall() {
     return;
    }
    $json = json_encode($table1);
-   echo "{$callback}($json)";
+   echo htmlentities($callback) . "($json)";
   }else {
    echo $table1;
   }

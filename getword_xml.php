@@ -16,7 +16,16 @@ function getwordXmlCall() {
   $temp = new GetwordXmlClass();
   $json = $temp->json;
   if (isset($_GET['callback'])) {
-   echo "{$_GET['callback']}($json)";
+   $callback = $_GET['callback'];
+   // Only allow a safe JSONP callback identifier. Echoing the raw callback
+   // is a reflected-XSS / JSONP-injection vector, so reject anything else.
+   if (!preg_match('/^[A-Za-z_$][A-Za-z0-9_$.]{0,127}$/',$callback)) {
+    header('content-type: text/plain; charset=utf-8');
+    http_response_code(400);
+    echo "invalid callback";
+    return;
+   }
+   echo htmlentities($callback) . "($json)";
   }else {
    echo $json;
   }
