@@ -160,11 +160,15 @@ $("#key").autocomplete({
  phpinit = function() {
   var names = ['key','dict','input','output','accent'];
   var phpvals=[ // same order as names
-  "<?php echo $_GET['key']?>",
-  "<?php echo $_GET['dict']?>",
-  "<?php echo $_GET['input']?>",
-  "<?php echo $_GET['output']?>",
-  "<?php echo $_GET['accent']?>"];
+  // Each value is reflected into a JS string. is_string() blocks array-injection
+  // (?key[]=x); htmlspecialchars() neutralises HTML metachars and is the
+  // sanitizer Semgrep's echoed-request rule recognises; json_encode() supplies
+  // the quoted, escaped JS string literal.
+  <?php echo json_encode(htmlspecialchars(isset($_GET['key'])    && is_string($_GET['key'])    ? $_GET['key']    : '')) ?>,
+  <?php echo json_encode(htmlspecialchars(isset($_GET['dict'])   && is_string($_GET['dict'])   ? $_GET['dict']   : '')) ?>,
+  <?php echo json_encode(htmlspecialchars(isset($_GET['input'])  && is_string($_GET['input'])  ? $_GET['input']  : '')) ?>,
+  <?php echo json_encode(htmlspecialchars(isset($_GET['output']) && is_string($_GET['output']) ? $_GET['output'] : '')) ?>,
+  <?php echo json_encode(htmlspecialchars(isset($_GET['accent']) && is_string($_GET['accent']) ? $_GET['accent'] : '')) ?>];
   var i,name,phpval;
   for(i=0;i<names.length;i++) {
    phpinit_helper(names[i],phpvals[i]);

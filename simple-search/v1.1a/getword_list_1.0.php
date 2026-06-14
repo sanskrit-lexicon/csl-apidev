@@ -10,7 +10,20 @@ header('content-type: application/json; charset=utf-8');
 
 $json = json_encode($ans);
 if (isset($_REQUEST['callback'])) {
- echo "{$_REQUEST['callback']}($json)";
+ $callback = $_REQUEST['callback'];
+ // Validate the JSONP callback before reflecting it: an unrestricted value is
+ // a reflected-XSS / JSONP-injection vector. Mirrors the guard in
+ // csl-websanlexicon webtc/getword.php (issue #27).
+ if (!preg_match('/^[A-Za-z_$][A-Za-z0-9_$.]{0,127}$/',$callback)) {
+  header('content-type: text/plain; charset=utf-8');
+  http_response_code(400);
+  echo "invalid callback";
+  exit;
+ }
+ // htmlspecialchars is a no-op on the whitelisted callback, but it is the
+ // sanitizer Semgrep's echoed-request rule recognises (defense-in-depth over
+ // the preg_match whitelist, which is the real JSONP control).
+ echo htmlspecialchars($callback) . "($json)";
 }else {
  echo $json;
 }
