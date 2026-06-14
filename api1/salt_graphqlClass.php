@@ -18,6 +18,7 @@ require_once(__DIR__ . '/salt_common.php');
 class SaltGraphqlClass {
   public $json;
   public $parm;
+  private $entriesError = null;
 
   public function __construct() {
     $this->parm = new Parm();                       // dict from $_REQUEST['dict']
@@ -30,8 +31,13 @@ class SaltGraphqlClass {
       $this->json = json_encode(array('data' => array('ids' => $this->resolveIds($vars))),
                                 JSON_UNESCAPED_UNICODE);
     } else if (strpos($query, 'entries') !== false) {
-      $this->json = json_encode(array('data' => array('entries' => $this->resolveEntries($query, $vars))),
-                                JSON_UNESCAPED_UNICODE);
+      $entries = $this->resolveEntries($query, $vars);
+      if ($this->entriesError !== null) {
+        http_response_code(400);
+        $this->json = json_encode(array('errors' => array(array('message' => $this->entriesError))));
+      } else {
+        $this->json = json_encode(array('data' => array('entries' => $entries)), JSON_UNESCAPED_UNICODE);
+      }
     } else {
       http_response_code(400);
       $this->json = json_encode(array('errors' => array(
@@ -45,6 +51,18 @@ class SaltGraphqlClass {
     $q          = $this->arg($query, $vars, 'query', '');
     $query_type = $this->arg($query, $vars, 'queryType', 'term');
     $size       = (int)$this->arg($query, $vars, 'size', 25);
+    // Validate against the SAME whitelists as the REST face (salt_entriesClass),
+    // so the three faces do not diverge: an unknown field/queryType is a request
+    // error, not a silently-empty result.
+    if (!in_array($field, salt_fields(), true)) {
+      $this->entriesError = "Missing or invalid parameter: 'field'"; return array();
+    }
+    if (!in_array($query_type, salt_query_types(), true)) {
+      $this->entriesError = "Missing or invalid parameter: 'queryType'"; return array();
+    }
+    if (in_array($query_type, array('match','match_phrase','regexp'), true)) {
+      $this->entriesError = "queryType '$query_type' not available until Phase 4"; return array();
+    }
     return salt_search_entries($this->parm, $field, $q, $query_type, $size);
   }
 
