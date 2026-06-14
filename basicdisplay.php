@@ -124,10 +124,16 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
   dbgprint($this->dbg,"chk 1\n");
   // parse
   if (!xml_parse($p,$line)) {
-   dbgprint(true,"basicdisplay.php: xml parse error\nline=$line\n");
+   // Respect the debug flag: previously this forced dbgprint(true,...) on
+   // every malformed entry, which silently appended the raw record to the
+   // repo-root dbg_apidev.txt log in production. Keep diagnostics behind $dbg.
+   dbgprint($this->dbg,"basicdisplay.php: xml parse error\nline=$line\n");
    $row = $line;
    $this->status = false;
-   $this->html = "<p>basicdisplay.php: xml parse error</p>";
+   // User-facing fallback: don't leak the internal filename, and don't blank
+   // the entry — show its text with markup stripped so a single bad record
+   // degrades gracefully instead of breaking the display.
+   $this->html = "<p>" . htmlspecialchars(strip_tags($line)) . "</p>";
    return;
   }
   dbgprint($this->dbg,"chk 2\n");
