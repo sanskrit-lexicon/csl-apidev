@@ -1,0 +1,84 @@
+name: CI
+
+# csl-apidev is the CDSL web-backend: plain PHP API endpoints plus Python/JS
+# tooling. There is no Composer/npm/Mako project here, so CI lints what exists:
+#   - PHP syntax (php -l) on first-party PHP — hard gate
+#   - Python lint (ruff, warn-only — roughly half the .py files are legacy
+#     Python 2 and will not parse under Python 3)
+#   - YAML lint
+# Vendored / intentional-fixture / broken legacy-variant PHP is skipped and the
+# skips are logged (no silent gaps).
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+    branches: [master, main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  php-lint:
+    name: PHP syntax lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.2"
+          coverage: none
+      - name: php -l on first-party PHP
+        run: |
+          fail=0; linted=0; skipped=0
+          while IFS= read -r f; do
+            case "$f" in
+              phpquery/*)                                                      # vendored third-party library
+                echo "skip (vendor): $f"; skipped=$((skipped+1)); continue;;
+              htmlwork/makeassets/bad.php)                                     # intentional bad-input fixture
+                echo "skip (fixture): $f"; skipped=$((skipped+1)); continue;;
+              simple-search/v1.0d/simple_search.php|simple-search/v1.1a/simple_search.php)
+                echo "skip (legacy variant): $f"; skipped=$((skipped+1)); continue;;  # pre-existing PHP8 syntax errors
+            esac
+            if ! php -l "$f" >/dev/null 2>lint.err; then
+              echo "::error file=$f::$(tr '\n' ' ' < lint.err)"; fail=1
+            fi
+            linted=$((linted+1))
+          done < <(git ls-files '*.php')
+          echo "php -l: linted=$linted skipped=$skipped"
+          exit $fail
+
+  python-lint:
+    name: Python lint (warn-only)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install ruff
+      - name: Ruff (warn-only — repo contains legacy Python 2 scripts)
+        run: ruff check . || echo "::warning::ruff reported findings (includes legacy Python 2)"
+
+  yaml-lint:
+    name: YAML lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+      - run: pip install pyyaml
+      - run: |
+          python - <<'PY'
+          import sys, glob, yaml
+          fail = 0
+          for f in glob.glob('**/*.yml', recursive=True) + glob.glob('**/*.yaml', recursive=True):
+              if '.git' in f:
+                  continue
+              try:
+                  with open(f, encoding='utf-8') as fh:
+                      yaml.safe_load(fh)
+              except yaml.YAMLError as e:
+                  print(f'::error file={f}::{e}'); fail = 1
+          sys.exit(fail)
+          PY

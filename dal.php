@@ -24,6 +24,12 @@ class Dal {
  // 
  public function __construct($dict,$dbname=null) {
   $this->dict=strtolower($dict);
+  // The dict is used as a SQL table identifier, which cannot be supplied as a
+  // bound parameter. Restrict it to a safe charset so a hostile 'dict' value
+  // cannot be injected into the table name. Anything else => no usable db.
+  if (!preg_match('/^[a-z0-9_]+$/',$this->dict)) {
+   $this->dict = '';
+  }
   $this->dbname = $dbname;
   $this->dictinfo = new DictInfo($dict);
   $sqlitedir = $this->dictinfo->sqlitedir;
@@ -110,49 +116,53 @@ class Dal {
    $this->file_db_xml = null;  
   }
  }
- public function get($sql) {
+ public function get($sql,$params=array()) {
   $ansarr = array();
   if (!$this->file_db) {
    //"file_db is null for $this->sqlitefile.
    return $ansarr;
   }
+  // Always go through a prepared statement so callers can bind values safely.
   try {
-   $result = $this->file_db->query($sql);
+   $stmt = $this->file_db->prepare($sql);
+   $stmt->execute($params);
   } catch (PDOException $e) {
-   $result == false;
-  }
-  if ($result == false) {
    return $ansarr;
   }
-  foreach($result as $m) {
+  foreach($stmt as $m) {
    $rec = array($m['key'],$m['lnum'],$m['data']);
    $ansarr[]=$rec;
   }
-  return $ansarr; 
+  return $ansarr;
  }
- public function get_xml($sql) {
+ public function get_xml($sql,$params=array()) {
   $ansarr = array();
   if (!$this->file_db_xml) {
    dbgprint($this->dbg, "file_db_xml is null. sqlitefile={$this->sqlitefile}\n");
    return $ansarr;
   }
-  $result = $this->file_db_xml->query($sql);
-  foreach($result as $m) {
+  try {
+   $stmt = $this->file_db_xml->prepare($sql);
+   $stmt->execute($params);
+  } catch (PDOException $e) {
+   return $ansarr;
+  }
+  foreach($stmt as $m) {
    $rec = array($m['key'],$m['lnum'],$m['data']);
    $ansarr[]=$rec;
   }
-  return $ansarr; 
+  return $ansarr;
  }
  public function get1($key) {
   // Returns associative array for the records in dictionary with this key
-  $sql = "select * from {$this->dict} where key='$key' order by lnum";
-  return $this->get($sql);
+  $sql = "select * from {$this->dict} where key=:key order by lnum";
+  return $this->get($sql,array(':key'=>$key));
  }
  public function get1_xml($key) {
   // Returns associative array for the records in dictionary with this key
-  $sql = "select * from {$this->dict} where key='$key' order by lnum";
+  $sql = "select * from {$this->dict} where key=:key order by lnum";
   dbgprint($this->dbg, "get1_xml, sql=$sql\n");
-  return $this->get_xml($sql);
+  return $this->get_xml($sql,array(':key'=>$key));
  }
 
  public function get2($L1,$L2) {
@@ -160,13 +170,15 @@ class Dal {
   // returns an array of records, one for each L-value in the range
   // $L1 <= $L <= $L2
   // each record is an array with three elements: key,lnum,data
-  $sql="select * from {$this->dict} where  $L1 <= lnum and lnum <= $L2  order by lnum"; 
+  // $L1,$L2 are numeric lnum bounds; cast to float so they cannot inject SQL.
+  $L1 = (float)$L1; $L2 = (float)$L2;
+  $sql="select * from {$this->dict} where  $L1 <= lnum and lnum <= $L2  order by lnum";
   return $this->get($sql);
  }
  public function get3($key) {
   // returns an array of records, which start like $key
-  $sql = "select * from {$this->dict} where key LIKE '$key%' order by lnum";
-  return $this->get($sql);
+  $sql = "select * from {$this->dict} where key LIKE :pat order by lnum";
+  return $this->get($sql,array(':pat'=>$key . '%'));
  }
 
  public function get3a_keydoc($key,$max) {
@@ -177,12 +189,15 @@ class Dal {
   if ($db == null) {return array();}
   $pragma="PRAGMA case_sensitive_like=true;";
   $db->query($pragma);
-  $sql = " select * from {$this->keydoc_tabname} where {$this->keydoc_tabid} LIKE '$key%' LIMIT $max";
+  $max = (int)$max; // LIMIT cannot be a bound parameter; force integer
+  $sql = " select * from {$this->keydoc_tabname} where {$this->keydoc_tabid} LIKE :pat LIMIT $max";
   dbgprint($dbg,"get3a_keydoc: sql=$sql\n");
- $result = $db->query($sql);
- dbgprint($dbg,"get3a_keydoc $key->" . count($result) . "\n");
+ $stmt = $db->prepare($sql);
+ $stmt->execute(array(':pat'=>$key . '%'));
+ $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+ dbgprint($dbg,"get3a_keydoc $key->" . count($rows) . "\n");
  $keys = array();
- foreach($result as $m) {
+ foreach($rows as $m) {
   // expect th
   // $m[1] is a string.  A comma-separated list of keys
   $newkeys = explode(",",$m['data']);
@@ -195,8 +210,8 @@ class Dal {
  $arr = array();
  foreach($keys as $key1) {
 
-  $sql = " select * from {$this->dict} where key='$key1' order by lnum;" ;
-  $ans1 = $this->get($sql);
+  $sql = " select * from {$this->dict} where key=:key order by lnum;" ;
+  $ans1 = $this->get($sql,array(':key'=>$key1));
   dbgprint($dbg,"get3a_keydoc($key1) ans1 has " . count($ans1) . "results\n");
   if (count($ans1) > 0) {
    $rec = $ans1[0];
@@ -234,16 +249,18 @@ class Dal {
   $db = $this->file_db;
   $pragma="PRAGMA case_sensitive_like=true;";
   $db->query($pragma);
-  $sql = " select * from {$this->dict} where key LIKE '$key%' order by lnum LIMIT $max";
-  return $this->get($sql);
+  $max = (int)$max; // LIMIT cannot be a bound parameter; force integer
+  $sql = " select * from {$this->dict} where key LIKE :pat order by lnum LIMIT $max";
+  return $this->get($sql,array(':pat'=>$key . '%'));
  }
  public function prev_get3a($key,$max) {
   // returns an array of records, which start like $key
   // Setting a pragma must for case_sensitive
   $pragma="PRAGMA case_sensitive_like=true;";
   $this->file_db->query($pragma);
-  $sql = " select * from {$this->dict} where key LIKE '$key%' order by lnum LIMIT $max";
-  return $this->get($sql);
+  $max = (int)$max; // LIMIT cannot be a bound parameter; force integer
+  $sql = " select * from {$this->dict} where key LIKE :pat order by lnum LIMIT $max";
+  return $this->get($sql,array(':pat'=>$key . '%'));
  }
 
  public function get3b($key,$max) {
@@ -257,8 +274,10 @@ class Dal {
 */
   $pragma="PRAGMA case_sensitive_like=true;";
   $this->file_db->query($pragma);
-  $sql = " select * from {$this->dict} where key LIKE '$key' order by lnum LIMIT $max";
-  return $this->get($sql);
+  $max = (int)$max; // LIMIT cannot be a bound parameter; force integer
+  // $key may already contain % / _ wildcards supplied by the caller.
+  $sql = " select * from {$this->dict} where key LIKE :pat order by lnum LIMIT $max";
+  return $this->get($sql,array(':pat'=>$key));
  }
 
  public function get3c($key,$max) {
@@ -274,26 +293,29 @@ class Dal {
 */
   $pragma="PRAGMA case_sensitive_like=true;";
   $this->file_db->query($pragma);
+  $max = (int)$max; // LIMIT cannot be a bound parameter; force integer
   # $sql = " select distinct key from {$this->dict} where key LIKE '$key%' order by lnum LIMIT $max";
-  $sql = " select distinct key from {$this->dict} where key LIKE '$key%' LIMIT $max";
-  return $this->get3c_helper($sql);
+  $sql = " select distinct key from {$this->dict} where key LIKE :pat LIMIT $max";
+  return $this->get3c_helper($sql,array(':pat'=>$key . '%'));
  }
- public function get3c_helper($sql) {
+ public function get3c_helper($sql,$params=array()) {
   $ansarr = array();
   if (!$this->file_db) {
    //"file_db is null for $this->sqlitefile.
    return $ansarr;
   }
-  $result = $this->file_db->query($sql);
-  if ($result == false) {
+  try {
+   $stmt = $this->file_db->prepare($sql);
+   $stmt->execute($params);
+  } catch (PDOException $e) {
    return $ansarr;
   }
 
-  foreach($result as $m) {
+  foreach($stmt as $m) {
    #$rec = array($m['key'],$m['lnum'],$m['data']);
    $ansarr[]=$m['key'];
   }
-  return $ansarr; 
+  return $ansarr;
 
  }
 
@@ -308,6 +330,7 @@ class Dal {
   } else {
    $lnum1 = round($lnum0,3);
   }
+  $max = (int)$max; // LIMIT cannot be a bound parameter; force integer
   $sql = "select * from {$this->dict} where (lnum < '$lnum1') order by lnum DESC LIMIT $max";
   return $this->get($sql);
  }
@@ -322,6 +345,7 @@ class Dal {
   } else {
    $lnum1 = round($lnum0,3);
   }
+  $max = (int)$max; // LIMIT cannot be a bound parameter; force integer
   $sql = "select * from {$this->dict} where ('$lnum1' < lnum) order by lnum LIMIT $max";
   return $this->get($sql);
  }
@@ -333,8 +357,10 @@ public function get1_keydoc_keys($key) {
  $dbg=False;
   $pragma="PRAGMA case_sensitive_like=true;";
   $this->keydoc_db->query($pragma);
-  $sql = " select data from {$this->keydoc_tabname} where {$this->keydoc_tabid}='$key';";
- $result = $this->keydoc_db->query($sql);
+  $sql = " select data from {$this->keydoc_tabname} where {$this->keydoc_tabid}=:key;";
+ $stmt = $this->keydoc_db->prepare($sql);
+ $stmt->execute(array(':key'=>$key));
+ $result = $stmt->fetchAll(PDO::FETCH_NUM);
  // $result is an array; expect it to be of length = 0 or 1
  $keys = array();
  foreach($result as $m) {
@@ -603,11 +629,13 @@ public function getgeneral($key,$table) {
    return array();
   }
 #$sql = "select * from $table where id='$key'";
-$key = str_replace("'","''",$key); // 02-08-2020
-$sql = "select * from $table where {$this->tabid}='$key'";
-$result = $this->file_db->query($sql);
+// $table is a SQL identifier (cannot be bound); restrict to a safe charset.
+if (!preg_match('/^[A-Za-z0-9_]+$/',$table)) { return array(); }
+$sql = "select * from $table where {$this->tabid}=:key";
+$stmt = $this->file_db->prepare($sql);
+$stmt->execute(array(':key'=>$key));
 $ansarr = array();
-foreach($result as $m) {
+foreach($stmt as $m) {
  $ansarr[] = $m;
 }
 return $ansarr;
