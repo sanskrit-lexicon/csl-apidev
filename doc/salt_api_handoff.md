@@ -14,12 +14,16 @@ dropped) — is fixed.
 **Open items the run surfaced** — all *contract / Phase-5* decisions for the parity pass (§7),
 not wiring faults:
 
-1. **`id` is not unique per record.** Multi-record headwords share one id: `agni` (5 records)
-   and `indra` (17) all emit `lemma-{key}`; `ka` mixes `lemma-ka-1` / `lemma-ka-2` (records
-   carrying `<hom>`) with a bare, colliding `lemma-ka` for the sub-records that have a
-   fractional `lnum` (41336.05/.1/.2) and no `<hom>`. The `lemma-{key}[-{n}]` scheme therefore
-   cannot address those records through `ids`. Decide the scheme for multi-record headwords
-   against the C-SALT oracle before leaving draft.
+1. **`id` uniqueness — FIXED (2026-06-14).** Multi-record headwords previously shared one id
+   (`agni`×5, `indra`×17 → `lemma-{key}`; `ka` mixed `lemma-ka-1/-2` with a bare colliding
+   `lemma-ka`). `salt_entry_from_record` now disambiguates: `<hom>` present → `-{n}` (C-SALT
+   form, unchanged); no `<hom>` → `-L{lnum}` fallback (the Cologne lnum is per-record unique).
+   `salt_entries_for_id` parses both forms back, so `ids` resolves a single record. Verified:
+   `ka` → `lemma-ka-1`, `lemma-ka-2`, `lemma-ka-L41336.05`, `lemma-ka-L41336.1`,
+   `lemma-ka-L41336.2` (all unique); `ids=lemma-agni-L890,lemma-agni-L891` returns exactly
+   those two records. **Parity note:** `-L{lnum}` is a sanctioned divergence from C-SALT's
+   `lemma-{key}-{n}` for sub-records the source does not number; confirm in §7 whether C-SALT
+   emits these sub-records at all, and reconcile in [`SALT_API_PROFILE.md`](https://github.com/sanskrit-lexicon/csl-standards/blob/salt-api-profile/docs/SALT_API_PROFILE.md).
 2. **`prefix` returns successive records of the first headword, not distinct headwords**
    (`prefix agni` size 8 → 8 `agni` records, lnum 890–897, never reaching `agnika…`). This may
    be parity-correct for "entries matching a prefix" — confirm the intended `size` unit against
@@ -112,7 +116,7 @@ Each is also flagged `VERIFY:` at the relevant line in [`salt_common.php`](../ap
 | `Getword_data(false)` via `$_REQUEST` | Acceptable, or refactor `Getword_data` to take a direct `(dict, key)` constructor (cleaner, avoids the `$_REQUEST` save/restore). |
 | `html` is SLP1-tagged (pre-final-transcode) | **Confirmed 2026-06-14**: `csl.html` shows stray `</s1>`/`</H1>` and untranscoded `<SA>…</SA>`. If clients want display-script HTML, apply `transcoder_processElements($body,'slp1',$filter,'SA')` (as `getwordClass` does). `csl.text` is already clean. |
 | `<ls>` reference extraction | The flat `references` list is a heuristic; confirm/adjust the tag per dictionary. (2026-06-14: `agni`→`["Uṇ."]`, sane.) |
-| `id` uniqueness / homonym suffix vs C-SALT | **Not yet matching (2026-06-14)**: `lemma-ka-1`/`-2` emit, but sub-records with fractional `lnum` and no `<hom>` collapse to a bare colliding `lemma-ka`, and `agni`/`indra` records all share one id. Decide the id scheme for multi-record headwords against C-SALT (run §7 parity) — `ids` cannot address individual records until each has a unique id. |
+| `id` uniqueness / homonym suffix vs C-SALT | **Fixed 2026-06-14** — `<hom>` → `-{n}` (C-SALT), no `<hom>` → `-L{lnum}` fallback; every record now has a unique id and the `ids` face resolves a single record (verified `ka`, `agni`, `indra`). Still confirm against §7 whether C-SALT emits the un-numbered sub-records and reconcile the `-L{lnum}` divergence in the profile. |
 
 ## 5. TODO (deferred, by phase)
 

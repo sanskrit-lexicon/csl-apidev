@@ -93,16 +93,21 @@ function salt_search_keys($parm, $field, $query, $query_type, $size) {
   return $out;
 }
 
-// ===== id -> Salt entries (lemma-{key} or lemma-{key}-{n}) ========================
+// ===== id -> Salt entries (lemma-{key} | lemma-{key}-{n} | lemma-{key}-L{lnum}) =====
 function salt_entries_for_id($parm, $id) {
   if (strpos($id, 'lemma-') !== 0) { return array(); }
   $rest = substr($id, strlen('lemma-'));
-  $hom  = null;
-  if (preg_match('/^(.*)-(\\d+)$/', $rest, $m)) { $rest = $m[1]; $hom = $m[2]; }
-  $all = salt_entries_for_key($rest, $parm->dict);
-  if ($hom === null) { return $all; }
+  // Recover the SLP1 key by stripping a disambiguator suffix (mirror of the mint side):
+  //   -L{lnum}  (lnum fallback; lnum may carry a decimal, e.g. -L41336.05)
+  //   -{n}      (C-SALT homonym number)
+  $key  = $rest;
+  $disambiguated = false;
+  if (preg_match('/^(.*)-L[0-9.]+$/', $rest, $m))      { $key = $m[1]; $disambiguated = true; }
+  elseif (preg_match('/^(.*)-[0-9]+$/', $rest, $m))    { $key = $m[1]; $disambiguated = true; }
+  $all = salt_entries_for_key($key, $parm->dict);
+  if (!$disambiguated) { return $all; }                 // bare lemma-{key}: whole headword
   $out = array();
-  foreach ($all as $e) { if ($e['id'] === $id) { $out[] = $e; } }   // pick the homonym
+  foreach ($all as $e) { if ($e['id'] === $id) { $out[] = $e; } }   // pick the exact record
   return $out;
 }
 
@@ -152,10 +157,20 @@ function salt_entry_from_record($dict, $match, $xmlmatch, $homCount) {
     // VERIFY: for non-MW, info is the page reference (format varies by dictionary).
     $page = ($info !== '') ? $info : null;
   }
-  $suffix = ($hom !== null && $homCount > 1) ? "-$hom" : '';
+  // id disambiguator for multi-record headwords (single-record keys stay bare):
+  //   <hom> present  -> "-{hom}"        (matches C-SALT's lemma-{key}-{n})
+  //   no <hom>       -> "-L{lnum}"      (fallback: the Cologne lnum is per-record unique,
+  //                                      so the `ids` face can still address each record;
+  //                                      a sanctioned divergence from the C-SALT id scheme
+  //                                      for sub-records the source does not number)
+  if ($homCount > 1) {
+    $suffix = ($hom !== null) ? "-$hom" : "-L$lnum";
+  } else {
+    $suffix = '';
+  }
 
   return array(
-    'id'                => "lemma-{$k}{$suffix}",          // matches C-SALT
+    'id'                => "lemma-{$k}{$suffix}",          // C-SALT: -{n}; else -L{lnum} fallback
     'headword_slp1'     => $k,
     'sense'             => array(),                        // TODO: TEI-grade sense split (Phase 5)
     're_headwords_slp1' => array(),                        // TODO: run-ons (<k2> / sub-entries)
