@@ -1,15 +1,34 @@
 # Salt API — implementation handoff (Phase 1)
 
-Status: the `api1/` controllers are a **wired skeleton** — connected to the real data layer
-(`Dal` / `Getword_data` / transcoder). **Partially run-verified (2026-06-14):** all eight
-files pass `php -l` (PHP 8.2) and are now linted in CI; the *data-independent* layer is
-runtime-checked — the `salt_common.php` require chain + `chdir`, the transcoder
-(`agni → अग्नि` / `agni`), `salt_multi_param` (repeated `ids=`), `salt_extract_refs` /
-`salt_scan_url`, and GraphQL literal-arg parsing all behave. A parser bug found in that pass
-— `arg()` truncating `query:"a*"` to `"a"` (wildcards/diacritics/spaces dropped) — is fixed.
-Still **NOT verified end-to-end**: the `Dal` / `Getword_data` search + envelope paths need a
-per-dict `*.sqlite` (§2) — run the smoke test on a host that has the data. This page is the
-one-stop guide to test, deploy, and finish it.
+Status: the `api1/` controllers are **wired to the real data layer** (`Dal` / `Getword_data` /
+transcoder) and **run-verified end-to-end (2026-06-14)** against the real MW `mw.sqlite`
+(286,560 records, from the `csl-sqlite` release — see §2.1). All eight files pass `php -l`
+(PHP 8.2, linted in CI); `php api1/salt_selftest.php mw agni indra ka` exits 0 with no
+warnings and returns structurally-correct envelopes for **all three faces** — `entries`
+(term + prefix), `ids` (batch), and `graphql entries`: correct `data.entries[]` / `data.ids[]`
+shape, populated `csl.{lnum,page,column,scanUrl,references,accentedKey}`, and working
+transliteration (`agni → अग्नि` / `agni`; `agni` resolves to MW p.5 col.1, lnum 890). An
+earlier parser bug — `arg()` truncating `query:"a*"` to `"a"` (wildcards/diacritics/spaces
+dropped) — is fixed.
+
+**Open items the run surfaced** — all *contract / Phase-5* decisions for the parity pass (§7),
+not wiring faults:
+
+1. **`id` is not unique per record.** Multi-record headwords share one id: `agni` (5 records)
+   and `indra` (17) all emit `lemma-{key}`; `ka` mixes `lemma-ka-1` / `lemma-ka-2` (records
+   carrying `<hom>`) with a bare, colliding `lemma-ka` for the sub-records that have a
+   fractional `lnum` (41336.05/.1/.2) and no `<hom>`. The `lemma-{key}[-{n}]` scheme therefore
+   cannot address those records through `ids`. Decide the scheme for multi-record headwords
+   against the C-SALT oracle before leaving draft.
+2. **`prefix` returns successive records of the first headword, not distinct headwords**
+   (`prefix agni` size 8 → 8 `agni` records, lnum 890–897, never reaching `agnika…`). This may
+   be parity-correct for "entries matching a prefix" — confirm the intended `size` unit against
+   C-SALT (records vs. headwords).
+3. **`csl.html` still carries SLP1 display tags + stray `</s1>`/`</H1>` and untranscoded
+   `<SA>`** — the `transcoder_processElements` item in §4. `csl.text` is clean.
+
+`sense` / `re_headwords_slp1` / TEI `xml` remain TODO (Phase 5). This page is the one-stop
+guide to test, deploy, and finish it.
 
 - Contract (normative): [`SALT_API_PROFILE.md`](https://github.com/sanskrit-lexicon/csl-standards/blob/salt-api-profile/docs/SALT_API_PROFILE.md) · [`salt-api.openapi.yaml`](https://github.com/sanskrit-lexicon/csl-standards/blob/salt-api-profile/data/schema/salt-api.openapi.yaml) · [`salt-api.graphql`](https://github.com/sanskrit-lexicon/csl-standards/blob/salt-api-profile/data/schema/salt-api.graphql)
 - Plan: [`SALT_API_INTEGRATION_ROADMAP.md`](https://github.com/sanskrit-lexicon/csl-standards/blob/salt-api-profile/docs/SALT_API_INTEGRATION_ROADMAP.md) · Divergences: [`SALT_API_LOSS_REPORT.md`](https://github.com/sanskrit-lexicon/csl-standards/blob/salt-api-profile/docs/SALT_API_LOSS_REPORT.md)
@@ -44,6 +63,26 @@ root** (the controllers `chdir` to root, and the `{dict}.sqlite` paths resolve f
 - A hard `exit(1)` mid-run → a record tripped a parser `exit` inside `getword_data.php`;
   note the headword and inspect that record.
 
+### 2.1 Get the per-dict data
+
+The smoke test needs the dictionary's own `*.sqlite` (the controllers read records via `Dal`).
+`download_hwnorm1c_sqlite.sh` fetches only the headword-normalisation helper — **not** the
+per-dict data. Get that from the [`csl-sqlite` releases](https://github.com/sanskrit-lexicon/csl-sqlite/releases/latest)
+(`{dict}.zip`, e.g. `mw.zip` ≈ 26 MB) and place it where `dictinfo.php` looks in the xampp
+layout — `../{dict}/web/sqlite/`, beside the `csl-apidev` directory:
+
+```sh
+gh release download --repo sanskrit-lexicon/csl-sqlite --pattern 'mw.zip'
+unzip -o mw.zip -d _mw && mkdir -p ../mw/web/sqlite && mv _mw/*.sqlite ../mw/web/sqlite/
+php api1/salt_selftest.php mw agni indra ka
+```
+
+Verified 2026-06-14 with `mw.sqlite` (286,560 records). `keydoc.sqlite` is not shipped in the
+bundle and is optional — without it `Dal::get1_mwalt` falls back to its `get4b` gap-filling
+path, which is what this run exercised. The xampp path is derived in `dictinfo::get_webPath()`
+from a directory literally named `csl-apidev`, so run from a clone/worktree with that exact
+basename.
+
 ## 3. Deploy (Apache rewrites)
 
 Controllers live under the existing base path `scans/awork/apidev/api1/`. Add these beside
@@ -71,9 +110,9 @@ Each is also flagged `VERIFY:` at the relevant line in [`salt_common.php`](../ap
 | MW `<info>` format `page,col:hcode:key2:hom:hui` | `page`/`column`/`accentedKey`/homonym suffix come out right for MW (`agni`, `ka`). |
 | Non-MW `<info>` = page reference | Check a non-MW dict (e.g. `ap90`, `pwg`) — the page format differs; adjust `salt_entry_from_record`. |
 | `Getword_data(false)` via `$_REQUEST` | Acceptable, or refactor `Getword_data` to take a direct `(dict, key)` constructor (cleaner, avoids the `$_REQUEST` save/restore). |
-| `html` is SLP1-tagged (pre-final-transcode) | If clients want display-script HTML, apply `transcoder_processElements($body,'slp1',$filter,'SA')` (as `getwordClass` does). |
-| `<ls>` reference extraction | The flat `references` list is a heuristic; confirm/adjust the tag per dictionary. |
-| `id` homonym suffix vs C-SALT | `lemma-ka-1..4` ordering matches C-SALT (run §7 parity). |
+| `html` is SLP1-tagged (pre-final-transcode) | **Confirmed 2026-06-14**: `csl.html` shows stray `</s1>`/`</H1>` and untranscoded `<SA>…</SA>`. If clients want display-script HTML, apply `transcoder_processElements($body,'slp1',$filter,'SA')` (as `getwordClass` does). `csl.text` is already clean. |
+| `<ls>` reference extraction | The flat `references` list is a heuristic; confirm/adjust the tag per dictionary. (2026-06-14: `agni`→`["Uṇ."]`, sane.) |
+| `id` uniqueness / homonym suffix vs C-SALT | **Not yet matching (2026-06-14)**: `lemma-ka-1`/`-2` emit, but sub-records with fractional `lnum` and no `<hom>` collapse to a bare colliding `lemma-ka`, and `agni`/`indra` records all share one id. Decide the id scheme for multi-record headwords against C-SALT (run §7 parity) — `ids` cannot address individual records until each has a unique id. |
 
 ## 5. TODO (deferred, by phase)
 
