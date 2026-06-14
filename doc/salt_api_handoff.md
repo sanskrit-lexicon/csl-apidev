@@ -37,6 +37,7 @@ guide to test, deploy, and finish it.
 - Contract (normative): [`SALT_API_PROFILE.md`](https://github.com/sanskrit-lexicon/csl-standards/blob/salt-api-profile/docs/SALT_API_PROFILE.md) · [`salt-api.openapi.yaml`](https://github.com/sanskrit-lexicon/csl-standards/blob/salt-api-profile/data/schema/salt-api.openapi.yaml) · [`salt-api.graphql`](https://github.com/sanskrit-lexicon/csl-standards/blob/salt-api-profile/data/schema/salt-api.graphql)
 - Plan: [`SALT_API_INTEGRATION_ROADMAP.md`](https://github.com/sanskrit-lexicon/csl-standards/blob/salt-api-profile/docs/SALT_API_INTEGRATION_ROADMAP.md) · Divergences: [`SALT_API_LOSS_REPORT.md`](https://github.com/sanskrit-lexicon/csl-standards/blob/salt-api-profile/docs/SALT_API_LOSS_REPORT.md)
 - Endpoint specs: [`salt_entries.md`](salt_entries.md) · [`salt_ids.md`](salt_ids.md) · [`salt_graphql.md`](salt_graphql.md)
+- Use cases & recipes: [`salt_api_usecases.md`](salt_api_usecases.md) — 10 copy-paste examples (curl + GraphQL + JSONP)
 
 ## 1. Files
 

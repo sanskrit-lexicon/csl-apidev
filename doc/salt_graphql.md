@@ -38,9 +38,33 @@ concepts, two spellings — this matches C-SALT.
 
 ### 3.4. Expected output
 
+Same data as the REST face, keyed under `data.entries` / `data.ids`, with camelCase fields.
+**Real response** (verified 2026-06-14) for `{ entries(field: headword_slp1, query: "agni",
+queryType: term, size: 2) { id headwordSlp1 csl { lnum page column } } }`:
+
 ```json
-{ "data": { "entries": [ { "id": "lemma-agni", "headwordSlp1": "agni", "...": "..." } ] } }
+{
+  "data": {
+    "entries": [
+      { "id": "lemma-agni-L890", "headwordSlp1": "agni", "csl": { "lnum": "890", "page": "5", "column": "1" } },
+      { "id": "lemma-agni-L891", "headwordSlp1": "agni", "csl": { "lnum": "891", "page": "5", "column": "1" } }
+    ]
+  }
+}
 ```
+
+Only the selected fields are returned (GraphQL projection). The `id` scheme is identical to
+REST ([salt_entries](salt_entries.md) §1.8), including the `-L{lnum}` fallback.
+
+### 3.4.1. Parser notes
+
+- The Phase-1 hand-rolled dispatcher reads literal args (`field`, `query`, `queryType`,
+  `size`). An earlier bug — `arg()` truncating `query:"a*"` to `"a"` (dropping wildcards,
+  diacritics, spaces) — is fixed; quoted strings are parsed whole.
+- `entries` arguments may be supplied inline (as above). `ids(ids: [...])` needs an **array
+  variable**, i.e. a `php://input` JSON body — exercise it over HTTP, not from the CLI
+  self-test (which has no request body). The `webonyx/graphql-php` block (§3.6 Q1) is the
+  production path.
 
 ### 3.5. Rewrite rules
 
