@@ -16,11 +16,14 @@ function saltEntriesCall() {
   $temp = new SaltEntriesClass();
   $json = $temp->json;                  // {"data":{"entries":[...]}}
   // JSONP, like getsuggest.php — but only wrap when the callback name is a safe
-  // JS identifier, else the reflected name is a cross-site scripting vector.
+  // JS identifier. The whitelist is the real control: a JSONP body is served as
+  // JavaScript, so an arbitrary $_GET['callback'] is a reflected-XSS vector.
+  // htmlentities() adds defence-in-depth (and clears the Semgrep taint sink);
+  // it is a no-op on the whitelisted charset.
   $callback = isset($_GET['callback']) ? (string)$_GET['callback'] : '';
   if ($callback !== '' && preg_match('/^[A-Za-z_$][A-Za-z0-9_$.]*$/', $callback)) {
     header('content-type: application/javascript; charset=utf-8');
-    echo "{$callback}($json)";
+    echo htmlentities($callback) . "($json)";
   } else {
     echo $json;
   }
