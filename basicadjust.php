@@ -77,6 +77,9 @@ class BasicAdjust {
  } else {
  // All other dictionaries
  $line = preg_replace('/¦/',' ',$line);
+ if ($this->getParms->dict == "wil") {
+  $line = preg_replace('~<lex.*?</lex>(?:(?!<lex|<div|</body>).)*~s', '<div n="1">$0</div>', $line);
+ }
   // chg_markup currently only applies to gra dictionary
   // Nov. 2024. Also used in mw dictionary
   // May 2026. Also used in lrv dictionary
@@ -132,6 +135,11 @@ class BasicAdjust {
   */
   // 04-08-2024
   $line1 = preg_replace('|<lang(.*?)>(.*?)</lang>|', '<ab\1>\2</ab>',$line);
+  $line = $line1;
+ }
+ if (in_array($this->getParms->dict,array('pwg'))) {
+  // 06-14-2026
+  $line1 = preg_replace('|<lang>(.*?)</lang>|', '<ab>\1</ab>',$line);
   $line = $line1;
  }
  if (in_array($this->getParms->dict,array('gra', 'md', 'ap'))) {
@@ -318,6 +326,10 @@ class BasicAdjust {
    # also, remove breaks.  This is a display choice, maybe not for acc.txt,xml
    $line = preg_replace('|- <br/>|','',$line);
    $line = preg_replace('|<br/>|',' ',$line);
+  } else if ($this->getParms->dict == "wil") {
+   $line = preg_replace('|\.²([0-9]+)|', '\1', $line);
+   $line = preg_replace('| *\.²([a-z]+)|', '</div><div n="2">\1', $line);
+   $line = preg_replace('| *<ab( n=[\x27\x22][^\x27\x22]*[\x27\x22])?>E\.</ab>|', '</div><div n="1"><ab\1>E.</ab>', $line);
   }
   if ($this->getParms->dict == "mw")  {
    // 11-13-2018 make bold abbreviations following <div n="vp">

@@ -740,7 +740,7 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
     $this->row .= " </tr> ";
   } else if ($el == "td"){
     $this->row .= " </td> ";
-  } else if ($el == "br") {
+  } else if (in_array($el,array("br","lb"))) {
     // nothing
   } else if (in_array($el,array("L","key1","h","info","tail","pc",
                        "body"))) {
