@@ -2,6 +2,13 @@ cff-version: 1.2.0
 type: software
 title: csl-apidev
 message: If you use this software, please cite it.
+authors:
+  - family-names: Funderburk
+    given-names: Jim
+  - family-names: Gasūns
+    given-names: Mārcis
+  - family-names: Patel
+    given-names: Dhaval
 license: GPL-3.0
 repository-code: https://github.com/sanskrit-lexicon/csl-apidev
 keywords:
