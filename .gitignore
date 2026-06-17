@@ -23,6 +23,3 @@ simple-search/hwnorm1/hwnorm1c.sqlite
 
 # local Claude Code settings (machine-specific; not for the repo)
 .claude/settings.local.json
-
-# session journal (machine-specific; not for the repo)
-.ai_state.md

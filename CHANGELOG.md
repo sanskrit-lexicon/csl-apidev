@@ -7,6 +7,10 @@ Dates are UTC+3 (project local).
 ## [Unreleased]
 
 ### Added
+- **Repo hygiene** (PR #58) — added a full GPL-3.0 `LICENSE` file (the README and
+  `CITATION.cff` already declared GPL-3.0 but no license text existed) and an
+  authors block in `CITATION.cff`. The session journal `.ai_state.md` is kept
+  tracked per the org session-journal protocol. — 2026-06-17
 - **Master handoff for Jim** (`simple-search/issue_jim_implementation.md`) — one
   ordered checklist (Phases 0–5 + DH Streams A–D), the locked decisions, and all
   open questions; **opened as [#47](https://github.com/sanskrit-lexicon/csl-apidev/issues/47)**. — 2026-06-11
