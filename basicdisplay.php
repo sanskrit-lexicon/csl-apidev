@@ -13,7 +13,7 @@ error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
 // for this to work for all Cologne dictionaries.
 // Aug 7, 2020.  Restructure under assumption that input to
 // constructor is either a string or an array of strings.
-// Nov 20, 2023. abch
+// Nov 20, 2023. abch, nmmb
 */
 require_once("dbgprint.php");
 require_once("parm.php");
@@ -361,7 +361,7 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
      }else {
       return "<div>";
      }
-   } else if (in_array($this->dict,array("abch", "acph", "acsj"))) {
+    } else if (in_array($this->dict,array("abch", "acph", "acsj", "nmmb"))) {
     if (isset($attribs['style'])) {
     $style=$attribs['style'];
     $ans = "<div style='$style'>";
@@ -379,7 +379,7 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
  }
 
  public function sthndl_elt_attribs($attribs,$elt) {
-  // 11-20-2023  new function used for abch.
+  // 11-20-2023  new function used for abch, nmmb.
   // But may have general use
   $attrib_keys = array_keys($attribs);
   $ar = array();
@@ -698,7 +698,7 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
   } else if ($el == "i"){
    $this->row .= "</i>"; 
   } else if ($el == "pb"){
-   if (in_array($this->dict,array("mw","bur","stc","abch","acph","acsj","pwg"))) {
+    if (in_array($this->dict,array("mw","bur","stc","abch","acph","acsj","nmmb","pwg"))) {
     # do nothing
    }else {
     $this->row .= "<br/>";

@@ -9,7 +9,7 @@ BasicAdjust class  Takes a parameter object
    This was formerly done by the BasicDisplay class in line_adjust function.
    The hope is to have dictionary specific code in this BasicAdjust class,
    and to have the BasicDisplay class to be identical for all dictionaries.
-   11-20-2023 revised for abch
+    11-20-2023 revised for abch, nmmb
 */
 require_once('dal.php');
 require_once('dbgprint.php');
@@ -56,8 +56,8 @@ class BasicAdjust {
 
  public function line_adjust($line) {
  $dbg = false;
- if (in_array($this->dict,array('abch', 'acph', 'acsj'))) {
-  // for koshas like abch
+ if (in_array($this->dict,array('abch', 'acph', 'acsj', 'nmmb'))) {
+  // for koshas like abch, nmmb
   $line = preg_replace('|<hwdetails>(.*?)</hwdetails>|',
          '<div style="background-color: beige;">\1</div>',$line);
   $line = preg_replace_callback('|<hwdetail><hw>(.*?)</hw><meaning>(.*?)</meaning></hwdetail>|',

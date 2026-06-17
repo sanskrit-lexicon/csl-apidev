@@ -254,7 +254,7 @@ dbgprint($dbg,"dispitem. key2=$key2\n");
   $ans_ID = "<span title='Cologne record ID' style='font-size:normal; color:rgb(160,160,160);'>ID=$lnum</span>";
 
   $ans = "[$ans_ID $revsup1]";
-  if (in_array($this->dictlo, array("abch", "acph", "acsj"))) {
+  if (in_array($this->dictlo, array("abch", "acph", "acsj", "nmmb"))) {
    // 10-30-2023
    $ans .= "<hr style='height:3px;border-width:0;color:gray;background-color:gray'>";
   }

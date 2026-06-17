@@ -59,7 +59,7 @@ class Getword_data {
    // 10-23-2023 For koshas, use $L instead of $lnum0.
    // 07-09-2024 For koshas, use $L1
    // Also,use L1 for mw (to get sup,rev)
-   if (in_array($dict,array('mw','abch', 'acph', 'acsj'))) {
+    if (in_array($dict,array('mw','abch', 'acph', 'acsj', 'nmmb'))) {
     if(preg_match('|<L1>(.*?)</L1>|',$html,$tempmatch)) {
      $lnum0 = $tempmatch[1];
      // remove L1 element from html1
@@ -108,7 +108,7 @@ public function getword_data_html_adapter($key,$lnum,$adjxml,$dict,$getParms,$xm
  dbgprint($dbg,"info = $info\n");
  dbgprint($dbg,"body = $body\n");
  // $this->basicdisplaydbg = $body;
- if (in_array($dict,['abch', 'acph', 'acsj'])) {
+  if (in_array($dict,['abch', 'acph', 'acsj', 'nmmb'])) {
   // no adjust body
  }else {
   // adjust body

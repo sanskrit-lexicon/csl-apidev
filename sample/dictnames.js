@@ -30,6 +30,7 @@ CologneDisplays.dictionaries= {
 ['MW' , 'Monier-Williams Sanskrit-English Dictionary'],
 ['MW72' , 'Monier-Williams Sanskrit-English Dictionary'],
 ['MWE' , 'Monier-Williams English-Sanskrit Dictionary'],
+['NMMB' , 'Nāmamālikā of Bhoja'],
 /*['PD' , 'An Encyclopedic Dictionary of Sanskrit on Historical Principles'],*/
 ['PE' , 'Puranic Encyclopedia'],
 ['PGN' , 'Personal and Geographical Names in the Gupta Inscriptions'],
