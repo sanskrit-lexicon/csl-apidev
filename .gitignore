@@ -20,3 +20,6 @@ __pycache__
 .DS_Store
 *hwnorm1c.sqlite
 simple-search/hwnorm1/hwnorm1c.sqlite
+
+# local Claude Code settings (machine-specific; not for the repo)
+.claude/settings.local.json

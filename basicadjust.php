@@ -137,6 +137,11 @@ class BasicAdjust {
   $line1 = preg_replace('|<lang(.*?)>(.*?)</lang>|', '<ab\1>\2</ab>',$line);
   $line = $line1;
  }
+ if (in_array($this->getParms->dict,array('pwg'))) {
+  // 06-14-2026
+  $line1 = preg_replace('|<lang>(.*?)</lang>|', '<ab>\1</ab>',$line);
+  $line = $line1;
+ }
  if (in_array($this->getParms->dict,array('gra', 'md', 'ap'))) {
   // 06-15-2023. Treat <pe> and <lang> tags like ab
   // 12-23-2023. Also for md. And also <cl>

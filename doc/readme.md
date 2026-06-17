@@ -29,8 +29,19 @@ and is currently one of:
 |[getsuggest](getsuggest.md) | return short list of words with a certain prefix|
 |[servepdf](servepdf.md) | generates link to scanned images for a particular page of a particular dictionary|
 |[getword_xml](getword_xml.md) | for a given headword, return matching records from <dict>.xml.  Currently not used.|
+|[cleanurl](cleanurl.md) | roadmap: clean-URL permalinks to entries, e.g. /MW/bAQa or /MW/144239 (COLOGNE#249); unified with the Salt permalink — cleanurl is its HTML + collision-safe-routing face, see [cleanurl](cleanurl.md) §0 and [salt_entries](salt_entries.md) §1.3/§1.7|
+|[salt_entries](salt_entries.md) | C-SALT-compatible entry search, `/dicts/{id}/restful/entries`|
+|[salt_ids](salt_ids.md) | C-SALT-compatible batch fetch by id, `/dicts/{id}/restful/ids`|
+|[salt_graphql](salt_graphql.md) | C-SALT-compatible GraphQL (`entries`, `ids`), `/dicts/{id}/graphql`|
 
 [restfulparm](restfulparm.md) shows all the restful parameters used by any of the endpoints.
+
+The `salt_*` endpoints implement the **Salt API** — a C-SALT-compatible REST + GraphQL face
+so that a client written for `api.c-salt.uni-koeln.de` works against
+`sanskrit-lexicon.uni-koeln.de` unchanged, over CSL's existing `getword` data. The
+normative contract, a CSL↔C-SALT field mapping, and a loss report live in `csl-standards`
+(`docs/SALT_API_PROFILE.md`, `data/schema/salt-api.openapi.yaml`,
+`data/schema/salt-api.graphql`).
 
 [transcoder](transcoder.md) provides details of the transcoding from one to another computer representation of Sanskrit.
 

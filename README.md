@@ -2,6 +2,25 @@
 
 CDSL **web-backend** repository in the Sanskrit Lexicon project.
 
+<!-- BEGIN MANUAL: documentation — hand-maintained; the Cologne Tooling Runbook preserves everything between these markers verbatim across README regeneration. Do not remove the markers. -->
+## Documentation
+
+API endpoint docs live in [`doc/`](doc/readme.md). Of note:
+
+- **Salt API** — a [C-SALT](https://api.c-salt.uni-koeln.de)-compatible REST + GraphQL
+  interface over the existing dictionary data, so a client written for the C-SALT APIs
+  works against `sanskrit-lexicon.uni-koeln.de` unchanged. Endpoint specs:
+  [`salt_entries`](doc/salt_entries.md), [`salt_ids`](doc/salt_ids.md),
+  [`salt_graphql`](doc/salt_graphql.md); Phase 1 controller skeleton in
+  [csl-apidev#46](https://github.com/sanskrit-lexicon/csl-apidev/pull/46). The normative
+  contract, schemas, and roadmap live in
+  [csl-standards#2](https://github.com/sanskrit-lexicon/csl-standards/pull/2).
+- [Clean-URL permalinks roadmap](doc/cleanurl.md) — path-based direct links to
+  dictionary entries, e.g. `/MW/bAQa` or `/MW/144239`
+  ([COLOGNE#249](https://github.com/sanskrit-lexicon/COLOGNE/issues/249)); the HTML and
+  collision-safe-routing face of the Salt permalink.
+<!-- END MANUAL: documentation -->
+
 ## Issues Overview
 
 **Total**: 45 | **Open**: 22 | **Closed**: 23

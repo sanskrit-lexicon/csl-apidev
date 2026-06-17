@@ -1,26 +1,220 @@
+#+TITLE: simple-search
 readme.org for simple-search
 
+* What simple-search is
+  "Simple search" is the *forgiving* headword lookup for the Cologne
+  dictionaries.  The user types a Sanskrit word in (almost) any spelling
+  they like -- Devanagari, IAST, Harvard-Kyoto, plain ASCII, even Russian
+  Cyrillic -- and the engine returns the list of *normalized headwords*
+  that the input might plausibly be.  Clicking a candidate opens the full
+  entry.
+
+  It powers the =input = simple= mode of the search page
+  (=list-0.2s_rw.php=) and is also the autocomplete/lookup behind the
+  English->Sanskrit dictionaries (ae, mwe, bor).
+
+** Human entry point (try it)
+   - current (production): [[https://sanskrit-lexicon.uni-koeln.de/simple/][/simple/]]
+   - v1.1 test build: [[https://sanskrit-lexicon.uni-koeln.de/simplet/][/simplet/]]
+   - direct file: [[https://www.sanskrit-lexicon.uni-koeln.de/scans/csl-apidev/simple-search/v1.1/list-0.2s_rw.php][list-0.2s_rw.php (v1.1)]]
+   The v1.1 rollout + feedback issue is
+   [[https://github.com/sanskrit-lexicon/csl-apidev/issues/26][csl-apidev#26]].
+
+** API endpoint (what the page calls)
+   =getword_list_1.0.php=, parameters =dict=, =input=, =output=, =key=:
+   : .../simple-search/v1.1/getword_list_1.0.php?dict=mw&input=default&output=iast&key=kara
+   The =input= parameter here is the *input_simple* value
+   (=default=, =hk=, =slp1=, =itrans=, =deva=, =iast=).  =default= is the
+   loose "type it however" mode and is where most of the interesting
+   behaviour -- and most of the overgeneration -- lives.
+
+* How it works (data flow)
+  The constructor of =Simple_Search= (in =simple_search.php=) does the
+  work.  The diagram below is the authoritative pipeline; GitHub's .org
+  viewer shows the block as source -- a rendered copy lives in
+  [[file:roadmap_v1.2.md][roadmap_v1.2.md]].
+
+  #+begin_src mermaid
+  flowchart TD
+    IN["user types a word<br/>(dict, input_simple, output)"] --> CNA["convert_nonascii()<br/>detect Deva / Cyrillic / roman → SLP1"]
+    CNA --> SEED["dalnorm.normalize()<br/>seeds = [keyin0, normkey]"]
+    SEED --> DOV["doVariant() — recursive<br/>expand each letter via transitionTable"]
+    DOV --> NGV{"ngramValidate(pref)<br/>some hwnorm1c key LIKE 'pref%' ?"}
+    NGV -- "no" --> BAD["discard prefix<br/>cache in badprefs"]
+    NGV -- "yes" --> ENDV["generate_alternate_endings()<br/>drop final M/m/s/H/n · f↔A"]
+    ENDV --> GRM["grammar_variants()<br/>+a +H +m +n +in · schwa"]
+    GRM --> EXIST{"normalizes to a<br/>hwnorm1c headword?"}
+    EXIST -- "no" --> DROP["drop"]
+    EXIST -- "yes" --> ADD["searchdict[normkey] = true"]
+    ADD --> NK["generate_normkeys()<br/>dedup by normalized key"]
+    NK --> FILT["keep headwords in user's dict<br/>order_by_wf · user-word-first"]
+    FILT --> JSON["JSON: result[] of {key, dicthw, dicthwoutput, status, wf}"]
+  #+end_src
+
+** Stage by stage
+   1. *convert_nonascii* -- decide what script the user typed and transcode
+      to SLP1.  Only *Devanagari* and *Cyrillic* are auto-detected; an
+      explicit =input_simple= of hk/slp1/itrans/iast is honoured; anything
+      else falls through the "default" path (lower-case, strip diacritics,
+      a few ASCII fix-ups in =clean_default=, then roman->slp1).
+   2. *seed* -- the SLP1 string and its hwnorm1c-normalized form become the
+      two starting points.
+   3. *doVariant* -- a recursive walk that, at every position, looks up the
+      letter in a =transitionTable= equivalence class and substitutes *each*
+      member, branching the search.  This is the multiplier.
+   4. *ngramValidate* -- the only pruning during the walk: keep a prefix iff
+      some hwnorm1c key begins with it (=LIKE 'pref%'=).  Dead prefixes are
+      cached in =badprefs=.
+   5. *endings + grammar* -- every surviving variant is further multiplied:
+      final nasal/visarga/s is optionally dropped, =f<->A= is tried, and
+      schwa / nominative-singular endings (=+a +H +m +n +in=) are added.
+   6. *existence filter* -- a variant is kept only if it normalizes to a
+      real headword in *some* dictionary (=searchdict_add_basic=).
+   7. *normkeys + dict filter* -- dedup by normalized key, keep the ones
+      actually present in the *user's* dictionary, order by corpus word
+      frequency (=wf0/wf.txt=), and float the user's exact spelling first.
+   8. *restrict_to_user_word* (2021) -- if the input mode is *not* =default=
+      and the user's exact spelling was found, return *only* that one word.
+      This is why precise modes already behave well (see below).
+
+** The equivalence table
+   Two tables live in =simple_search.php=: =transitionTable_default= (broad,
+   used for =input = default=) and =transitionTable_slp1= (slightly
+   narrower, used when the input mode is precise).  Each row is a set of
+   letters treated as interchangeable, e.g.
+
+   #+begin_src text
+   ["r","f","F","ri","ar","ru","rI","R","RI"]   # r-cluster (9-way)
+   ["n","Y","N","m","R","M"]                     # nasals    (6-way)
+   ["S","z","s","zh","sh"]                       # sibilants
+   ["b","B","v","V"]                             # b / v
+   #+end_src
+
+   The classes are applied *unconditionally and in both directions at every
+   position*, which is exactly why the result lists get long (see below).
+
+* Worked examples (live MW endpoint, 2026-06-11)
+  All four use =dict=mw&input=default&output=iast=.  Counts are the length
+  of the JSON =result= array.
+
+** 0 results
+   : .../getword_list_1.0.php?dict=mw&input=default&output=iast&key=xqzqxq
+   Exact body returned:
+   #+begin_src json
+   {"dict":"mw","input":"slp1","output":"roman","accent":"no","result":[]}
+   #+end_src
+   The page renders this as "0 no results found".
+
+** 1 result
+   : .../getword_list_1.0.php?dict=mw&input=default&output=iast&key=agni
+   #+begin_src json
+   {
+     "dict": "mw", "input": "slp1", "output": "roman", "accent": "no",
+     "result": [
+       { "key": "agni", "keyin": "agni", "user_key_flag": true,
+         "dicthw": "agni", "dicthwoutput": "agni",
+         "status": 200, "wf": <int>, "xml": "…elided…" }
+     ]
+   }
+   #+end_src
+   The page renders "1 result: *agni*" (bold = the user's own spelling).
+
+** 5 results
+   : .../getword_list_1.0.php?dict=mw&input=default&output=iast&key=deva
+   =dicthw= values returned (5): =deva=, =dEva=, =devA=, =devan=, =devf=.
+   Note that =devan= and =devf= are grammar/ending fabrications, not what
+   the user meant -- a small taste of overgeneration.  JSON shape (one
+   element):
+   #+begin_src json
+   { "key": "deva", "keyin": "deva", "user_key_flag": true,
+     "dicthw": "deva", "dicthwoutput": "deva",
+     "status": 200, "wf": <int>, "xml": "…elided…" }
+   #+end_src
+
+** 15+ results
+   : .../getword_list_1.0.php?dict=mw&input=default&output=iast&key=manas
+   *20* results.  The =dicthw= list is dominated by nasal/sibilant swaps of
+   a single typed word: =manas, mAna, namas, nAma, nAman, nAnA, mana, …=
+   (illustrative; the live list also shows what looks like a repeated
+   surface headword).  Companion cases:
+   - =key=sana= -> *18*
+   - =key=kara= -> *11*  (=kara, Kara, kaRa, kAra, kArA, krA, KAra, …=)
+   Switch =input= from =default= to =iast= (a precise mode) and the same
+   =manas= returns just *1* -- =restrict_to_user_word= already does the
+   right thing once the user commits to a precise spelling.
+
+* Why so many? (overgeneration)
+  The engine *generates then keeps everything that exists*, with no notion
+  of "how far is this from what you typed".  Concretely:
+
+  1. *Coarse, symmetric classes.* Nasals (6), sibilants, the r-cluster (9)
+     and b/v are merged and swapped at *every* position, in *both*
+     directions.  A 5-letter word can branch into hundreds of strings.
+  2. *It only bites in =default= mode.*  Precise input modes are
+     post-filtered by =restrict_to_user_word= (step 8) down to the single
+     exact word when it exists -- verified live: =manas=, =sana=, =kara=,
+     =saMskfta= each return *1* under =input=iast=, versus 20/18/11 under
+     =input=default=.  The long lists therefore appear only for =default=
+     (loose) input, or for a precise spelling that is *not itself* a
+     headword (a typo or inflected form), where the broad table shows
+     through unranked.
+  3. *Existence is the only filter.* =ngramValidate= and
+     =searchdict_add_basic= ask "does a headword like this exist?", never
+     "is it *similar enough* to keep?".  Every coincidental real word one
+     swap away is returned with equal standing.
+  4. *Endings + grammar stack on top.* =generate_alternate_endings= and
+     =grammar_variants= multiply each survivor again (=deva -> devan, devf=).
+  5. *No ranking, no cap, no surface-form dedup.* Results are ordered by
+     corpus frequency only; the user sees 20 undifferentiated chips.
+
+* Missing ways to write Sanskrit (input coverage)
+  =convert_nonascii= auto-detects only *Devanagari* and *Cyrillic*.  Gaps:
+  - *WX notation* -- a transcoder table already exists
+    (=utilities/transcoder/wx_slp1.xml=) but is never probed.
+  - *Velthuis* (=aa ii .t "s .m=) -- no table at all.
+  - *Other Brahmic scripts* -- Bengali, Tamil/Grantha, Telugu, Kannada,
+    Malayalam, Gujarati… Sanskrit is written natively in all of these; only
+    Devanagari has a table here.
+  - *ISO-15919* marks (=ṁ ē ō r̥=) and *Unicode NFC* -- decomposed
+    diacritics (combining ring/macron) can silently fail to transcode.
+  - *Loose-ASCII folk spelling* -- =sh/ch/ri/ee/oo=, =gya/dnya->jñ=,
+    =ksh/x->kṣ=, doubled consonants -- handled only ad-hoc in =clean_default=
+    and as hacks inside the transition table.
+  - *Capital letters / case.* The default path runs =mb_strtolower()= on the
+    whole input.  That is right for natural romanization (Rāma = RAMA =
+    rama), but it is *lossy for the case-significant ASCII schemes*: HK,
+    SLP1 and upper-ITRANS use capitals to mean distinct letters
+    (=T=≠=t=, =S=≠=s=, =R=≠=r=), and in =default= mode those capitals are
+    flattened before transcoding.  A capital that carries a *combining*
+    diacritic (=R̥=, decomposed =Ā=) additionally needs the NFC pass above.
+
+* Improving the algorithm
+  The proposed redesign -- confidence-tiered tables, similarity scoring with
+  a result cap, phonotactic pruning, a folk-ASCII pre-normalizer, wider
+  script detection, and an index-side "blur-key" alternative -- is written
+  up for implementation in [[file:roadmap_v1.2.md][roadmap_v1.2.md]] (Jim's idiom: numbered
+  steps, example URLs, rewrite blocks, expected-output JSON, open
+  questions).
+
+* -------------------------------------------------------------------------
 * word_frequency.txt and word_frequency_adj.txt
 See v0.1/readme.org
-* v1.0  : older version of simple-search
-* v1.0.0 : first good version of simple-search
-* v1.0d : current dev version of simple-search
-* v1.1  : current version of simple-search (as of 02-02-2026)
-* wf0  directory:  08-17-2017  
- wf0/wf.txt is used in v1.0 as of this date.
- see wf0/readme.org for more details.
- separates out word_frequency work, starting with work from v1.0.
- word_frequency_adj.txt : copied from v0.1
-   slp1 spelling
-   duplicates removed
- wf.txt is final result. 
-   normalized spelling.
+* Version index
+  - v1.0   : older version of simple-search
+  - v1.0.0 : first good version of simple-search
+  - v1.0d  : current dev version of simple-search
+  - v1.1   : current version of simple-search (as of 02-02-2026)
+  - wf0 directory: 08-17-2017.  =wf0/wf.txt= is used in v1.0 as of this date.
+    See =wf0/readme.org= for details.  Separates out word_frequency work,
+    starting with work from v1.0.  =word_frequency_adj.txt= copied from
+    v0.1 (slp1 spelling, duplicates removed).  =wf.txt= is the final result
+    (normalized spelling).
 
 * ngram and hwnorm1c
-  When changes are made to hwnorm1c normalization algorithm, the
+  When changes are made to the hwnorm1c normalization algorithm, the
   ngrams must be recomputed:
-  a)  https://github.com/sanskrit-lexicon/hwnorm1/tree/master/ejf/ngram/data
-   in ejf/ngram:  sh redo.sh
-   This recreates 4 files: data/2gram.txt, data/2gram_beg.txt and
-    similarly named data/3gram.txt, data/3gram_beg.txt
-  b) copy these files  to directory simple-search/ngram1
+  a) https://github.com/sanskrit-lexicon/hwnorm1/tree/master/ejf/ngram/data
+     in =ejf/ngram=:  =sh redo.sh=
+     This recreates 4 files: =data/2gram.txt=, =data/2gram_beg.txt= and
+     similarly named =data/3gram.txt=, =data/3gram_beg.txt=
+  b) copy these files to directory =simple-search/ngram1=
