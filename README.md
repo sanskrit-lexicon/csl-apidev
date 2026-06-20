@@ -9,7 +9,8 @@ API endpoint docs live in [`doc/`](doc/readme.md). Of note:
 
 - **Salt API** — a [C-SALT](https://api.c-salt.uni-koeln.de)-compatible REST + GraphQL
   interface over the existing dictionary data, so a client written for the C-SALT APIs
-  works against `sanskrit-lexicon.uni-koeln.de` unchanged. Endpoint specs:
+  uses the same endpoint shapes against `sanskrit-lexicon.uni-koeln.de`, with Phase 1
+  caveats documented in the Salt specs. Endpoint specs:
   [`salt_entries`](doc/salt_entries.md), [`salt_ids`](doc/salt_ids.md),
   [`salt_graphql`](doc/salt_graphql.md); Phase 1 controller skeleton in
   [csl-apidev#46](https://github.com/sanskrit-lexicon/csl-apidev/pull/46). The normative

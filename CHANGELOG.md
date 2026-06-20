@@ -6,6 +6,53 @@ Dates are UTC+3 (project local).
 
 ## [Unreleased]
 
+### Salt API — Phase 1 (PR [#46](https://github.com/sanskrit-lexicon/csl-apidev/pull/46), `api1/`, MW pilot)
+
+#### Added
+- **C-SALT-compatible controller trio** wired to the real data layer (no new runtime):
+  `api1/salt_entries.php`, `salt_ids.php`, `salt_graphql.php` (+ their `*Class.php`), sharing
+  one search + envelope builder `api1/salt_common.php`. Search → `Dal`
+  (`term`/`prefix`/`wildcard`/`fuzzy`; `regexp`/`match`/`match_phrase` → 400 until Phase 4);
+  render → `Getword_data`; transliteration → `transcoder_processString`. — 2026-06-11
+- **Run-verified end-to-end (2026-06-14)** against the real `mw.sqlite` (286,560 records,
+  from the `csl-sqlite` release): all three faces (`entries` term+prefix, `ids`, `graphql`)
+  return structurally-correct envelopes with populated `csl.{lnum,page,column,scanUrl,
+  references,headwordDeva,headwordIast,accentedKey}` and working transliteration
+  (`agni → अग्नि`). CLI smoke test: `php api1/salt_selftest.php mw agni indra ka`.
+- **Docs**: `doc/salt_api_handoff.md` (run/deploy/verify/parity), deepened endpoint specs
+  `doc/salt_entries.md` · `salt_ids.md` · `salt_graphql.md` (real verified responses,
+  `query_type` matrix, error/JSONP semantics), and new `doc/salt_api_usecases.md`
+  (10 copy-paste recipes). — 2026-06-14
+
+#### Changed
+- **Salt API docs alignment.** Updated endpoint docs, use cases, README pointers, and GraphQL
+  examples so Phase 1 paths, unsupported-mode 400s, variable-based `ids`, and migration
+  caveats match the deploy handoff. — 2026-06-20
+#### Fixed
+- **Entry `id` now unique per record.** Multi-record headwords previously collided on a
+  single id, so the `ids` face could not address an individual record. `salt_entry_from_record`
+  now disambiguates: `<hom>` present → `-{n}` (C-SALT), else `-L{lnum}` fallback;
+  `salt_entries_for_id` parses both forms back. Verified `ka` → 5 unique ids,
+  `ids=lemma-agni-L890,lemma-agni-L891` → exactly those 2 records. — 2026-06-14
+- **Phase 1 `field` handling no longer pretends unsupported fields are headword
+  searches.** REST and GraphQL now accept only `field=headword_slp1` in the MW pilot;
+  C-SALT enum values that need later resolvers/indexes (`id`, `sense`,
+  `re_headwords_slp1`, `created`, `xml`) return 400/error instead of silently running the
+  headword path. — 2026-06-20
+- **Missing SQLite no longer crashes prefix/wildcard search.** If the per-dictionary
+  SQLite database is unavailable in a development checkout, shared Salt search returns an
+  empty result envelope instead of calling `Dal` methods on a null PDO connection. —
+  2026-06-20
+- **GraphQL literal-arg parser** no longer truncates `query:"a*"` to `"a"` (wildcards /
+  diacritics / spaces were dropped). — 2026-06-14
+
+#### Security
+- **JSONP-callback reflected-XSS hardened** in `api1/salt_entries.php` + `salt_ids.php`:
+  the `callback` is whitelisted (`^[A-Za-z_$][A-Za-z0-9_$.]{0,127}$`, else `400 invalid
+  callback`) and `htmlentities`-wrapped — clears the Semgrep `echoed-request` taint sink.
+  The same class was swept across 10 pre-existing endpoints on `master` in PR
+  [#52](https://github.com/sanskrit-lexicon/csl-apidev/pull/52) (merged). — 2026-06-14
+
 ### Added
 - **Master handoff for Jim** (`simple-search/issue_jim_implementation.md`) — one
   ordered checklist (Phases 0–5 + DH Streams A–D), the locked decisions, and all
