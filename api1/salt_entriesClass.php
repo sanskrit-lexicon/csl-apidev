@@ -30,6 +30,11 @@ class SaltEntriesClass {
       $this->json = json_encode(array('error' => "Missing or invalid parameter: 'field'"));
       return;
     }
+    if (!in_array($this->field, salt_phase1_fields(), true)) {
+      http_response_code(400);
+      $this->json = json_encode(array('error' => salt_phase1_field_error($this->field)));
+      return;
+    }
     if (!in_array($this->query_type, salt_query_types(), true)) {
       http_response_code(400);
       $this->json = json_encode(array('error' => "Missing or invalid parameter: 'query_type'"));

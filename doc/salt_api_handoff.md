@@ -23,7 +23,7 @@ not wiring faults:
    `lemma-ka-L41336.2` (all unique); `ids=lemma-agni-L890,lemma-agni-L891` returns exactly
    those two records. **Parity note:** `-L{lnum}` is a sanctioned divergence from C-SALT's
    `lemma-{key}-{n}` for sub-records the source does not number; confirm in §7 whether C-SALT
-   emits these sub-records at all, and reconcile in [`SALT_API_PROFILE.md`](https://github.com/sanskrit-lexicon/csl-standards/blob/salt-api-profile/docs/SALT_API_PROFILE.md).
+   emits these sub-records at all, and reconcile in [`SALT_API_PROFILE.md`](https://github.com/sanskrit-lexicon/csl-standards/blob/main/docs/SALT_API_PROFILE.md).
 2. **`prefix` returns successive records of the first headword, not distinct headwords**
    (`prefix agni` size 8 → 8 `agni` records, lnum 890–897, never reaching `agnika…`). This may
    be parity-correct for "entries matching a prefix" — confirm the intended `size` unit against
@@ -34,8 +34,8 @@ not wiring faults:
 `sense` / `re_headwords_slp1` / TEI `xml` remain TODO (Phase 5). This page is the one-stop
 guide to test, deploy, and finish it.
 
-- Contract (normative): [`SALT_API_PROFILE.md`](https://github.com/sanskrit-lexicon/csl-standards/blob/salt-api-profile/docs/SALT_API_PROFILE.md) · [`salt-api.openapi.yaml`](https://github.com/sanskrit-lexicon/csl-standards/blob/salt-api-profile/data/schema/salt-api.openapi.yaml) · [`salt-api.graphql`](https://github.com/sanskrit-lexicon/csl-standards/blob/salt-api-profile/data/schema/salt-api.graphql)
-- Plan: [`SALT_API_INTEGRATION_ROADMAP.md`](https://github.com/sanskrit-lexicon/csl-standards/blob/salt-api-profile/docs/SALT_API_INTEGRATION_ROADMAP.md) · Divergences: [`SALT_API_LOSS_REPORT.md`](https://github.com/sanskrit-lexicon/csl-standards/blob/salt-api-profile/docs/SALT_API_LOSS_REPORT.md)
+- Contract (normative): [`SALT_API_PROFILE.md`](https://github.com/sanskrit-lexicon/csl-standards/blob/main/docs/SALT_API_PROFILE.md) · [`salt-api.openapi.yaml`](https://github.com/sanskrit-lexicon/csl-standards/blob/main/data/schema/salt-api.openapi.yaml) · [`salt-api.graphql`](https://github.com/sanskrit-lexicon/csl-standards/blob/main/data/schema/salt-api.graphql)
+- Plan: [`SALT_API_INTEGRATION_ROADMAP.md`](https://github.com/sanskrit-lexicon/csl-standards/blob/main/docs/SALT_API_INTEGRATION_ROADMAP.md) · Divergences: [`SALT_API_LOSS_REPORT.md`](https://github.com/sanskrit-lexicon/csl-standards/blob/main/docs/SALT_API_LOSS_REPORT.md) · Phase 0 checklist: [`SALT_API_PHASE0_CHECKLIST.md`](https://github.com/sanskrit-lexicon/csl-standards/blob/main/docs/SALT_API_PHASE0_CHECKLIST.md)
 - Endpoint specs: [`salt_entries.md`](salt_entries.md) · [`salt_ids.md`](salt_ids.md) · [`salt_graphql.md`](salt_graphql.md)
 - Use cases & recipes: [`salt_api_usecases.md`](salt_api_usecases.md) — 10 copy-paste examples (curl + GraphQL + JSONP)
 
@@ -90,8 +90,30 @@ basename.
 
 ## 3. Deploy (Apache rewrites)
 
+This is the concrete Phase 1 deploy handoff for Jim. Deploy only after PR #46, plus the
+field-handling follow-up PR #59, is present on the host branch.
+
+### 3.1 Pre-deploy checklist
+
+1. Confirm the deployed tree contains `api1/salt_entries.php`, `api1/salt_ids.php`,
+   `api1/salt_graphql.php`, and `api1/salt_common.php`.
+2. Confirm PHP has PDO SQLite enabled.
+3. Confirm MW SQLite exists at the path `dictinfo.php` resolves for the Cologne host
+   (`../mw/web/sqlite/mw.sqlite` in the xampp-style layout described in §2.1).
+4. From the deployed repository root, run:
+
+```sh
+php api1/salt_selftest.php mw agni indra ka
+```
+
+Expected: non-empty `data.entries[]` for `agni` and `ka`, at least one `ids` result, and a
+GraphQL `data.entries[]` envelope. Empty envelopes mean the MW SQLite path is wrong; a PHP
+fatal means the record parser hit an unhandled source shape and deployment should pause.
+
+### 3.2 Apache rewrites
+
 Controllers live under the existing base path `scans/awork/apidev/api1/`. Add these beside
-the current `getword`/`servepdf`/`list` rules (and lower-case the dict in the handler):
+the current `getword`/`servepdf`/`list` rules:
 
 ```apache
 # REST — C-SALT-identical query form
@@ -101,10 +123,48 @@ RewriteRule ^dicts/([^/]*)/restful/ids$      /scans/awork/apidev/api1/salt_ids.p
 RewriteRule ^dicts/([^/]*)/graphql$          /scans/awork/apidev/api1/salt_graphql.php?dict=$1  [QSA,L]
 ```
 
+After adding rewrites, verify from outside the host:
+
+```sh
+curl 'https://sanskrit-lexicon.uni-koeln.de/dicts/mw/restful/entries?field=headword_slp1&query=agni&query_type=term&size=2'
+curl 'https://sanskrit-lexicon.uni-koeln.de/dicts/mw/restful/ids?ids=lemma-agni-L890'
+curl -X POST 'https://sanskrit-lexicon.uni-koeln.de/dicts/mw/graphql' \
+  -H 'content-type: application/json' \
+  --data '{"query":"{ entries(field: headword_slp1, query: \"agni\", queryType: term, size: 1) { id headwordSlp1 csl { lnum page column } } }"}'
+```
+
+Expected response shape:
+
+- REST entries: `{ "data": { "entries": [...] } }`.
+- REST ids: `{ "data": { "ids": [...] } }`.
+- GraphQL: `{ "data": { "entries": [...] } }`.
+
+Negative checks:
+
+```sh
+curl -i 'https://sanskrit-lexicon.uni-koeln.de/dicts/mw/restful/entries?field=sense&query=agni&query_type=term'
+curl -i 'https://sanskrit-lexicon.uni-koeln.de/dicts/mw/restful/entries?field=headword_slp1&query=agni&query_type=match'
+```
+
+Expected: HTTP 400 with an explicit error. Phase 1 must not silently run headword search
+when the client asks for an unimplemented field or body-search mode.
+
 The human permalink `/{DICT}/{ref}` (headword or lnum) is **not** added here — it stays with
 [`cleanurl`](cleanurl.md) as its HTML + collision-safe-routing face, per
 [`salt_entries.md`](salt_entries.md) §1.7 (whitelist the dict code, content-negotiate
 `Accept: application/json` → `salt_entries.php`).
+
+### 3.3 Post-deploy parity
+
+After the public URLs answer, run the MW parity script from `csl-standards`:
+
+```sh
+python data/pilot/parity_mw.py --csl-base https://sanskrit-lexicon.uni-koeln.de
+```
+
+Record findings in
+[`SALT_API_LOSS_REPORT.md`](https://github.com/sanskrit-lexicon/csl-standards/blob/main/docs/SALT_API_LOSS_REPORT.md),
+especially the `-L{lnum}` id fallback, `prefix` `size` semantics, and homonym ordering.
 
 ## 4. VERIFY: punch-list (assumptions to confirm against real data)
 
@@ -150,7 +210,7 @@ Once MW answers on the server:
 python data/pilot/parity_mw.py --csl-base https://sanskrit-lexicon.uni-koeln.de
 ```
 
-(in the `csl-standards` repo — [`parity_mw.py`](https://github.com/sanskrit-lexicon/csl-standards/blob/salt-api-profile/data/pilot/parity_mw.py)).
+(in the `csl-standards` repo — [`parity_mw.py`](https://github.com/sanskrit-lexicon/csl-standards/blob/main/data/pilot/parity_mw.py)).
 It diffs entry `id`s/counts against `api.c-salt.uni-koeln.de/dicts/mw`. Divergences are
 expected where CSL covers homonyms or scan apparatus the 7-dictionary derivative does not.
 Use the results to decide 7-vs-40 dictionary scope.

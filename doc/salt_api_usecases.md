@@ -21,9 +21,10 @@ curl "$H/dicts/mw/restful/entries?field=headword_slp1&query=agni&query_type=term
 ```
 
 Returns the 5 `agni` records, each a full entry with `csl.text` (clean prose),
-`csl.page`/`column` and `csl.scanUrl`. The query is transcoded to SLP1 first, so the **same
-call works in any input script** — pass `query=अग्नि` or `query=agni` with `input=deva`/`iast`
-and you get the same result. See [`salt_entries.md`](salt_entries.md) §1.8 for the verbatim
+`csl.page`/`column` and `csl.scanUrl`. The query is transcoded to SLP1 first, so the
+call works when the declared input script matches the query text: use
+`query=agni&input=slp1`, `query=अग्नि&input=deva`, or `query=agni&input=roman` for
+IAST-style roman input. See [`salt_entries.md`](salt_entries.md) §1.8 for the verbatim
 response.
 
 ## 2. Address one exact record (deep link / citation)
@@ -131,7 +132,9 @@ The REST query form, GraphQL schema, envelope shape, and `lemma-…` id scheme m
 `api.c-salt.uni-koeln.de`. To repoint a client written for C-SALT:
 
 1. Swap the host → `sanskrit-lexicon.uni-koeln.de`.
-2. Everything in §§1–9 works unchanged.
+2. Headword search, ids, envelopes, and GraphQL field names map directly; Phase 1
+   caveats remain explicit: unsupported fields/body-search modes return 400, and GraphQL
+   `ids` currently needs variables until webonyx is wired.
 3. Two CSL-only conveniences are additive (ignore them and you have plain C-SALT): the
    `csl{}` block (page/column/scanUrl/translit/html), and the `input`/`output`/`accent`
    query params for display transliteration.
