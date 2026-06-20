@@ -13,7 +13,7 @@ Recommended PHP library: `webonyx/graphql-php` (provisional).
 
 ### 3.1. URL
 
-POST https://www.sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/salt_graphql.php?dict=mw
+POST https://www.sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/api1/salt_graphql.php?dict=mw
 
 Clean form: `POST /dicts/{id}/graphql`.
 
@@ -37,7 +37,7 @@ REST face and avoids silent empty results.
 } }
 
 # get-by-id
-{ ids(ids: ["lemma-ka-1", "lemma-ka-2"]) { id headwordSlp1 xml } }
+query($ids: [String!]!) { ids(ids: $ids) { id headwordSlp1 xml } }
 ```
 
 ### 3.4. Expected output
@@ -60,6 +60,15 @@ queryType: term, size: 2) { id headwordSlp1 csl { lnum page column } } }`:
 Only the selected fields are returned (GraphQL projection). The `id` scheme is identical to
 REST ([salt_entries](salt_entries.md) §1.8), including the `-L{lnum}` fallback.
 
+For the current hand-rolled Phase-1 dispatcher, send ids through JSON variables, for example:
+
+```json
+{
+  "query": "query($ids: [String!]!) { ids(ids: $ids) { id headwordSlp1 xml } }",
+  "variables": { "ids": ["lemma-ka-1", "lemma-ka-2"] }
+}
+```
+
 ### 3.4.1. Parser notes
 
 - The Phase-1 hand-rolled dispatcher reads literal args (`field`, `query`, `queryType`,
@@ -73,7 +82,7 @@ REST ([salt_entries](salt_entries.md) §1.8), including the `-L{lnum}` fallback.
 ### 3.5. Rewrite rules
 
 ```
-RewriteRule ^dicts/([^/]*)/graphql$  /scans/awork/apidev/salt_graphql.php?dict=$1  [QSA,L]
+RewriteRule ^dicts/([^/]*)/graphql$  /scans/awork/apidev/api1/salt_graphql.php?dict=$1  [QSA,L]
 ```
 
 ### 3.6. Questions

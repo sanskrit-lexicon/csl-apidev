@@ -24,6 +24,10 @@ Dates are UTC+3 (project local).
   `query_type` matrix, error/JSONP semantics), and new `doc/salt_api_usecases.md`
   (10 copy-paste recipes). — 2026-06-14
 
+#### Changed
+- **Salt API docs alignment.** Updated endpoint docs, use cases, README pointers, and GraphQL
+  examples so Phase 1 paths, unsupported-mode 400s, variable-based `ids`, and migration
+  caveats match the deploy handoff. — 2026-06-20
 #### Fixed
 - **Entry `id` now unique per record.** Multi-record headwords previously collided on a
   single id, so the `ids` face could not address an individual record. `salt_entry_from_record`

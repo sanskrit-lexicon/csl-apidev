@@ -11,7 +11,7 @@ Normative contract: `csl-standards/docs/SALT_API_PROFILE.md` §5.
 
 ### 2.1. URL
 
-https://www.sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/salt_ids.php?dict=mw&ids=lemma-agni&ids=lemma-indra
+https://www.sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/api1/salt_ids.php?dict=mw&ids=lemma-agni&ids=lemma-indra
 
 ### 2.2. Input parameters
 
@@ -54,7 +54,7 @@ None for `dict`/`ids` (mandatory). `input=slp1`, `output=deva`, `accent=no`.
 ### 2.7. Rewrite rules
 
 ```
-RewriteRule ^dicts/([^/]*)/restful/ids$  /scans/awork/apidev/salt_ids.php?dict=$1  [QSA,L]
+RewriteRule ^dicts/([^/]*)/restful/ids$  /scans/awork/apidev/api1/salt_ids.php?dict=$1  [QSA,L]
 ```
 
 ### 2.8. Expected output

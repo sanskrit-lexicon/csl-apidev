@@ -37,8 +37,9 @@ and is currently one of:
 [restfulparm](restfulparm.md) shows all the restful parameters used by any of the endpoints.
 
 The `salt_*` endpoints implement the **Salt API** — a C-SALT-compatible REST + GraphQL face
-so that a client written for `api.c-salt.uni-koeln.de` works against
-`sanskrit-lexicon.uni-koeln.de` unchanged, over CSL's existing `getword` data. The
+so that a client written for `api.c-salt.uni-koeln.de` can use the same endpoint shapes
+against `sanskrit-lexicon.uni-koeln.de`, with Phase 1 caveats documented in the Salt
+specs, over CSL's existing `getword` data. The
 normative contract, a CSL↔C-SALT field mapping, and a loss report live in `csl-standards`
 (`docs/SALT_API_PROFILE.md`, `data/schema/salt-api.openapi.yaml`,
 `data/schema/salt-api.graphql`).

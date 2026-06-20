@@ -3,7 +3,8 @@
 C-SALT-compatible search over one dictionary. This mirrors the C-SALT / Kosh
 `/dicts/{id}/restful/entries` contract (verified live against
 `api.c-salt.uni-koeln.de/dicts/mw` on 2026-06-11) so that a client written for the C-SALT
-APIs works against `sanskrit-lexicon.uni-koeln.de` unchanged.
+APIs uses the same endpoint shapes against `sanskrit-lexicon.uni-koeln.de`, with Phase 1
+caveats documented in the Salt specs.
 
 Render path is unchanged: this endpoint wraps the existing `getword` data (see
 [getword](getword.md)) in the Salt JSON envelope. Parameters reuse the `Parm` class
@@ -14,7 +15,7 @@ Render path is unchanged: this endpoint wraps the existing `getword` data (see
 
 ### 1.1. URL
 
-https://www.sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/salt_entries.php?dict=mw&field=headword_slp1&query=agni&query_type=term&size=10
+https://www.sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/api1/salt_entries.php?dict=mw&field=headword_slp1&query=agni&query_type=term&size=10
 
 ### 1.2. Input parameters
 
@@ -71,11 +72,11 @@ Permalink form (subsumes the `cleanurl` roadmap, COLOGNE#249):
 
 ```
 # C-SALT-identical query form → salt_entries.php (base path scans/awork/apidev)
-RewriteRule ^dicts/([^/]*)/restful/entries$  /scans/awork/apidev/salt_entries.php?dict=$1  [QSA,L]
+RewriteRule ^dicts/([^/]*)/restful/entries$  /scans/awork/apidev/api1/salt_entries.php?dict=$1  [QSA,L]
 
 # Permalink (subsumes cleanurl / COLOGNE#249): /{DICT}/{ref}, ref = headword or lnum.
 # 'restful' and 'graphql' are reserved and not valid {dict} values.
-RewriteRule ^([A-Za-z0-9]+)/([^/]+)$  /scans/awork/apidev/salt_entries.php?dict=$1&query=$2  [L]
+RewriteRule ^([A-Za-z0-9]+)/([^/]+)$  /scans/awork/apidev/api1/salt_entries.php?dict=$1&query=$2  [L]
 ```
 
 > **Reconciliation note — see [cleanurl](cleanurl.md) §0.** The permalink rule above is
