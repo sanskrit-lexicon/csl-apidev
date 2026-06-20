@@ -21,7 +21,7 @@ https://www.sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/salt_entries.php?di
 | restful | example | Parm / notes |
 |---|---|---|
 | dict | mw | Cologne dict code, lower-cased ([restfulparm](restfulparm.md) `dict`). Pilot: `mw` only. |
-| field | headword_slp1 | one of `id`, `headword_slp1`, `sense`, `re_headwords_slp1`, `created`, `xml` |
+| field | headword_slp1 | one of `id`, `headword_slp1`, `sense`, `re_headwords_slp1`, `created`, `xml`; Phase 1 implements `headword_slp1` only |
 | query | agni | the search string, in the `input` transliteration (Parm `keyin`) |
 | query_type | term | one of `term`, `fuzzy`, `match`, `match_phrase`, `prefix`, `wildcard`, `regexp` |
 | size | 10 | max records; optional |
@@ -169,14 +169,19 @@ so the same word works in any `input` script.
 | `fuzzy` | approximated by `prefix` | matches `getsuggest`'s behaviour; revisit in Phase 4 |
 | `regexp`, `match`, `match_phrase` | **HTTP 400** | need a body/FTS index (Phase 4); never a silent empty result |
 
+Phase 1 also returns **HTTP 400** for `field` values other than `headword_slp1`. The
+C-SALT enum is preserved, but `id`, `sense`, `re_headwords_slp1`, `created`, and `xml`
+search need a later resolver/index and must not silently run a headword search.
+
 > **`size` unit (open, Phase-3 parity).** `prefix agni&size=8` returns the first 8 *records*
 > of `agni` (lnum 890–897), not 8 distinct headwords — the cap counts entries. Confirm against
 > C-SALT whether `size` should count records or headwords before relying on it for paging.
 
 ### 1.11. Errors and JSONP
 
-- **400** — unsupported `query_type` (`regexp`/`match`/`match_phrase` in Phase 1) or an
-  unknown `field`. The body is a JSON error envelope; the cause is named, not swallowed.
+- **400** — unsupported `query_type` (`regexp`/`match`/`match_phrase` in Phase 1),
+  unsupported `field` (anything except `headword_slp1` in Phase 1), or an unknown `field`.
+  The body is a JSON error envelope; the cause is named, not swallowed.
 - **JSONP** — append `&callback={fn}` to wrap the JSON in `fn(...)`. The callback name is
   validated against `^[A-Za-z_$][A-Za-z0-9_$.]{0,127}$`; anything else returns
   `400 invalid callback` (reflected-XSS guard — see [`salt_api_handoff.md`](salt_api_handoff.md)).

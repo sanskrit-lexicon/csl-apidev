@@ -26,6 +26,10 @@ require_once('getword_data.php');   // pulls basicadjust.php, basicdisplay.php, 
 // ---- allowed values (match C-SALT exactly) ----
 function salt_fields()      { return array('id','headword_slp1','sense','re_headwords_slp1','created','xml'); }
 function salt_query_types() { return array('term','fuzzy','match','match_phrase','prefix','wildcard','regexp'); }
+function salt_phase1_fields() { return array('headword_slp1'); }
+function salt_phase1_field_error($field) {
+  return "field '$field' not available until a Phase 4/5 index or resolver is implemented";
+}
 
 // ---- repeated query parameter (e.g. ?ids=a&ids=b) -> array ----
 function salt_multi_param($name) {
@@ -61,6 +65,10 @@ function salt_search_entries($parm, $field, $query, $query_type, $size) {
 // Distinct SLP1 keys matching the query under the given mode, via real Dal methods.
 function salt_search_keys($parm, $field, $query, $query_type, $size) {
   $dal = new Dal($parm->dict);
+  if (!$dal->status) {
+    $dal->close();
+    return array();
+  }
   $slp = salt_query_to_slp1($parm, $query);
   $max = ($size > 0) ? $size : 25;
   $keys = array();

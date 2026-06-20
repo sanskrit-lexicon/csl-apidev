@@ -30,6 +30,15 @@ Dates are UTC+3 (project local).
   now disambiguates: `<hom>` present → `-{n}` (C-SALT), else `-L{lnum}` fallback;
   `salt_entries_for_id` parses both forms back. Verified `ka` → 5 unique ids,
   `ids=lemma-agni-L890,lemma-agni-L891` → exactly those 2 records. — 2026-06-14
+- **Phase 1 `field` handling no longer pretends unsupported fields are headword
+  searches.** REST and GraphQL now accept only `field=headword_slp1` in the MW pilot;
+  C-SALT enum values that need later resolvers/indexes (`id`, `sense`,
+  `re_headwords_slp1`, `created`, `xml`) return 400/error instead of silently running the
+  headword path. — 2026-06-20
+- **Missing SQLite no longer crashes prefix/wildcard search.** If the per-dictionary
+  SQLite database is unavailable in a development checkout, shared Salt search returns an
+  empty result envelope instead of calling `Dal` methods on a null PDO connection. —
+  2026-06-20
 - **GraphQL literal-arg parser** no longer truncates `query:"a*"` to `"a"` (wildcards /
   diacritics / spaces were dropped). — 2026-06-14
 

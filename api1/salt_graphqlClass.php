@@ -57,6 +57,9 @@ class SaltGraphqlClass {
     if (!in_array($field, salt_fields(), true)) {
       $this->entriesError = "Missing or invalid parameter: 'field'"; return array();
     }
+    if (!in_array($field, salt_phase1_fields(), true)) {
+      $this->entriesError = salt_phase1_field_error($field); return array();
+    }
     if (!in_array($query_type, salt_query_types(), true)) {
       $this->entriesError = "Missing or invalid parameter: 'queryType'"; return array();
     }

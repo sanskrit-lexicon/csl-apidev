@@ -23,6 +23,10 @@ GraphQL uses camelCase (`queryType`, `headwordSlp1`, `reHeadwordsSlp1`); the RES
 uses the snake_case forms (`query_type`, `headword_slp1`, `re_headwords_slp1`). Same
 concepts, two spellings — this matches C-SALT.
 
+Phase 1 implements `field: headword_slp1` only. Other C-SALT field enum values return a
+GraphQL error until the corresponding Phase 4/5 resolver or index exists; this mirrors the
+REST face and avoids silent empty results.
+
 ### 3.3. Example queries
 
 ```graphql
