@@ -605,9 +605,28 @@ public function ls_callback_pwg_href($code,$data) {
    dbgprint($dbg,"$pfx: href=$href\n");
    return $href;
   }
- }
+  }
+ /******* link to Ṛgveda Prātiśākhya  ***********/
+  $temparr = array("ṚV. PRĀT.");
+  foreach($temparr as $temp) {
+   if (preg_match("|^($temp) *([0-9]+), *([0-9]+)|",$data,$matches)) {
+    $t = $matches[2]; // patala
+    $s = $matches[3]; // sutra
+    $href = "https://sanskrit-lexicon-scans.github.io/rvps/app1?$t,$s";
+    dbgprint($dbg,"$pfx: href=$href\n");
+    return $href;
+   }
+  }
+  // ṚV. PRĀT. Roman numeral → app2 by ipage
+  if (preg_match("|^ṚV\. PRĀT\. ([IVXLCDM]+)|",$data,$matches)) {
+   $roman = $matches[1];
+   $ipage = $this->romanToInt($roman);
+   $href = "https://sanskrit-lexicon-scans.github.io/rvps/app2/?$ipage";
+   dbgprint($dbg,"$pfx: href=$href\n");
+   return $href;
+  }
  /******* link to YĀJÑAVALKYA'S Gesetzbuch  ***********/
- // pwg,pw,pwkvn  YĀJÑ. N,N;  
+  // pwg,pw,pwkvn  YĀJÑ. N,N;  
  $temparr = array("YĀJÑ.");
  foreach($temparr as $temp) {
   if (preg_match("|^($temp) *([0-9]+), *([0-9]+)|",$data,$matches)) {
@@ -2547,10 +2566,11 @@ public function ls_callback_sch_href($code,$n,$data) {
    'Vikr.' => 'vikramor', 
    'Vikram.' => 'vikramor', 
    'Ait. Br.' => 'aitbr',
-   'Nir.'  => 'nir',
-   'Nigh.' => 'naigh',
+    'Nir.'  => 'nir',
+    'Nigh.' => 'naigh',
+    'ṚV. Prāt.' => 'rvps',
 
- );
+  );
  if (!isset($code_to_pfx[$code])) {
   return $href;
  }
@@ -3105,10 +3125,21 @@ public function ls_callback_sch_href($code,$n,$data) {
    $href = "https://sanskrit-lexicon-scans.github.io/armh2/app1?$t,$s";
    dbgprint($dbg,"$pfx: href=$href\n");
    return $href;
-  }  
- }
+   }  
+  }
+ /******* link to Ṛgveda Prātiśākhya (for sch) ***********/
+  if ($pfx == 'rvps') {
+   if (preg_match("|^($code) *([0-9]+), *([0-9]+)|",$data1,$matches)) {
+    $t = $matches[2]; // patala
+    $s = $matches[3]; // sutra
+    $href = "https://sanskrit-lexicon-scans.github.io/rvps/app1?$t,$s";
+    dbgprint($dbg,"$pfx: href=$href\n");
+    return $href;
+   }
+   return $href;
+  }
 
- /******* link to manava dharmashastra (for sch) ***********/
+  /******* link to manava dharmashastra (for sch) ***********/
  $temparr = array("M.");
  foreach($temparr as $temp) {
   if (preg_match("|^($temp) *([0-9]+), *([0-9]+)|",$data1,$matches)) {
@@ -3728,6 +3759,9 @@ public function ls_callback_ap90_href($code,$n,$data) {
   |<ab(.*?)>(.*?)</ab>|
  */
  $x = $matches[0]; // full string
+ if (str_starts_with($x, '<abot')) { // 06-22-2026
+  return $x;
+ }
  $a = $matches[1];
  $data = $matches[2];
  $dbg=false;
