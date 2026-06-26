@@ -3759,7 +3759,7 @@ public function ls_callback_ap90_href($code,$n,$data) {
   |<ab(.*?)>(.*?)</ab>|
  */
  $x = $matches[0]; // full string
- if (str_starts_with($x, '<abot')) { // 06-22-2026
+  if (strpos($x, '<abot') === 0) { // 06-22-2026
   return $x;
  }
  $a = $matches[1];
