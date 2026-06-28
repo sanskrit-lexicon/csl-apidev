@@ -210,7 +210,10 @@ $(document).ready(function() {
    "&accent=" + escape(accent) +
    "&input=" + escape(input);
   jQuery("#dataframe").attr("src",url);
-    
+  // Update the browser address bar so the URL is bookmarkable (issue #21)
+  var baseseg = window.location.pathname.split('/')[1]; // e.g. 'simple' or 'simple1.1a'
+  history.pushState({dict: dict, key: key}, '', '/' + baseseg + '/' + dict + '/' + key);
+
  }; // listDisplay
  
 /* Jquery UI functions for selecting a dictionary from the #dict div */
