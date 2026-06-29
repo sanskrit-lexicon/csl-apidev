@@ -11,7 +11,7 @@ on:
     paths:
       - README.md
   push:
-    branches: [master]
+    branches: [main]
     paths:
       - README.md
   workflow_dispatch:
