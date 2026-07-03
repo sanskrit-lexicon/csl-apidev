@@ -7,18 +7,18 @@ current directory never matters (no `cd`, no cwd-drift surprises).
 
 Substitute your clone path below: `REPO = C:\Users\user\Documents\GitHub\csl-apidev`
 
-## Sync your clone with origin/master
+## Sync your clone with origin/main
 ```powershell
 git -C "C:\Users\user\Documents\GitHub\csl-apidev" fetch origin
 git -C "C:\Users\user\Documents\GitHub\csl-apidev" status
-git -C "C:\Users\user\Documents\GitHub\csl-apidev" pull --ff-only origin master
+git -C "C:\Users\user\Documents\GitHub\csl-apidev" pull --ff-only origin main
 ```
 
 ## Commit & push a change
 ```powershell
 git -C "C:\Users\user\Documents\GitHub\csl-apidev" add simple-search\<file>
 git -C "C:\Users\user\Documents\GitHub\csl-apidev" commit -m "message"
-git -C "C:\Users\user\Documents\GitHub\csl-apidev" push origin master
+git -C "C:\Users\user\Documents\GitHub\csl-apidev" push origin main
 ```
 
 ## Update the master implementation issue [#47](https://github.com/sanskrit-lexicon/csl-apidev/issues/47) from its file
@@ -44,8 +44,7 @@ python "C:\Users\user\Documents\GitHub\csl-apidev\simple-search\dcs_xref\build_x
 - Before `pull --ff-only`, run `git status` and resolve/stash local edits first (this
   checkout sometimes has concurrent edits, e.g. to `.ai_state.md`).
 - If history has diverged, inspect upstream before deciding:
-  `git -C "C:\Users\user\Documents\GitHub\csl-apidev" log --oneline -5 origin/master`.
+  `git -C "C:\Users\user\Documents\GitHub\csl-apidev" log --oneline -5 origin/main`.
 - The branch can change under you (external "codex"/"human push" commits). Pin work to
-  master with `git -C "<REPO>"`; verify with `git -C "<REPO>" branch --show-current`.
-```
+  main with `git -C "<REPO>"`; verify with `git -C "<REPO>" branch --show-current`.
 

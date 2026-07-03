@@ -34,11 +34,12 @@ the wiring is yours.
 - [ ] **Wire the DCS-2026 frequencies (Fix I).** One line: point
   `init_word_frequency()` in [simple-search/v1.1/getword_list_1.0_main.php](https://github.com/sanskrit-lexicon/csl-apidev/blob/master/simple-search/v1.1/getword_list_1.0_main.php) at
   [simple-search/wf1/wf.txt](https://github.com/sanskrit-lexicon/csl-apidev/blob/master/simple-search/wf1/wf.txt) instead of [wf0/wf.txt](https://github.com/sanskrit-lexicon/csl-apidev/blob/master/simple-search/wf0/wf.txt). **(data ready)** —
-  12,096 keys refreshed; `tad 180→3734`, `kf 163→1083`, `rAjan 84→588`.
+  12,096 lines refreshed direct + 90 via legacy-spelling re-normalize (addendum A1); `tad 180→3734`, `kf 163→1083`, `rAjan 84→588`.
 - [ ] **Record the live baseline.** On the server run
   `python simple-search/eval/eval_search.py --live` (see [eval_search.py](https://github.com/sanskrit-lexicon/csl-apidev/blob/master/simple-search/eval/eval_search.py))
-  and save the numbers. Offline baseline today: recall@5 = 1.00, **default mean
-  #results = 5.22** vs precise 1.00, P@1 = 0.94 (one miss: `rama`→`rAma@2`).
+  and save the numbers. Offline baseline today (non-aspirational rows —
+  `rama` is excluded, see below): recall@5 = 1.00, **default mean #results =
+  5.00** vs precise 1.00, P@1 = 1.00.
 
 ## Phase 1 — M1 engine hygiene  ([roadmap_v1.2 §§4, 7, 8](https://github.com/sanskrit-lexicon/csl-apidev/blob/master/simple-search/roadmap_v1.2.md))
 - [ ] **Fix A** — add `transitionTable_precise`; route slp1/deva/iast to it.
@@ -50,11 +51,20 @@ the wiring is yours.
   `doVariant`; score each candidate; **hard-drop** below `best + DELTA`
   (never drop the user's exact word); expose `score` in the JSON.
 - [ ] **A2** — soften `restrict_to_user_word` to return exact + scored near-matches.
-- [ ] **Gate with the harness** (re-run `--live`): **recall@5 must stay ≥ 0.98**,
-  **default mean #results 5.22 → ≤ 3**, and **`rama` P@1 → 1.0** (wf1 + score).
+- [ ] **Gate with the harness** (re-run `--live`): **recall@5 ≥ 0.98 over
+  non-aspirational rows**, **default mean #results 5.00 → ≤ 3**. Do **not**
+  target `rama` P@1 → 1.0 — `put_user_word_first` unconditionally floats the
+  user's literal spelling and v1.2 keeps that design, so `rama` is capped at
+  rank 2 regardless of `wf1`/Fix B scoring; it is marked `aspirational` in
+  `gold.tsv` (recall-only; H122/M2 ruling).
 
 ## Phase 3 — M3 precision  ([roadmap_v1.2 §§6, 9](https://github.com/sanskrit-lexicon/csl-apidev/blob/master/simple-search/roadmap_v1.2.md))
-- [ ] **Fix C** — phonotactic/sandhi prune (start safe: no word-initial ṅ/ṇ; ṣ/ṇ nati trigger).
+- [ ] **Fix C** — phonotactic prune: word-initial ṅ/ṇ only (letter-names ṅa/ṇa
+  whitelisted). The original rule (b) — "ṇ needs a nati trigger" — is
+  **deleted**: it vetoed real lexical ṇ-words (guṇa, maṇi, paṇa, …) in every
+  input mode, including precise (Fable 5 review finding C1). Do not
+  reintroduce a nati-trigger veto without gating it to generated variants
+  only, never precise modes, never before `restrict_to_user_word`.
 - [ ] **Fix F** — `folknorm()` pre-normalizer (sh/ch/ri/ee/oo, ksh/x→kṣ, gya/dnya→jñ, case-fold), replacing the scattered `clean_default` hacks.
 
 ## Phase 4 — M4 input coverage  ([roadmap_v1.2 §§8, 10](https://github.com/sanskrit-lexicon/csl-apidev/blob/master/simple-search/roadmap_v1.2.md))
@@ -71,7 +81,7 @@ the wiring is yours.
   split `devarājaḥ`→`deva`+`rājan`. Decide hosting (microservice vs pre-expanded table).
 - [ ] **Stream B — corpus-grounding** (`corpus=yes`): DCS frequency + genre + examples
   per result. **Join key ready** → [simple-search/dcs_xref/dcs_cdsl_xref.tsv](https://github.com/sanskrit-lexicon/csl-apidev/blob/master/simple-search/dcs_xref/dcs_cdsl_xref.tsv)
-  (DCS lemma → CDSL normkey; 12,946 linked). Examples in the VisualDCS repo (`visual/conc_*.json`).
+  (DCS lemma → CDSL normkey; 12,945 linked). Examples in the VisualDCS repo (`visual/conc_*.json`).
 - [ ] **Stream C — FAIR / TEI Lex-0 / LOD**: reuse the [csl-standards](https://github.com/sanskrit-lexicon/csl-standards) entry id;
   content-negotiate CDSL/TEI-Lex-0/OntoLex; citable permalinks via [COLOGNE#249](https://github.com/sanskrit-lexicon/COLOGNE/issues/249).
   Align with [csl-standards](https://github.com/sanskrit-lexicon/csl-standards); do not duplicate its model.

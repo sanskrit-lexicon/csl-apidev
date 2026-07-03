@@ -41,7 +41,7 @@ readme.org for simple-search
     SEED --> DOV["doVariant() — recursive<br/>expand each letter via transitionTable"]
     DOV --> NGV{"ngramValidate(pref)<br/>some hwnorm1c key LIKE 'pref%' ?"}
     NGV -- "no" --> BAD["discard prefix<br/>cache in badprefs"]
-    NGV -- "yes" --> ENDV["generate_alternate_endings()<br/>drop final M/m/s/H/n · f↔A"]
+    NGV -- "yes" --> ENDV["generate_alternate_endings()<br/>drop final M/m/s/H/h/n (regex [MmsHhn]$) · f↔A"]
     ENDV --> GRM["grammar_variants()<br/>+a +H +m +n +in · schwa"]
     GRM --> EXIST{"normalizes to a<br/>hwnorm1c headword?"}
     EXIST -- "no" --> DROP["drop"]
@@ -136,7 +136,11 @@ readme.org for simple-search
    *20* results.  The =dicthw= list is dominated by nasal/sibilant swaps of
    a single typed word: =manas, mAna, namas, nAma, nAman, nAnA, mana, …=
    (illustrative; the live list also shows what looks like a repeated
-   surface headword).  Companion cases:
+   surface headword -- **unconfirmed** (Fable 5 review, NIT): the fixtured
+   =manaS= entry is plausibly the genuine MW combining-form headword
+   =manaś°=, not a capture artifact, and no fixture list contains a literal
+   duplicate; re-check against the live page once the host is reachable).
+   Companion cases:
    - =key=sana= -> *18*
    - =key=kara= -> *11*  (=kara, Kara, kaRa, kAra, kArA, krA, KAra, …=)
    Switch =input= from =default= to =iast= (a precise mode) and the same

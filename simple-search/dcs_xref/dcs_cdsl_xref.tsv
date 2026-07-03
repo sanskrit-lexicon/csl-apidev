@@ -1937,7 +1937,7 @@ dcs_id	dcs_lemma_iast	slp1	normkey	in_cdsl	token_count	grammar
 155496	prayojana	prayojana	prayojana	1	12	n
 156130	indh	inD	inD	1	12	2. Ā.
 156156	kamp	kamp	kamp	1	12	1. P.
-156176	kﾱp	kp	kp	0	12	1. P.
+156176	kﾱp	kxp	kxp	0	12	1. P.
 156183	krudh	kruD	kruD	1	12	4. Ā.
 156261	ceṣṭ	cezw	cezw	1	12	1. Ā.
 157236	tuṣ	tuz	tuz	1	12	4. Ā.
@@ -4114,7 +4114,7 @@ dcs_id	dcs_lemma_iast	slp1	normkey	in_cdsl	token_count	grammar
 162248	parī	parI	parI	1	5	1.Ā.,2.P.,2.Ā.
 162272	paryas	paryas	paryas	1	5	1.Ā.,2.P.,4.P.,1.P.,4.Ā.
 162328	prakāś	prakAS	prakAS	1	5	1.Ā.,1.P.
-162339	prak￞	prak	prak	0	5	6.P.
+162339	prak￞	prakF	prakF	0	5	6.P.
 162613	prativac	prativac	prativac	1	5	3.Ā.,2.P.,3.P.
 162626	pratividhā	prativiDA	prativiDA	1	5	3.Ā.,3.P.
 162664	pratiṣṭhāpay	pratizWApay	pratizWApay	0	5	10.P.,10.Ā.
@@ -8105,7 +8105,7 @@ dcs_id	dcs_lemma_iast	slp1	normkey	in_cdsl	token_count	grammar
 159756	ājīv	AjIv	AjIv	1	2	1.P.,1.Ā.
 159762	ātan	Atan	Atan	1	2	8.P.,8.Ā.
 159782	ādarśay	AdarSay	AdarSay	0	2	10.P.
-159827	āp￞	Ap	Ap	1	2	4.P.,9.P.,3.P.,3.Ā.
+159827	āp￞	ApF	ApF	0	2	4.P.,9.P.,3.P.,3.Ā.
 159854	ābhṛ	ABf	ABf	1	2	1.Ā.,1.P.,3.P.,3.Ā.
 159865	āmṛś	AmfS	AmfS	1	2	6.P.
 159881	āyojay	Ayojay	Ayojay	0	2	10.P.
@@ -8186,7 +8186,7 @@ dcs_id	dcs_lemma_iast	slp1	normkey	in_cdsl	token_count	grammar
 162282	paryādā	paryAdA	paryAdA	1	2	3.Ā.,3.P.
 162332	prakopay	prakopay	prakopay	0	2	10.P.
 162337	prakṛṣ	prakfz	prakfz	1	2	4.P.,6.P.,1.P.,1.Ā.
-162340	prakﾱp	prakp	prakp	0	2	1.Ā.
+162340	prakﾱp	prakxp	prakxp	0	2	1.Ā.
 162352	prakṣi	prakzi	prakzi	1	2	9.P.,5.P.
 162360	prakhyā	praKyA	praKyA	1	2	4.P.,2.P.,2.Ā.
 162383	pracar	pracar	pracar	1	2	1.P.,1.Ā.
@@ -14211,7 +14211,7 @@ dcs_id	dcs_lemma_iast	slp1	normkey	in_cdsl	token_count	grammar
 163225	prollikh	prolliK	prolliK	1	1	6.P.
 163246	vikuñcay	vikuYcay	vikuYcay	0	1	10.P.
 163253	vikṛṣ	vikfz	vikfz	1	1	4.P.,6.P.,1.P.,1.Ā.
-163255	vikﾱp	vikp	vikp	0	1	1.Ā.
+163255	vikﾱp	vikxp	vikxp	0	1	1.Ā.
 163270	vikhyāpay	viKyApay	viKyApay	0	1	10.P.,10.Ā.
 163286	vighūrṇ	viGUrR	viGUrR	1	1	1.P.,1.Ā.
 163294	vici	vici	vici	1	1	5.Ā.,5.P.
@@ -15104,7 +15104,7 @@ dcs_id	dcs_lemma_iast	slp1	normkey	in_cdsl	token_count	grammar
 211163	praśodhay	praSoDay	praSoDay	0	1	10.P.,10.Ā.
 211166	anupekṣaṇīya	anupekzaRIya	anupekzaRIya	1	1	adj
 211170	gāṇanikya	gARanikya	gARanikya	1	1	n
-211172	avakﾱptika	avakptika	avakptika	0	1	adj
+211172	avakﾱptika	avakxptika	avakxptika	0	1	adj
 211173	apustaka	apustaka	apustaka	0	1	adj
 211175	prativarṇaka	prativarRaka	prativarRaka	1	1	adj
 211176	rāśīkṛ	rASIkf	rASIkf	1	1	8.P.

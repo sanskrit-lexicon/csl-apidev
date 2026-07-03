@@ -22,7 +22,7 @@ Accessible front door to the Interoperable + Reusable data.
 2. Interoperability target = **TEI Lex-0** (the archival TEI profile already
    chosen as the CDSL baseline in `csl-standards`), with OntoLex as the
    semantic mirror `csl-standards` already produces.
-3. Morphology engine = **Vidyut** (Rust, fast, embeddable, Apache-2).
+3. Morphology engine = **Vidyut** (Rust, fast, embeddable, MIT).
 4. Build the **full evaluation harness** (gold set + precision@k / MRR). Done
    this round — see §5.
 5. **Repo boundary (decided 2026-06-11):** `csl-standards` owns the neutral
@@ -205,7 +205,11 @@ query**, tracked against **recall** (did we still return the intended word?).
 Use it to (a) set a baseline on v1.1, (b) gate Fixes A–I, (c) tune the Fix B
 hard-drop `DELTA` by evidence.
 
-**Baseline — v1.1 (wf0), seed gold set, 2026-06-11:**
+**Baseline — superseded — see [eval/readme.md](eval/readme.md) for the
+current (47-case) baseline, gate, and the `rama` design-tension note.** The
+block below is the original seed-gold-set snapshot (n=16, 2026-06-11); it
+predates the `expect`/`aspirational` gate mechanism (H122/M1) and the
+`gold.tsv` expansion, and its P@1/mean#results figures are stale.
 
 ```
 ALL       n=16   P@1=0.94  recall@5=1.00  MRR=0.969  mean#results=5.25
@@ -215,10 +219,14 @@ precise   n=4    P@1=1.00  recall@5=1.00  MRR=1.000  mean#results=1.00
 
 Recall is already perfect — the engine never *loses* the intended word. The
 problem is **overgeneration**: `default` returns 6.7× more results than precise
-(6.67 vs 1.00). The one ranking miss, `rama` → intended `rAma` at rank 2, is the
-`put_user_word_first`-vs-frequency tension that `wf1` + Fix B should fix.
-Targets for the v1.2 fixes: keep recall@5 ≥ 0.98 while default mean#results
-falls from 6.67 toward ≤ 3.
+(6.67 vs 1.00). The one ranking miss, `rama` → intended `rAma` at rank 2, is
+the `put_user_word_first`-vs-frequency tension — `put_user_word_first` runs
+*after* ranking and unconditionally floats the user's literal spelling, and
+v1.2 explicitly keeps that design, so this is **not** fixable by `wf1` or Fix
+B scoring (H122/M2 ruling: `rama` is marked `aspirational` in `gold.tsv` —
+recall-only, not a P@1 target). Targets for the v1.2 fixes: keep recall@5 ≥
+0.98 (over non-aspirational rows) while default mean#results falls from 6.67
+toward ≤ 3.
 
 **Questions:** D1 who curates the gold set's *full* relevant sets for ambiguous
 queries (scholarly judgement)? D2 target thresholds — e.g. "recall@5 ≥ 0.98 AND

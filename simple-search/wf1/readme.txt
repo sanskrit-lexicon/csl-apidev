@@ -5,8 +5,10 @@ Generated 2026-06-11.  Roadmap: simple-search/roadmap_v1.2.md  Fix I (sec. 12).
 WHAT
   wf1/wf.txt is a drop-in replacement for wf0/wf.txt -- the `slp1_key  count`
   table loaded by init_word_frequency() and used by order_by_wf() to order
-  simple-search results.  Same 50,574-key universe as wf0; only the COUNTS are
-  refreshed, using 2026 corpus frequencies.
+  simple-search results.  Same 50,574-LINE / 50,474-distinct-KEY universe as
+  wf0 (wf0 has 100 duplicate-key lines, 87 distinct duplicated keys --
+  pre-existing quirk, faithfully preserved); only the COUNTS are refreshed,
+  using 2026 corpus frequencies.
 
 SOURCE
   VisualDCS/src/DCS-data-2026/exports/clean/lemmas.csv
@@ -24,8 +26,13 @@ PIPELINE (build_wf_from_dcs.py)
      policy -- flip MERGE in the script for DCS-only).
 
 RESULT (this build)
-  - 12,096 of 50,574 keys refreshed (the high-frequency core; ~94% of token mass)
+  - 12,096 of 50,574 lines refreshed (12,055 of 50,474 distinct keys -- the
+    12,096 count includes 41 duplicate-key lines; the high-frequency core,
+    ~94% of token mass)
   - 1,573 keys that were 0/neg in wf0 now carry positive 2026 counts
+  - Bonus: wf0 has two `ca` lines (179, then 1); PHP's last-wins assoc array
+    means the live engine has been ranking `ca` at wf=1 -- wf1 heals this
+    incidentally (both lines now read 3385).
   - 2,921 DCS normkeys are NOT in wf0 (corpus forms outside the headword set:
     causative/derived stems kAray, darSay, cintay; sandhi kaScit, kadAcid) -- not
     written into wf.txt (they are never looked up), but they are the raw material
