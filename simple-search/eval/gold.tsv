@@ -1,7 +1,12 @@
-# simple-search gold set  --  query <TAB> input <TAB> dict <TAB> intended_dicthw <TAB> note
+# simple-search gold set  --  query <TAB> input <TAB> dict <TAB> intended_dicthw <TAB> note <TAB> expect
 # intended_dicthw is the SLP1 headword the user most likely wants.
 # An empty intended marks a "should return nothing" (zero-result) case.
 # Rows whose key is not in fixtures.json are scored only with --live (skipped offline).
+# expect (6th column, optional): "aspirational" marks a row DESIGNED to miss
+# under v1.1/v1.2 as specified (Stream-A lemmatization targets, or a ranking
+# constraint the design intentionally keeps below rank 1) -- such rows are still
+# scored and printed, but excluded from the recall@5 gate denominator and
+# reported in a separate "aspirational" bucket (H122/M1; see eval/readme.md).
 # Seeded 2026-06-11 from live MW responses (output=iast). Expand with scholarly judgement.
 
 # --- exact / overgeneration (default), fixtured ---
@@ -13,7 +18,7 @@ sana	default	mw	sana	overgeneration (18)
 manas	default	mw	manas	overgeneration (20)
 yoga	default	mw	yoga	3 results
 vishvamitra	default	mw	viSvAmitra	proper noun; 3 results
-rama	default	mw	rAma	HARD: intended raama ranks #2 behind literal 'rama'
+rama	default	mw	rAma	HARD: intended rAma ranks #2 behind literal 'rama' -- put_user_word_first design keeps it there (H122/M2 ruling: recall-only, not P@1)	aspirational
 
 # --- folk romanization (default), fixtured ---
 upanishad	default	mw	upanizad	folk 'sh'; 2 results
@@ -52,8 +57,14 @@ viṣṇu	iast	mw	vizRu	precise IAST diacritics, live-only
 dharma	iast	mw	Darma	precise, live-only
 
 # --- lemmatization targets (Stream A) -- expected to MISS in v1.1, live-only ---
-gacchati	iast	mw	gam	STREAM-A: inflected (3sg pres) -> root gam
-rAmasya	slp1	mw	rAma	STREAM-A: genitive -> rAma
+gacchati	iast	mw	gam	STREAM-A: inflected (3sg pres) -> root gam	aspirational
+rAmasya	slp1	mw	rAma	STREAM-A: genitive -> rAma	aspirational
+
+# --- phonotactic / folknorm tripwires (C1/M3), fixtures pending live capture (H122 step 8) ---
+mani	default	mw	maRi	C1 tripwire: lexical R (maRi/mani) must NOT be vetoed by phonotactic_ok
+guna	default	mw	guRa	C1 tripwire: lexical R (guRa/guna) must NOT be vetoed by phonotactic_ok
+hari	default	mw	hari	M3 tripwire: folknorm ri->f must be onset-anchored; medial ri (hari) must NOT become haf
+giri	default	mw	giri	M3 tripwire: folknorm ri->f must be onset-anchored; medial ri (giri) must NOT become gif
 
 # --- zero-result ---
 xqzqxq	default	mw		zero-result (nonsense)

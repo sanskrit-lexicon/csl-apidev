@@ -192,12 +192,20 @@ s/r — and drops the nasal-merge, sibilant-merge and r-cross rows:
 public $transitionTable_precise = [
   ["a","A"], ["i","I"], ["u","U"], ["o","O"], ["e","E"],
   ["M","m"],            // anusvāra <-> m only (NOT n/ṇ/ṅ/ñ)
-  ["H"],               // visarga stays put under precise input
+  ["H"],               // visarga stays put in THIS table (doVariant only --
+                        // see caveat below)
   ["f","F"],           // vocalic ṛ length only (NOT r/ri/ar/ru)
   ["x","X"],
   // consonants: identity (no k/kh, no b/v, no s/ś/ṣ merges)
 ];
 ```
+
+**NIT — "visarga stays put" is only true inside `doVariant`.**
+`transitionTable_precise` doesn't merge `H` with anything, but
+`generate_alternate_endings()` runs later in the pipeline and still strips a
+final `H` unconditionally (it is not table-gated). So a precise-mode word
+ending in visarga can still lose it downstream; this table alone doesn't
+guarantee visarga survives end-to-end.
 
 **(A2) Soften `restrict_to_user_word` (optional, needs §5 scores).** Returning
 *only* the exact word is blunt — it also hides homonyms and the close
@@ -244,14 +252,20 @@ confusion, large = cross-class guess):
 
 ```php
 // v1.2: cost per transitionTable row, same indices as $this->transitionTable
+// MINOR-7: do NOT fill this list by the comments below — the real
+// transitionTable_default (simple_search.php:43) has an ["h","H"] row between
+// the l-cluster and the nasals that the illustrative comments here skip, so
+// copying row-for-comment misaligns every cost from index 7 onward. Count the
+// rows in the LIVE table and assign one cost per actual row.
 public $transitionCost_default = [
   0,0,0,0,0,        // vowel length pairs
   2,                // r-cluster cross members
   2,                // l-cluster
+  2,                // h/H row (present in the live table; don't skip it)
   1,                // nasals
   1,                // sibilants
   2,                // b/v
-  /* ...one entry per row... */
+  /* ...one entry per row -- count the live table, not this comment list... */
 ];
 ```
 
@@ -280,6 +294,9 @@ threshold relative to the best — but never drop the user's own spelling:
 
 ```php
 // v1.2: in generate_normkeys()
+// MINOR-7: min() on an empty $searchcost errors (E_WARNING / TypeError on
+// PHP 8) for the zero-result case -- guard it.
+if (empty($this->searchcost)) { return; }        // no candidates at all
 $best = min($this->searchcost);                 // smallest cost seen
 $KEEP = $best + $DELTA;                          // hard-drop window (Q1)
 foreach ($this->searchcost as $k=>$cost) {
@@ -315,33 +332,60 @@ the exact word and its closest neighbours; far guesses like `krA`, `KAra`,
 
 Many fabricated forms are not just unlikely, they are **impossible** Sanskrit
 — yet they survive because a real but unrelated headword shares their prefix.
+
+**Revision (Fable 5 adversarial review, 03-07-2026, finding C1):** the original
+rule (b) below — "retroflex ṇ needs a nati trigger earlier in the word" —
+treated *every* ṇ as ṇatva-derived. That is false for lexical/original ṇ:
+`guRa` (guṇa), `maRi` (maṇi), `paRa`, `PaRa`, `vaRij`, `aRu` all lack a
+trigger and would be vetoed outright. Worse, the trigger class `[rfzkSK]`
+was linguistically wrong (k/K/ś are not ṇati triggers; ṛ/ṝ/r/ṣ are), and
+because the filter was wired into `searchdict_add_basic` — which serves
+**all** input modes, not just `default` — a user typing precise IAST `maṇi`
+would get **0 results**: the exact word is vetoed before the existence
+check, and `restrict_to_user_word` cannot restore what was never added.
+Rule (b) is therefore **deleted**. Rule (a) (word-initial ṅ/ṇ) survives, with
+the letter-name caveat from Q8 (the headwords *ṅa* and *ṇa* themselves are
+legitimate and must be whitelisted, not deleted, once the exceptions list is
+vetted).
+
+If a nati-style ṇ filter is wanted later, it must be re-scoped to apply
+**only to server-generated variants**, never to the user's own typed string,
+**never in precise input modes** (`slp1`/`deva`/`iast`), and with the
+corrected trigger class `[rfFz]` (ṛ/ṝ/r/ṣ — drop k/K/ś). `phonotactic_ok`
+must run *after* `restrict_to_user_word` has had a chance to see the exact
+word, never before it — the exact word the user typed is never eligible to
+be phonotactically vetoed.
+
 Add a cheap, high-precision filter applied *before* the existence check, in
 `searchdict_add_basic`:
 
 ```php
 // v1.2 (NEW)  word is slp1
 public function phonotactic_ok($word) {
-  // a. word-initial ṅ (N) or ṇ (R) does not occur in native vocabulary
-  if (preg_match('/^[NR]/', $word)) return false;
-  // b. retroflex ṇ (R) needs a nati trigger (r/ṛ/ṣ/k...) earlier in the word
-  if (strpos($word,'R')!==false && !preg_match('/[rfzkSK].*R/', $word)) return false;
-  // ...start conservative; extend as exceptions are vetted (Q8)
+  // a. word-initial ṅ (N) or ṇ (R) does not occur in native vocabulary,
+  //    except the letter-name headwords ṅa/ṇa themselves (Q8 whitelist)
+  if (preg_match('/^[NR]/', $word) && !in_array($word, ['Na','Ra'])) return false;
+  // rule (b) DELETED (C1) — it vetoed real lexical ṇ-words (guRa, maRi, ...)
+  // in every input mode. Do NOT reintroduce a nati-trigger veto here; if one
+  // is wanted, gate it to generated variants only, never precise modes, and
+  // never before restrict_to_user_word sees the user's exact string.
   return true;
 }
 ```
 
-Wire it in:
+Wire it in — **never before the exact-word check**:
 
 ```php
 // v1.2: searchdict_add_basic
 public function searchdict_add_basic($k0) {
-  if (!$this->phonotactic_ok($k0)) return;       // NEW
+  if (!$this->phonotactic_ok($k0)) return;       // NEW — rule (a) only
   $k = $this->dalnorm->normalize($k0);
   ...
 }
 ```
 
-Example to watch (`naman`/`maRa`-type fabrications disappear):
+Example to watch (`naman`/`maRa`-type fabrications disappear, `guRa`/`maRi`
+survive):
 <https://www.sanskrit-lexicon.uni-koeln.de/scans/csl-apidev/simple-search/v1.1/getword_list_1.0.php?dict=mw&input=default&output=iast&key=manas>
 
 ---
@@ -402,8 +446,16 @@ options** — they cannot be reliably distinguished from each other or from
 loose ASCII (Q5, Q10). So `wx` and `velthuis` are added to the input
 `<select>` in `list-0.2s_rw.php`, *not* to the detect loop above.
 
-Example (decomposed `ṛ` = `r` + U+0325 now matches precomposed):
-<https://www.sanskrit-lexicon.uni-koeln.de/scans/csl-apidev/simple-search/v1.1/getword_list_1.0.php?dict=mw&input=iast&output=iast&key=kr%CC%A5ta>
+**Revision (Fable 5 adversarial review, 03-07-2026, finding MINOR-3):** the
+original example used `kr̥ta` = `r` + U+0325 (combining ring below) — that is
+the *ISO-15919* under-ring, which has **no NFC-precomposed form** (NFC is a
+no-op on it), so it does not demonstrate E1 at all. IAST `ṛ` is `r` + U+0323
+(combining dot below, NFC-composes to U+1E5B `ṛ`) — a different codepoint.
+Swapped to a genuinely NFC-composable example: decomposed `ā` = `a` + U+0304
+(combining macron), which NFC-composes to precomposed `ā` (U+0101).
+
+Example (decomposed `rāma` = `r` + `a` + U+0304 + `ma`, NFC-composes to `rāma`):
+<https://www.sanskrit-lexicon.uni-koeln.de/scans/csl-apidev/simple-search/v1.1/getword_list_1.0.php?dict=mw&input=iast&output=iast&key=ra%CC%84ma>
 
 ---
 
@@ -427,20 +479,56 @@ $word1 = preg_replace('|f|','ph',$word1);  // dead (f already gone)
 
 by an explicit `folknorm` (lower-cased ASCII in, near-SLP1 out):
 
+**Revision (Fable 5 adversarial review, 03-07-2026, finding M3):** the
+original sketch had three defects, all fixed below:
+
+(i) *Rule order made `ksh` dead.* `sh→S` ran **before** `(ksh|x)→kz`, so any
+"ksh" had already become "kS" by the time the ksh rule looked for it — it
+could never fire, and folk `moksha` reached `mokza` only via a cost-1
+sibilant fuzz instead of the intended cost-0 map. **Fixed by reordering:
+`ksh`/`x` before `sh`.**
+
+(ii) *`ri→f` was a global replace* despite its own "(onset; Q2)" comment:
+`hari→haf`, `giri→gif`, `shri→Sf` — every medial/final "ri" word was damaged
+and had to be recovered through the cost-2 r-cluster row, below cheaper junk.
+**Fixed by anchoring to word-onset: `/^ri/` only.**
+
+(iii) *Collapse-doubles `(.)\1→$1` destroyed true geminates* before
+transcoding: `buddha→budha` (→ `buDa` = budha, "Mercury" — the Buddha becomes
+unreachable, since nothing re-doubles `d`), `sattva→satva`. **Fixed by
+dropping the blanket collapse** — geminate consonants (`dh`, `tv`, `tt`, …)
+are real Sanskrit clusters, not typos, and folk-typing rarely doubles a
+consonant that isn't there in the source. If a narrower geminate-typo case is
+wanted later, whitelist-guard it (skip known-geminate clusters) rather than
+collapsing blindly.
+
+Also note: `user_keyin` (the string the "never drop the user's exact word"
+guard protects) must be captured **before** `folknorm` runs, not after
+`convert_nonascii`. If it is captured post-folknorm, the guard protects the
+folknormed string instead of what the user actually typed — defeating the
+guard's purpose.
+
 ```php
-// v1.2 (NEW)
+// v1.2 (NEW) -- ksh before sh; ri->f onset-anchored; no blanket doubling-collapse
 public function folknorm($w) {
+  // capture $this->user_keyin BEFORE this function runs (not after) --
+  // the "never drop the user's exact word" guard must protect the typed
+  // string, not the folknormed one.
   $w = preg_replace('/chh/','C',$w);                 // छ
   $w = preg_replace('/ch/','c',$w);                  // च
+  $w = preg_replace('/(ksh|x)/','kz',$w);            // क्ष  (Q2: x vs z) -- BEFORE sh
   $w = preg_replace('/sh/','S',$w);                  // श  (vs ष — table fuzzes)
-  $w = preg_replace('/(ksh|x)/','kz',$w);            // क्ष  (Q2: x vs z)
   $w = preg_replace('/(gya|dnya|dny|jna)/','jYa',$w);// ज्ञ  (gya/dnya/jña)
   $w = preg_replace('/aa/','A',$w);
   $w = preg_replace('/ee/','I',$w);
   $w = preg_replace('/oo/','U',$w);
-  $w = preg_replace('/ri/','f',$w);                  // ऋ (onset; Q2)
+  $w = preg_replace('/^ri/','f',$w);                 // ऋ (onset only; M3(ii) -- was
+                                                      // a global replace, damaged
+                                                      // medial/final ri: hari, giri)
   $w = preg_replace('/w/','v',$w);
-  $w = preg_replace('/(.)\1/','$1',$w);              // collapse doubles
+  // M3(iii): blanket doubling-collapse (.)\1 -> $1 DELETED -- it destroyed real
+  // geminates (buddha->budha->buDa "Mercury", sattva->satva). Do not reintroduce
+  // without whitelist-guarding known Sanskrit geminate clusters (dh, tv, tt, ...).
   return $w;
 }
 ```
@@ -449,7 +537,9 @@ Example (`Kr̥ṣṇa` typed as folk `krishna` / `krushna` / `kRShNa`):
 <https://www.sanskrit-lexicon.uni-koeln.de/scans/csl-apidev/simple-search/v1.1/getword_list_1.0.php?dict=mw&input=default&output=iast&key=krishna>
 
 **Expected output:** `krishna`, `krushna`, `kRShNa` and `kRSNa` all reach
-`kfzRa` (कृष्ण) as the top-scored result.
+`kfzRa` (कृष्ण) as the top-scored result. `hari`, `giri`, `buddha`, `sattva`
+must reach their own correct headwords, not `haf`/`gif`/`budha`/`satva` — see
+the C1/M3 tripwire rows added to [eval/gold.tsv](eval/gold.tsv).
 
 ---
 
@@ -491,7 +581,8 @@ without the combinatorial walk. Treat as a separate, later milestone (Q9).
 
 ## 12. Fix I — refresh the ranking frequencies from DCS 2026 (data)
 
-Result ordering is driven by `wf0/wf.txt` — a 50,474-line `slp1_key  count`
+Result ordering is driven by `wf0/wf.txt` — a 50,574-line (50,474 distinct
+keys — wf0 has 100 duplicate-key lines) `slp1_key  count`
 table loaded by `init_word_frequency()` and applied in `order_by_wf()`. Many
 entries are stale or zero (`akac 0`, `akaRwakin 0`). The **VisualDCS** repo now
 carries a fresh Digital Corpus of Sanskrit (2026) lemma-frequency export —
@@ -535,7 +626,8 @@ hard-drop tie-breaks: `score_final = f(edit_cost) · g(log(1 + freq))`.
 
 **Built 2026-06-11** — `simple-search/wf1/wf.txt` + `build_wf_from_dcs.py` (the
 data is shipped; only the one-line wiring in `init_word_frequency()` remains for
-Jim). 12,096 / 50,574 keys refreshed, 1,573 went from 0→positive. Sample
+Jim). 12,096 / 50,574 lines refreshed (12,055 of 50,474 distinct keys), 1,573
+went from 0→positive. Sample
 (wf0 → wf1):
 
 ```

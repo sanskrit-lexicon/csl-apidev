@@ -17,6 +17,13 @@ default-mode phenomenon (restrict_to_user_word collapses precise input).
 A zero-result gold row (empty 'intended') is a "should return nothing" case:
 correct iff the engine returns an empty list.
 
+A gold row with expect="aspirational" (6th tsv column) is DESIGNED to miss
+under v1.1/v1.2 as specified (Stream-A lemmatization targets, or a ranking
+constraint the design intentionally keeps below rank 1, e.g. `rama`). Such
+rows are still scored and printed, but reported in their own bucket and
+excluded from the ALL/default/precise gate -- otherwise the gate is
+unsatisfiable by construction (H122/M1).
+
 Usage:
   python eval_search.py                 # offline: scores eval/fixtures.json
   python eval_search.py --live          # scores the live API (needs network)
@@ -38,11 +45,12 @@ def load_gold(path):
             if not line.strip() or line.lstrip().startswith('#'):
                 continue
             parts = line.split('\t')
-            while len(parts) < 5:
+            while len(parts) < 6:
                 parts.append('')
-            q, inp, dic, intended, note = parts[:5]
+            q, inp, dic, intended, note, expect = parts[:6]
             rows.append({'query': q, 'input': inp, 'dict': dic,
-                         'intended': intended.strip(), 'note': note})
+                         'intended': intended.strip(), 'note': note,
+                         'expect': expect.strip()})
     return rows
 
 def fetch_live(row, timeout=90):
@@ -77,7 +85,7 @@ def main():
         with open(a.fixtures, encoding='utf-8') as f:
             fix = json.load(f)
 
-    buckets = {'all': [], 'default': [], 'precise': []}
+    buckets = {'all': [], 'default': [], 'precise': [], 'aspirational': []}
     print('%-13s %-7s %4s %5s %5s  %s' % ('query', 'input', '#res', 'rank', 'rr', 'note'))
     print('-' * 64)
     for row in gold:
@@ -97,11 +105,15 @@ def main():
             p1 = 1.0 if rank == 1 else 0.0
             rec = 1.0 if (rank and rank <= a.k) else 0.0
         rec_row = {'n': n, 'rr': rr, 'p1': p1, 'rec': rec}
-        buckets['all'].append(rec_row)
-        buckets['precise' if row['input'] in PRECISE else 'default'].append(rec_row)
-        print('%-13s %-7s %4d %5s %5.2f  %s' %
+        if row['expect'] == 'aspirational':
+            buckets['aspirational'].append(rec_row)
+        else:
+            buckets['all'].append(rec_row)
+            buckets['precise' if row['input'] in PRECISE else 'default'].append(rec_row)
+        tag = ' [aspirational]' if row['expect'] == 'aspirational' else ''
+        print('%-13s %-7s %4d %5s %5.2f  %s%s' %
               (row['query'], row['input'], n,
-               (str(rank) if rank else '-'), rr, row['note']))
+               (str(rank) if rank else '-'), rr, row['note'], tag))
 
     def summ(name, rs):
         if not rs:
@@ -116,6 +128,11 @@ def main():
     summ('ALL', buckets['all'])
     summ('default', buckets['default'])
     summ('precise', buckets['precise'])
+    summ('aspirational', buckets['aspirational'])
+    if buckets['aspirational']:
+        print('(aspirational rows are DESIGNED to miss under v1.1/v1.2 as')
+        print(' specified -- excluded from the ALL/default/precise gate above;')
+        print(' see the "expect" column in gold.tsv and eval/readme.md.)')
 
 if __name__ == '__main__':
     main()
