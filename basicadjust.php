@@ -126,8 +126,18 @@ class BasicAdjust {
       "BasicAdjust::ls_callback_mw",$line);
   //dbgprint(true,"after ls_callback_mw: $line\n");
 
-  $line = preg_replace('|<ls>ib[.]|','<ls><ab>ib.</ab>',$line);    
- } 
+  $line = preg_replace('|<ls>ib[.]|','<ls><ab>ib.</ab>',$line);
+ }
+ if (in_array($this->getParms->dict,array('mw'))) {
+  // 03-07-2026 (H139). Vārttikas are numbered per-sūtra, not independently, and
+  // ashtadhyayi.com exposes no separate per-Vārttika anchor -- so an
+  // <ab>Vārtt.</ab> N inherits the ashtadhyayi.com href of the Pāṇini sūtra it is
+  // textually co-cited with on the same source line (the ls_callback_mw pass just
+  // above already turned that sūtra's <ls> into a <gralink href='...sutraani/a/p/s'>).
+  // If no such sūtra link is present on the line, leave the Vārttika unlinked --
+  // do not fabricate.
+  $line = $this->vartt_href_callback_mw($line);
+ }
  if (in_array($this->getParms->dict,array('mw'))) {
   /* 04-16-2024  This change already present in mw.txt
   $line1 = preg_replace('|<lang n="greek">(.*?)</lang>@|',
@@ -2539,7 +2549,77 @@ public function ls_callback_mw_href($code,$n,$data) {
    return $href;
  }
 
- return $href; 
+ return $href;
+}
+/* 03-07-2026 (H139). Vārttikas (Kātyāyana's critical notes on Pāṇini) are
+   numbered per-sūtra, not in an independent sequence, and ashtadhyayi.com has
+   no separate per-Vārttika anchor -- a Vārttika is shown inside the commentary
+   panel of the sūtra page it belongs to. So an <ab>Vārtt.</ab> N in mw.txt
+   should link to the same https://ashtadhyayi.com/sutraani/{a}/{p}/{s} page as
+   whichever Pāṇini sūtra citation it is co-cited with on the same source line.
+   By the time this runs, ls_callback_mw (just above, same dict='mw' block) has
+   already turned any such <ls>Pāṇ. a,p,s</ls> into
+   <gralink href='.../sutraani/a/p/s' n='...'>...</gralink> -- reuse that href
+   rather than recomputing it. If no sūtra link exists on the line (e.g. <ls>ib.</ls>
+   or <ls>Pat. <ab>Introd.</ab></ls> with no attached sūtra number), leave the
+   Vārttika unlinked; do not fabricate a link.
+   Heuristic: nearest preceding sutraani gralink on the line, else nearest
+   following one (handles the rare "Vārtt. N on Pāṇ. ..." word order). Confirmed
+   against the full mw.txt corpus (H139 investigation): 897/921 <ab>Vārtt.</ab> N
+   occurrences resolve this way; the remaining 24 are genuinely unresolvable and
+   are left unlinked by design. */
+public function vartt_href_callback_mw($line) {
+ $dbg = false;
+ if (strpos($line,'Vārtt') === false) {return $line;}
+ $npat = "|<gralink href='(https://ashtadhyayi\\.com/sutraani/[0-9]+/[0-9]+/[0-9]+)' n='(.*?)'>.*?</gralink>|";
+ if (! preg_match_all($npat,$line,$gmatches,PREG_OFFSET_CAPTURE)) {
+  dbgprint($dbg,"vartt_href_callback_mw: no sutraani gralink on line, skipping\n");
+  return $line; // no sutra link on this line to inherit
+ }
+ $spans = array();
+ foreach ($gmatches[0] as $i => $m) {
+  $start = $m[1];
+  $end = $start + strlen($m[0]);
+  $href = $gmatches[1][$i][0];
+  $tooltip = $gmatches[2][$i][0];
+  $spans[] = array($start,$end,$href,$tooltip);
+ }
+ if (! preg_match_all('|<ab>Vārtt\\.</ab> ([0-9]+)|',$line,$vmatches,PREG_OFFSET_CAPTURE)) {
+  return $line;
+ }
+ $replacements = array();
+ foreach ($vmatches[0] as $i => $vm) {
+  $vstart = $vm[1];
+  $vend = $vstart + strlen($vm[0]);
+  $n = $vmatches[1][$i][0];
+  $best = null;
+  foreach ($spans as $s) {
+   if ($s[1] <= $vstart) { // preceding: prefer the nearest one
+    if ($best === null || $s[1] > $best[1]) {$best = $s;}
+   }
+  }
+  if ($best === null) {
+   foreach ($spans as $s) {
+    if ($s[0] >= $vend) { // no preceding sūtra link: fall back to nearest following
+     if ($best === null || $s[0] < $best[0]) {$best = $s;}
+    }
+   }
+  }
+  if ($best !== null) {
+   $href = $best[2];
+   $tooltip = $best[3];
+   $repl = "<gralink href='$href' n='$tooltip'><ab>Vārtt.</ab> $n</gralink>";
+   dbgprint($dbg,"vartt_href_callback_mw: n=$n -> href=$href\n");
+   $replacements[] = array($vstart,$vend,$repl);
+  }
+ }
+ // apply right-to-left so earlier offsets stay valid
+ usort($replacements, function($a,$b) {return $b[0] - $a[0];});
+ foreach ($replacements as $r) {
+  list($start,$end,$repl) = $r;
+  $line = substr_replace($line,$repl,$start,$end - $start);
+ }
+ return $line;
 }
 public function ls_callback_sch_href($code,$n,$data) {
  $href = null; // default if no success
