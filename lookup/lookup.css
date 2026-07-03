@@ -1,0 +1,161 @@
+/* lookup.css -- styles for lookup/index.php (doc/roadmap_lookup.md Wave 1).
+   Vanilla CSS, no framework, no build step. Layered on top of
+   ../css/basic.css (which the fetched dictionary-entry HTML relies on for
+   #CologneBasic, .sdata, table.display, etc.) -- this file only styles the
+   lookup page's own chrome. */
+
+* { box-sizing: border-box; }
+
+body {
+ color: #1a1a1a;
+ background-color: #f5f7fa;
+ font-family: Verdana, Arial, Helvetica, sans-serif;
+ margin: 0;
+ padding: 0 12px 32px;
+}
+
+.lk-header {
+ display: flex;
+ align-items: center;
+ gap: 12px;
+ padding: 16px 0;
+}
+.lk-header h1 {
+ font-size: 1.3rem;
+ margin: 0;
+}
+.lk-logo img {
+ display: block;
+}
+
+.lk-form {
+ display: flex;
+ flex-wrap: wrap;
+ align-items: flex-end;
+ gap: 12px;
+ background: #fff;
+ border: 1px solid #d5dbe3;
+ border-radius: 6px;
+ padding: 12px;
+}
+.lk-field {
+ display: flex;
+ flex-direction: column;
+ gap: 4px;
+}
+.lk-field label {
+ font-size: 0.8rem;
+ color: #444;
+}
+.lk-field-key {
+ flex: 1 1 220px;
+ min-width: 180px;
+}
+.lk-field input,
+.lk-field select {
+ font-size: 1rem;
+ padding: 6px 8px;
+ border: 1px solid #aab4c0;
+ border-radius: 4px;
+}
+.lk-field-scheme[hidden] { display: none; }
+.lk-badge {
+ font-size: 0.8rem;
+ color: #2a6b4d;
+ background: #e4f3ea;
+ border-radius: 4px;
+ padding: 4px 8px;
+ align-self: center;
+}
+#lk-submit {
+ font-size: 1rem;
+ padding: 8px 18px;
+ border: 1px solid #2a5a8c;
+ background: #2a6bbf;
+ color: #fff;
+ border-radius: 4px;
+ cursor: pointer;
+}
+#lk-submit:hover,
+#lk-submit:focus-visible {
+ background: #204f92;
+}
+
+.lk-preview {
+ color: #555;
+ font-size: 0.9rem;
+ min-height: 1.2em;
+ margin: 10px 2px 0;
+}
+
+.lk-status {
+ font-size: 0.95rem;
+ margin: 6px 2px;
+ min-height: 1.2em;
+}
+.lk-status-loading { color: #55606e; }
+.lk-status-retry { color: #9a6a00; }
+.lk-status-error { color: #a3242a; }
+.lk-status-notfound { color: #55606e; font-style: italic; }
+
+.lk-dictlist {
+ display: flex;
+ flex-wrap: wrap;
+ gap: 8px;
+ margin: 10px 0;
+}
+.lk-dictbtn {
+ font-size: 0.95rem;
+ padding: 6px 12px;
+ border: 1px solid #aab4c0;
+ border-radius: 999px;
+ background: #fff;
+ cursor: pointer;
+}
+.lk-dictbtn[aria-pressed="true"] {
+ background: #2a6bbf;
+ border-color: #2a5a8c;
+ color: #fff;
+}
+
+.lk-tabs {
+ display: flex;
+ flex-wrap: wrap;
+ gap: 4px;
+ border-bottom: 2px solid #d5dbe3;
+ margin-top: 6px;
+}
+.lk-tabs[hidden] { display: none; }
+.lk-tab {
+ font-size: 0.9rem;
+ padding: 6px 12px;
+ border: 1px solid #d5dbe3;
+ border-bottom: none;
+ border-radius: 4px 4px 0 0;
+ background: #eef1f5;
+ cursor: pointer;
+}
+.lk-tab[aria-selected="true"] {
+ background: #fff;
+ font-weight: bold;
+}
+.lk-tab:focus-visible,
+#lk-submit:focus-visible,
+.lk-dictbtn:focus-visible {
+ outline: 3px solid #1a5fb4;
+ outline-offset: 1px;
+}
+
+.lk-panels {
+ background: #fff;
+ border: 1px solid #d5dbe3;
+ border-top: none;
+ padding: 4px 8px;
+}
+.lk-panel[hidden] { display: none; }
+
+@media (max-width: 480px) {
+ .lk-form { flex-direction: column; align-items: stretch; }
+ .lk-field-key { min-width: 0; }
+ #lk-submit { width: 100%; }
+}
