@@ -25,9 +25,53 @@
  var ASCII_SCHEMES = ['hk', 'slp1', 'itrans'];
  var SPACING_MS = 250;
  var MAX_RETRIES = 4;
+ var PREFERRED_KEY = 'lookupPreferredDicts';
+ var LANG_LABELS = { en: 'English', de: 'German', fr: 'French', la: 'Latin', other: 'Other' };
 
  var els = {};
- var state = { dicts: [], tabs: [] };
+ var state = { dicts: [], tabs: [], preferred: loadPreferred(), langFilter: {}, eraFilter: {} };
+
+ // ---- dictionary metadata (doc/roadmap_lookup.md Wave 2 item 1) --------
+
+ // window.LOOKUP_DICTMETA: [dict, title, year, yearOlder][] from dictmeta.js
+ var DICTMETA_BY_CODE = {};
+ (window.LOOKUP_DICTMETA || []).forEach(function (row) {
+  var dict = row[0].toLowerCase();
+  var title = row[1];
+  DICTMETA_BY_CODE[dict] = { title: title, year: row[2], yearOlder: row[3], lang: classifyLang(title) };
+ });
+
+ // Mechanical, auditable classification from the title string only -- see
+ // the comment in dictmeta.js for why this isn't a hand-curated per-dict
+ // scholarly claim. Titles matching none of these fall into 'other'.
+ function classifyLang(title) {
+  if (/english/i.test(title)) { return 'en'; }
+  if (/fran[çc]ais|french/i.test(title)) { return 'fr'; }
+  if (/wörterbuch|woerterbuch/i.test(title)) { return 'de'; }
+  if (/glossarium/i.test(title)) { return 'la'; }
+  return 'other';
+ }
+
+ function metaFor(dict) {
+  return DICTMETA_BY_CODE[dict] || { title: dict.toUpperCase(), year: '', yearOlder: null, lang: 'other' };
+ }
+
+ function loadPreferred() {
+  try { return JSON.parse(window.localStorage.getItem(PREFERRED_KEY)) || []; }
+  catch (e) { return []; }
+ }
+
+ function savePreferred() {
+  try { window.localStorage.setItem(PREFERRED_KEY, JSON.stringify(state.preferred)); }
+  catch (e) { /* localStorage unavailable (private mode, quota) -- non-fatal */ }
+ }
+
+ function togglePreferred(dict) {
+  var i = state.preferred.indexOf(dict);
+  if (i === -1) { state.preferred.push(dict); } else { state.preferred.splice(i, 1); }
+  savePreferred();
+  renderDictCards(state.dicts, state.output);
+ }
 
  function qs(sel) { return document.querySelector(sel); }
 
@@ -184,20 +228,146 @@
 
  // ---- rendering ----------------------------------------------------------
 
- function renderDictButtons(dicts, output) {
-  els.dictlist.innerHTML = '';
-  dicts.forEach(function (dictRec, i) {
-   var btn = document.createElement('button');
-   btn.type = 'button';
-   btn.className = 'lk-dictbtn';
-   btn.textContent = dictRec.dict.toUpperCase() + ' (' + dictRec.dockeys.length + ')';
-   btn.setAttribute('aria-pressed', i === 0 ? 'true' : 'false');
-   btn.addEventListener('click', function () {
-    Array.prototype.forEach.call(els.dictlist.children, function (b) { b.setAttribute('aria-pressed', 'false'); });
-    btn.setAttribute('aria-pressed', 'true');
-    loadDictEntries(dictRec, output);
+ function uniqSorted(arr) {
+  var seen = {}, out = [];
+  arr.forEach(function (v) { if (v && !seen[v]) { seen[v] = true; out.push(v); } });
+  return out.sort();
+ }
+
+ function renderFilterBar(items) {
+  var langs = uniqSorted(items.map(function (i) { return i.lang; }));
+  var eras = uniqSorted(items.map(function (i) { return i.year; }));
+  els.filterbar.innerHTML = '';
+  els.filterbar.hidden = langs.length < 2 && eras.length < 2;
+
+  function chipGroup(label, values, activeSet, labelFor) {
+   var wrap = document.createElement('div');
+   wrap.className = 'lk-filtergroup';
+   var span = document.createElement('span');
+   span.className = 'lk-filtergroup-label';
+   span.textContent = label;
+   wrap.appendChild(span);
+   values.forEach(function (v) {
+    var chip = document.createElement('button');
+    chip.type = 'button';
+    chip.className = 'lk-filterchip';
+    chip.textContent = labelFor ? labelFor(v) : v;
+    chip.setAttribute('aria-pressed', activeSet[v] ? 'true' : 'false');
+    chip.addEventListener('click', function () {
+     if (activeSet[v]) { delete activeSet[v]; } else { activeSet[v] = true; }
+     renderDictCards(state.dicts, state.output);
+    });
+    wrap.appendChild(chip);
    });
-   els.dictlist.appendChild(btn);
+   return wrap;
+  }
+
+  if (langs.length > 1) {
+   els.filterbar.appendChild(chipGroup('language', langs, state.langFilter, function (v) { return LANG_LABELS[v] || v; }));
+  }
+  if (eras.length > 1) {
+   els.filterbar.appendChild(chipGroup('edition year', eras, state.eraFilter));
+  }
+ }
+
+ function renderDictCards(dicts, output) {
+  state.output = output;
+  var items = dicts.map(function (dictRec) {
+   var meta = metaFor(dictRec.dict);
+   return {
+    dictRec: dictRec, dict: dictRec.dict,
+    title: meta.title, year: meta.year, yearOlder: meta.yearOlder, lang: meta.lang
+   };
+  });
+
+  renderFilterBar(items);
+
+  var langActive = Object.keys(state.langFilter).length > 0;
+  var eraActive = Object.keys(state.eraFilter).length > 0;
+  var filtered = items.filter(function (i) {
+   return (!langActive || state.langFilter[i.lang]) && (!eraActive || state.eraFilter[i.year]);
+  });
+
+  // Preferred dicts (per doc/roadmap_lookup.md Wave 2 item 1) sort first,
+  // in the user's stored order; everything else keeps dalglob.php's order.
+  filtered.sort(function (a, b) {
+   var pa = state.preferred.indexOf(a.dict), pb = state.preferred.indexOf(b.dict);
+   if (pa === -1 && pb === -1) { return 0; }
+   if (pa === -1) { return 1; }
+   if (pb === -1) { return -1; }
+   return pa - pb;
+  });
+
+  els.dictlist.innerHTML = '';
+  if (!filtered.length) {
+   var empty = document.createElement('p');
+   empty.className = 'lk-dictlist-empty';
+   empty.textContent = 'No dictionaries match the current filters.';
+   els.dictlist.appendChild(empty);
+   return;
+  }
+
+  filtered.forEach(function (item, i) {
+   var card = document.createElement('div');
+   card.className = 'lk-dictcard';
+   card.setAttribute('role', 'button');
+   card.tabIndex = 0;
+   card.setAttribute('aria-pressed', i === 0 ? 'true' : 'false');
+
+   var pin = document.createElement('button');
+   pin.type = 'button';
+   pin.className = 'lk-pin';
+   var isPreferred = state.preferred.indexOf(item.dict) !== -1;
+   pin.setAttribute('aria-pressed', isPreferred ? 'true' : 'false');
+   pin.title = isPreferred ? 'Remove from preferred dictionaries' : 'Mark as preferred dictionary';
+   pin.textContent = isPreferred ? '★' : '☆'; // filled/empty star
+   pin.addEventListener('click', function (evt) {
+    evt.stopPropagation();
+    togglePreferred(item.dict);
+   });
+   card.appendChild(pin);
+
+   var head = document.createElement('div');
+   head.className = 'lk-dictcard-head';
+   var code = document.createElement('span');
+   code.className = 'lk-dictcard-code';
+   code.textContent = item.dict.toUpperCase() + ' (' + item.dictRec.dockeys.length + ')';
+   head.appendChild(code);
+   if (item.lang !== 'other') {
+    var langBadge = document.createElement('span');
+    langBadge.className = 'lk-dictcard-lang';
+    langBadge.textContent = LANG_LABELS[item.lang];
+    head.appendChild(langBadge);
+   }
+   card.appendChild(head);
+
+   var title = document.createElement('div');
+   title.className = 'lk-dictcard-title';
+   title.textContent = item.title;
+   card.appendChild(title);
+
+   if (item.year) {
+    var year = document.createElement('div');
+    year.className = 'lk-dictcard-year';
+    year.textContent = item.yearOlder && item.yearOlder !== item.year
+     ? item.year + ' (earlier ed. ' + item.yearOlder + ')'
+     : item.year;
+    card.appendChild(year);
+   }
+
+   function select() {
+    Array.prototype.forEach.call(els.dictlist.children, function (c) {
+     if (c.setAttribute) { c.setAttribute('aria-pressed', 'false'); }
+    });
+    card.setAttribute('aria-pressed', 'true');
+    loadDictEntries(item.dictRec, output);
+   }
+   card.addEventListener('click', select);
+   card.addEventListener('keydown', function (evt) {
+    if (evt.key === 'Enter' || evt.key === ' ') { evt.preventDefault(); select(); }
+   });
+
+   els.dictlist.appendChild(card);
   });
  }
 
@@ -282,15 +452,36 @@
   }).catch(function () { /* suggestions are best-effort */ });
  }, 250);
 
+ // ---- permalinks (doc/roadmap_lookup.md Wave 2 item 2; doc/cleanurl.md
+ // reserves the path-segment /{DICT}/{ref} family for per-dictionary
+ // entries -- lookup/ searches across all dictionaries at once, so it
+ // stays in the query-string family already used for the Wave 1 GET
+ // prefill, extended with pushState instead of a full reload, mirroring
+ // simple-search's listDisplay() (simple-search/v1.1/list-0.2s_rw.php). ---
+
+ function updatePermalink(key, input, output) {
+  var params = new URLSearchParams();
+  params.set('key', key);
+  if (input) { params.set('input', input); }
+  if (output) { params.set('output', output); }
+  var url = window.location.pathname + '?' + params.toString();
+  if (url !== window.location.pathname + window.location.search) {
+   window.history.pushState({ key: key, input: input, output: output }, '', url);
+  }
+  els.copylink.hidden = false;
+ }
+
  // ---- top-level search --------------------------------------------------
 
- function runSearch() {
+ function runSearch(pushUrl) {
   var key = els.key.value.trim();
   clearResults();
   setStatus('', null);
   if (!key) { return; }
   var scheme = resolveScheme();
   var output = els.output.value;
+
+  if (pushUrl !== false) { updatePermalink(key, scheme, output); }
 
   setStatus('Searching...', 'loading');
   fetchDalglob(key, scheme, output).then(function (data) {
@@ -300,11 +491,48 @@
    }
    setStatus('', null);
    state.dicts = data.dicts;
-   renderDictButtons(data.dicts, output);
+   renderDictCards(data.dicts, output);
    loadDictEntries(data.dicts[0], output);
   }).catch(function (err) {
    setStatus('Network error: ' + err.message, 'error');
   });
+ }
+
+ function restoreFromLocation() {
+  var params = new URLSearchParams(window.location.search);
+  var key = params.get('key') || '';
+  var input = params.get('input');
+  var output = params.get('output');
+  els.key.value = key;
+  if (ASCII_SCHEMES.indexOf(input) !== -1) { els.scheme.value = input; }
+  if (output) { els.output.value = output; }
+  updatePreview();
+  if (key) { runSearch(false); } else { clearResults(); setStatus('', null); els.copylink.hidden = true; }
+ }
+
+ // ---- copy-link -----------------------------------------------------
+
+ function copyLink() {
+  var url = window.location.href;
+  var done = function () { setStatus('Link copied to clipboard.', 'copied'); };
+  var fail = function () {
+   // Fallback for browsers without the async Clipboard API (still zero
+   // external dependencies -- a hidden textarea + the legacy command).
+   var ta = document.createElement('textarea');
+   ta.value = url;
+   ta.style.position = 'fixed';
+   ta.style.opacity = '0';
+   document.body.appendChild(ta);
+   ta.select();
+   try { document.execCommand('copy'); done(); }
+   catch (e) { setStatus('Could not copy automatically -- copy from the address bar.', 'error'); }
+   document.body.removeChild(ta);
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+   navigator.clipboard.writeText(url).then(done, fail);
+  } else {
+   fail();
+  }
  }
 
  // ---- init ----------------------------------------------------------
@@ -317,8 +545,10 @@
   els.scheme = qs('#lk-scheme');
   els.schemeAuto = qs('#lk-scheme-auto');
   els.output = qs('#lk-output');
+  els.copylink = qs('#lk-copylink');
   els.preview = qs('#lk-preview');
   els.status = qs('#lk-status');
+  els.filterbar = qs('#lk-filterbar');
   els.dictlist = qs('#lk-dictlist');
   els.tabs = qs('#lk-tabs');
   els.panels = qs('#lk-panels');
@@ -333,12 +563,14 @@
   });
   els.scheme.addEventListener('change', updatePreview);
   els.output.addEventListener('change', updatePreview);
+  els.copylink.addEventListener('click', copyLink);
+  window.addEventListener('popstate', restoreFromLocation);
 
   var prefill = window.LOOKUP_PREFILL || {};
   if (ASCII_SCHEMES.indexOf(prefill.input) !== -1) { els.scheme.value = prefill.input; }
   if (prefill.output) { els.output.value = prefill.output; }
   updatePreview();
-  if (prefill.key) { runSearch(); }
+  if (prefill.key) { runSearch(false); }
  }
 
  if (document.readyState === 'loading') {

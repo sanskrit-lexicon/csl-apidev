@@ -54,11 +54,13 @@ error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
  </div>
 
  <button type="submit" id="lk-submit">Search</button>
+ <button type="button" id="lk-copylink" class="lk-copylink" hidden>Copy link</button>
 </form>
 
 <p id="lk-preview" class="lk-preview"></p>
 <p id="lk-status" class="lk-status" role="status" aria-live="polite"></p>
 
+<div id="lk-filterbar" class="lk-filterbar" role="group" aria-label="Filter dictionaries" hidden></div>
 <div id="lk-dictlist" class="lk-dictlist" role="group" aria-label="Dictionaries containing this citation"></div>
 
 <div id="lk-tabs" class="lk-tabs" role="tablist" aria-label="Homonyms" hidden></div>
@@ -78,6 +80,7 @@ window.LOOKUP_PREFILL = {
   <?php echo json_encode(htmlspecialchars(isset($_GET['output']) && is_string($_GET['output']) ? $_GET['output'] : '')) ?>
 };
 </script>
+<script src="dictmeta.js" defer></script>
 <script src="lookup.js" defer></script>
 </body>
 </html>

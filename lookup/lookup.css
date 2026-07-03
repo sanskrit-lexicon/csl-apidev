@@ -81,6 +81,21 @@ body {
  background: #204f92;
 }
 
+.lk-copylink {
+ font-size: 0.9rem;
+ padding: 8px 14px;
+ border: 1px solid #aab4c0;
+ background: #fff;
+ color: #1a1a1a;
+ border-radius: 4px;
+ cursor: pointer;
+}
+.lk-copylink[hidden] { display: none; }
+.lk-copylink:hover,
+.lk-copylink:focus-visible {
+ background: #eef1f5;
+}
+
 .lk-preview {
  color: #555;
  font-size: 0.9rem;
@@ -97,25 +112,109 @@ body {
 .lk-status-retry { color: #9a6a00; }
 .lk-status-error { color: #a3242a; }
 .lk-status-notfound { color: #55606e; font-style: italic; }
+.lk-status-copied { color: #2a6b4d; }
 
-.lk-dictlist {
+.lk-filterbar {
  display: flex;
  flex-wrap: wrap;
- gap: 8px;
- margin: 10px 0;
+ gap: 14px;
+ margin: 4px 0 10px;
 }
-.lk-dictbtn {
- font-size: 0.95rem;
- padding: 6px 12px;
+.lk-filterbar[hidden] { display: none; }
+.lk-filtergroup {
+ display: flex;
+ flex-wrap: wrap;
+ align-items: center;
+ gap: 6px;
+}
+.lk-filtergroup-label {
+ font-size: 0.78rem;
+ color: #666;
+ text-transform: uppercase;
+ letter-spacing: 0.03em;
+}
+.lk-filterchip {
+ font-size: 0.85rem;
+ padding: 3px 10px;
  border: 1px solid #aab4c0;
  border-radius: 999px;
  background: #fff;
  cursor: pointer;
 }
-.lk-dictbtn[aria-pressed="true"] {
- background: #2a6bbf;
+.lk-filterchip[aria-pressed="true"] {
+ background: #dce7f7;
  border-color: #2a5a8c;
- color: #fff;
+ color: #1a3a5c;
+}
+
+.lk-dictlist {
+ display: flex;
+ flex-wrap: wrap;
+ gap: 10px;
+ margin: 10px 0;
+}
+.lk-dictlist-empty {
+ color: #666;
+ font-style: italic;
+}
+.lk-dictcard {
+ position: relative;
+ min-width: 200px;
+ max-width: 260px;
+ padding: 8px 10px 8px 30px;
+ border: 1px solid #aab4c0;
+ border-radius: 6px;
+ background: #fff;
+ cursor: pointer;
+}
+.lk-dictcard[aria-pressed="true"] {
+ background: #eaf1fc;
+ border-color: #2a5a8c;
+ box-shadow: 0 0 0 1px #2a5a8c inset;
+}
+.lk-dictcard:focus-visible {
+ outline: 3px solid #1a5fb4;
+ outline-offset: 1px;
+}
+.lk-pin {
+ position: absolute;
+ top: 6px;
+ left: 4px;
+ font-size: 1rem;
+ line-height: 1;
+ padding: 2px;
+ border: none;
+ background: transparent;
+ color: #c9a400;
+ cursor: pointer;
+}
+.lk-pin[aria-pressed="false"] { color: #b3b9c2; }
+.lk-dictcard-head {
+ display: flex;
+ align-items: baseline;
+ gap: 6px;
+ flex-wrap: wrap;
+}
+.lk-dictcard-code {
+ font-weight: bold;
+ font-size: 0.95rem;
+}
+.lk-dictcard-lang {
+ font-size: 0.72rem;
+ color: #444;
+ background: #eef1f5;
+ border-radius: 3px;
+ padding: 1px 5px;
+}
+.lk-dictcard-title {
+ font-size: 0.85rem;
+ color: #333;
+ margin-top: 2px;
+}
+.lk-dictcard-year {
+ font-size: 0.75rem;
+ color: #777;
+ margin-top: 4px;
 }
 
 .lk-tabs {
@@ -158,4 +257,5 @@ body {
  .lk-form { flex-direction: column; align-items: stretch; }
  .lk-field-key { min-width: 0; }
  #lk-submit { width: 100%; }
+ .lk-copylink { width: 100%; }
 }
