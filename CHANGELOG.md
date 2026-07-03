@@ -4,6 +4,8 @@ All notable changes to **simple-search** (and related `csl-apidev` work) are
 recorded here. Format loosely follows [Keep a Changelog](https://keepachangelog.com).
 Dates are UTC+3 (project local).
 
+## [Unreleased]
+
 ## [0.1.0] - 2026-07-03
 
 ### Salt API — Phase 1 (PR [#46](https://github.com/sanskrit-lexicon/csl-apidev/pull/46), `api1/`, MW pilot)
