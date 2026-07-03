@@ -230,4 +230,111 @@ VisualDCS evidence assets exist at the exact claimed sizes.
   `vfti`/`vftti` multi-headword example) — the database lives only server-side.
 - **PHP-side `Parm`/transcoder echo details** — same host dependency.
 
+---
+
+## Addendum — differential-execution pass (03-07-2026, second Fable 5 session)
+
+A second, independent Fable 5 (`claude-fable-5`) session executed the same
+[H118](https://github.com/gasyoun/Uprava/blob/main/handoffs/archive/H118_fable5_simple_search_review.md)
+brief concurrently, unaware of [PR #64](https://github.com/sanskrit-lexicon/csl-apidev/pull/64)
+until delivery. Its method differed in one decisive way: the frozen v1.1 PHP was
+**executed**, not statically diffed — a local XAMPP PHP 8.2.12 CLI drove a
+byte-identical copy of
+[v1.1/dalnorm.php](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/simple-search/v1.1/dalnorm.php)
+and the real
+[utilities/transcoder.php](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/utilities/transcoder.php)
+head-to-head against the ports in
+[wf1/build_wf_from_dcs.py](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/simple-search/wf1/build_wf_from_dcs.py).
+Everything below is additive: **all four verdicts above are CONFIRMED**; one number
+is corrected (A6).
+
+### The #1 self-flagged risk is now closed by execution
+
+| Oracle | Corpus | Result |
+|---|---|---|
+| PHP `Dalnorm::normalize()` (executed) vs `dalnorm_normalize()` | all 50,574 wf0 keys | **0 diffs** |
+| same | all 14,989 distinct SLP1 transcodes of the DCS lemmas | **0 diffs** |
+| same | 157 adversarial strings (per-rule + cross-rule combos) | **2 diffs, both non-ASCII** (`rśśa`, `arśśa`): PCRE without `/u` matches *bytes*, so `([r])(.)\2` cannot see a doubled two-byte char that Python's char-level `.` dedupes. Unreachable in both real pipelines — the build strips to `[a-zA-Z]` and the engine's `clean_slp1` to `[a-zA-Z\|~]` before `normalize()`; `\|`/`~` are single-byte and probed identical. |
+| PHP `transcoder_processString('roman','slp1')` (executed) vs the port | all 15,902 raw lemmas | **0 diffs** |
+| same | adversarial IAST (multi-codepoint ṭh/ḍh/ḻh, aï/aü, m̐, ṁ/ṃ, avagraha, Vedic accent combiners, case probes) | **0 diffs** |
+| same | all 15,902 lemmas NFD-decomposed | with NFC disabled the port replicates PHP *exactly* (0 diffs — both mangle); the port's actual NFC pre-pass recovers **all 11,068** lemmas PHP mangles under NFD. `lemmas.csv` is 100% NFC, so live behavior is identical — NFC is strictly protective, as claimed. |
+
+The "ports were never executed against real PHP" risk (the brief's #1) is closed:
+on every input either pipeline can actually receive, the ports and the PHP are
+behaviorally identical.
+
+### New findings (additive; none change the verdicts)
+
+**A1 (MINOR) — 458 wf0 keys are dead at runtime; wf1 inherits them and forfeits
+396 DCS tokens.** Executing `normalize()` over wf0 shows 458/50,574 keys are not
+fixpoints (mostly pre-Oct-2017 `cC` spellings: `aCa`, `praC`, `iCA` …). The
+engine's result `key` is always a `normalize()` image
+([generate_normkeys](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/simple-search/v1.1/simple_search.php#L205-L220)),
+so `order_by_wf` can never hit those 458 raw spellings — those words already rank
+`wf=-1` on the live site, and the wf1 merge cannot refresh them: **89 of the 2,956
+"DCS-only" normkeys (396 tokens) are exactly the normalize-images of raw wf0 keys**
+(`pracC`←`praC` 91, `icCA`←`iCA` 28, `ucCvAsa`←`uCvAsa` 18, `kfcCra`←`kfCra` 17,
+`acCa`←`aCa` 16, `yadfcCA` 15, `pucCa` 14, `pracCad` 11 …). *Fix:* match DCS
+normkeys against `normalize(wf0key)` in
+[build_wf_from_dcs.py](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/simple-search/wf1/build_wf_from_dcs.py)
+(or migrate the 458 rows to normkey spelling under the M1 dedup) — folded into
+[H122](https://github.com/gasyoun/Uprava/blob/main/handoffs/H122_simple_search_review_fixups.md)
+step 5. Verdict (a) unchanged: wf1 is no *worse* than wf0 here.
+
+**A2 (MINOR) — `in_cdsl` ≠ "CDSL headword"; wf0 is a frequency list, not the
+head-key universe.**
+[dcs_xref/readme.md:14](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/simple-search/dcs_xref/readme.md#L14)
+("known CDSL head-key"), [:19](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/simple-search/dcs_xref/readme.md#L19)
+("outside the headword set") and [:28](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/simple-search/dcs_xref/readme.md#L28)
+("forms the dictionaries don't index as headwords") overstate the flag: ≥89 of the
+2,956 `in_cdsl=0` rows are provably CDSL headwords under their runtime key (A1's
+list — MW root `praC` first among them), and the engine's own `wf=-1` branch exists
+precisely because hwnorm1c keys routinely miss wf0. *Fix:* re-document the column as
+`in_wf0` semantics and state the ≥89-row lower bound on misclassification.
+
+**A3 (MINOR, contingent on one live probe) — f-doubling leak.** 28 DCS-only
+normkeys / 205 tokens collapse onto wf0 keys under the *discarded* `[rf]` doubling
+rule (`vftti`→`vfti` 65, `vfttAnta`→`vftAnta` 35, `vftta`→`vfta` 30, `pravftti` 25 …).
+The getword code comment (`norm = vfti … key1=vfti, vftti`) suggests the server
+sqlite groups these under the collapsed key, i.e. the engine looks up
+`wfreqs['vfti']` — in which case vṛtti's 65 tokens should refresh `vfti` and
+currently don't. One request decides:
+`getword_list_1.0.php?dict=mw&input=slp1&output=slp1&key=vftti` — if the result
+`key` is `vfti`, add the f-rule to the wf0-side matching in A1's fix. → H122 step 8.
+
+**A4 (NIT) — strip-policy edge.** The port keeps `[a-zA-Z]` only; the engine's
+[clean_slp1](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/simple-search/v1.1/simple_search.php#L530-L533)
+keeps `|` and `~` too (SLP1 retroflex ḷh, candrabindu). Latent only: 0 of 15,902
+lemmas transcode to either character today (executed check).
+
+**A5 (verified non-issue) — the `preverbs` column.** 1,825 lemma rows (9,162 tokens)
+carry preverbs, but the DCS `lemma` field already contains the full preverbed form
+(`āgam`, `prāp`, `praviś` …), so aggregating by `lemma` alone is correct. Recorded
+so a future pass doesn't "fix" it.
+
+**A6 (correction to M1 above).** The live precise bucket has **9** rows (7 precise
++ the 2 Stream-A rows, whose modes are `iast`/`slp1`), so the poisoned ceiling is
+**7/9 ≈ 0.78**, not 5/7 ≈ 0.71. Direction and fix unchanged.
+
+### Adversarial re-check of this report's own findings
+
+Independently re-derived from the sources: **C1 CONFIRMED** (`guRa`, `maRi`, `aRu`,
+`PaRa` all fail `[rfzkSK].*R`; the veto sits in `searchdict_add_basic`, which serves
+every input mode, before the existence check). **M1 CONFIRMED** (41/43 = 0.953;
+`eval_search.py` has no exclusion mechanism; the gate is stated in all three cited
+docs) with A6's bucket correction. **M2 CONFIRMED** (`put_user_word_first` runs
+unconditionally after `order_by_wf`,
+[getword_list_1.0_main.php:163-164](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/simple-search/v1.1/getword_list_1.0_main.php#L163-L164);
+all three docs promise the impossible rank). **M3(i)(ii)(iii) CONFIRMED** (`sh→S`
+precedes the `ksh` rule; `/ri/` unanchored; `(.)\1` collapse → `buddha`→`budha`;
+`user_keyin` is captured post-`convert_nonascii`). MINORs 1/2/3/5/6/7 CONFIRMED
+against their cited lines; MINOR-4 (Vidyut MIT) not network-verifiable this session,
+consistent with prior knowledge. The offline eval baseline re-ran to the exact
+published five numbers, and the 43-row gold set was re-judged headword-by-headword —
+no intended form is wrong. **Verdicts (a) (b) (c): CONCUR.**
+
+_Second pass: Fable 5 (`claude-fable-5`), 03-07-2026, XAMPP PHP 8.2.12 CLI +
+Python 3 harness; corpora and diffs reproducible from the repo +
+VisualDCS `lemmas.csv`. Both H118 passes were Fable 5 (`claude-fable-5`)._
+
 _Dr. Mārcis Gasūns_
