@@ -33,6 +33,10 @@ Design tone:
 
 Proposal A, Research Workbench, is the recommended direction.
 
+**Ruled 03-07-2026 (MG): Proposal A confirmed.** The implementable spec is
+[ui-spec-app-v1.md](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/doc/ux-redesign/ui-spec-app-v1.md)
+(new `app/` directory, slice 1 = search + results + reader).
+
 It gives students one obvious search box while keeping exact, prefix, and suffix search visible as first-class modes. It also preserves scan links without making scanned pages central.
 
 ## Proposal set
