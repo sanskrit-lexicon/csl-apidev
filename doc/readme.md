@@ -46,6 +46,8 @@ normative contract, a CSL↔C-SALT field mapping, and a loss report live in `csl
 
 [transcoder](transcoder.md) provides details of the transcoding from one to another computer representation of Sanskrit.
 
+[do_not_file_suppression_verdict](do_not_file_suppression_verdict.md) records why the SanskritSpellCheck do-not-file suppression corpus is not wired into the production API (exact/prefix match only) and the pre-ship gate for the experimental `simple-search` v1.2 folding engine.
+
 The current convention of restful interface APIs is to return data in JSON format.
 This is the case with *getsuggest*, but the other formats are returned as strings of HTML.  
 
