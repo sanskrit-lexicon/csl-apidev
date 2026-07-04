@@ -6,6 +6,35 @@ Dates are UTC+3 (project local).
 
 ## [Unreleased]
 
+### app/ — unified Cologne search UI, slice 1 (H147, spec [ui-spec-app-v1.md](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/doc/ux-redesign/ui-spec-app-v1.md))
+
+#### Added
+- **`app/` slice 1 — Proposal A "Research Workbench"** (MG rulings R1–R7 of
+  03-07-2026): one search surface over all dictionaries at once. `app/index.php`
+  (GET-prefill via the lookup/ `json_encode(htmlspecialchars(...))` pattern),
+  `app/app.js` (vanilla ES6, no build step), `app/app.css` (prototype palette).
+  Search modes Fuzzy (default, `getword_list_1.0.php` `input=default`) · Exact
+  (`restrict_to_user_word` + client `user_key_flag` filter) · Prefix
+  (`getsuggest.php` as results list) · Suffix (tab present, disabled — slice 2).
+  Results grouped by headword with per-dictionary badges from one `dalglob.php`
+  round-trip per headword (homonyms as numbered sub-badges MW¹ MW²); entry
+  reader fetches via `getword_batch.php` with the lookup.js sequential
+  `getword.php` + 429-backoff fallback on 404. IAST-default display with
+  one-click Devanagari toggle (client-side re-render via vendored
+  `sanskrit-util` global build in `app/vendor/`; slp1→iast/deva directions
+  only). Auto-detect Devanagari/IAST input + explicit ASCII scheme select;
+  permalinks `?key=&input=&output=&dict=`; mobile < 900px single-column with
+  reader accordion. Rate discipline per spec: single-flight search token,
+  ≥300 ms debounce, per-session response cache (repeat search = zero requests),
+  no prefetch, 250 ms-spaced badge chain. — 2026-07-04
+- **`app/fixtures/` offline mode (`?fixtures=1`)**: all endpoint traffic served
+  from `fixtures.json` keyed by the client's cache keys; shapes verified against
+  the repo PHP, fuzzy candidate lists real (2026-06-11 capture), dalglob/entry
+  payloads synthetic + watermarked pending live recapture
+  (see [app/fixtures/readme.md](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/app/fixtures/readme.md)).
+  All 8 slice-1 acceptance criteria verified offline against these fixtures;
+  live verification is gated on the server outage. — 2026-07-04
+
 ## [0.1.0] - 2026-07-03
 
 ### Salt API — Phase 1 (PR [#46](https://github.com/sanskrit-lexicon/csl-apidev/pull/46), `api1/`, MW pilot)

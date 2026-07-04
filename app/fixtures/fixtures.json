@@ -1,0 +1,806 @@
+{
+ "_note": "Offline fixtures for app/?fixtures=1. Keys mirror app.js cache keys. Shapes verified against repo PHP; fuzzy candidate lists are REAL (captured live 2026-06-11, simple-search/eval/fixtures.json); dalglob dict sets and entry HTML are SYNTHETIC pending live recapture — every synthetic entry body is watermarked. See readme.md.",
+ "suggest|mw|hk|agni": [
+  "agni",
+  "agnicayana",
+  "agnihotra"
+ ],
+ "suggest|mw|hk|manas": [
+  "manas",
+  "manasA",
+  "manaskAra"
+ ],
+ "wordlist|mw|default|agni": {
+  "dict": "mw",
+  "input": "default",
+  "output": "slp1",
+  "accent": "no",
+  "result": [
+   {
+    "key": "agni",
+    "keyin": "agni",
+    "user_key_flag": true,
+    "dicthw": "agni",
+    "dicthwoutput": "agni",
+    "xml": "",
+    "status": 200,
+    "wf": 46420
+   }
+  ]
+ },
+ "wordlist|mw|default|अग्नि": {
+  "dict": "mw",
+  "input": "default",
+  "output": "slp1",
+  "accent": "no",
+  "result": [
+   {
+    "key": "agni",
+    "keyin": "agni",
+    "user_key_flag": true,
+    "dicthw": "agni",
+    "dicthwoutput": "agni",
+    "xml": "",
+    "status": 200,
+    "wf": 46420
+   }
+  ]
+ },
+ "wordlist|mw|default|manas": {
+  "dict": "mw",
+  "input": "default",
+  "output": "slp1",
+  "accent": "no",
+  "result": [
+   {
+    "key": "manas",
+    "keyin": "manas",
+    "user_key_flag": true,
+    "dicthw": "manas",
+    "dicthwoutput": "manas",
+    "xml": "",
+    "status": 200,
+    "wf": 20
+   },
+   {
+    "key": "nAman",
+    "keyin": "nAman",
+    "user_key_flag": false,
+    "dicthw": "nAman",
+    "dicthwoutput": "nAman",
+    "xml": "",
+    "status": 200,
+    "wf": 19
+   },
+   {
+    "key": "nAma",
+    "keyin": "nAma",
+    "user_key_flag": false,
+    "dicthw": "nAma",
+    "dicthwoutput": "nAma",
+    "xml": "",
+    "status": 200,
+    "wf": 18
+   },
+   {
+    "key": "nAnA",
+    "keyin": "nAnA",
+    "user_key_flag": false,
+    "dicthw": "nAnA",
+    "dicthwoutput": "nAnA",
+    "xml": "",
+    "status": 200,
+    "wf": 17
+   },
+   {
+    "key": "mAna",
+    "keyin": "mAna",
+    "user_key_flag": false,
+    "dicthw": "mAna",
+    "dicthwoutput": "mAna",
+    "xml": "",
+    "status": 200,
+    "wf": 16
+   },
+   {
+    "key": "namas",
+    "keyin": "namas",
+    "user_key_flag": false,
+    "dicthw": "namas",
+    "dicthwoutput": "namas",
+    "xml": "",
+    "status": 200,
+    "wf": 15
+   },
+   {
+    "key": "mAnasa",
+    "keyin": "mAnasa",
+    "user_key_flag": false,
+    "dicthw": "mAnasa",
+    "dicthwoutput": "mAnasa",
+    "xml": "",
+    "status": 200,
+    "wf": 14
+   },
+   {
+    "key": "mARa",
+    "keyin": "mARa",
+    "user_key_flag": false,
+    "dicthw": "mARa",
+    "dicthwoutput": "mARa",
+    "xml": "",
+    "status": 200,
+    "wf": 13
+   },
+   {
+    "key": "maRa",
+    "keyin": "maRa",
+    "user_key_flag": false,
+    "dicthw": "maRa",
+    "dicthwoutput": "maRa",
+    "xml": "",
+    "status": 200,
+    "wf": 12
+   },
+   {
+    "key": "mana",
+    "keyin": "mana",
+    "user_key_flag": false,
+    "dicthw": "mana",
+    "dicthwoutput": "mana",
+    "xml": "",
+    "status": 200,
+    "wf": 11
+   },
+   {
+    "key": "manasa",
+    "keyin": "manasa",
+    "user_key_flag": false,
+    "dicthw": "manasa",
+    "dicthwoutput": "manasa",
+    "xml": "",
+    "status": 200,
+    "wf": 10
+   },
+   {
+    "key": "mama",
+    "keyin": "mama",
+    "user_key_flag": false,
+    "dicthw": "mama",
+    "dicthwoutput": "mama",
+    "xml": "",
+    "status": 200,
+    "wf": 9
+   },
+   {
+    "key": "nAna",
+    "keyin": "nAna",
+    "user_key_flag": false,
+    "dicthw": "nAna",
+    "dicthwoutput": "nAna",
+    "xml": "",
+    "status": 200,
+    "wf": 8
+   },
+   {
+    "key": "nama",
+    "keyin": "nama",
+    "user_key_flag": false,
+    "dicthw": "nama",
+    "dicthwoutput": "nama",
+    "xml": "",
+    "status": 200,
+    "wf": 7
+   },
+   {
+    "key": "mAma",
+    "keyin": "mAma",
+    "user_key_flag": false,
+    "dicthw": "mAma",
+    "dicthwoutput": "mAma",
+    "xml": "",
+    "status": 200,
+    "wf": 6
+   },
+   {
+    "key": "nanA",
+    "keyin": "nanA",
+    "user_key_flag": false,
+    "dicthw": "nanA",
+    "dicthwoutput": "nanA",
+    "xml": "",
+    "status": 200,
+    "wf": 5
+   },
+   {
+    "key": "manA",
+    "keyin": "manA",
+    "user_key_flag": false,
+    "dicthw": "manA",
+    "dicthwoutput": "manA",
+    "xml": "",
+    "status": 200,
+    "wf": 4
+   },
+   {
+    "key": "namasa",
+    "keyin": "namasa",
+    "user_key_flag": false,
+    "dicthw": "namasa",
+    "dicthwoutput": "namasa",
+    "xml": "",
+    "status": 200,
+    "wf": 3
+   },
+   {
+    "key": "mAnAsa",
+    "keyin": "mAnAsa",
+    "user_key_flag": false,
+    "dicthw": "mAnAsa",
+    "dicthwoutput": "mAnAsa",
+    "xml": "",
+    "status": 200,
+    "wf": 2
+   },
+   {
+    "key": "manaS",
+    "keyin": "manaS",
+    "user_key_flag": false,
+    "dicthw": "manaS",
+    "dicthwoutput": "manaS",
+    "xml": "",
+    "status": 200,
+    "wf": 1
+   }
+  ]
+ },
+ "wordlist|mw|iast|manas": {
+  "dict": "mw",
+  "input": "iast",
+  "output": "slp1",
+  "accent": "no",
+  "result": [
+   {
+    "key": "manas",
+    "keyin": "manas",
+    "user_key_flag": true,
+    "dicthw": "manas",
+    "dicthwoutput": "manas",
+    "xml": "",
+    "status": 200,
+    "wf": 20
+   }
+  ]
+ },
+ "wordlist|mw|default|māna": {
+  "dict": "mw",
+  "input": "default",
+  "output": "slp1",
+  "accent": "no",
+  "result": [
+   {
+    "key": "mAna",
+    "keyin": "mAna",
+    "user_key_flag": true,
+    "dicthw": "mAna",
+    "dicthwoutput": "mAna",
+    "xml": "",
+    "status": 200,
+    "wf": 30
+   },
+   {
+    "key": "mana",
+    "keyin": "mana",
+    "user_key_flag": false,
+    "dicthw": "mana",
+    "dicthwoutput": "mana",
+    "xml": "",
+    "status": 200,
+    "wf": 20
+   },
+   {
+    "key": "manA",
+    "keyin": "manA",
+    "user_key_flag": false,
+    "dicthw": "manA",
+    "dicthwoutput": "manA",
+    "xml": "",
+    "status": 200,
+    "wf": 10
+   }
+  ]
+ },
+ "dalglob|agni": {
+  "status": 200,
+  "dicts": [
+   {
+    "dict": "mw",
+    "dockeys": [
+     "agni"
+    ]
+   },
+   {
+    "dict": "ap90",
+    "dockeys": [
+     "agni"
+    ]
+   },
+   {
+    "dict": "pwg",
+    "dockeys": [
+     "agni"
+    ]
+   },
+   {
+    "dict": "pw",
+    "dockeys": [
+     "agni"
+    ]
+   },
+   {
+    "dict": "gra",
+    "dockeys": [
+     "agni"
+    ]
+   },
+   {
+    "dict": "ben",
+    "dockeys": [
+     "agni"
+    ]
+   },
+   {
+    "dict": "cae",
+    "dockeys": [
+     "agni"
+    ]
+   },
+   {
+    "dict": "md",
+    "dockeys": [
+     "agni"
+    ]
+   }
+  ]
+ },
+ "dalglob|manas": {
+  "status": 200,
+  "dicts": [
+   {
+    "dict": "mw",
+    "dockeys": [
+     "manas"
+    ]
+   },
+   {
+    "dict": "ap90",
+    "dockeys": [
+     "manas"
+    ]
+   },
+   {
+    "dict": "pwg",
+    "dockeys": [
+     "manas"
+    ]
+   },
+   {
+    "dict": "pw",
+    "dockeys": [
+     "manas"
+    ]
+   },
+   {
+    "dict": "gra",
+    "dockeys": [
+     "manas"
+    ]
+   },
+   {
+    "dict": "cae",
+    "dockeys": [
+     "manas"
+    ]
+   }
+  ]
+ },
+ "dalglob|mAna": {
+  "status": 200,
+  "dicts": [
+   {
+    "dict": "mw",
+    "dockeys": [
+     "mAna",
+     "mAna2"
+    ]
+   },
+   {
+    "dict": "ap90",
+    "dockeys": [
+     "mAna"
+    ]
+   },
+   {
+    "dict": "pwg",
+    "dockeys": [
+     "mAna"
+    ]
+   }
+  ]
+ },
+ "dalglob|mana": {
+  "status": 200,
+  "dicts": [
+   {
+    "dict": "mw",
+    "dockeys": [
+     "mana"
+    ]
+   },
+   {
+    "dict": "ap90",
+    "dockeys": [
+     "mana"
+    ]
+   }
+  ]
+ },
+ "dalglob|manA": {
+  "status": 200,
+  "dicts": [
+   {
+    "dict": "mw",
+    "dockeys": [
+     "manA"
+    ]
+   }
+  ]
+ },
+ "dalglob|agnicayana": {
+  "status": 200,
+  "dicts": [
+   {
+    "dict": "mw",
+    "dockeys": [
+     "agnicayana"
+    ]
+   }
+  ]
+ },
+ "dalglob|agnihotra": {
+  "status": 200,
+  "dicts": [
+   {
+    "dict": "mw",
+    "dockeys": [
+     "agnihotra"
+    ]
+   },
+   {
+    "dict": "ap90",
+    "dockeys": [
+     "agnihotra"
+    ]
+   }
+  ]
+ },
+ "dalglob|nAman": {
+  "status": 200,
+  "dicts": [
+   {
+    "dict": "mw",
+    "dockeys": [
+     "nAman"
+    ]
+   },
+   {
+    "dict": "pwg",
+    "dockeys": [
+     "nAman"
+    ]
+   }
+  ]
+ },
+ "dalglob|nAma": {
+  "status": 200,
+  "dicts": [
+   {
+    "dict": "mw",
+    "dockeys": [
+     "nAma"
+    ]
+   },
+   {
+    "dict": "pwg",
+    "dockeys": [
+     "nAma"
+    ]
+   }
+  ]
+ },
+ "dalglob|nAnA": {
+  "status": 200,
+  "dicts": [
+   {
+    "dict": "mw",
+    "dockeys": [
+     "nAnA"
+    ]
+   },
+   {
+    "dict": "pwg",
+    "dockeys": [
+     "nAnA"
+    ]
+   }
+  ]
+ },
+ "dalglob|namas": {
+  "status": 200,
+  "dicts": [
+   {
+    "dict": "mw",
+    "dockeys": [
+     "namas"
+    ]
+   },
+   {
+    "dict": "pwg",
+    "dockeys": [
+     "namas"
+    ]
+   }
+  ]
+ },
+ "dalglob|mAnasa": {
+  "status": 200,
+  "dicts": [
+   {
+    "dict": "mw",
+    "dockeys": [
+     "mAnasa"
+    ]
+   },
+   {
+    "dict": "pwg",
+    "dockeys": [
+     "mAnasa"
+    ]
+   }
+  ]
+ },
+ "dalglob|mARa": {
+  "status": 200,
+  "dicts": [
+   {
+    "dict": "mw",
+    "dockeys": [
+     "mARa"
+    ]
+   },
+   {
+    "dict": "pwg",
+    "dockeys": [
+     "mARa"
+    ]
+   }
+  ]
+ },
+ "dalglob|maRa": {
+  "status": 200,
+  "dicts": [
+   {
+    "dict": "mw",
+    "dockeys": [
+     "maRa"
+    ]
+   },
+   {
+    "dict": "pwg",
+    "dockeys": [
+     "maRa"
+    ]
+   }
+  ]
+ },
+ "dalglob|manasa": {
+  "status": 200,
+  "dicts": [
+   {
+    "dict": "mw",
+    "dockeys": [
+     "manasa"
+    ]
+   },
+   {
+    "dict": "pwg",
+    "dockeys": [
+     "manasa"
+    ]
+   }
+  ]
+ },
+ "dalglob|mama": {
+  "status": 200,
+  "dicts": [
+   {
+    "dict": "mw",
+    "dockeys": [
+     "mama"
+    ]
+   },
+   {
+    "dict": "pwg",
+    "dockeys": [
+     "mama"
+    ]
+   }
+  ]
+ },
+ "dalglob|nAna": {
+  "status": 200,
+  "dicts": [
+   {
+    "dict": "mw",
+    "dockeys": [
+     "nAna"
+    ]
+   },
+   {
+    "dict": "pwg",
+    "dockeys": [
+     "nAna"
+    ]
+   }
+  ]
+ },
+ "dalglob|nama": {
+  "status": 200,
+  "dicts": [
+   {
+    "dict": "mw",
+    "dockeys": [
+     "nama"
+    ]
+   },
+   {
+    "dict": "pwg",
+    "dockeys": [
+     "nama"
+    ]
+   }
+  ]
+ },
+ "dalglob|mAma": {
+  "status": 200,
+  "dicts": [
+   {
+    "dict": "mw",
+    "dockeys": [
+     "mAma"
+    ]
+   },
+   {
+    "dict": "pwg",
+    "dockeys": [
+     "mAma"
+    ]
+   }
+  ]
+ },
+ "dalglob|nanA": {
+  "status": 200,
+  "dicts": [
+   {
+    "dict": "mw",
+    "dockeys": [
+     "nanA"
+    ]
+   },
+   {
+    "dict": "pwg",
+    "dockeys": [
+     "nanA"
+    ]
+   }
+  ]
+ },
+ "dalglob|namasa": {
+  "status": 200,
+  "dicts": [
+   {
+    "dict": "mw",
+    "dockeys": [
+     "namasa"
+    ]
+   },
+   {
+    "dict": "pwg",
+    "dockeys": [
+     "namasa"
+    ]
+   }
+  ]
+ },
+ "dalglob|mAnAsa": {
+  "status": 200,
+  "dicts": [
+   {
+    "dict": "mw",
+    "dockeys": [
+     "mAnAsa"
+    ]
+   },
+   {
+    "dict": "pwg",
+    "dockeys": [
+     "mAnAsa"
+    ]
+   }
+  ]
+ },
+ "dalglob|manaS": {
+  "status": 200,
+  "dicts": [
+   {
+    "dict": "mw",
+    "dockeys": [
+     "manaS"
+    ]
+   },
+   {
+    "dict": "pwg",
+    "dockeys": [
+     "manaS"
+    ]
+   }
+  ]
+ },
+ "batch|mw|roman|no|agni": [
+  {
+   "key": "agni",
+   "status": 200,
+   "html": "<div id=\"CologneBasic\"><h2 class=\"dictitle\">Monier-Williams Sanskrit-English Dictionary, 1899</h2><table class=\"display\"><tr><td><strong lang=\"sa\">agni</strong> <span lang=\"sa\">m. fire, sacrificial fire; Agni as a deity.</span><p class=\"fixture-note\">[SYNTHETIC FIXTURE — offline dev only; not MW text]</p></td></tr></table></div>"
+  }
+ ],
+ "batch|mw|deva|no|agni": [
+  {
+   "key": "agni",
+   "status": 200,
+   "html": "<div id=\"CologneBasic\"><h2 class=\"dictitle\">Monier-Williams Sanskrit-English Dictionary, 1899</h2><table class=\"display\"><tr><td><strong lang=\"sa\">अग्नि</strong> <span lang=\"sa\">m. fire, sacrificial fire; Agni as a deity.</span><p class=\"fixture-note\">[SYNTHETIC FIXTURE — offline dev only; not MW text]</p></td></tr></table></div>"
+  }
+ ],
+ "batch|ap90|roman|no|agni": [
+  {
+   "key": "agni",
+   "status": 200,
+   "html": "<div id=\"CologneBasic\"><h2 class=\"dictitle\">Apte Practical Sanskrit-English Dictionary, 1890</h2><table class=\"display\"><tr><td><strong lang=\"sa\">agni</strong> <span lang=\"sa\">Fire; the god of fire; digestive heat.</span><p class=\"fixture-note\">[SYNTHETIC FIXTURE — offline dev only; not AP90 text]</p></td></tr></table></div>"
+  }
+ ],
+ "batch|mw|roman|no|manas": [
+  {
+   "key": "manas",
+   "status": 200,
+   "html": "<div id=\"CologneBasic\"><h2 class=\"dictitle\">Monier-Williams Sanskrit-English Dictionary, 1899</h2><table class=\"display\"><tr><td><strong lang=\"sa\">manas</strong> <span lang=\"sa\">n. mind, intellect, understanding.</span><p class=\"fixture-note\">[SYNTHETIC FIXTURE — offline dev only; not MW text]</p></td></tr></table></div>"
+  }
+ ],
+ "batch|mw|deva|no|manas": [
+  {
+   "key": "manas",
+   "status": 200,
+   "html": "<div id=\"CologneBasic\"><h2 class=\"dictitle\">Monier-Williams Sanskrit-English Dictionary, 1899</h2><table class=\"display\"><tr><td><strong lang=\"sa\">मनस्</strong> <span lang=\"sa\">n. mind, intellect, understanding.</span><p class=\"fixture-note\">[SYNTHETIC FIXTURE — offline dev only; not MW text]</p></td></tr></table></div>"
+  }
+ ],
+ "batch|mw|roman|no|mAna,mAna2": [
+  {
+   "key": "mAna",
+   "status": 200,
+   "html": "<div id=\"CologneBasic\"><h2 class=\"dictitle\">Monier-Williams Sanskrit-English Dictionary, 1899</h2><table class=\"display\"><tr><td><strong lang=\"sa\">māna</strong> <span lang=\"sa\">m. opinion, notion; pride, arrogance.</span><p class=\"fixture-note\">[SYNTHETIC FIXTURE — offline dev only; not MW text]</p></td></tr></table></div>"
+  },
+  {
+   "key": "mAna2",
+   "status": 200,
+   "html": "<div id=\"CologneBasic\"><h2 class=\"dictitle\">Monier-Williams Sanskrit-English Dictionary, 1899</h2><table class=\"display\"><tr><td><strong lang=\"sa\">māna</strong> <span lang=\"sa\">m. measure, dimension; a standard.</span><p class=\"fixture-note\">[SYNTHETIC FIXTURE — offline dev only; not MW text]</p></td></tr></table></div>"
+  }
+ ]
+}
