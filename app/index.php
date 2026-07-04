@@ -30,7 +30,9 @@ error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
      <option value="default" selected="selected">Default (forgiving)</option>
      <option value="iast">IAST</option>
      <option value="hk">HK</option>
+     <option value="deva">Devanagari</option>
      <option value="slp1">SLP1</option>
+     <option value="velthuis">Velthuis</option>
      <option value="itrans">ITRANS</option>
     </select>
    </div>

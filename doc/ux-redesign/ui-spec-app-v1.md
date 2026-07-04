@@ -21,6 +21,7 @@ scope were ruled by MG on 03-07-2026 (spec authored the same session, Fable 5
 | R5 | Display script | **IAST default, one-click toggle to Devanagari** |
 | R6 | Dictionary scope | **All dictionaries always** (cross-dict resolution must therefore be one round-trip — see §Endpoint bindings) |
 | R7 | Results shape | **Grouped by headword, dictionary badges per row** |
+| R8 | Input-scheme select (ruled 04-07-2026) | **Order: Default, IAST, HK, Devanagari, SLP1, Velthuis, ITRANS**; WX excluded (storage-only); Velthuis built + wired end-to-end this pass |
 
 ## Files (slice 1)
 
@@ -78,10 +79,19 @@ session keyed by SLP1 headword; **no prefetching** of entries the user hasn't cl
 | Prefix | `getsuggest.php` prefix matching rendered as a results list | full |
 | Suffix | endpoint unconfirmed — the current Advanced page's mechanism must be identified before wiring | **tab present, disabled with "coming in slice 2" tooltip** (see Open items) |
 
-Input scheme select: `Default (forgiving)` · `IAST` · `HK` · `SLP1` · `ITRANS`, plus
-auto-detected Devanagari/Cyrillic input (badge shows the detection, as lookup does).
-ASCII schemes are never auto-detected — explicit select only (locked v1.2 ruling in
+**Input scheme select, ruled 04-07-2026 (R8), exact order:** `Default (forgiving)` ·
+`IAST` · `HK` · `Devanagari` · `SLP1` · `Velthuis` · `ITRANS`. Devanagari is both an
+explicit option and auto-detected (typing actual Devanagari characters overrides the
+select, as with the badge behavior below); the ASCII schemes (HK, SLP1, Velthuis,
+ITRANS) are never auto-detected — explicit select only (locked v1.2 ruling, E3 in
 [roadmap_v1.2.md](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/simple-search/roadmap_v1.2.md)).
+**WX is excluded from this list — data-storage/export format only, never a user input
+option** (closes Q5 in the roadmap). Velthuis ships fully wired in slice 1: new
+[velthuis_slp1.xml](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/utilities/transcoder/velthuis_slp1.xml)
+transcoder table plus a server-side `input_simple == 'velthuis'` branch in
+[simple_search.php](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/simple-search/v1.1/simple_search.php)
+mirroring the existing HK/ITRANS branches (MG-authorized narrow exception to the
+v1.1-frozen-for-Jim convention — additive, doesn't touch M1–M5 scoring logic).
 
 ## Results list (R7)
 

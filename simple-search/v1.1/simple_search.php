@@ -549,6 +549,14 @@ class Simple_Search{
    $wordin2 = $this->clean_slp1($wordin1);
    return $wordin2;
   }
+  if ($input_simple == 'velthuis') {
+   // 04-07-2026: MG ruling -- Velthuis added as an explicit input scheme
+   // (never auto-detected -- ASCII schemes are mutually ambiguous, see E3
+   // in simple-search/roadmap_v1.2.md). WX stays storage-only, not wired here.
+   $wordin1 = transcoder_processString($wordin,'velthuis','slp1');
+   $wordin2 = $this->clean_slp1($wordin1);
+   return $wordin2;
+  }
   if ($input_simple == 'iast') {
    // transcoder files use 'roman' instead of 'iast' 
    $wordin1 = transcoder_processString($wordin,'roman','slp1');
