@@ -28,7 +28,7 @@
  // Candidate generation + autocomplete run against MW: the broadest
  // general-purpose dictionary (same choice as lookup.js SUGGEST_DICT).
  var ENGINE_DICT = 'mw';
- var ASCII_SCHEMES = ['hk', 'slp1', 'itrans'];
+ var ASCII_SCHEMES = ['hk', 'slp1', 'itrans', 'velthuis'];
  var SPACING_MS = 250;
  var MAX_RETRIES = 4;
  var DEBOUNCE_MS = 300; // spec: debounced >= 300ms
@@ -289,7 +289,7 @@
   if (scheme === 'slp1') { return word; }
   if (scheme === 'iast') { return SU.to_slp1(word); }
   if (scheme === 'deva') { return SU.deva_to_slp1(word); }
-  return null; // hk/itrans: no client-side transcoder; server resolves
+  return null; // hk/itrans/velthuis: no client-side transcoder; server resolves
  }
 
  // ---- results list (R7: one row per headword, dict badges) ----------------
@@ -700,7 +700,7 @@
   var output = params.output || '';
   var mode = params.mode || '';
   els.key.value = key;
-  if (ASCII_SCHEMES.indexOf(input) !== -1 || input === 'iast') { els.scheme.value = input; }
+  if (ASCII_SCHEMES.indexOf(input) !== -1 || input === 'iast' || input === 'deva') { els.scheme.value = input; }
   if (output === 'deva' || output === 'roman') { setDisplay(output, false); }
   setMode(['fuzzy', 'exact', 'prefix'].indexOf(mode) !== -1 ? mode : 'fuzzy');
   pendingDict = params.dict ? params.dict.toLowerCase() : null;

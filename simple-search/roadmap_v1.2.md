@@ -549,8 +549,8 @@ Inventory of `utilities/transcoder/` and what is needed:
 
 | Scheme | Table today | Action |
 |---|---|---|
-| WX | `wx_slp1.xml` ✅ | wire into input `<select>` only |
-| Velthuis | — | add `velthuis_slp1.xml`, add to `<select>` |
+| WX | `wx_slp1.xml` ✅ | **RULED 04-07-2026: storage/export format only — do NOT wire into any input `<select>`.** |
+| Velthuis | `velthuis_slp1.xml` ✅ done 04-07-2026 | **DONE** — wired into the [csl-apidev/app](https://github.com/sanskrit-lexicon/csl-apidev/tree/main/app) input `<select>` and into `input_simple == 'velthuis'` in [simple_search.php](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/simple-search/v1.1/simple_search.php) (MG-authorized narrow exception to the v1.1-frozen convention, mirrors the existing hk/itrans branches). |
 | Bengali | — | add `beng_slp1.xml`, add to detect loop (E2) |
 | Tamil/Grantha | — | add `taml_slp1.xml` (+ Grantha) |
 | Telugu/Kannada/Malayalam/Gujarati | — | add `*_slp1.xml` |
@@ -693,8 +693,10 @@ v1.2:  1–2 results (manas, +mAnasa)   — unchanged unless A2 softens the guar
    the rest? (`ś` is more common.)
 4. **JSON contract.** OK to add `score` to each result object? Any consumer
    besides `list-0.2s_rw.php` and sanlex-vue that parses this shape?
-5. **WX / Velthuis as explicit modes.** Confirm they go in the input
-   `<select>` (not auto-detect), since ASCII schemes are mutually ambiguous.
+5. ~~**WX / Velthuis as explicit modes.**~~ **RESOLVED 04-07-2026 (MG):**
+   Velthuis is an explicit `<select>` input scheme (never auto-detect, ASCII
+   schemes are mutually ambiguous) — table + PHP branch done, see §10. WX is
+   **not** a user input option anywhere — storage/export format only.
 6. **Brahmic priority + codepoint overlap.** Which scripts first, and is
    there any pair whose ranges collide in the detect loop ordering?
 7. **PHP intl.** Is the `Normalizer` class available on the Cologne server
