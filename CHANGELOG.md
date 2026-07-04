@@ -6,6 +6,8 @@ Dates are UTC+3 (project local).
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-07-04
+
 ### app/ — unified Cologne search UI, slice 1 (H147, spec [ui-spec-app-v1.md](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/doc/ux-redesign/ui-spec-app-v1.md))
 
 #### Added
