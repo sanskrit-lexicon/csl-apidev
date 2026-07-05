@@ -767,6 +767,7 @@
   els.advanced = qs('#ap-advanced');
   els.accent = qs('#ap-accent');
   els.dictfilter = qs('#ap-dictfilter');
+  if (window.THEME) { window.THEME.wire(qs('#ap-theme')); }
 
   els.form.addEventListener('submit', function (evt) {
    evt.preventDefault();
