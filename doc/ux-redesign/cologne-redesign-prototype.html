@@ -570,6 +570,16 @@ button.flow-step:focus-visible {
   box-shadow: var(--shadow);
   transform: translateY(-2px);
 }
+.entry .senses {
+  margin: 6px 0 0;
+  padding-left: 20px;
+}
+.entry .senses li { margin: 2px 0; }
+.entry cite {
+  font-style: italic;
+  color: var(--muted);
+}
+.entry abbr { text-decoration: none; }
 </style>
 </head>
 <body>
@@ -662,12 +672,25 @@ button.flow-step:focus-visible {
     <div class="grid two">
       <aside class="panel">
         <h4>Results across dictionaries</h4>
+        <p class="muted" style="margin:-4px 0 12px">Entry text below is the <b>actual public-domain dictionary text</b> (Monier-Williams 1899 &middot; Apte 1890), from the Cologne <code>csl-orig</code> source.</p>
         <div class="result">
           <div class="result-head">
-            <span class="headword">agni</span>
+            <span class="headword" lang="sa">agní</span>
             <span class="source">MW 1899</span>
           </div>
-          <div class="entry"><mark>agni</mark>, m. fire; Agni as a deity; sacrificial fire.</div>
+          <div class="entry">
+            <strong lang="sa"><mark>agní</mark></strong> <em>m.</em> (&radic; <span lang="sa">ag</span>, <cite>Uṇ.</cite>)
+            <ol class="senses">
+              <li>fire, sacrificial fire (of three kinds, <span lang="sa">Gārhapatya</span>, <span lang="sa">Āhavanīya</span>, and <span lang="sa">Dakṣiṇa</span>)</li>
+              <li>the number three, <cite>Sūryas.</cite></li>
+              <li>the god of fire, the fire of the stomach, digestive faculty, gastric fluid</li>
+              <li>bile, <cite>L.</cite></li>
+              <li>gold, <cite>L.</cite></li>
+              <li><abbr title="name">N.</abbr> of various plants &mdash; <em>Semecarpus Anacardium</em>, <cite>Suśr.</cite>; <em>Plumbago Zeylanica</em> and <em>Rosea</em>; <em>Citrus Acida</em></li>
+              <li>a mystical substitute for the letter <span lang="sa">r</span></li>
+              <li>in the <span lang="sa">Kātantra</span> grammar, <abbr title="name">N.</abbr> of noun-stems ending in <span lang="sa">i</span> and <span lang="sa">u</span></li>
+            </ol>
+          </div>
           <div class="entry-tools">
             <button class="link-button" type="button">Open entry</button>
             <button class="link-button" type="button">Scan</button>
@@ -676,10 +699,24 @@ button.flow-step:focus-visible {
         </div>
         <div class="result">
           <div class="result-head">
-            <span class="headword">agni</span>
+            <span class="headword" lang="sa">agniḥ</span>
             <span class="source">AP90 1890</span>
           </div>
-          <div class="entry">Fire; the god of fire; digestive heat.</div>
+          <div class="entry">
+            <strong lang="sa"><mark>agniḥ</mark></strong> [<cite>Uṇ. 4.50</cite>]
+            <ol class="senses">
+              <li>Fire</li>
+              <li>the God of fire</li>
+              <li>sacrificial fire of three kinds (<span lang="sa">Gārhapatya</span>, <span lang="sa">Āhavanīya</span> and <span lang="sa">Dakṣiṇa</span>)</li>
+              <li>the fire of the stomach, digestive faculty, gastric fluid</li>
+              <li>bile</li>
+              <li>cauterization</li>
+              <li>gold</li>
+              <li>the number three</li>
+              <li><abbr title="name">N.</abbr> of various plants (<em>Plumbago Zeylanica</em>; <em>Semecarpus Anacardium</em>; <em>Citrus Acida</em>)</li>
+              <li>a mystical substitute for the letter <span lang="sa">r</span></li>
+            </ol>
+          </div>
           <div class="entry-tools">
             <button class="link-button" type="button">Open entry</button>
             <button class="link-button" type="button">Scan</button>
@@ -943,8 +980,10 @@ inputScheme.addEventListener("change", updateDetect);
 // Mock search: filter the sample workbench results by the typed word.
 const results = document.querySelectorAll("#proposal-workbench .result");
 const caption = document.getElementById("searchCaption");
+// strip diacritics so "agni" matches "agní" / "agniḥ"
+function norm(s) { return s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase(); }
 function runSearch() {
-  const q = qInput.value.trim().toLowerCase();
+  const q = norm(qInput.value.trim());
   activateProposal("workbench");
   if (!q) {
     caption.textContent = "";
@@ -953,14 +992,14 @@ function runSearch() {
   }
   let shown = 0;
   results.forEach((r) => {
-    const hw = r.querySelector(".headword").textContent.toLowerCase();
+    const hw = norm(r.querySelector(".headword").textContent);
     const hit = hw.indexOf(q) !== -1;
     r.classList.toggle("hide", !hit);
     if (hit) shown++;
   });
   caption.textContent = shown
-    ? "Showing " + shown + " mock result" + (shown > 1 ? "s" : "") + " for “" + qInput.value.trim() + "” (design preview)."
-    : "No mock entry for “" + qInput.value.trim() + "” — this is a static design preview; the live app searches every dictionary.";
+    ? "Showing " + shown + " result" + (shown > 1 ? "s" : "") + " for “" + qInput.value.trim() + "” — real MW & Apte text (this static preview only carries agni)."
+    : "Only “agni” is loaded in this static preview — the live app searches every dictionary for “" + qInput.value.trim() + "”.";
 }
 document.getElementById("searchBtn").addEventListener("click", runSearch);
 qInput.addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); runSearch(); } });
