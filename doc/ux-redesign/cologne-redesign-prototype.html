@@ -512,6 +512,64 @@ a { color: var(--blue); }
     grid-column: 1 / -1;
   }
 }
+
+/* --- interactive additions (2026-07 prototype functions) --- */
+.shell-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.shell-hint {
+  color: var(--muted);
+  font-family: Verdana, Arial, sans-serif;
+  font-size: 0.8rem;
+}
+.inline-input {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;             /* pushes the Input control to the right corner */
+  color: var(--muted);
+  font-family: Verdana, Arial, sans-serif;
+  font-size: 0.78rem;
+}
+.inline-input select {
+  min-height: 34px;
+  border: 1px solid #aab7c5;
+  border-radius: 4px;
+  background: #fff;
+  color: var(--ink);
+  padding: 4px 8px;
+}
+.detect {
+  min-height: 1.1em;
+  margin-top: 8px;
+  font-family: Verdana, Arial, sans-serif;
+  font-size: 0.8rem;
+  color: var(--green);
+}
+.detect:empty { display: none; }
+.search-caption {
+  margin: 10px 0 0;
+  font-family: Verdana, Arial, sans-serif;
+  font-size: 0.84rem;
+  color: var(--muted);
+}
+.result.hide { display: none; }
+button.flow-step {
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+  color: var(--ink);
+  transition: border-color 0.12s, box-shadow 0.12s, transform 0.06s;
+}
+button.flow-step:hover,
+button.flow-step:focus-visible {
+  border-color: var(--blue);
+  box-shadow: var(--shadow);
+  transform: translateY(-2px);
+}
 </style>
 </head>
 <body>
@@ -538,6 +596,19 @@ a { color: var(--blue); }
     <h2>Search the Cologne Sanskrit dictionaries</h2>
     <p>A unified responsive redesign based on Simple Search: fast lookup first, dictionary browsing second, and scholarly controls available as modes.</p>
     <div class="search-shell" role="search">
+      <div class="shell-top">
+        <span class="shell-hint">Search all 45 dictionaries at once</span>
+        <label class="inline-input" for="inputScheme">Input
+          <select id="inputScheme">
+            <option value="auto">Auto</option>
+            <option value="iast">IAST</option>
+            <option value="hk">HK</option>
+            <option value="deva">Devanagari</option>
+            <option value="slp1">SLP1</option>
+            <option value="itrans">ITRANS</option>
+          </select>
+        </label>
+      </div>
       <div class="search-row">
         <div class="field">
           <label for="q">Citation or word</label>
@@ -552,8 +623,9 @@ a { color: var(--blue); }
             <option>PWG Grosses Petersburger</option>
           </select>
         </div>
-        <button class="search-button" type="button">Search</button>
+        <button class="search-button" id="searchBtn" type="button">Search</button>
       </div>
+      <div class="detect" id="detect" aria-live="polite"></div>
       <div class="mode-strip" aria-label="Search mode">
         <button class="mode-tab" type="button" aria-pressed="true" data-mode="simple">Simple</button>
         <button class="mode-tab" type="button" aria-pressed="false" data-mode="precise">Exact</button>
@@ -562,11 +634,11 @@ a { color: var(--blue); }
         <button class="mode-tab" type="button" aria-pressed="false" data-mode="advanced">Advanced</button>
       </div>
       <div class="control-strip" aria-label="Common controls">
-        <button class="chip" type="button" aria-pressed="true">Input: Auto</button>
-        <button class="chip" type="button" aria-pressed="false">Output: IAST</button>
-        <button class="chip" type="button" aria-pressed="false">Accents</button>
-        <button class="chip" type="button" aria-pressed="false">Scans hidden</button>
+        <button class="chip" id="chipOutput" type="button" data-values="IAST,Devanagari,HK,SLP1" data-i="0" aria-pressed="false">Output: IAST</button>
+        <button class="chip" id="chipAccents" type="button" aria-pressed="false">Accents: off</button>
+        <button class="chip" id="chipScans" type="button" aria-pressed="false">Scans: hidden</button>
       </div>
+      <p class="search-caption" id="searchCaption"></p>
     </div>
   </div>
 </section>
@@ -800,15 +872,15 @@ a { color: var(--blue); }
     <div class="section-head">
       <div>
         <h3>Compatibility Plan</h3>
-        <p>Preserve existing PHP URLs while moving users into one coherent interface.</p>
+        <p>Preserve existing PHP URLs while moving users into one coherent interface. <b>Click a step</b> to preview the proposal that absorbs it.</p>
       </div>
     </div>
     <div class="flow">
-      <div class="flow-step"><b>Homepage</b><span class="muted">Fast search + dictionary catalogue.</span></div>
-      <div class="flow-step"><b>Simple</b><span class="muted">Becomes the main search app.</span></div>
-      <div class="flow-step"><b>Basic/List</b><span class="muted">Open as modes inside the same app.</span></div>
-      <div class="flow-step"><b>Advanced</b><span class="muted">Collapsible controls, same endpoint contracts.</span></div>
-      <div class="flow-step"><b>Mobile</b><span class="muted">Replaced by responsive layout.</span></div>
+      <button class="flow-step" type="button" data-target="catalogue"><b>Homepage &rsaquo;</b><span class="muted">Fast search + dictionary catalogue.</span></button>
+      <button class="flow-step" type="button" data-target="workbench"><b>Simple &rsaquo;</b><span class="muted">Becomes the main search app.</span></button>
+      <button class="flow-step" type="button" data-target="workbench"><b>Basic/List &rsaquo;</b><span class="muted">Open as modes inside the same app.</span></button>
+      <button class="flow-step" type="button" data-target="workbench"><b>Advanced &rsaquo;</b><span class="muted">Collapsible controls, same endpoint contracts.</span></button>
+      <button class="flow-step" type="button" data-target="mobile"><b>Mobile &rsaquo;</b><span class="muted">Replaced by responsive layout.</span></button>
     </div>
   </section>
 </main>
@@ -838,6 +910,90 @@ document.querySelectorAll(".mode-strip .mode-tab").forEach((button) => {
     button.setAttribute("aria-pressed", "true");
   });
 });
+
+/* ---- interactive prototype functions (2026-07) ---- */
+
+// Switch the visible proposal by key, keeping the switcher buttons in sync.
+function activateProposal(key) {
+  proposalButtons.forEach((item) =>
+    item.setAttribute("aria-pressed", item.dataset.proposal === key ? "true" : "false"));
+  Object.entries(proposals).forEach(([k, section]) =>
+    section.classList.toggle("active", k === key));
+}
+
+// Input scheme + auto-detect (mirrors the real app's Devanagari/IAST detection).
+const qInput = document.getElementById("q");
+const inputScheme = document.getElementById("inputScheme");
+const detect = document.getElementById("detect");
+const DEVA_RE = /[ऀ-ॿ]/;
+const IAST_RE = /[āīūṛṝḷḹṃṅñṇṭḍśṣ]/i;
+function updateDetect() {
+  if (inputScheme.value !== "auto") {
+    detect.textContent = "Input scheme: " + inputScheme.options[inputScheme.selectedIndex].text;
+    return;
+  }
+  const v = qInput.value.trim();
+  if (!v) { detect.textContent = ""; return; }
+  const s = DEVA_RE.test(v) ? "Devanagari" : IAST_RE.test(v) ? "IAST" : "HK / plain ASCII";
+  detect.textContent = "Auto-detected input: " + s;
+}
+qInput.addEventListener("input", updateDetect);
+inputScheme.addEventListener("change", updateDetect);
+
+// Mock search: filter the sample workbench results by the typed word.
+const results = document.querySelectorAll("#proposal-workbench .result");
+const caption = document.getElementById("searchCaption");
+function runSearch() {
+  const q = qInput.value.trim().toLowerCase();
+  activateProposal("workbench");
+  if (!q) {
+    caption.textContent = "";
+    results.forEach((r) => r.classList.remove("hide"));
+    return;
+  }
+  let shown = 0;
+  results.forEach((r) => {
+    const hw = r.querySelector(".headword").textContent.toLowerCase();
+    const hit = hw.indexOf(q) !== -1;
+    r.classList.toggle("hide", !hit);
+    if (hit) shown++;
+  });
+  caption.textContent = shown
+    ? "Showing " + shown + " mock result" + (shown > 1 ? "s" : "") + " for “" + qInput.value.trim() + "” (design preview)."
+    : "No mock entry for “" + qInput.value.trim() + "” — this is a static design preview; the live app searches every dictionary.";
+}
+document.getElementById("searchBtn").addEventListener("click", runSearch);
+qInput.addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); runSearch(); } });
+
+// Cycling / toggling control chips.
+const chipOutput = document.getElementById("chipOutput");
+chipOutput.addEventListener("click", () => {
+  const vals = chipOutput.dataset.values.split(",");
+  const i = (parseInt(chipOutput.dataset.i, 10) + 1) % vals.length;
+  chipOutput.dataset.i = i;
+  chipOutput.textContent = "Output: " + vals[i];
+  chipOutput.setAttribute("aria-pressed", i > 0 ? "true" : "false");
+});
+function toggleChip(id, onLabel, offLabel) {
+  const el = document.getElementById(id);
+  el.addEventListener("click", () => {
+    const pressed = el.getAttribute("aria-pressed") === "true";
+    el.setAttribute("aria-pressed", pressed ? "false" : "true");
+    el.textContent = pressed ? offLabel : onLabel;
+  });
+}
+toggleChip("chipAccents", "Accents: on", "Accents: off");
+toggleChip("chipScans", "Scans: shown", "Scans: hidden");
+
+// Compatibility Plan: each step previews the proposal that absorbs that page.
+document.querySelectorAll(".flow-step[data-target]").forEach((step) => {
+  step.addEventListener("click", () => {
+    activateProposal(step.dataset.target);
+    document.getElementById("proposal").scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+});
+
+updateDetect();
 </script>
 </body>
 </html>
