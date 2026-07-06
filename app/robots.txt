@@ -1,0 +1,19 @@
+# robots.txt for the Cologne Sanskrit Lexicon entry permalinks (H227).
+#
+# DEPLOY NOTE: robots.txt is only honored at the HOST ROOT
+# (https://www.sanskrit-lexicon.uni-koeln.de/robots.txt). This copy lives in
+# app/ as the version-controlled source; merge the lines below into the
+# host-root robots.txt when the entry pages go live (or copy the file there
+# if the host has none). Regenerate the sitemap files first with
+# scripts/build_sitemap.py (see doc/ux-redesign/SEO_PLAN.md §4).
+
+User-agent: *
+Allow: /
+
+# The JSON/HTML API endpoints are for programmatic use, not indexing.
+Disallow: /*getword.php
+Disallow: /*getword_batch.php
+Disallow: /*getsuggest.php
+Disallow: /*dalglob.php
+
+Sitemap: https://www.sanskrit-lexicon.uni-koeln.de/csl-apidev/app/sitemaps/sitemap.xml
