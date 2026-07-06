@@ -1,0 +1,23 @@
+# app/.htaccess -- clean entry permalinks (H227 P0).
+#
+#   /…/app/entry/<key>          -> entry.php?key=<key>          (stacked, canonical)
+#   /…/app/entry/<dict>/<key>   -> entry.php?dict=<dict>&key=<key>
+#
+# <dict> is a known CDSL code (whitelisted lowercase alpha-numeric, the
+# same rule doc/cleanurl.md adopted so /entry/images/x can never route);
+# <key> is an SLP1 headword (letters + optional homonym digits).
+#
+# Requires AllowOverride FileInfo (or the equivalent rules in the vhost).
+# If overrides are off on the Cologne host, the query form
+# entry.php?key=… works identically -- the canonical URL emitted by
+# entry.php stays the query form until this rewrite is confirmed live
+# (see doc/ux-redesign/SEO_PLAN.md §2).
+<IfModule mod_rewrite.c>
+RewriteEngine On
+
+# /entry/<dict>/<key> -- dict codes are 2-6 chars (mw, ap90, pwkvn, …)
+RewriteRule ^entry/([a-z0-9]{2,6})/([A-Za-z]+[0-9]*)/?$ entry.php?dict=$1&key=$2 [L,QSA,B]
+
+# /entry/<key> -- the canonical stacked page
+RewriteRule ^entry/([A-Za-z]+[0-9]*)/?$ entry.php?key=$1 [L,QSA,B]
+</IfModule>

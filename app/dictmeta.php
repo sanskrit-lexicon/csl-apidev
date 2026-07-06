@@ -1,0 +1,55 @@
+<?php
+/* app/dictmeta.php -- static per-dictionary metadata for app/entry.php (H227).
+   MACHINE-DERIVED from lookup/dictmeta.js (the Wave-2 static table, itself
+   sourced from sample/dictnames.js + dictinfo.php DictInfo::$dictyear /
+   $dictyear_older). Keep the two files in sync: edit lookup/dictmeta.js
+   first, then regenerate this array. One row per dictionary:
+   code => array(title, cdslYear, cdslYearOlder|null). */
+$APP_DICTMETA = array(
+ 'abch' => array('Abhidhānacintāmaṇi of Hemacandrācārya', '2023', null),
+ 'acc' => array('Aufrecht Catalogus Catalogorum', '2020', '2014'),
+ 'acph' => array('Abhidhānacintāmaṇipariśiṣṭa of Hemacandrācārya', '2023', null),
+ 'acsj' => array('Abhidhānacintāmaṇiśiloñcha of Jinadeva', '2023', null),
+ 'ae' => array('Apte Student English-Sanskrit Dictionary', '2020', '2014'),
+ 'ap' => array('Apte Practical Sanskrit-English Dictionary, revised', '2020', '2014'),
+ 'ap90' => array('Apte Practical Sanskrit-English Dictionary', '2020', '2014'),
+ 'armh' => array('Abhidhānaratnamālā of Halāyudha', '2020', '2020'),
+ 'ben' => array('Benfey Sanskrit-English Dictionary', '2020', '2014'),
+ 'bhs' => array('Edgerton Buddhist Hybrid Sanskrit Dictionary', '2020', '2014'),
+ 'bop' => array('Bopp Glossarium Sanscritum', '2020', '2014'),
+ 'bor' => array('Borooah English-Sanskrit Dictionary', '2020', '2014'),
+ 'bur' => array('Burnouf Dictionnaire Sanscrit-Français', '2020', '2013'),
+ 'cae' => array('Cappeller Sanskrit-English Dictionary', '2020', '2014'),
+ 'ccs' => array('Cappeller Sanskrit Wörterbuch', '2020', '2014'),
+ 'fri' => array('Frisch Sanskrit Reader Vocabulary, 1956', '2025', null),
+ 'gra' => array('Grassmann Wörterbuch zum Rig Veda', '2020', '2014'),
+ 'gst' => array('Goldstücker Sanskrit-English Dictionary', '2020', '2014'),
+ 'ieg' => array('Indian Epigraphical Glossary', '2020', '2014'),
+ 'inm' => array('Index to the Names in the Mahabharata', '2020', '2013'),
+ 'krm' => array('Kṛdantarūpamālā', '2020', '2014'),
+ 'lan' => array('Lanman Sanskrit Reader Dictionary', '2020', '2019'),
+ 'lrv' => array('Vaidya Standard Sanskrit-English Dictionary', '2022', '2022'),
+ 'mci' => array('Mahabharata Cultural Index', '2020', '2014'),
+ 'md' => array('Macdonell Sanskrit-English Dictionary', '2020', '2014'),
+ 'mw' => array('Monier-Williams Sanskrit-English Dictionary', '2020', '2014'),
+ 'mw72' => array('Monier-Williams Sanskrit-English Dictionary', '2020', '2014'),
+ 'mwe' => array('Monier-Williams English-Sanskrit Dictionary', '2020', '2013'),
+ 'nmmb' => array('Nāmamālikā of Bhoja', '2026', null),
+ 'pd' => array('An Encyclopedic Dictionary of Sanskrit on Historical Principles', '2020', '2014'),
+ 'pe' => array('Puranic Encyclopedia', '2020', '2014'),
+ 'pgn' => array('Personal and Geographical Names in the Gupta Inscriptions', '2020', '2014'),
+ 'pui' => array('The Purana Index', '2020', '2014'),
+ 'pw' => array('Böhtlingk Sanskrit-Wörterbuch in kürzerer Fassung', '2020', '2014'),
+ 'pwg' => array('Böhtlingk and Roth Grosses Petersburger Wörterbuch', '2020', '2013'),
+ 'pwkvn' => array('Böhtlingk Sanskrit-Wörterbuch (PW/PWG cross-reference variant)', '2020', '2020'),
+ 'sch' => array('Schmidt Nachträge zum Sanskrit-Wörterbuch', '2020', '2014'),
+ 'shs' => array('Shabda-Sagara Sanskrit-English Dictionary', '2020', '2014'),
+ 'skd' => array('Sabda-kalpadruma', '2020', '2013'),
+ 'snp' => array('Meulenbeld Sanskrit Names of Plants', '2020', '2014'),
+ 'stc' => array('Stchoupak Dictionnaire Sanscrit-Français', '2020', '2013'),
+ 'vcp' => array('Vacaspatyam', '2020', '2019'),
+ 'vei' => array('The Vedic Index of Names and Subjects', '2020', '2014'),
+ 'wil' => array('Wilson Sanskrit-English Dictionary', '2020', '2014'),
+ 'yat' => array('Yates Sanskrit-English Dictionary', '2020', '2014'),
+);
+?>
