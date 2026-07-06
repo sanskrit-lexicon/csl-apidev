@@ -12,7 +12,7 @@ Design direction, product rationale and the locked R1–R8 rulings live in
 [`doc/ux-redesign/`](https://github.com/sanskrit-lexicon/csl-apidev/tree/main/doc/ux-redesign):
 [proposal-brief.md](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/doc/ux-redesign/proposal-brief.md),
 [ui-spec-app-v1.md](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/doc/ux-redesign/ui-spec-app-v1.md),
-[cologne-redesign-prototype.html](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/doc/ux-redesign/cologne-redesign-prototype.html).
+[cologne-redesign-prototype.html](https://sanskrit-lexicon.github.io/csl-apidev/doc/ux-redesign/cologne-redesign-prototype.html).
 
 ## Pages
 

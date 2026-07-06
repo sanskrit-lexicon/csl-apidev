@@ -7,7 +7,7 @@ scope were ruled by MG on 03-07-2026 (spec authored the same session, Fable 5
 `claude-fable-5`). Companion documents:
 [proposal-brief.md](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/doc/ux-redesign/proposal-brief.md)
 (product direction) and
-[cologne-redesign-prototype.html](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/doc/ux-redesign/cologne-redesign-prototype.html)
+[cologne-redesign-prototype.html](https://sanskrit-lexicon.github.io/csl-apidev/doc/ux-redesign/cologne-redesign-prototype.html)
 (visual reference — the "Proposal A: Research Workbench" state is the one being built).
 
 ## MG rulings (03-07-2026) — locked

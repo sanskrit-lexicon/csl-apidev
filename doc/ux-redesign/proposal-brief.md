@@ -88,7 +88,7 @@ It gives students one obvious search box while keeping exact, prefix, and suffix
 
 ## Prototype
 
-Open [cologne-redesign-prototype.html](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/doc/ux-redesign/cologne-redesign-prototype.html) in a browser. It is a static, self-contained clickable mockup with proposal switching and mode controls.
+Open [cologne-redesign-prototype.html](https://sanskrit-lexicon.github.io/csl-apidev/doc/ux-redesign/cologne-redesign-prototype.html) in a browser. It is a static, self-contained clickable mockup with proposal switching and mode controls.
 
 ## Built implementation
 
