@@ -280,7 +280,51 @@ function slp1_simplify(slp1) {
   return s.toLowerCase();
 }
 
+// ---- CDSL raw source line -> readable IAST (display layer over from_slp1) ----
+// A raw csl-orig line is SLP1 inside CDSL markup, unreadable to a human. These
+// render it to IAST honoring each dictionary's encoding: MW <s>…</s>;
+// PW/PWG/AP/WIL {#…#} (with the meaning language in {%…%}, left as-is);
+// VCP/SKD whole-line SLP1 prose. The markup shell (tags, [Page…] markers, the ¦
+// headword separator) is stripped. `code` is the csl-orig dict code
+// (mw, ap, pwg, pw, wil, vcp, skd). Non-SLP1 spans — glosses, <ls> citations,
+// grammar abbreviations like "f." — are preserved.
+const _PROSE_SLP1_DICTS = new Set(['vcp', 'skd']);
+
+function _stripCdslMarkup(text) {
+  return text
+    .replace(/<info[^>]*\/?>/gi, '')   // metadata self-closing tags
+    .replace(/\[Page[^\]]*\]/g, '')    // VCP/SKD page markers
+    .replace(/<[^>]+>/g, '');          // any remaining tag shell
+}
+
+function _cleanCdsl(text) {
+  return text
+    .replace(/¦/g, ' ')                // ¦ headword/body separator
+    .replace(/\s+([,.;:!?])/g, '$1')   // pull punctuation back
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function source_line_to_iast(text, code) {
+  if (text == null) return '';
+  const c = String(code || '').toLowerCase();
+  if (_PROSE_SLP1_DICTS.has(c)) {
+    const s = String(text).replace(/[A-Za-z~']+/g, (m) => from_slp1(m));
+    return _cleanCdsl(_stripCdslMarkup(s));
+  }
+  let s = String(text);
+  s = s.replace(/\{[#@]([^#@]*)[#@]\}/g, (_, x) => from_slp1(x));   // {#…#}, {@…@}
+  s = s.replace(/<s\d?>([^<]*)<\/s\d?>/gi, (_, x) => from_slp1(x)); // MW <s>…</s>
+  s = s.replace(/\{%([^%]*)%\}/g, (_, x) => x);                    // meaning: unwrap, keep
+  return _cleanCdsl(_stripCdslMarkup(s));
+}
+
+function source_text_to_iast(text, code) {
+  if (text == null) return '';
+  return String(text).split('\n').map((l) => source_line_to_iast(l, code)).join('\n');
+}
+
   root.SanskritUtil = Object.freeze({
-    to_slp1, to_roman, from_slp1, deva_to_iast, deva_to_slp1, slp1_to_devanagari, iast_to_devanagari, norm, nfold, form_key, normalize_sanskrit, SLP1_VOWELS, SLP1_MARKS, SLP1_CONSONANTS, SLP1_ALPHABET, strip_slp1_accents, slp1_norm, slp1_form_key, slp1_simplify,
+    to_slp1, to_roman, from_slp1, deva_to_iast, deva_to_slp1, slp1_to_devanagari, iast_to_devanagari, norm, nfold, form_key, normalize_sanskrit, SLP1_VOWELS, SLP1_MARKS, SLP1_CONSONANTS, SLP1_ALPHABET, strip_slp1_accents, slp1_norm, slp1_form_key, slp1_simplify, source_line_to_iast, source_text_to_iast,
   });
 })(typeof globalThis !== 'undefined' ? globalThis : this);
