@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>D4 Data-dense Scholar · Dict — Cologne Sanskrit Lexicon prototype</title>
+<style>
+:root{
+ --bg:#0f172a; --panel:#1e293b; --text:#e2e8f0; --muted:#94a3b8;
+ --accent:#22d3ee; --amber:#fbbf24; --line:#334155;
+ --mono:Consolas,'Cascadia Mono','Courier New',monospace;
+ --sans:'Segoe UI',system-ui,-apple-system,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font:13px/1.5 var(--sans);}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+.banner{background:#0b1120;border-bottom:1px solid var(--line);color:var(--muted);
+ font:11px/1.4 var(--mono);padding:3px 12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.toolbar{position:sticky;top:0;z-index:10;background:var(--panel);border-bottom:1px solid var(--line);
+ display:flex;align-items:center;flex-wrap:wrap;gap:8px;padding:6px 12px}
+.logo{font:600 13px var(--mono);color:var(--text);letter-spacing:.5px}
+.logo .sl{color:var(--accent)}
+nav.d4nav{display:flex;gap:2px;font:12px var(--mono)}
+nav.d4nav a{padding:3px 8px;border:1px solid transparent;border-radius:2px;color:var(--muted)}
+nav.d4nav a:hover{color:var(--text);text-decoration:none;border-color:var(--line)}
+nav.d4nav a[aria-current="page"]{color:var(--accent);border-color:var(--accent);background:rgba(34,211,238,.08)}
+.spacer{flex:1 1 auto}
+input[type="search"]{background:#0b1120;border:1px solid var(--line);border-radius:2px;
+ color:var(--text);font:13px var(--mono);padding:4px 8px;min-width:200px;outline:none}
+input[type="search"]:focus{border-color:var(--accent)}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:2px;overflow:hidden}
+.seg button{background:var(--panel);border:0;border-right:1px solid var(--line);color:var(--muted);
+ font:11px var(--mono);padding:4px 8px;cursor:pointer}
+.seg button:last-child{border-right:0}
+.seg button[aria-pressed="true"]{background:rgba(34,211,238,.15);color:var(--accent)}
+.seg button:hover{color:var(--text)}
+kbd{background:#0b1120;border:1px solid var(--line);border-bottom-width:2px;border-radius:2px;
+ color:var(--muted);font:10px var(--mono);padding:1px 5px}
+.hints{color:var(--muted);font:11px var(--mono);white-space:nowrap}
+main{max-width:1200px;margin:0 auto;padding:14px 12px 40px}
+h1{font:600 16px var(--sans);margin:0 0 2px}
+h2{font:600 13px var(--sans);color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin:22px 0 6px}
+.sub{color:var(--muted);font-size:12px;margin:0 0 12px}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:2px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;font-size:12px}
+th,td{border-bottom:1px solid var(--line);padding:5px 10px;text-align:left;vertical-align:top;white-space:nowrap}
+th{background:#0b1120;color:var(--muted);font:600 11px var(--mono);text-transform:uppercase;letter-spacing:.5px}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:hover{background:rgba(34,211,238,.05)}
+/* key-value sheet */
+table.kv th[scope="row"]{background:#0b1120;color:var(--muted);font:600 11px var(--mono);
+ text-transform:uppercase;letter-spacing:.5px;width:170px}
+table.kv td{font:12px var(--mono);white-space:normal}
+table.kv td.prose{font-family:var(--sans);font-size:12.5px}
+td.code{font:600 12px var(--mono);color:var(--accent)}
+td.code .inert{color:var(--text)}
+td.hw{font:600 13px var(--mono)}
+td.hw a{color:var(--text)}
+td.hw a:hover{color:var(--accent)}
+td.loc,td.year{font:11px var(--mono);color:var(--muted)}
+td.gloss,td.title{white-space:normal;color:var(--muted)}
+.actions{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+.actions a{background:var(--panel);border:1px solid var(--line);border-radius:2px;
+ font:11px var(--mono);padding:5px 10px;color:var(--accent)}
+.actions a:hover{border-color:var(--accent);text-decoration:none}
+.searchrow{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin:10px 0}
+.searchrow button{background:#0b1120;border:1px solid var(--line);border-radius:2px;color:var(--accent);
+ font:11px var(--mono);padding:5px 10px;cursor:pointer}
+.searchrow button:hover{border-color:var(--accent)}
+.formrow{font:12px var(--mono);color:var(--muted)}
+.formrow .sf{color:var(--text)}
+.prov{color:var(--muted);font-size:11px;margin-top:18px;border-top:1px solid var(--line);padding-top:8px}
+cite{font-style:italic;color:var(--muted)}
+span[lang="sa"]{font-family:var(--mono)}
+@media (max-width:640px){
+ input[type="search"]{min-width:120px;flex:1}
+ .hints{display:none}
+ table.kv th[scope="row"]{width:110px}
+}
+</style>
+</head>
+<body>
+<div class="banner">Design-direction prototype D4 · Data-dense Scholar — static preview with real MW (1899) &amp; Apte (1890) text</div>
+<header class="toolbar">
+ <span class="logo">CSL<span class="sl">//</span>D4</span>
+ <nav class="d4nav" aria-label="Prototype pages">
+  <a href="home.html">Home</a>
+  <a href="results.html">Results</a>
+  <a href="entry.html">Entry</a>
+  <a href="dict.html" aria-current="page">Dict</a>
+  <a href="../index.html">&#8962; All prototypes</a>
+ </nav>
+ <span class="spacer"></span>
+ <div class="seg" id="scriptSeg" role="group" aria-label="Script">
+  <button type="button" data-script="iast" aria-pressed="true">IAST</button>
+  <button type="button" data-script="deva" aria-pressed="false">Devanagari</button>
+  <button type="button" data-script="slp1" aria-pressed="false">SLP1</button>
+  <button type="button" data-script="hk" aria-pressed="false">HK</button>
+ </div>
+ <span class="hints"><kbd>/</kbd> search &nbsp;<kbd>Esc</kbd> blur</span>
+</header>
+<main>
+ <h1>MW — Monier-Williams Sanskrit-English Dictionary</h1>
+ <p class="sub">Dictionary data sheet</p>
+
+ <div class="tablewrap">
+ <table class="kv">
+  <tbody>
+   <tr><th scope="row">Code</th><td>MW</td></tr>
+   <tr><th scope="row">Title</th><td class="prose">Monier-Williams Sanskrit-English Dictionary</td></tr>
+   <tr><th scope="row">Language</th><td>English</td></tr>
+   <tr><th scope="row">Cologne edition</th><td>2020</td></tr>
+   <tr><th scope="row">Previous edition</th><td>2014</td></tr>
+   <tr><th scope="row">Source</th><td class="prose"><cite>Sir Monier Monier-Williams, A Sanskrit-English Dictionary</cite>, Oxford 1899</td></tr>
+   <tr><th scope="row">Digitized by</th><td class="prose">the Cologne Digital Sanskrit Dictionaries project</td></tr>
+  </tbody>
+ </table>
+ </div>
+
+ <h2>Search within MW</h2>
+ <div class="searchrow">
+  <input type="search" id="q" placeholder="headword in MW" aria-label="Search within MW">
+  <button type="button" id="goSearch">search &#8594;</button>
+ </div>
+
+ <h2>Actions</h2>
+ <div class="actions">
+  <a href="https://www.sanskrit-lexicon.uni-koeln.de/scans/MWScan/2020/web/index.php" target="_blank" rel="noopener">Current Cologne interface &#8599;</a>
+  <a href="https://www.sanskrit-lexicon.uni-koeln.de/scans/MWScan/2020/web/webtc/servepdf.php?page=5,1" target="_blank" rel="noopener">Scanned pages &#8599;</a>
+  <a href="https://www.sanskrit-lexicon.uni-koeln.de/scans/csl-orig/v02/mw/" target="_blank" rel="noopener">Downloads (XML) &#8599;</a>
+ </div>
+
+ <h2>Sample entries (loaded in this preview)</h2>
+ <div class="tablewrap">
+ <table>
+  <thead>
+   <tr><th scope="col">Headword</th><th scope="col">Gloss</th><th scope="col">MW page,col · L</th><th scope="col"></th></tr>
+  </thead>
+  <tbody>
+   <tr>
+    <td class="hw"><a href="entry.html#agni"><span class="sf" lang="sa" data-iast="agní" data-deva="अग्नि" data-slp1="agni" data-hk="agni">agní</span></a></td>
+    <td class="gloss">fire; the god of fire</td>
+    <td class="loc">5,1 · L 890</td>
+    <td><a href="entry.html#agni">open &#8594;</a></td>
+   </tr>
+   <tr>
+    <td class="hw"><a href="entry.html#dharma"><span class="sf" lang="sa" data-iast="dhárma" data-deva="धर्म" data-slp1="Darma" data-hk="dharma">dhárma</span></a></td>
+    <td class="gloss">law, duty, virtue, nature</td>
+    <td class="loc">510,3 · L 99903</td>
+    <td><a href="entry.html#dharma">open &#8594;</a></td>
+   </tr>
+   <tr>
+    <td class="hw"><a href="entry.html#manas"><span class="sf" lang="sa" data-iast="mánas" data-deva="मनस्" data-slp1="manas" data-hk="manas">mánas</span></a></td>
+    <td class="gloss">mind, intellect, spirit</td>
+    <td class="loc">783,3 · L 156776</td>
+    <td><a href="entry.html#manas">open &#8594;</a></td>
+   </tr>
+   <tr>
+    <td class="hw"><a href="entry.html#indra"><span class="sf" lang="sa" data-iast="índra" data-deva="इन्द्र" data-slp1="indra" data-hk="indra">índra</span></a></td>
+    <td class="gloss">the god of the atmosphere and sky</td>
+    <td class="loc">166,1 · L 28925</td>
+    <td><a href="entry.html#indra">open &#8594;</a></td>
+   </tr>
+  </tbody>
+ </table>
+ </div>
+
+ <h2>Sibling dictionaries</h2>
+ <div class="tablewrap">
+ <table>
+  <thead>
+   <tr><th scope="col">Code</th><th scope="col">Title</th><th scope="col">Version</th><th scope="col">Older</th></tr>
+  </thead>
+  <tbody>
+   <tr><td class="code"><span class="inert">AP90</span></td><td class="title">Apte Practical Sanskrit-English Dictionary</td><td class="year">2020</td><td class="year">2014</td></tr>
+   <tr><td class="code"><span class="inert">AP</span></td><td class="title">Apte Practical Sanskrit-English Dictionary, revised</td><td class="year">2020</td><td class="year">2014</td></tr>
+   <tr><td class="code"><span class="inert">BEN</span></td><td class="title">Benfey Sanskrit-English Dictionary</td><td class="year">2020</td><td class="year">2014</td></tr>
+   <tr><td class="code"><span class="inert">CAE</span></td><td class="title">Cappeller Sanskrit-English Dictionary</td><td class="year">2020</td><td class="year">2014</td></tr>
+   <tr><td class="code"><span class="inert">GRA</span></td><td class="title">Grassmann W&#246;rterbuch zum Rig Veda</td><td class="year">2020</td><td class="year">2014</td></tr>
+   <tr><td class="code"><span class="inert">GST</span></td><td class="title">Goldst&#252;cker Sanskrit-English Dictionary</td><td class="year">2020</td><td class="year">2014</td></tr>
+   <tr><td class="code"><span class="inert">MD</span></td><td class="title">Macdonell Sanskrit-English Dictionary</td><td class="year">2020</td><td class="year">2014</td></tr>
+   <tr><td class="code"><span class="inert">MW72</span></td><td class="title">Monier-Williams Sanskrit-English Dictionary (1872)</td><td class="year">2020</td><td class="year">2014</td></tr>
+   <tr><td class="code"><span class="inert">PW</span></td><td class="title">B&#246;htlingk Sanskrit-W&#246;rterbuch in k&#252;rzerer Fassung</td><td class="year">2020</td><td class="year">2014</td></tr>
+   <tr><td class="code"><span class="inert">PWG</span></td><td class="title">B&#246;htlingk and Roth Grosses Petersburger W&#246;rterbuch</td><td class="year">2020</td><td class="year">2013</td></tr>
+   <tr><td class="code"><span class="inert">SHS</span></td><td class="title">Shabda-Sagara Sanskrit-English Dictionary</td><td class="year">2020</td><td class="year">2014</td></tr>
+   <tr><td class="code"><span class="inert">WIL</span></td><td class="title">Wilson Sanskrit-English Dictionary</td><td class="year">2020</td><td class="year">2014</td></tr>
+  </tbody>
+ </table>
+ </div>
+
+ <p class="prov">Entry text is the actual public-domain dictionary text (Monier-Williams 1899 &#183; Apte 1890), from the Cologne csl-orig source.</p>
+</main>
+<script>
+(function(){
+ 'use strict';
+ /* ---- script toggle (shared D4 contract) ---- */
+ var seg = document.getElementById('scriptSeg');
+ function applyScript(s){
+  var els = document.querySelectorAll('.sf');
+  for (var i=0;i<els.length;i++){
+   var v = els[i].getAttribute('data-'+s);
+   if (v !== null) { els[i].textContent = v; }
+  }
+  if (seg){
+   var btns = seg.querySelectorAll('button');
+   for (var j=0;j<btns.length;j++){
+    btns[j].setAttribute('aria-pressed', btns[j].getAttribute('data-script')===s ? 'true':'false');
+   }
+  }
+  try { localStorage.setItem('d4script', s); } catch(e){}
+ }
+ if (seg){
+  seg.addEventListener('click', function(ev){
+   var b = ev.target.closest ? ev.target.closest('button') : null;
+   if (b && b.getAttribute('data-script')) { applyScript(b.getAttribute('data-script')); }
+  });
+ }
+ var saved = null;
+ try { saved = localStorage.getItem('d4script'); } catch(e){}
+ if (saved && ['iast','deva','slp1','hk'].indexOf(saved) !== -1) { applyScript(saved); }
+
+ /* ---- search within MW -> results ---- */
+ var q = document.getElementById('q');
+ var go = document.getElementById('goSearch');
+ function submit(){
+  if (q && q.value.trim() !== ''){
+   location.href = 'results.html?q=' + encodeURIComponent(q.value.trim()) + '&dict=MW';
+  }
+ }
+ if (q){ q.addEventListener('keydown', function(ev){ if (ev.key === 'Enter'){ submit(); } }); }
+ if (go){ go.addEventListener('click', submit); }
+
+ /* ---- keyboard: / focuses search, Esc blurs (never while typing) ---- */
+ document.addEventListener('keydown', function(ev){
+  var t = ev.target;
+  if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)){
+   if (ev.key === 'Escape' && t.blur) { t.blur(); }
+   return;
+  }
+  if (ev.key === '/' && q){ ev.preventDefault(); q.focus(); q.select(); }
+ });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>D3 Minimal Student · Home — Cologne Sanskrit Lexicon prototype</title>
+<style>
+  :root { --ink:#111827; --muted:#6b7280; --accent:#0f766e; --hairline:#e5e7eb; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  html { -webkit-text-size-adjust:100%; }
+  body {
+    font-family:system-ui,-apple-system,'Segoe UI',sans-serif;
+    color:var(--ink); background:#fff;
+    line-height:1.6; padding:1.25rem 1rem 4rem;
+  }
+  .wrap { max-width:640px; margin:0 auto; }
+  a { color:var(--accent); }
+  nav.top { display:flex; justify-content:flex-end; flex-wrap:wrap; gap:0.25rem 1rem; font-size:0.8rem; }
+  nav.top a { text-decoration:none; color:var(--muted); }
+  nav.top a:hover { color:var(--accent); }
+  nav.top a[aria-current="page"] { color:var(--accent); font-weight:600; }
+  .proto-note { font-size:0.72rem; color:var(--muted); text-align:right; margin-top:0.5rem; }
+  header.hero { margin-top:14vh; text-align:center; }
+  .wordmark { font-size:0.95rem; letter-spacing:0.04em; color:var(--muted); font-weight:500; }
+  form.search { margin-top:2rem; }
+  .search input[type="search"] {
+    width:100%; font-size:1.35rem; font-family:inherit; color:var(--ink);
+    padding:0.85rem 1rem; border:1px solid var(--hairline); border-radius:0.75rem;
+    outline:none; background:#fff;
+  }
+  .search input[type="search"]:focus { border-color:var(--accent); box-shadow:0 1px 6px rgba(15,118,110,0.15); }
+  .search button {
+    margin-top:0.85rem; font-size:1.05rem; font-family:inherit;
+    background:var(--accent); color:#fff; border:none; border-radius:0.75rem;
+    padding:0.65rem 2.25rem; cursor:pointer;
+  }
+  .script-hint { margin-top:0.6rem; font-size:0.8rem; color:var(--muted); min-height:1.2em; }
+  .chips { margin-top:1.75rem; display:flex; justify-content:center; flex-wrap:wrap; gap:0.6rem; }
+  .chips a {
+    text-decoration:none; font-size:0.95rem; color:var(--accent);
+    border:1px solid var(--hairline); border-radius:999px; padding:0.35rem 1rem;
+  }
+  .chips a:hover { border-color:var(--accent); }
+  .collection { margin-top:22vh; text-align:center; font-size:0.85rem; color:var(--muted); }
+  .collection details { margin-top:0.75rem; text-align:left; }
+  .collection summary { cursor:pointer; color:var(--accent); text-align:center; list-style-position:inside; }
+  .collection ul { list-style:none; margin-top:1rem; border-top:1px solid var(--hairline); padding-top:1rem; }
+  .collection li { padding:0.15rem 0; font-size:0.85rem; color:var(--ink); }
+  .collection li code { font-family:inherit; color:var(--muted); display:inline-block; min-width:4.2em; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <nav class="top" aria-label="Prototype pages">
+    <a href="home.html" aria-current="page">Home</a>
+    <a href="results.html">Results</a>
+    <a href="entry.html">Entry</a>
+    <a href="dict.html">About MW</a>
+    <a href="../index.html">⌂ All prototypes</a>
+  </nav>
+  <p class="proto-note">Design-direction prototype D3 · Minimal Student — static preview with real MW (1899) &amp; Apte (1890) text</p>
+
+  <header class="hero">
+    <p class="wordmark">Cologne Sanskrit Dictionaries</p>
+    <form class="search" id="searchForm" action="results.html" method="get">
+      <label for="q" class="visually-hidden" style="position:absolute;left:-9999px;">Search a Sanskrit word</label>
+      <input type="search" id="q" name="q" autofocus autocomplete="off"
+             placeholder="Type any Sanskrit word — agni, धर्म, manas…">
+      <p class="script-hint" id="scriptHint">Devanagari, IAST or plain letters — the script is detected for you.</p>
+      <button type="submit">Search</button>
+    </form>
+    <div class="chips" aria-label="Example words">
+      <a href="results.html?q=agni"><span lang="sa">agni</span></a>
+      <a href="results.html?q=dharma"><span lang="sa">dharma</span></a>
+      <a href="results.html?q=manas"><span lang="sa">manas</span></a>
+      <a href="results.html?q=indra"><span lang="sa">indra</span></a>
+    </div>
+  </header>
+
+  <section class="collection">
+    <p>Searches all 45 dictionaries of the Cologne collection.</p>
+    <details>
+      <summary>See the full list</summary>
+      <ul id="dictList"></ul>
+    </details>
+  </section>
+
+</div>
+<script>
+(function () {
+  'use strict';
+  var DICTS = [
+    ['ABCH','Abhidhānacintāmaṇi of Hemacandrācārya'],
+    ['ACC','Aufrecht Catalogus Catalogorum'],
+    ['ACPH','Abhidhānacintāmaṇipariśiṣṭa of Hemacandrācārya'],
+    ['ACSJ','Abhidhānacintāmaṇiśiloñcha of Jinadeva'],
+    ['AE','Apte Student English-Sanskrit Dictionary'],
+    ['AP','Apte Practical Sanskrit-English Dictionary, revised'],
+    ['AP90','Apte Practical Sanskrit-English Dictionary'],
+    ['ARMH','Abhidhānaratnamālā of Halāyudha'],
+    ['BEN','Benfey Sanskrit-English Dictionary'],
+    ['BHS','Edgerton Buddhist Hybrid Sanskrit Dictionary'],
+    ['BOP','Bopp Glossarium Sanscritum'],
+    ['BOR','Borooah English-Sanskrit Dictionary'],
+    ['BUR','Burnouf Dictionnaire Sanscrit-Français'],
+    ['CAE','Cappeller Sanskrit-English Dictionary'],
+    ['CCS','Cappeller Sanskrit Wörterbuch'],
+    ['FRI','Frisch Sanskrit Reader Vocabulary, 1956'],
+    ['GRA','Grassmann Wörterbuch zum Rig Veda'],
+    ['GST','Goldstücker Sanskrit-English Dictionary'],
+    ['IEG','Indian Epigraphical Glossary'],
+    ['INM','Index to the Names in the Mahabharata'],
+    ['KRM','Kṛdantarūpamālā'],
+    ['LAN','Lanman Sanskrit Reader Dictionary'],
+    ['LRV','Vaidya Standard Sanskrit-English Dictionary'],
+    ['MCI','Mahabharata Cultural Index'],
+    ['MD','Macdonell Sanskrit-English Dictionary'],
+    ['MW','Monier-Williams Sanskrit-English Dictionary'],
+    ['MW72','Monier-Williams Sanskrit-English Dictionary'],
+    ['MWE','Monier-Williams English-Sanskrit Dictionary'],
+    ['NMMB','Nāmamālikā of Bhoja'],
+    ['PD','An Encyclopedic Dictionary of Sanskrit on Historical Principles'],
+    ['PE','Puranic Encyclopedia'],
+    ['PGN','Personal and Geographical Names in the Gupta Inscriptions'],
+    ['PUI','The Purana Index'],
+    ['PW','Böhtlingk Sanskrit-Wörterbuch in kürzerer Fassung'],
+    ['PWG','Böhtlingk and Roth Grosses Petersburger Wörterbuch'],
+    ['PWKVN','Böhtlingk Sanskrit-Wörterbuch (PW/PWG cross-reference variant)'],
+    ['SCH','Schmidt Nachträge zum Sanskrit-Wörterbuch'],
+    ['SHS','Shabda-Sagara Sanskrit-English Dictionary'],
+    ['SKD','Sabda-kalpadruma'],
+    ['SNP','Meulenbeld Sanskrit Names of Plants'],
+    ['STC','Stchoupak Dictionnaire Sanscrit-Français'],
+    ['VCP','Vacaspatyam'],
+    ['VEI','The Vedic Index of Names and Subjects'],
+    ['WIL','Wilson Sanskrit-English Dictionary'],
+    ['YAT','Yates Sanskrit-English Dictionary']
+  ];
+  var list = document.getElementById('dictList');
+  if (list) {
+    DICTS.forEach(function (d) {
+      var li = document.createElement('li');
+      var code = document.createElement('code');
+      code.textContent = d[0];
+      li.appendChild(code);
+      li.appendChild(document.createTextNode(' ' + d[1]));
+      list.appendChild(li);
+    });
+  }
+  var input = document.getElementById('q');
+  var hint = document.getElementById('scriptHint');
+  var DEFAULT_HINT = 'Devanagari, IAST or plain letters — the script is detected for you.';
+  function updateHint() {
+    if (!input || !hint) { return; }
+    var v = input.value || '';
+    if (!v.trim()) { hint.textContent = DEFAULT_HINT; return; }
+    if (/[ऀ-ॿ]/.test(v)) { hint.textContent = 'Detected: Devanagari script'; }
+    else if (/[āīūṛṝḷḹṃṅñṇṭḍśṣ]/i.test(v)) { hint.textContent = 'Detected: IAST transliteration'; }
+    else { hint.textContent = 'Detected: plain letters'; }
+  }
+  if (input) {
+    input.addEventListener('input', updateHint);
+    updateHint();
+  }
+})();
+</script>
+</body>
+</html>

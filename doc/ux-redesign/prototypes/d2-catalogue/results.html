@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>D2 Library Catalogue · Results — Cologne Sanskrit Lexicon prototype</title>
+<style>
+:root{
+  --paper:#f8f3e9; --card:#fffdf7; --ink:#3a2d21; --ink-muted:#7a6a56;
+  --brown:#5b3a29; --maroon:#7a2e2a; --gold:#a5803a; --line:#e3d7bf;
+  --spine-english:#2e5d43;
+  --serif:'Palatino Linotype','Palatino','Book Antiqua',Georgia,serif;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--serif);line-height:1.55}
+a{color:var(--maroon)}
+.site-header{background:var(--brown);color:#f5ecdd;padding:.65rem 1.25rem;display:flex;flex-wrap:wrap;align-items:baseline;gap:.35rem 1.25rem}
+.site-header .brand{font-size:1.05rem;font-weight:700;letter-spacing:.04em}
+.site-header nav{display:flex;flex-wrap:wrap;gap:.25rem .9rem;font-size:.92rem;margin-left:auto}
+.site-header nav a{color:#e8dcc4;text-decoration:none;padding:.15rem .1rem;border-bottom:2px solid transparent}
+.site-header nav a:hover{color:#fff;border-bottom-color:#c9a55e}
+.site-header nav a[aria-current="page"]{color:#fff;font-weight:700;border-bottom-color:var(--gold)}
+.proto-banner{background:#efe4cd;border-bottom:1px solid var(--line);color:#6b5232;font-size:.8rem;padding:.35rem 1.25rem;text-align:center}
+main{max-width:46rem;margin:0 auto;padding:1.8rem 1.25rem 3rem}
+h1{font-size:1.45rem;color:var(--brown);margin:0 0 1rem}
+.searchbar{display:flex;box-shadow:0 2px 8px rgba(91,58,41,.15);border-radius:10px;overflow:hidden;border:1px solid var(--line);background:var(--card);margin-bottom:.5rem}
+.searchbar input{flex:1;min-width:0;border:0;background:transparent;padding:.8rem 1.05rem;font:inherit;font-size:1.05rem;color:var(--ink)}
+.searchbar input:focus{outline:2px solid var(--gold);outline-offset:-2px}
+.searchbar button{border:0;background:var(--maroon);color:#f8f0e0;font:inherit;font-size:1rem;padding:0 1.3rem;cursor:pointer}
+.searchbar button:hover{background:#8f3a35}
+.scope-note{font-size:.82rem;color:var(--ink-muted);margin:.2rem 0 1.4rem}
+.scope-note .within{display:inline-block;background:#efe4cd;border:1px solid var(--line);border-radius:999px;padding:.05rem .6rem;font-size:.78rem;color:#6b5232}
+.result-count{font-size:.9rem;color:var(--ink-muted);border-top:3px double var(--gold);padding-top:.8rem;margin:0 0 1rem}
+.slips{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:1.1rem}
+.slip{background:var(--card);border:1px solid var(--line);border-left:7px solid var(--gold);border-radius:10px;box-shadow:0 1px 4px rgba(91,58,41,.12);transition:box-shadow .15s ease}
+.slip:hover{box-shadow:0 3px 10px rgba(91,58,41,.2)}
+.slip>a{display:block;padding:1rem 1.15rem;text-decoration:none;color:inherit}
+.slip-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:.35rem .8rem}
+.slip-head .iast{font-size:1.5rem;font-weight:700;color:var(--maroon);font-style:italic}
+.slip-head .deva{font-size:1.25rem;color:var(--brown)}
+.slip>a:hover .iast{text-decoration:underline}
+.gloss{margin:.25rem 0 .65rem;color:var(--ink)}
+.snippet{margin:0 0 .65rem;font-size:.92rem;line-height:1.55;color:#6b5138}
+.snippet .lbl{font-variant:small-caps;letter-spacing:.03em;color:#8a6d4a}
+.found-in{margin:0;font-size:.8rem;color:var(--ink-muted)}
+.badges{display:inline-flex;gap:.4rem;vertical-align:middle;margin-left:.35rem}
+.badge{display:inline-block;background:var(--spine-english);color:#f3ecdc;border-radius:3px;padding:.1rem .5rem .12rem;font-size:.72rem;font-weight:700;letter-spacing:.04em;box-shadow:inset 2px 0 0 rgba(255,255,255,.35),0 1px 2px rgba(91,58,41,.3)}
+.badge.ap90{background:#3f6252}
+.caption{font-size:.8rem;color:var(--ink-muted);font-style:italic;margin:1.4rem 0 0}
+.no-results{display:none;color:var(--ink-muted);font-style:italic;padding:1.2rem 0}
+footer.provenance{max-width:46rem;margin:0 auto;padding:0 1.25rem 2rem;color:var(--ink-muted);font-size:.78rem;border-top:1px solid var(--line);padding-top:.8rem}
+@media (max-width:480px){ .site-header nav{margin-left:0} }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <span class="brand">Cologne Sanskrit Lexicon · Catalogue</span>
+  <nav aria-label="Prototype pages">
+    <a href="home.html">Home</a>
+    <a href="results.html" aria-current="page">Results</a>
+    <a href="entry.html">Entry</a>
+    <a href="dict.html">Dictionary</a>
+    <a href="../index.html">⌂ All prototypes</a>
+  </nav>
+</header>
+<p class="proto-banner">Design-direction prototype D2 · Library Catalogue — static preview with real MW (1899) &amp; Apte (1890) text</p>
+
+<main>
+  <h1>Catalogue search</h1>
+
+  <form class="searchbar" action="results.html" method="get" role="search">
+    <input type="search" id="q" name="q" placeholder="Search across the collection…" aria-label="Search across the collection" autocomplete="off">
+    <button type="submit">Search</button>
+  </form>
+  <p class="scope-note" id="scope-note">Diacritic-insensitive — <em>agni</em> finds <span lang="sa"><em>agní</em></span>.</p>
+
+  <p class="result-count" id="result-count">4 headwords on the shelf</p>
+
+  <ul class="slips" id="slips">
+    <li class="slip" data-key="agni agní agnih agniḥ fire; the god of fire">
+      <a href="entry.html#agni">
+        <p class="slip-head"><span class="iast" lang="sa">agní</span> <span class="deva" lang="sa">अग्नि</span></p>
+        <p class="gloss">fire; the god of fire</p>
+        <p class="snippet"><span class="lbl">MW 1899, sense 1:</span> fire, sacrificial fire (of three kinds, <span lang="sa">Gārhapatya</span>, <span lang="sa">Āhavanīya</span>, and <span lang="sa">Dakṣiṇa</span>)</p>
+        <p class="found-in">Found in
+          <span class="badges"><span class="badge">MW</span><span class="badge ap90">AP90</span></span>
+          — pull the slips →</p>
+      </a>
+    </li>
+    <li class="slip" data-key="dharma dhárma law, duty, virtue, nature">
+      <a href="entry.html#dharma">
+        <p class="slip-head"><span class="iast" lang="sa">dhárma</span> <span class="deva" lang="sa">धर्म</span></p>
+        <p class="gloss">law, duty, virtue, nature</p>
+        <p class="snippet"><span class="lbl">MW 1899, sense 1:</span> that which is established or firm, steadfast decree, statute, ordinance, law</p>
+        <p class="found-in">Found in
+          <span class="badges"><span class="badge">MW</span></span>
+          — pull the slip →</p>
+      </a>
+    </li>
+    <li class="slip" data-key="manas mánas mind, intellect, spirit">
+      <a href="entry.html#manas">
+        <p class="slip-head"><span class="iast" lang="sa">mánas</span> <span class="deva" lang="sa">मनस्</span></p>
+        <p class="gloss">mind, intellect, spirit</p>
+        <p class="snippet"><span class="lbl">MW 1899, sense 1 (opening):</span> mind (in its widest sense as applied to all the mental powers), intellect, intelligence, understanding, perception, sense, conscience, will, <cite>RV.</cite> &amp;c. &amp;c. …</p>
+        <p class="found-in">Found in
+          <span class="badges"><span class="badge">MW</span></span>
+          — pull the slip →</p>
+      </a>
+    </li>
+    <li class="slip" data-key="indra índra the god of the atmosphere and sky">
+      <a href="entry.html#indra">
+        <p class="slip-head"><span class="iast" lang="sa">índra</span> <span class="deva" lang="sa">इन्द्र</span></p>
+        <p class="gloss">the god of the atmosphere and sky</p>
+        <p class="snippet"><span class="lbl">MW 1899, sense 2 (opening):</span> the Indian Jupiter Pluvius or lord of rain (who in Vedic mythology reigns over the deities of the intermediate region or atmosphere …), <cite>RV.</cite>; <cite>AV.</cite>; <cite>ŚBr.</cite></p>
+        <p class="found-in">Found in
+          <span class="badges"><span class="badge">MW</span></span>
+          — pull the slip →</p>
+      </a>
+    </li>
+  </ul>
+  <p class="no-results" id="no-results">Nothing on the shelf matches — try <em>agni</em>, <em>dharma</em>, <em>manas</em> or <em>indra</em>.</p>
+
+  <p class="caption">Only these 4 words are loaded in this static preview — the full catalogue holds hundreds of thousands of headwords.</p>
+</main>
+
+<footer class="provenance">
+  Entry text is the actual public-domain dictionary text (Monier-Williams 1899 · Apte 1890), from the Cologne csl-orig source.
+</footer>
+
+<script>
+(function () {
+  'use strict';
+  function fold(s) {
+    if (!s) { return ''; }
+    try { s = s.normalize('NFD'); } catch (e) { /* older engines */ }
+    return s.replace(/[̀-ͯ]/g, '').toLowerCase();
+  }
+
+  var input = document.getElementById('q');
+  var slips = document.querySelectorAll('#slips .slip');
+  var countEl = document.getElementById('result-count');
+  var noResults = document.getElementById('no-results');
+  var scopeNote = document.getElementById('scope-note');
+  if (!input || !slips.length) { return; }
+
+  function applyFilter() {
+    var needle = fold(input.value).replace(/^\s+|\s+$/g, '');
+    var shown = 0;
+    for (var i = 0; i < slips.length; i++) {
+      var hay = fold(slips[i].getAttribute('data-key') || '');
+      var match = !needle || hay.indexOf(needle) !== -1;
+      slips[i].style.display = match ? '' : 'none';
+      if (match) { shown++; }
+    }
+    if (countEl) {
+      countEl.textContent = needle
+        ? shown + ' of 4 headwords match “' + input.value + '”'
+        : '4 headwords on the shelf';
+    }
+    if (noResults) { noResults.style.display = shown ? 'none' : 'block'; }
+  }
+
+  /* prefill from ?q= and note ?dict= scope (mock) */
+  var m = /[?&]q=([^&]*)/.exec(location.search);
+  if (m) {
+    try { input.value = decodeURIComponent(m[1].replace(/\+/g, ' ')); }
+    catch (e) { input.value = m[1]; }
+  }
+  var d = /[?&]dict=([^&]*)/.exec(location.search);
+  if (d && d[1] && scopeNote) {
+    var code = d[1].replace(/[^A-Za-z0-9]/g, '');
+    var chip = document.createElement('span');
+    chip.className = 'within';
+    chip.textContent = 'searching within ' + code + ' (mock scope)';
+    scopeNote.appendChild(document.createTextNode(' '));
+    scopeNote.appendChild(chip);
+  }
+
+  input.addEventListener('input', applyFilter);
+  applyFilter();
+})();
+</script>
+</body>
+</html>

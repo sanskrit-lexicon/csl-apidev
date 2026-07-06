@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>D4 Data-dense Scholar · Results — Cologne Sanskrit Lexicon prototype</title>
+<style>
+:root{
+ --bg:#0f172a; --panel:#1e293b; --text:#e2e8f0; --muted:#94a3b8;
+ --accent:#22d3ee; --amber:#fbbf24; --line:#334155;
+ --mono:Consolas,'Cascadia Mono','Courier New',monospace;
+ --sans:'Segoe UI',system-ui,-apple-system,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font:13px/1.5 var(--sans);}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+.banner{background:#0b1120;border-bottom:1px solid var(--line);color:var(--muted);
+ font:11px/1.4 var(--mono);padding:3px 12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.toolbar{position:sticky;top:0;z-index:10;background:var(--panel);border-bottom:1px solid var(--line);
+ display:flex;align-items:center;flex-wrap:wrap;gap:8px;padding:6px 12px}
+.logo{font:600 13px var(--mono);color:var(--text);letter-spacing:.5px}
+.logo .sl{color:var(--accent)}
+nav.d4nav{display:flex;gap:2px;font:12px var(--mono)}
+nav.d4nav a{padding:3px 8px;border:1px solid transparent;border-radius:2px;color:var(--muted)}
+nav.d4nav a:hover{color:var(--text);text-decoration:none;border-color:var(--line)}
+nav.d4nav a[aria-current="page"]{color:var(--accent);border-color:var(--accent);background:rgba(34,211,238,.08)}
+.spacer{flex:1 1 auto}
+input[type="search"]{background:#0b1120;border:1px solid var(--line);border-radius:2px;
+ color:var(--text);font:13px var(--mono);padding:4px 8px;min-width:200px;outline:none}
+input[type="search"]:focus{border-color:var(--accent)}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:2px;overflow:hidden}
+.seg button{background:var(--panel);border:0;border-right:1px solid var(--line);color:var(--muted);
+ font:11px var(--mono);padding:4px 8px;cursor:pointer}
+.seg button:last-child{border-right:0}
+.seg button[aria-pressed="true"]{background:rgba(34,211,238,.15);color:var(--accent)}
+.seg button:hover{color:var(--text)}
+kbd{background:#0b1120;border:1px solid var(--line);border-bottom-width:2px;border-radius:2px;
+ color:var(--muted);font:10px var(--mono);padding:1px 5px}
+.hints{color:var(--muted);font:11px var(--mono);white-space:nowrap}
+main{max-width:1200px;margin:0 auto;padding:14px 12px 40px}
+h1{font:600 16px var(--sans);margin:0 0 2px}
+h2{font:600 13px var(--sans);color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin:22px 0 6px}
+.sub{color:var(--muted);font-size:12px;margin:0 0 12px}
+.count{color:var(--muted);font:11px var(--mono)}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:2px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;font-size:12px}
+th,td{border-bottom:1px solid var(--line);padding:5px 10px;text-align:left;vertical-align:top;white-space:nowrap}
+th{background:#0b1120;color:var(--muted);font:600 11px var(--mono);text-transform:uppercase;letter-spacing:.5px}
+tbody tr:hover{background:rgba(34,211,238,.05)}
+tbody tr:last-child td{border-bottom:0}
+td.hw{font:600 14px var(--mono)}
+td.hw a{color:var(--text)}
+td.hw a:hover{color:var(--accent)}
+td.gloss{white-space:normal;min-width:180px;color:var(--muted)}
+td.loc{font:11px var(--mono);color:var(--muted)}
+.badge{display:inline-block;border:1px solid var(--line);border-radius:2px;font:600 10px var(--mono);
+ padding:1px 6px;margin-right:3px}
+.badge.mw{border-color:var(--accent);color:var(--accent)}
+.badge.ap{border-color:var(--amber);color:var(--amber)}
+.badge.none{color:#475569;border-color:#243146}
+td.open a{font:11px var(--mono)}
+.caption{color:var(--muted);font:11px var(--mono);margin:6px 2px}
+/* comparison strip */
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.col{background:var(--panel);border:1px solid var(--line);border-radius:2px;min-width:0}
+.colhead{background:#0b1120;border-bottom:1px solid var(--line);padding:5px 10px;
+ font:600 11px var(--mono);letter-spacing:.5px;display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
+.colhead .dict{color:var(--accent)}
+.col.apte .colhead .dict{color:var(--amber)}
+.colhead .hwf{color:var(--text);font-size:13px}
+.colhead .gram{color:var(--muted);font-style:italic;font-family:var(--sans)}
+.colhead .loc{color:var(--muted);font-weight:400}
+.colbody{padding:8px 10px}
+.etym{color:var(--muted);font-size:12px;margin:0 0 6px}
+ol.senses{margin:0;padding-left:2.1em;font-size:12.5px}
+ol.senses li{margin:0 0 3px;padding-left:.2em}
+ol.senses li::marker{color:var(--accent);font:600 11px var(--mono)}
+.col.apte ol.senses li::marker{color:var(--amber)}
+.note{color:var(--muted);font-size:11px;margin:8px 0 0;font-style:italic}
+cite{font-style:italic;color:var(--muted)}
+abbr{text-decoration:none;border-bottom:1px dotted #475569;cursor:help}
+span[lang="sa"]{font-family:var(--mono)}
+.prov{color:var(--muted);font-size:11px;margin-top:18px;border-top:1px solid var(--line);padding-top:8px}
+@media (max-width:820px){ .compare{grid-template-columns:1fr} }
+@media (max-width:640px){
+ input[type="search"]{min-width:120px;flex:1}
+ .hints{display:none}
+}
+</style>
+</head>
+<body>
+<div class="banner">Design-direction prototype D4 · Data-dense Scholar — static preview with real MW (1899) &amp; Apte (1890) text</div>
+<header class="toolbar">
+ <span class="logo">CSL<span class="sl">//</span>D4</span>
+ <nav class="d4nav" aria-label="Prototype pages">
+  <a href="home.html">Home</a>
+  <a href="results.html" aria-current="page">Results</a>
+  <a href="entry.html">Entry</a>
+  <a href="dict.html">Dict</a>
+  <a href="../index.html">&#8962; All prototypes</a>
+ </nav>
+ <span class="spacer"></span>
+ <input type="search" id="q" placeholder="filter headwords" aria-label="Filter headwords">
+ <div class="seg" id="scriptSeg" role="group" aria-label="Script">
+  <button type="button" data-script="iast" aria-pressed="true">IAST</button>
+  <button type="button" data-script="deva" aria-pressed="false">Devanagari</button>
+  <button type="button" data-script="slp1" aria-pressed="false">SLP1</button>
+  <button type="button" data-script="hk" aria-pressed="false">HK</button>
+ </div>
+ <span class="hints"><kbd>/</kbd> search &nbsp;<kbd>Esc</kbd> blur</span>
+</header>
+<main>
+ <h1>Results</h1>
+ <p class="sub">Diacritic-insensitive live filter — <span class="count" id="resCount">4 / 4 headwords</span></p>
+
+ <div class="tablewrap">
+ <table id="resTable">
+  <thead>
+   <tr>
+    <th scope="col">Headword</th>
+    <th scope="col">Gloss</th>
+    <th scope="col">Dictionaries</th>
+    <th scope="col">MW page,col · L</th>
+    <th scope="col"></th>
+   </tr>
+  </thead>
+  <tbody>
+   <tr data-search="agni agní fire the god of fire">
+    <td class="hw"><a href="entry.html#agni"><span class="sf" lang="sa" data-iast="agní" data-deva="अग्नि" data-slp1="agni" data-hk="agni">agní</span></a></td>
+    <td class="gloss">fire; the god of fire</td>
+    <td><span class="badge mw">MW</span><span class="badge ap">AP90</span></td>
+    <td class="loc">5,1 · L 890</td>
+    <td class="open"><a href="entry.html#agni">open &#8594;</a></td>
+   </tr>
+   <tr data-search="dharma dhárma law duty virtue nature">
+    <td class="hw"><a href="entry.html#dharma"><span class="sf" lang="sa" data-iast="dhárma" data-deva="धर्म" data-slp1="Darma" data-hk="dharma">dhárma</span></a></td>
+    <td class="gloss">law, duty, virtue, nature</td>
+    <td><span class="badge mw">MW</span><span class="badge none">AP90 —</span></td>
+    <td class="loc">510,3 · L 99903</td>
+    <td class="open"><a href="entry.html#dharma">open &#8594;</a></td>
+   </tr>
+   <tr data-search="manas mánas mind intellect spirit">
+    <td class="hw"><a href="entry.html#manas"><span class="sf" lang="sa" data-iast="mánas" data-deva="मनस्" data-slp1="manas" data-hk="manas">mánas</span></a></td>
+    <td class="gloss">mind, intellect, spirit</td>
+    <td><span class="badge mw">MW</span><span class="badge none">AP90 —</span></td>
+    <td class="loc">783,3 · L 156776</td>
+    <td class="open"><a href="entry.html#manas">open &#8594;</a></td>
+   </tr>
+   <tr data-search="indra índra the god of the atmosphere and sky">
+    <td class="hw"><a href="entry.html#indra"><span class="sf" lang="sa" data-iast="índra" data-deva="इन्द्र" data-slp1="indra" data-hk="indra">índra</span></a></td>
+    <td class="gloss">the god of the atmosphere and sky</td>
+    <td><span class="badge mw">MW</span><span class="badge none">AP90 —</span></td>
+    <td class="loc">166,1 · L 28925</td>
+    <td class="open"><a href="entry.html#indra">open &#8594;</a></td>
+   </tr>
+  </tbody>
+ </table>
+ </div>
+ <p class="caption">only 4 words loaded in this static preview</p>
+
+ <h2>Side-by-side · <span class="sf" lang="sa" data-iast="agní" data-deva="अग्नि" data-slp1="agni" data-hk="agni">agní</span> in two dictionaries</h2>
+ <div class="compare">
+  <section class="col mw" aria-label="Monier-Williams 1899">
+   <header class="colhead">
+    <span class="dict">MW 1899</span>
+    <span class="hwf sf" lang="sa" data-iast="agní" data-deva="अग्नि" data-slp1="agni" data-hk="agni">agní</span>
+    <span class="gram">m.</span>
+    <span class="loc">p. 5, col. 1 · L 890</span>
+   </header>
+   <div class="colbody">
+    <p class="etym">(√ <span lang="sa">ag</span>, <cite>Uṇ.</cite>)</p>
+    <ol class="senses">
+     <li>fire, sacrificial fire (of three kinds, <span lang="sa">Gārhapatya</span>, <span lang="sa">Āhavanīya</span>, and <span lang="sa">Dakṣiṇa</span>)</li>
+     <li>the number three, <cite>Sūryas.</cite></li>
+     <li>the god of fire, the fire of the stomach, digestive faculty, gastric fluid</li>
+     <li>bile, <cite>L.</cite></li>
+     <li>gold, <cite>L.</cite></li>
+     <li><abbr title="name">N.</abbr> of various plants — <em>Semecarpus Anacardium</em>, <cite>Suśr.</cite>; <em>Plumbago Zeylanica</em> and <em>Rosea</em>; <em>Citrus Acida</em></li>
+     <li>a mystical substitute for the letter <span lang="sa">r</span></li>
+     <li>in the <span lang="sa">Kātantra</span> grammar, <abbr title="name">N.</abbr> of noun-stems ending in <span lang="sa">i</span> and <span lang="sa">u</span></li>
+    </ol>
+    <p class="note"><cite>Monier-Williams, A Sanskrit-English Dictionary (1899), s.v. agní, p. 5, col. 1. Cologne Digital Sanskrit Dictionaries.</cite></p>
+   </div>
+  </section>
+  <section class="col apte" aria-label="Apte 1890">
+   <header class="colhead">
+    <span class="dict">AP90 1890</span>
+    <span class="hwf" lang="sa">agniḥ</span>
+    <span class="gram">m.</span>
+    <span class="loc">[<cite>Uṇ. 4.50</cite>]</span>
+   </header>
+   <div class="colbody">
+    <ol class="senses">
+     <li>Fire</li>
+     <li>the God of fire</li>
+     <li>sacrificial fire of three kinds (<span lang="sa">Gārhapatya</span>, <span lang="sa">Āhavanīya</span> and <span lang="sa">Dakṣiṇa</span>)</li>
+     <li>the fire of the stomach, digestive faculty, gastric fluid</li>
+     <li>bile</li>
+     <li>cauterization</li>
+     <li>gold</li>
+     <li>the number three</li>
+     <li><abbr title="name">N.</abbr> of various plants (<em>Plumbago Zeylanica</em>; <em>Semecarpus Anacardium</em>; <em>Citrus Acida</em>)</li>
+     <li>a mystical substitute for the letter <span lang="sa">r</span></li>
+    </ol>
+    <p class="note">English gloss senses shown; the inline Sanskrit usage examples of the print entry are omitted in this preview.</p>
+    <p class="note"><cite>Apte, The Practical Sanskrit-English Dictionary (1890), s.v. agniḥ. Cologne Digital Sanskrit Dictionaries.</cite></p>
+   </div>
+  </section>
+ </div>
+
+ <p class="prov">Entry text is the actual public-domain dictionary text (Monier-Williams 1899 &#183; Apte 1890), from the Cologne csl-orig source.</p>
+</main>
+<script>
+(function(){
+ 'use strict';
+ /* ---- script toggle (shared D4 contract) ---- */
+ var seg = document.getElementById('scriptSeg');
+ function applyScript(s){
+  var els = document.querySelectorAll('.sf');
+  for (var i=0;i<els.length;i++){
+   var v = els[i].getAttribute('data-'+s);
+   if (v !== null) { els[i].textContent = v; }
+  }
+  if (seg){
+   var btns = seg.querySelectorAll('button');
+   for (var j=0;j<btns.length;j++){
+    btns[j].setAttribute('aria-pressed', btns[j].getAttribute('data-script')===s ? 'true':'false');
+   }
+  }
+  try { localStorage.setItem('d4script', s); } catch(e){}
+ }
+ if (seg){
+  seg.addEventListener('click', function(ev){
+   var b = ev.target.closest ? ev.target.closest('button') : null;
+   if (b && b.getAttribute('data-script')) { applyScript(b.getAttribute('data-script')); }
+  });
+ }
+ var saved = null;
+ try { saved = localStorage.getItem('d4script'); } catch(e){}
+ if (saved && ['iast','deva','slp1','hk'].indexOf(saved) !== -1) { applyScript(saved); }
+
+ /* ---- diacritic-insensitive live filter ---- */
+ function fold(s){
+  return s.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase();
+ }
+ var q = document.getElementById('q');
+ var table = document.getElementById('resTable');
+ var tbody = table ? table.tBodies[0] : null;
+ var countEl = document.getElementById('resCount');
+ function applyFilter(){
+  if (!tbody) { return; }
+  var needle = q ? fold(q.value.trim()) : '';
+  var shown = 0, total = tbody.rows.length;
+  for (var i=0;i<total;i++){
+   var row = tbody.rows[i];
+   var hay = fold(row.getAttribute('data-search') || '');
+   var ok = needle === '' || hay.indexOf(needle) !== -1;
+   row.style.display = ok ? '' : 'none';
+   if (ok) { shown++; }
+  }
+  if (countEl){ countEl.textContent = shown + ' / ' + total + ' headwords'; }
+ }
+ if (q){
+  q.addEventListener('input', applyFilter);
+  /* prefill from ?q= (home.html and dict.html hand off here) */
+  try {
+   var m = /[?&]q=([^&]*)/.exec(location.search);
+   if (m){ q.value = decodeURIComponent(m[1].replace(/\+/g,' ')); applyFilter(); }
+  } catch(e){}
+ }
+
+ /* ---- keyboard: / focuses search, Esc blurs/clears (never while typing) ---- */
+ document.addEventListener('keydown', function(ev){
+  var t = ev.target;
+  if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)){
+   if (ev.key === 'Escape' && t.blur) { t.blur(); }
+   return;
+  }
+  if (ev.key === '/' && q){ ev.preventDefault(); q.focus(); q.select(); }
+ });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cologne Sanskrit Lexicon — design-direction prototypes (H225)</title>
+<style>
+:root {
+  --ink: #1c2530;
+  --muted: #5e6a76;
+  --line: #d5dce3;
+  --wash: #eef1f4;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--wash);
+  color: var(--ink);
+  font-family: Georgia, "Times New Roman", serif;
+}
+.wrap { max-width: 1180px; margin: 0 auto; padding: 28px 20px 56px; }
+header h1 { margin: 0 0 6px; font-size: 1.7rem; line-height: 1.2; }
+header p {
+  margin: 0 0 6px; max-width: 78ch; color: var(--muted);
+  font-family: Verdana, Arial, sans-serif; font-size: 0.86rem; line-height: 1.55;
+}
+header a { color: #1f5f99; }
+.grid {
+  display: grid; gap: 16px; margin-top: 22px;
+  grid-template-columns: repeat(auto-fit, minmax(255px, 1fr));
+}
+.direction {
+  border: 1px solid var(--line); border-radius: 8px; overflow: hidden;
+  background: #fff; display: flex; flex-direction: column;
+  box-shadow: 0 8px 20px rgba(28, 37, 48, 0.07);
+}
+.swatch { padding: 18px 16px 14px; }
+.swatch .kicker {
+  font-family: Verdana, Arial, sans-serif; font-size: 0.7rem;
+  font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; opacity: 0.75;
+}
+.swatch h2 { margin: 4px 0 0; font-size: 1.22rem; line-height: 1.2; }
+.swatch .hw { margin-top: 10px; font-size: 1.5rem; }
+.swatch .hw small { font-size: 0.72rem; opacity: 0.8; display: block; margin-top: 2px; }
+.d1 .swatch { background: #f3f6f8; color: #17212b; border-bottom: 3px solid #1f5f99; }
+.d1 .swatch .hw { font-family: Georgia, serif; }
+.d2 .swatch { background: #f8f3e9; color: #4a3020; border-bottom: 3px solid #7a2e2a; }
+.d2 .swatch .hw { font-family: "Palatino Linotype", "Book Antiqua", Georgia, serif; }
+.d3 .swatch { background: #ffffff; color: #111827; border-bottom: 3px solid #0f766e; }
+.d3 .swatch .hw { font-family: Georgia, serif; }
+.d3 .swatch .kicker { color: #0f766e; opacity: 1; }
+.d4 .swatch { background: #0f172a; color: #e2e8f0; border-bottom: 3px solid #22d3ee; }
+.d4 .swatch .hw { font-family: Consolas, "Cascadia Mono", monospace; font-size: 1.3rem; }
+.body { padding: 14px 16px 16px; display: flex; flex-direction: column; gap: 12px; flex: 1; }
+.pitch {
+  margin: 0; color: var(--muted); flex: 1;
+  font-family: Verdana, Arial, sans-serif; font-size: 0.82rem; line-height: 1.5;
+}
+.pages { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
+.pages a {
+  display: block; padding: 8px 10px; border: 1px solid var(--line); border-radius: 5px;
+  color: var(--ink); text-decoration: none;
+  font-family: Verdana, Arial, sans-serif; font-size: 0.78rem;
+}
+.pages a b { display: block; }
+.pages a span { color: var(--muted); font-size: 0.7rem; }
+.pages a:hover, .pages a:focus-visible { border-color: #1f5f99; color: #174a78; }
+.foot {
+  margin-top: 26px; border-left: 4px solid #1f5f99; background: #fff;
+  padding: 12px 14px; color: var(--muted);
+  font-family: Verdana, Arial, sans-serif; font-size: 0.82rem; line-height: 1.55;
+}
+.foot a { color: #1f5f99; }
+@media (max-width: 560px) { .pages { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <h1>Cologne Sanskrit Lexicon — four design-direction prototypes</h1>
+  <p>Four visually and structurally distinct end-to-end explorations of the Cologne Digital
+     Sanskrit Dictionaries redesign. Each direction is a complete static app over the same four
+     pages — homepage/catalogue, search results, entry reading page, dictionary detail — and
+     embeds the same <b>real public-domain dictionary text</b> (Monier-Williams 1899 · Apte 1890,
+     from the Cologne <code>csl-orig</code> source): <i lang="sa">agní</i>, <i lang="sa">dhárma</i>,
+     <i lang="sa">mánas</i>, <i lang="sa">índra</i>.</p>
+  <p>Grid: 4 directions × 4 pages = 16 screens. The single-screen v1 reference prototype is
+     <a href="../cologne-redesign-prototype.html">here</a>; product rulings live in
+     <a href="../proposal-brief.md">proposal-brief.md</a> and <a href="../ui-spec-app-v1.md">ui-spec-app-v1.md</a>.</p>
+</header>
+
+<div class="grid">
+  <section class="direction d1">
+    <div class="swatch">
+      <div class="kicker">D1 · Proposal A (ruled)</div>
+      <h2>Research Workbench</h2>
+      <div class="hw" lang="sa">agní <small>Georgia serif · dense two-pane · university library</small></div>
+    </div>
+    <div class="body">
+      <p class="pitch">The ruled direction: one scholarly search surface, results list beside an
+         always-open entry reader. Restrained blues and paper whites, everything one click deep.</p>
+      <nav class="pages" aria-label="D1 pages">
+        <a href="d1-workbench/home.html"><b>P1 Home</b><span>hero search + 45-dict catalogue</span></a>
+        <a href="d1-workbench/results.html"><b>P2 Results</b><span>two-pane workbench</span></a>
+        <a href="d1-workbench/entry.html"><b>P3 Entry</b><span>full reading page</span></a>
+        <a href="d1-workbench/dict.html"><b>P4 Dictionary</b><span>MW detail / midpage</span></a>
+      </nav>
+    </div>
+  </section>
+
+  <section class="direction d2">
+    <div class="swatch">
+      <div class="kicker">D2</div>
+      <h2>Library Catalogue</h2>
+      <div class="hw" lang="sa">dhárma <small>parchment + book spines · dictionary-first</small></div>
+    </div>
+    <div class="body">
+      <p class="pitch">The 45 dictionaries are the spine of the site: a warm, card-rich digital
+         library you browse first and search within. Entries read like an open book.</p>
+      <nav class="pages" aria-label="D2 pages">
+        <a href="d2-catalogue/home.html"><b>P1 Home</b><span>the collection as card grid</span></a>
+        <a href="d2-catalogue/results.html"><b>P2 Results</b><span>catalogue pull-slips</span></a>
+        <a href="d2-catalogue/entry.html"><b>P3 Entry</b><span>the reading room</span></a>
+        <a href="d2-catalogue/dict.html"><b>P4 Dictionary</b><span>MW library card</span></a>
+      </nav>
+    </div>
+  </section>
+
+  <section class="direction d3">
+    <div class="swatch">
+      <div class="kicker">D3</div>
+      <h2>Minimal Student</h2>
+      <div class="hw" lang="sa">mánas <small>one search box · huge type · mobile-first</small></div>
+    </div>
+    <div class="body">
+      <p class="pitch">Lowest learning curve: one large search, generous whitespace, big readable
+         entries, every advanced control folded away until asked for.</p>
+      <nav class="pages" aria-label="D3 pages">
+        <a href="d3-minimal/home.html"><b>P1 Home</b><span>one box, nothing else</span></a>
+        <a href="d3-minimal/results.html"><b>P2 Results</b><span>roomy word blocks</span></a>
+        <a href="d3-minimal/entry.html"><b>P3 Entry</b><span>one perfect column</span></a>
+        <a href="d3-minimal/dict.html"><b>P4 Dictionary</b><span>calm MW about-page</span></a>
+      </nav>
+    </div>
+  </section>
+
+  <section class="direction d4">
+    <div class="swatch">
+      <div class="kicker">D4</div>
+      <h2>Data-dense Scholar</h2>
+      <div class="hw" lang="sa">índra <small>dark terminal · tables · keyboard + script toggles</small></div>
+    </div>
+    <div class="body">
+      <p class="pitch">The power-user terminal: compact dark tables, dictionaries side by side,
+         always-on IAST/Devanagari/SLP1/HK toggle, keyboard hints everywhere.</p>
+      <nav class="pages" aria-label="D4 pages">
+        <a href="d4-scholar/home.html"><b>P1 Home</b><span>sortable 45-dict table</span></a>
+        <a href="d4-scholar/results.html"><b>P2 Results</b><span>dense grid + comparison</span></a>
+        <a href="d4-scholar/entry.html"><b>P3 Entry</b><span>scholar's workbench</span></a>
+        <a href="d4-scholar/dict.html"><b>P4 Dictionary</b><span>MW data sheet</span></a>
+      </nav>
+    </div>
+  </section>
+</div>
+
+<p class="foot">All 17 pages are self-contained static HTML (inline CSS/JS, no build step, no
+   external assets) served from GitHub Pages; the live Cologne server is not required. Entry text
+   is the actual public-domain dictionary text (Monier-Williams 1899 · Apte 1890) from the Cologne
+   <code>csl-orig</code> source repo — abridgements are noted per entry, nothing is paraphrased.
+   Prototype set H225, 06-07-2026.</p>
+</div>
+</body>
+</html>

@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>D4 Data-dense Scholar · Entry — Cologne Sanskrit Lexicon prototype</title>
+<style>
+:root{
+ --bg:#0f172a; --panel:#1e293b; --text:#e2e8f0; --muted:#94a3b8;
+ --accent:#22d3ee; --amber:#fbbf24; --line:#334155;
+ --mono:Consolas,'Cascadia Mono','Courier New',monospace;
+ --sans:'Segoe UI',system-ui,-apple-system,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font:13px/1.5 var(--sans);}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+.banner{background:#0b1120;border-bottom:1px solid var(--line);color:var(--muted);
+ font:11px/1.4 var(--mono);padding:3px 12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.toolbar{position:sticky;top:0;z-index:10;background:var(--panel);border-bottom:1px solid var(--line);
+ display:flex;align-items:center;flex-wrap:wrap;gap:8px;padding:6px 12px}
+.logo{font:600 13px var(--mono);color:var(--text);letter-spacing:.5px}
+.logo .sl{color:var(--accent)}
+nav.d4nav{display:flex;gap:2px;font:12px var(--mono)}
+nav.d4nav a{padding:3px 8px;border:1px solid transparent;border-radius:2px;color:var(--muted)}
+nav.d4nav a:hover{color:var(--text);text-decoration:none;border-color:var(--line)}
+nav.d4nav a[aria-current="page"]{color:var(--accent);border-color:var(--accent);background:rgba(34,211,238,.08)}
+.spacer{flex:1 1 auto}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:2px;overflow:hidden}
+.seg button{background:var(--panel);border:0;border-right:1px solid var(--line);color:var(--muted);
+ font:11px var(--mono);padding:4px 8px;cursor:pointer}
+.seg button:last-child{border-right:0}
+.seg button[aria-pressed="true"]{background:rgba(34,211,238,.15);color:var(--accent)}
+.seg button:hover{color:var(--text)}
+kbd{background:#0b1120;border:1px solid var(--line);border-bottom-width:2px;border-radius:2px;
+ color:var(--muted);font:10px var(--mono);padding:1px 5px}
+.hints{color:var(--muted);font:11px var(--mono);white-space:nowrap}
+.btn{background:#0b1120;border:1px solid var(--line);border-radius:2px;color:var(--text);
+ font:11px var(--mono);padding:4px 8px;cursor:pointer;white-space:nowrap}
+.btn:hover{border-color:var(--accent);color:var(--accent);text-decoration:none}
+.btn.flash{border-color:var(--amber);color:var(--amber)}
+main{max-width:1200px;margin:0 auto;padding:14px 12px 40px}
+h1{font:600 16px var(--sans);margin:0}
+h2{font:600 13px var(--sans);color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin:0 0 6px}
+.entry[hidden]{display:none}
+/* header data block */
+.datablock{background:var(--panel);border:1px solid var(--line);border-radius:2px;margin:0 0 12px;
+ display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:0}
+.datablock>div{border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:6px 10px;min-width:0}
+.datablock .k{display:block;color:var(--muted);font:600 9px var(--mono);text-transform:uppercase;letter-spacing:.8px}
+.datablock .v{font:14px var(--mono);color:var(--text);word-break:break-word}
+.datablock .v.small{font-size:12px;font-family:var(--sans)}
+.chip{display:inline-block;border:1px solid var(--line);border-radius:2px;font:11px var(--mono);
+ padding:1px 6px;margin:1px 2px 1px 0;color:var(--muted)}
+.chip.l{border-color:var(--accent);color:var(--accent)}
+.xref{display:inline-block;border:1px solid var(--amber);border-radius:2px;color:var(--amber);
+ font-family:var(--mono);font-size:.95em;padding:0 4px;cursor:help}
+/* columns */
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.compare.single{grid-template-columns:2fr 1fr}
+.col{background:var(--panel);border:1px solid var(--line);border-radius:2px;min-width:0}
+.colhead{background:#0b1120;border-bottom:1px solid var(--line);padding:5px 10px;
+ font:600 11px var(--mono);letter-spacing:.5px;display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
+.colhead .dict{color:var(--accent)}
+.col.apte .colhead .dict{color:var(--amber)}
+.colhead .hwf{color:var(--text);font-size:13px}
+.colhead .gram{color:var(--muted);font-style:italic;font-family:var(--sans);font-weight:400}
+.colhead .loc{color:var(--muted);font-weight:400}
+.colbody{padding:8px 10px}
+.etym{color:var(--muted);font-size:12px;margin:0 0 6px}
+ol.senses{margin:0;padding-left:2.1em;font-size:12.5px}
+ol.senses li{margin:0 0 3px;padding-left:.2em}
+ol.senses li::marker{color:var(--accent);font:600 11px var(--mono)}
+.col.apte ol.senses li::marker{color:var(--amber)}
+.tail,.note{color:var(--muted);font-size:11px;margin:8px 0 0}
+.note{font-style:italic}
+.placeholder .colbody{color:#475569;font:13px var(--mono);padding:16px 10px}
+cite{font-style:italic;color:var(--muted)}
+abbr{text-decoration:none;border-bottom:1px dotted #475569;cursor:help}
+span[lang="sa"]{font-family:var(--mono)}
+.entryhead{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin:0 0 8px}
+.entryhead .gloss{color:var(--muted);font-size:12px}
+.prov{color:var(--muted);font-size:11px;margin-top:18px;border-top:1px solid var(--line);padding-top:8px}
+@media (max-width:820px){ .compare,.compare.single{grid-template-columns:1fr} }
+@media (max-width:640px){ .hints{display:none} }
+</style>
+</head>
+<body>
+<div class="banner">Design-direction prototype D4 · Data-dense Scholar — static preview with real MW (1899) &amp; Apte (1890) text</div>
+<header class="toolbar">
+ <span class="logo">CSL<span class="sl">//</span>D4</span>
+ <nav class="d4nav" aria-label="Prototype pages">
+  <a href="home.html">Home</a>
+  <a href="results.html">Results</a>
+  <a href="entry.html" aria-current="page">Entry</a>
+  <a href="dict.html">Dict</a>
+  <a href="../index.html">&#8962; All prototypes</a>
+ </nav>
+ <span class="spacer"></span>
+ <div class="seg" id="wordSeg" role="group" aria-label="Entry">
+  <button type="button" data-entry="agni" aria-pressed="true">agni</button>
+  <button type="button" data-entry="dharma" aria-pressed="false">dharma</button>
+  <button type="button" data-entry="manas" aria-pressed="false">manas</button>
+  <button type="button" data-entry="indra" aria-pressed="false">indra</button>
+ </div>
+ <div class="seg" id="scriptSeg" role="group" aria-label="Script">
+  <button type="button" data-script="iast" aria-pressed="true">IAST</button>
+  <button type="button" data-script="deva" aria-pressed="false">Devanagari</button>
+  <button type="button" data-script="slp1" aria-pressed="false">SLP1</button>
+  <button type="button" data-script="hk" aria-pressed="false">HK</button>
+ </div>
+ <a class="btn" id="scanLink" href="https://www.sanskrit-lexicon.uni-koeln.de/scans/MWScan/2020/web/webtc/servepdf.php?page=5,1" target="_blank" rel="noopener">scan &#8599;</a>
+ <button type="button" class="btn" id="copyCite">copy citation</button>
+ <button type="button" class="btn" id="copySlp1">copy SLP1</button>
+ <span class="hints"><kbd>1</kbd>&#8211;<kbd>4</kbd> entries &nbsp;<kbd>Esc</kbd> blur</span>
+</header>
+<main>
+
+ <!-- ======================= agni ======================= -->
+ <article class="entry" id="e-agni"
+  data-citation="Monier-Williams, A Sanskrit-English Dictionary (1899), s.v. agní, p. 5, col. 1. Cologne Digital Sanskrit Dictionaries."
+  data-slp1="agni"
+  data-scan="https://www.sanskrit-lexicon.uni-koeln.de/scans/MWScan/2020/web/webtc/servepdf.php?page=5,1">
+  <div class="entryhead">
+   <h1><span class="sf" lang="sa" data-iast="agní" data-deva="अग्नि" data-slp1="agni" data-hk="agni">agní</span></h1>
+   <span class="gloss">fire; the god of fire</span>
+  </div>
+  <div class="datablock">
+   <div><span class="k">IAST</span><span class="v" lang="sa">agní</span></div>
+   <div><span class="k">Devanagari</span><span class="v" lang="sa">अग्नि</span></div>
+   <div><span class="k">SLP1</span><span class="v" lang="sa">agni</span></div>
+   <div><span class="k">HK</span><span class="v" lang="sa">agni</span></div>
+   <div><span class="k">Grammar</span><span class="v small"><em>m.</em></span></div>
+   <div><span class="k">Etymology (MW)</span><span class="v small">(√ <span lang="sa">ag</span>, <cite>Uṇ.</cite>)</span></div>
+   <div><span class="k">Location</span><span class="v small"><span class="chip">MW p. 5, col. 1</span><span class="chip l">L 890</span></span></div>
+  </div>
+  <div class="compare">
+   <section class="col mw" aria-label="Monier-Williams 1899">
+    <header class="colhead"><span class="dict">MW 1899</span>
+     <span class="hwf sf" lang="sa" data-iast="agní" data-deva="अग्नि" data-slp1="agni" data-hk="agni">agní</span>
+     <span class="gram">m.</span><span class="loc">p. 5, col. 1 · L 890</span></header>
+    <div class="colbody">
+     <p class="etym">(√ <span lang="sa">ag</span>, <cite>Uṇ.</cite>)</p>
+     <ol class="senses">
+      <li>fire, sacrificial fire (of three kinds, <span lang="sa">Gārhapatya</span>, <span lang="sa">Āhavanīya</span>, and <span lang="sa">Dakṣiṇa</span>)</li>
+      <li>the number three, <cite>Sūryas.</cite></li>
+      <li>the god of fire, the fire of the stomach, digestive faculty, gastric fluid</li>
+      <li>bile, <cite>L.</cite></li>
+      <li>gold, <cite>L.</cite></li>
+      <li><abbr title="name">N.</abbr> of various plants — <em>Semecarpus Anacardium</em>, <cite>Suśr.</cite>; <em>Plumbago Zeylanica</em> and <em>Rosea</em>; <em>Citrus Acida</em></li>
+      <li>a mystical substitute for the letter <span lang="sa">r</span></li>
+      <li>in the <span lang="sa">Kātantra</span> grammar, <abbr title="name">N.</abbr> of noun-stems ending in <span lang="sa">i</span> and <span lang="sa">u</span></li>
+     </ol>
+     <p class="note"><cite>Monier-Williams, A Sanskrit-English Dictionary (1899), s.v. agní, p. 5, col. 1. Cologne Digital Sanskrit Dictionaries.</cite></p>
+    </div>
+   </section>
+   <section class="col apte" aria-label="Apte 1890">
+    <header class="colhead"><span class="dict">AP90 1890</span>
+     <span class="hwf" lang="sa">agniḥ</span>
+     <span class="gram">m.</span><span class="loc">[<cite>Uṇ. 4.50</cite>]</span></header>
+    <div class="colbody">
+     <ol class="senses">
+      <li>Fire</li>
+      <li>the God of fire</li>
+      <li>sacrificial fire of three kinds (<span lang="sa">Gārhapatya</span>, <span lang="sa">Āhavanīya</span> and <span lang="sa">Dakṣiṇa</span>)</li>
+      <li>the fire of the stomach, digestive faculty, gastric fluid</li>
+      <li>bile</li>
+      <li>cauterization</li>
+      <li>gold</li>
+      <li>the number three</li>
+      <li><abbr title="name">N.</abbr> of various plants (<em>Plumbago Zeylanica</em>; <em>Semecarpus Anacardium</em>; <em>Citrus Acida</em>)</li>
+      <li>a mystical substitute for the letter <span lang="sa">r</span></li>
+     </ol>
+     <p class="note">English gloss senses shown; the inline Sanskrit usage examples of the print entry are omitted in this preview.</p>
+     <p class="note"><cite>Apte, The Practical Sanskrit-English Dictionary (1890), s.v. agniḥ. Cologne Digital Sanskrit Dictionaries.</cite></p>
+    </div>
+   </section>
+  </div>
+ </article>
+
+ <!-- ======================= dharma ======================= -->
+ <article class="entry" id="e-dharma" hidden
+  data-citation="Monier-Williams, A Sanskrit-English Dictionary (1899), s.v. dhárma, p. 510, col. 3. Cologne Digital Sanskrit Dictionaries."
+  data-slp1="Darma"
+  data-scan="https://www.sanskrit-lexicon.uni-koeln.de/scans/MWScan/2020/web/webtc/servepdf.php?page=510,3">
+  <div class="entryhead">
+   <h1><span class="sf" lang="sa" data-iast="dhárma" data-deva="धर्म" data-slp1="Darma" data-hk="dharma">dhárma</span></h1>
+   <span class="gloss">law, duty, virtue, nature</span>
+  </div>
+  <div class="datablock">
+   <div><span class="k">IAST</span><span class="v" lang="sa">dhárma</span></div>
+   <div><span class="k">Devanagari</span><span class="v" lang="sa">धर्म</span></div>
+   <div><span class="k">SLP1</span><span class="v" lang="sa">Darma</span></div>
+   <div><span class="k">HK</span><span class="v" lang="sa">dharma</span></div>
+   <div><span class="k">Grammar</span><span class="v small"><em>m.</em></span></div>
+   <div><span class="k">Etymology (MW)</span><span class="v small">(rarely <em>n.</em> <abbr title="gaṇa">g.</abbr> <span lang="sa">ardharcādi</span>; the older form of the <cite>RV.</cite> is <span lang="sa" class="xref" title="not loaded in this static preview">dhárman</span>, <abbr title="quod vide">q.v.</abbr>)</span></div>
+   <div><span class="k">Location</span><span class="v small"><span class="chip">MW p. 510, col. 3</span><span class="chip l">L 99903</span></span></div>
+  </div>
+  <div class="compare single">
+   <section class="col mw" aria-label="Monier-Williams 1899">
+    <header class="colhead"><span class="dict">MW 1899</span>
+     <span class="hwf sf" lang="sa" data-iast="dhárma" data-deva="धर्म" data-slp1="Darma" data-hk="dharma">dhárma</span>
+     <span class="gram">m.</span><span class="loc">p. 510, col. 3 · L 99903</span></header>
+    <div class="colbody">
+     <p class="etym">(rarely <em>n.</em> <abbr title="gaṇa">g.</abbr> <span lang="sa">ardharcādi</span>; the older form of the <cite>RV.</cite> is <span lang="sa" class="xref" title="not loaded in this static preview">dhárman</span>, <abbr title="quod vide">q.v.</abbr>)</p>
+     <ol class="senses">
+      <li>that which is established or firm, steadfast decree, statute, ordinance, law</li>
+      <li>usage, practice, customary observance or prescribed conduct, duty</li>
+      <li>right, justice (often as a synonym of punishment)</li>
+      <li>virtue, morality, religion, religious merit, good works (<span lang="sa">dhármeṇa</span> <em>ind.</em> or <span lang="sa">°māt</span> <em>ind.</em> according to right or rule, rightly, justly, according to the nature of anything; <span lang="sa">°me sthita</span> <em>mfn.</em> holding to the law, doing one’s duty), <cite>AV.</cite> &amp;c. &amp;c.</li>
+      <li>Law or Justice personified (as <span lang="sa">Indra</span>, <cite>ŚBr.</cite> &amp;c.; as <span lang="sa">Yama</span>, <cite>MBh.</cite>; as born from the right breast of <span lang="sa">Yama</span> and father of <span lang="sa">Śama</span>, <span lang="sa">Kāma</span> and <span lang="sa">Harṣa</span>, <cite>ib.</cite>; as <span lang="sa">Viṣṇu</span>, <cite>Hariv.</cite>; as <span lang="sa">Prajā-pati</span> and son-in-law of <span lang="sa">Dakṣa</span>, <cite>Hariv.</cite>; <cite>Mn.</cite> &amp;c.; as one of the attendants of the Sun, <cite>L.</cite>; as a Bull, <cite>Mn. viii, 16</cite>; as a Dove, <cite>Kathās. vii, 89</cite>, &amp;c.)</li>
+      <li>the law or doctrine of Buddhism (as distinguished from the <span lang="sa">saṅgha</span> or monastic order, <cite>MWB. 70</cite>)</li>
+      <li>the ethical precepts of Buddhism (or the principal <span lang="sa">dharma</span> called <span lang="sa">sūtra</span>, as distinguished from the <span lang="sa">abhi-dharma</span> or ‘further <span lang="sa">dharma</span>’ and from the <span lang="sa">vinaya</span> or ‘discipline’, these three constituting the canon of Southern Buddhism, <cite>MWB. 61</cite>)</li>
+      <li>the law of Northern Buddhism (in 9 canonical scriptures, <abbr title="videlicet">viz.</abbr> <span lang="sa">Prajñā-pāramitā</span>, <span lang="sa">Gaṇḍa-vyūha</span>, <span lang="sa">Daśa-bhūmīśvara</span>, <span lang="sa">Samādhirāja</span>, <span lang="sa">Laṅkāvatāra</span>, <span lang="sa">Saddharma-puṇḍarīka</span>, <span lang="sa">Tathāgata-guhyaka</span>, <span lang="sa">Lalita-vistara</span>, <span lang="sa">Suvarṇa-prabhāsa</span>, <cite>MWB. 69</cite>)</li>
+      <li>nature, character, peculiar condition or essential quality, property, mark, peculiarity (= <span lang="sa">sva-bhāva</span>, <cite>L.</cite>; <abbr title="confer">cf.</abbr> <span lang="sa">daśa-dharma-gata</span>, <cite>ŚBr.</cite> &amp;c. &amp;c.; <span lang="sa">upamānopameyayor dharma</span>, the tertium comparationis, <cite>Pāṇ. ii, 1, 55</cite>, <abbr title="Scholiast">Sch.</abbr>)</li>
+      <li>a particular ceremony, <cite>MBh. xiv, 2623</cite></li>
+      <li>sacrifice, <cite>L.</cite></li>
+      <li>the ninth mansion, <cite>Var.</cite></li>
+      <li>an <span lang="sa">Upaniṣad</span>, <cite>L.</cite></li>
+      <li>associating with the virtuous, <cite>L.</cite></li>
+      <li>religious abstraction, devotion, <cite>L.</cite></li>
+      <li>= <span lang="sa">upamā</span>, <cite>L.</cite> (<abbr title="confer">cf.</abbr> above)</li>
+      <li>a bow, <cite>Dharmaś.</cite></li>
+      <li>a <span lang="sa">Soma</span>-drinker, <cite>L.</cite></li>
+      <li><abbr title="name">N.</abbr> of the 15th <span lang="sa">Arhat</span> of the present <span lang="sa">Ava-sarpiṇī</span>, <cite>L.</cite></li>
+     </ol>
+     <p class="note">Senses 1–19 of the entry; the remaining senses (proper names) are omitted in this static preview.</p>
+     <p class="note"><cite>Monier-Williams, A Sanskrit-English Dictionary (1899), s.v. dhárma, p. 510, col. 3. Cologne Digital Sanskrit Dictionaries.</cite></p>
+    </div>
+   </section>
+   <section class="col apte placeholder" aria-label="Apte 1890 — not present">
+    <header class="colhead"><span class="dict">AP90 1890</span></header>
+    <div class="colbody">AP90: — <span class="note">(not loaded in this static preview)</span></div>
+   </section>
+  </div>
+ </article>
+
+ <!-- ======================= manas ======================= -->
+ <article class="entry" id="e-manas" hidden
+  data-citation="Monier-Williams, A Sanskrit-English Dictionary (1899), s.v. mánas, p. 783, col. 3. Cologne Digital Sanskrit Dictionaries."
+  data-slp1="manas"
+  data-scan="https://www.sanskrit-lexicon.uni-koeln.de/scans/MWScan/2020/web/webtc/servepdf.php?page=783,3">
+  <div class="entryhead">
+   <h1><span class="sf" lang="sa" data-iast="mánas" data-deva="मनस्" data-slp1="manas" data-hk="manas">mánas</span></h1>
+   <span class="gloss">mind, intellect, spirit</span>
+  </div>
+  <div class="datablock">
+   <div><span class="k">IAST</span><span class="v" lang="sa">mánas</span></div>
+   <div><span class="k">Devanagari</span><span class="v" lang="sa">मनस्</span></div>
+   <div><span class="k">SLP1</span><span class="v" lang="sa">manas</span></div>
+   <div><span class="k">HK</span><span class="v" lang="sa">manas</span></div>
+   <div><span class="k">Grammar</span><span class="v small"><em>n.</em></span></div>
+   <div><span class="k">Etymology (MW)</span><span class="v small">—</span></div>
+   <div><span class="k">Location</span><span class="v small"><span class="chip">MW p. 783, col. 3</span><span class="chip l">L 156776</span></span></div>
+  </div>
+  <div class="compare single">
+   <section class="col mw" aria-label="Monier-Williams 1899">
+    <header class="colhead"><span class="dict">MW 1899</span>
+     <span class="hwf sf" lang="sa" data-iast="mánas" data-deva="मनस्" data-slp1="manas" data-hk="manas">mánas</span>
+     <span class="gram">n.</span><span class="loc">p. 783, col. 3 · L 156776</span></header>
+    <div class="colbody">
+     <ol class="senses">
+      <li>mind (in its widest sense as applied to all the mental powers), intellect, intelligence, understanding, perception, sense, conscience, will, <cite>RV.</cite> &amp;c. &amp;c. (in <abbr title="philosophy">phil.</abbr> the internal organ or <span lang="sa">antaḥ-karaṇa</span> of perception and cognition, the faculty or instrument through which thoughts enter or by which objects of sense affect the soul, <cite>IW. 53</cite>; in this sense <span lang="sa">manas</span> is always regarded as distinct from <span lang="sa">ātman</span> and <span lang="sa">puruṣa</span>, ‘spirit or soul’, and belonging only to the body, like which it is — except in the <span lang="sa">Nyāya</span> — considered perishable; in <cite>RV.</cite> it is sometimes joined with <span lang="sa">hṛd</span> or <span lang="sa">hṛdaya</span>, the heart, <cite>Mn. vii, 6</cite> with <span lang="sa">cakṣus</span>, the eye)</li>
+      <li>the spirit or spiritual principle, the breath or living soul which escapes from the body at death (called <span lang="sa">asu</span> in animals; <abbr title="confer">cf.</abbr> above), <cite>ib.</cite></li>
+      <li>thought, imagination, excogitation, invention, reflection, opinion, intention, inclination, affection, desire, mood, temper, spirit, <cite>ib.</cite> (<span lang="sa">manaḥ √ kṛ</span>, to make up one’s mind; <span lang="sa">mánasā</span> <em>ind.</em> in the mind; in thought or imagination; with all the heart, willingly; <span lang="sa">manasi</span> with <span lang="sa">√ kṛ</span>, to bear or ponder in the mind, meditate on, remember; with <span lang="sa">ni-√ dhā</span>, to impress on the mind, consider; with <span lang="sa">√ vṛt</span>, to be passing in one’s mind)</li>
+      <li><abbr title="name">N.</abbr> of the 26th <span lang="sa">Kalpa</span> (<abbr title="sub voce">s.v.</abbr>), <cite>Cat.</cite></li>
+      <li>of the lake <span lang="sa">Mānasa</span>, <cite>BhP.</cite></li>
+      <li><span lang="sa">manaso dohaḥ</span> <abbr title="name">N.</abbr> of a <span lang="sa">Sāman</span>, <cite>ĀrṣBr.</cite></li>
+     </ol>
+     <p class="tail">[<abbr title="confer">cf.</abbr> Gk. μένος; Lat. <em>Miner-va</em>.]</p>
+     <p class="note">The long list of verbal idioms under sense 3 is abridged in this static preview (full entry MW p. 783, col. 3 – p. 784, col. 1).</p>
+     <p class="note"><cite>Monier-Williams, A Sanskrit-English Dictionary (1899), s.v. mánas, p. 783, col. 3. Cologne Digital Sanskrit Dictionaries.</cite></p>
+    </div>
+   </section>
+   <section class="col apte placeholder" aria-label="Apte 1890 — not present">
+    <header class="colhead"><span class="dict">AP90 1890</span></header>
+    <div class="colbody">AP90: — <span class="note">(not loaded in this static preview)</span></div>
+   </section>
+  </div>
+ </article>
+
+ <!-- ======================= indra ======================= -->
+ <article class="entry" id="e-indra" hidden
+  data-citation="Monier-Williams, A Sanskrit-English Dictionary (1899), s.v. índra, p. 166, col. 1. Cologne Digital Sanskrit Dictionaries."
+  data-slp1="indra"
+  data-scan="https://www.sanskrit-lexicon.uni-koeln.de/scans/MWScan/2020/web/webtc/servepdf.php?page=166,1">
+  <div class="entryhead">
+   <h1><span class="sf" lang="sa" data-iast="índra" data-deva="इन्द्र" data-slp1="indra" data-hk="indra">índra</span></h1>
+   <span class="gloss">the god of the atmosphere and sky</span>
+  </div>
+  <div class="datablock">
+   <div><span class="k">IAST</span><span class="v" lang="sa">índra</span></div>
+   <div><span class="k">Devanagari</span><span class="v" lang="sa">इन्द्र</span></div>
+   <div><span class="k">SLP1</span><span class="v" lang="sa">indra</span></div>
+   <div><span class="k">HK</span><span class="v" lang="sa">indra</span></div>
+   <div><span class="k">Grammar</span><span class="v small"><em>m.</em></span></div>
+   <div><span class="k">Etymology (MW)</span><span class="v small">(according to <cite>BRD.</cite> <abbr title="from">fr.</abbr> <span lang="sa">in</span> = √ <span lang="sa">inv</span> with <abbr title="suffix">suff.</abbr> <span lang="sa">ra</span> preceded by inserted <span lang="sa">d</span>, meaning ‘to subdue, conquer’; more probably from √ <span lang="sa">ind</span>, ‘to drop’, <abbr title="quod vide">q.v.</abbr>, and connected with <span lang="sa" class="xref" title="not loaded in this static preview">indu</span>)</span></div>
+   <div><span class="k">Location</span><span class="v small"><span class="chip">MW p. 166, col. 1</span><span class="chip l">L 28925</span></span></div>
+  </div>
+  <div class="compare single">
+   <section class="col mw" aria-label="Monier-Williams 1899">
+    <header class="colhead"><span class="dict">MW 1899</span>
+     <span class="hwf sf" lang="sa" data-iast="índra" data-deva="इन्द्र" data-slp1="indra" data-hk="indra">índra</span>
+     <span class="gram">m.</span><span class="loc">p. 166, col. 1 · L 28925</span></header>
+    <div class="colbody">
+     <p class="etym">(according to <cite>BRD.</cite> <abbr title="from">fr.</abbr> <span lang="sa">in</span> = √ <span lang="sa">inv</span> with <abbr title="suffix">suff.</abbr> <span lang="sa">ra</span> preceded by inserted <span lang="sa">d</span>, meaning ‘to subdue, conquer’; more probably from √ <span lang="sa">ind</span>, ‘to drop’, <abbr title="quod vide">q.v.</abbr>, and connected with <span lang="sa" class="xref" title="not loaded in this static preview">indu</span>)</p>
+     <ol class="senses">
+      <li>the god of the atmosphere and sky</li>
+      <li>the Indian Jupiter Pluvius or lord of rain (who in Vedic mythology reigns over the deities of the intermediate region or atmosphere; he fights against and conquers with his thunder-bolt [<span lang="sa">vajra</span>] the demons of darkness, and is in general a symbol of generous heroism; <span lang="sa">indra</span> was not originally lord of the gods of the sky, but his deeds were most useful to mankind, and he was therefore addressed in prayers and hymns more than any other deity, and ultimately superseded the more lofty and spiritual <span lang="sa">Varuṇa</span>; in the later mythology <span lang="sa">indra</span> is subordinated to the triad <span lang="sa">Brahman</span>, <span lang="sa">Viṣṇu</span>, and <span lang="sa">Śiva</span>, but remained the chief of all other deities in the popular mind), <cite>RV.</cite>; <cite>AV.</cite>; <cite>ŚBr.</cite>; <cite>Mn.</cite>; <cite>MBh.</cite>; <cite>R.</cite> &amp;c. &amp;c.</li>
+      <li>(he is also regent of the east quarter, and considered one of the twelve <span lang="sa">Āditya</span>s), <cite>Mn.</cite>; <cite>R.</cite>; <cite>Suśr.</cite> &amp;c.</li>
+      <li>in the <span lang="sa">Vedānta</span> he is identified with the supreme being</li>
+      <li>a prince</li>
+      <li><abbr title="in fine compositi">ifc.</abbr> best, excellent, the first, the chief (of any class of objects; <abbr title="confer">cf.</abbr> <span lang="sa">surendra</span>, <span lang="sa">rājendra</span>, <span lang="sa">parvatendra</span>, &amp;c.), <cite>Mn.</cite>; <cite>Hit.</cite></li>
+      <li>the pupil of the right eye (that of the left being called <span lang="sa">Indrāṇī</span> or <span lang="sa">Indra</span>’s wife), <cite>ŚBr.</cite>; <cite>BṛĀrUp.</cite></li>
+      <li>the number fourteen, <cite>Sūryas.</cite></li>
+      <li><abbr title="name">N.</abbr> of a grammarian</li>
+      <li>of a physician</li>
+      <li>the plant <em>Wrightia Antidysenterica</em> (see <span lang="sa" class="xref" title="not loaded in this static preview">kuṭaja</span>), <cite>L.</cite></li>
+      <li>a vegetable poison, <cite>L.</cite></li>
+      <li>the twenty-sixth <span lang="sa">Yoga</span> or division of a circle on the plane of the ecliptic</li>
+      <li>the <span lang="sa">Yoga</span> star in the twenty-sixth <span lang="sa">Nakṣatra</span>, γ Pegasi</li>
+      <li>the human soul, the portion of spirit residing in the body</li>
+      <li>night, <cite>L.</cite></li>
+      <li>one of the nine divisions of <span lang="sa">Jambu-dvīpa</span> or the known continent, <cite>L.</cite></li>
+     </ol>
+     <p class="note">The etymological discussion of the print head is condensed; senses 1–17 shown, compounds omitted.</p>
+     <p class="note"><cite>Monier-Williams, A Sanskrit-English Dictionary (1899), s.v. índra, p. 166, col. 1. Cologne Digital Sanskrit Dictionaries.</cite></p>
+    </div>
+   </section>
+   <section class="col apte placeholder" aria-label="Apte 1890 — not present">
+    <header class="colhead"><span class="dict">AP90 1890</span></header>
+    <div class="colbody">AP90: — <span class="note">(not loaded in this static preview)</span></div>
+   </section>
+  </div>
+ </article>
+
+ <p class="prov">Entry text is the actual public-domain dictionary text (Monier-Williams 1899 &#183; Apte 1890), from the Cologne csl-orig source.</p>
+</main>
+<script>
+(function(){
+ 'use strict';
+ var IDS = ['agni','dharma','manas','indra'];
+
+ /* ---- script toggle (shared D4 contract) ---- */
+ var seg = document.getElementById('scriptSeg');
+ function applyScript(s){
+  var els = document.querySelectorAll('.sf');
+  for (var i=0;i<els.length;i++){
+   var v = els[i].getAttribute('data-'+s);
+   if (v !== null) { els[i].textContent = v; }
+  }
+  if (seg){
+   var btns = seg.querySelectorAll('button');
+   for (var j=0;j<btns.length;j++){
+    btns[j].setAttribute('aria-pressed', btns[j].getAttribute('data-script')===s ? 'true':'false');
+   }
+  }
+  try { localStorage.setItem('d4script', s); } catch(e){}
+ }
+ if (seg){
+  seg.addEventListener('click', function(ev){
+   var b = ev.target.closest ? ev.target.closest('button') : null;
+   if (b && b.getAttribute('data-script')) { applyScript(b.getAttribute('data-script')); }
+  });
+ }
+ var saved = null;
+ try { saved = localStorage.getItem('d4script'); } catch(e){}
+ if (saved && ['iast','deva','slp1','hk'].indexOf(saved) !== -1) { applyScript(saved); }
+
+ /* ---- entry switcher (segmented control + hash + keys 1-4) ---- */
+ var wordSeg = document.getElementById('wordSeg');
+ var scanLink = document.getElementById('scanLink');
+ var current = 'agni';
+ function showEntry(id){
+  if (IDS.indexOf(id) === -1) { id = 'agni'; }
+  current = id;
+  for (var i=0;i<IDS.length;i++){
+   var art = document.getElementById('e-' + IDS[i]);
+   if (art){ art.hidden = (IDS[i] !== id); }
+  }
+  if (wordSeg){
+   var btns = wordSeg.querySelectorAll('button');
+   for (var j=0;j<btns.length;j++){
+    btns[j].setAttribute('aria-pressed', btns[j].getAttribute('data-entry')===id ? 'true':'false');
+   }
+  }
+  var art2 = document.getElementById('e-' + id);
+  if (scanLink && art2 && art2.getAttribute('data-scan')){
+   scanLink.href = art2.getAttribute('data-scan');
+  }
+ }
+ if (wordSeg){
+  wordSeg.addEventListener('click', function(ev){
+   var b = ev.target.closest ? ev.target.closest('button') : null;
+   if (b && b.getAttribute('data-entry')){
+    var id = b.getAttribute('data-entry');
+    if (('#'+id) !== location.hash){ location.hash = id; } else { showEntry(id); }
+   }
+  });
+ }
+ function fromHash(){
+  var h = (location.hash || '').replace(/^#/,'');
+  showEntry(h || 'agni');
+ }
+ window.addEventListener('hashchange', fromHash);
+ fromHash();
+
+ /* ---- copy buttons (clipboard API + fallback + flash) ---- */
+ function flash(btn, txt){
+  var orig = btn.textContent;
+  btn.textContent = txt;
+  btn.classList.add('flash');
+  setTimeout(function(){ btn.textContent = orig; btn.classList.remove('flash'); }, 1200);
+ }
+ function copyText(text, btn){
+  function ok(){ flash(btn, 'copied ✓'); }
+  function fallback(){
+   try {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    ok();
+   } catch(e){ flash(btn, 'copy failed'); }
+  }
+  if (navigator.clipboard && navigator.clipboard.writeText){
+   navigator.clipboard.writeText(text).then(ok, fallback);
+  } else { fallback(); }
+ }
+ var copyCite = document.getElementById('copyCite');
+ var copySlp1 = document.getElementById('copySlp1');
+ if (copyCite){
+  copyCite.addEventListener('click', function(){
+   var art = document.getElementById('e-' + current);
+   if (art){ copyText(art.getAttribute('data-citation') || '', copyCite); }
+  });
+ }
+ if (copySlp1){
+  copySlp1.addEventListener('click', function(){
+   var art = document.getElementById('e-' + current);
+   if (art){ copyText(art.getAttribute('data-slp1') || '', copySlp1); }
+  });
+ }
+
+ /* ---- keyboard: 1-4 switch entries, Esc blurs (never while typing) ---- */
+ document.addEventListener('keydown', function(ev){
+  var t = ev.target;
+  if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)){
+   if (ev.key === 'Escape' && t.blur) { t.blur(); }
+   return;
+  }
+  var n = ['1','2','3','4'].indexOf(ev.key);
+  if (n !== -1){
+   var id = IDS[n];
+   if (('#'+id) !== location.hash){ location.hash = id; } else { showEntry(id); }
+  }
+ });
+})();
+</script>
+</body>
+</html>

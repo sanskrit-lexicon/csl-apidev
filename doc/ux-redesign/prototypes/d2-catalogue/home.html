@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>D2 Library Catalogue · Home — Cologne Sanskrit Lexicon prototype</title>
+<style>
+:root{
+  --paper:#f8f3e9; --card:#fffdf7; --ink:#3a2d21; --ink-muted:#7a6a56;
+  --brown:#5b3a29; --maroon:#7a2e2a; --gold:#a5803a; --line:#e3d7bf;
+  --spine-english:#2e5d43; --spine-german:#7a2e2a; --spine-french:#4a5d78;
+  --spine-latin:#a5803a; --spine-other:#8a8378;
+  --serif:'Palatino Linotype','Palatino','Book Antiqua',Georgia,serif;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--serif);line-height:1.55}
+a{color:var(--maroon)}
+/* header */
+.site-header{background:var(--brown);color:#f5ecdd;padding:.65rem 1.25rem;display:flex;flex-wrap:wrap;align-items:baseline;gap:.35rem 1.25rem}
+.site-header .brand{font-size:1.05rem;font-weight:700;letter-spacing:.04em}
+.site-header nav{display:flex;flex-wrap:wrap;gap:.25rem .9rem;font-size:.92rem;margin-left:auto}
+.site-header nav a{color:#e8dcc4;text-decoration:none;padding:.15rem .1rem;border-bottom:2px solid transparent}
+.site-header nav a:hover{color:#fff;border-bottom-color:#c9a55e}
+.site-header nav a[aria-current="page"]{color:#fff;font-weight:700;border-bottom-color:var(--gold)}
+.proto-banner{background:#efe4cd;border-bottom:1px solid var(--line);color:#6b5232;font-size:.8rem;padding:.35rem 1.25rem;text-align:center}
+/* hero */
+.hero{max-width:62rem;margin:0 auto;padding:2.6rem 1.25rem 1.6rem;text-align:center}
+.hero h1{font-size:clamp(1.6rem,4.5vw,2.5rem);margin:0 0 .35rem;color:var(--brown);font-weight:700}
+.hero h1 .amp{color:var(--gold)}
+.hero p.lede{margin:0 auto 1.5rem;max-width:44rem;color:var(--ink-muted);font-style:italic}
+.searchbar{display:flex;max-width:36rem;margin:0 auto;box-shadow:0 2px 8px rgba(91,58,41,.15);border-radius:10px;overflow:hidden;border:1px solid var(--line);background:var(--card)}
+.searchbar input{flex:1;min-width:0;border:0;background:transparent;padding:.85rem 1.1rem;font:inherit;font-size:1.05rem;color:var(--ink)}
+.searchbar input:focus{outline:2px solid var(--gold);outline-offset:-2px}
+.searchbar button{border:0;background:var(--maroon);color:#f8f0e0;font:inherit;font-size:1rem;padding:0 1.4rem;cursor:pointer}
+.searchbar button:hover{background:#8f3a35}
+.hero .hint{font-size:.8rem;color:var(--ink-muted);margin-top:.6rem}
+.hero .hint a{color:var(--maroon)}
+/* collection */
+.collection{max-width:72rem;margin:0 auto;padding:0 1.25rem 3rem}
+.collection-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:.5rem 1rem;border-top:3px double var(--gold);padding-top:1.2rem;margin-top:.8rem}
+.collection-head h2{margin:0;font-size:1.35rem;color:var(--brown)}
+.collection-head .count{color:var(--ink-muted);font-size:.95rem}
+.facets{display:flex;flex-wrap:wrap;gap:.45rem;margin:.9rem 0 1.4rem;padding:0;list-style:none}
+.facets button{font:inherit;font-size:.85rem;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:.3rem .95rem;cursor:pointer;box-shadow:0 1px 2px rgba(91,58,41,.08)}
+.facets button:hover{border-color:var(--gold)}
+.facets button[aria-pressed="true"]{background:var(--brown);color:#f5ecdd;border-color:var(--brown)}
+.facets .dot{display:inline-block;width:.6em;height:.6em;border-radius:50%;margin-right:.4em;vertical-align:baseline}
+.grid{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(15.5rem,1fr));gap:1rem}
+.dict-card{background:var(--card);border:1px solid var(--line);border-left:7px solid var(--spine-other);border-radius:10px;box-shadow:0 1px 4px rgba(91,58,41,.12);transition:box-shadow .15s ease}
+.dict-card:hover{box-shadow:0 3px 10px rgba(91,58,41,.2)}
+.dict-card.lang-english{border-left-color:var(--spine-english)}
+.dict-card.lang-german{border-left-color:var(--spine-german)}
+.dict-card.lang-french{border-left-color:var(--spine-french)}
+.dict-card.lang-latin{border-left-color:var(--spine-latin)}
+.dict-card.lang-other{border-left-color:var(--spine-other)}
+.dict-card>a,.dict-card>div{display:flex;gap:.85rem;align-items:flex-start;padding:.9rem .95rem;text-decoration:none;color:inherit;height:100%}
+.dict-card>a:hover .dict-title{color:var(--maroon);text-decoration:underline}
+.monogram{flex:none;display:flex;align-items:center;justify-content:center;width:3.4rem;height:3.4rem;border-radius:8px;background:var(--paper);border:1px solid var(--line);color:var(--brown);font-weight:700;font-size:.95rem;letter-spacing:.02em}
+.monogram.small{font-size:.72rem}
+.dict-title{margin:0 0 .25rem;font-size:.98rem;line-height:1.3;font-weight:700;color:var(--ink)}
+.dict-meta{margin:0;font-size:.8rem;color:var(--ink-muted)}
+.lang-tag{font-variant:small-caps;letter-spacing:.05em}
+.detail-cue{font-size:.75rem;color:var(--gold);font-style:italic}
+.no-results{display:none;color:var(--ink-muted);font-style:italic;padding:1.5rem 0}
+footer.provenance{max-width:72rem;margin:0 auto;padding:0 1.25rem 2rem;color:var(--ink-muted);font-size:.78rem;border-top:1px solid var(--line);padding-top:.8rem}
+@media (max-width:480px){
+  .grid{grid-template-columns:1fr}
+  .site-header nav{margin-left:0}
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <span class="brand">Cologne Sanskrit Lexicon · Catalogue</span>
+  <nav aria-label="Prototype pages">
+    <a href="home.html" aria-current="page">Home</a>
+    <a href="results.html">Results</a>
+    <a href="entry.html">Entry</a>
+    <a href="dict.html">Dictionary</a>
+    <a href="../index.html">⌂ All prototypes</a>
+  </nav>
+</header>
+<p class="proto-banner">Design-direction prototype D2 · Library Catalogue — static preview with real MW (1899) &amp; Apte (1890) text</p>
+
+<main>
+  <section class="hero">
+    <h1>A library of forty-five Sanskrit dictionaries<span class="amp">.</span></h1>
+    <p class="lede">Every shelf of the Cologne Digital Sanskrit Dictionaries, open for browsing — search across the whole collection, or pull a single volume from the shelf.</p>
+    <form class="searchbar" action="results.html" method="get" role="search">
+      <input type="search" name="q" placeholder="Search across the collection…" aria-label="Search across the collection">
+      <button type="submit">Search</button>
+    </form>
+    <p class="hint">Try <a href="results.html?q=agni"><span lang="sa">agni</span></a>, <a href="results.html?q=dharma"><span lang="sa">dharma</span></a>, <a href="results.html?q=manas"><span lang="sa">manas</span></a> or <a href="results.html?q=indra"><span lang="sa">indra</span></a> — the four words loaded in this static preview.</p>
+  </section>
+
+  <section class="collection" aria-labelledby="collection-h">
+    <div class="collection-head">
+      <h2 id="collection-h">The collection</h2>
+      <span class="count" id="dict-count">45 dictionaries</span>
+    </div>
+
+    <ul class="facets" aria-label="Filter by language">
+      <li><button type="button" data-lang="all" aria-pressed="true">All · 45</button></li>
+      <li><button type="button" data-lang="English" aria-pressed="false"><span class="dot" style="background:#2e5d43"></span>English · 16</button></li>
+      <li><button type="button" data-lang="German" aria-pressed="false"><span class="dot" style="background:#7a2e2a"></span>German · 6</button></li>
+      <li><button type="button" data-lang="French" aria-pressed="false"><span class="dot" style="background:#4a5d78"></span>French · 2</button></li>
+      <li><button type="button" data-lang="Latin" aria-pressed="false"><span class="dot" style="background:#a5803a"></span>Latin · 1</button></li>
+      <li><button type="button" data-lang="Other" aria-pressed="false"><span class="dot" style="background:#8a8378"></span>Other · 20</button></li>
+    </ul>
+
+    <ul class="grid" id="dict-grid">
+      <li class="dict-card lang-other" data-lang="Other"><div><span class="monogram">ABCH</span><div><h3 class="dict-title">Abhidhānacintāmaṇi of Hemacandrācārya</h3><p class="dict-meta"><span class="lang-tag">Other</span> · Cologne 2023</p></div></div></li>
+      <li class="dict-card lang-other" data-lang="Other"><div><span class="monogram">ACC</span><div><h3 class="dict-title">Aufrecht Catalogus Catalogorum</h3><p class="dict-meta"><span class="lang-tag">Other</span> · Cologne 2020 · prev. 2014</p></div></div></li>
+      <li class="dict-card lang-other" data-lang="Other"><div><span class="monogram">ACPH</span><div><h3 class="dict-title">Abhidhānacintāmaṇipariśiṣṭa of Hemacandrācārya</h3><p class="dict-meta"><span class="lang-tag">Other</span> · Cologne 2023</p></div></div></li>
+      <li class="dict-card lang-other" data-lang="Other"><div><span class="monogram">ACSJ</span><div><h3 class="dict-title">Abhidhānacintāmaṇiśiloñcha of Jinadeva</h3><p class="dict-meta"><span class="lang-tag">Other</span> · Cologne 2023</p></div></div></li>
+      <li class="dict-card lang-english" data-lang="English"><div title="prototype: only MW has a detail page"><span class="monogram">AE</span><div><h3 class="dict-title">Apte Student English-Sanskrit Dictionary</h3><p class="dict-meta"><span class="lang-tag">English</span> · Cologne 2020 · prev. 2014</p></div></div></li>
+      <li class="dict-card lang-english" data-lang="English"><div title="prototype: only MW has a detail page"><span class="monogram">AP</span><div><h3 class="dict-title">Apte Practical Sanskrit-English Dictionary, revised</h3><p class="dict-meta"><span class="lang-tag">English</span> · Cologne 2020 · prev. 2014</p></div></div></li>
+      <li class="dict-card lang-english" data-lang="English"><div title="prototype: only MW has a detail page"><span class="monogram">AP90</span><div><h3 class="dict-title">Apte Practical Sanskrit-English Dictionary</h3><p class="dict-meta"><span class="lang-tag">English</span> · Cologne 2020 · prev. 2014</p></div></div></li>
+      <li class="dict-card lang-other" data-lang="Other"><div><span class="monogram">ARMH</span><div><h3 class="dict-title">Abhidhānaratnamālā of Halāyudha</h3><p class="dict-meta"><span class="lang-tag">Other</span> · Cologne 2020 · prev. 2020</p></div></div></li>
+      <li class="dict-card lang-english" data-lang="English"><div title="prototype: only MW has a detail page"><span class="monogram">BEN</span><div><h3 class="dict-title">Benfey Sanskrit-English Dictionary</h3><p class="dict-meta"><span class="lang-tag">English</span> · Cologne 2020 · prev. 2014</p></div></div></li>
+      <li class="dict-card lang-english" data-lang="English"><div title="prototype: only MW has a detail page"><span class="monogram">BHS</span><div><h3 class="dict-title">Edgerton Buddhist Hybrid Sanskrit Dictionary</h3><p class="dict-meta"><span class="lang-tag">English</span> · Cologne 2020 · prev. 2014</p></div></div></li>
+      <li class="dict-card lang-latin" data-lang="Latin"><div title="prototype: only MW has a detail page"><span class="monogram">BOP</span><div><h3 class="dict-title">Bopp Glossarium Sanscritum</h3><p class="dict-meta"><span class="lang-tag">Latin</span> · Cologne 2020 · prev. 2014</p></div></div></li>
+      <li class="dict-card lang-english" data-lang="English"><div title="prototype: only MW has a detail page"><span class="monogram">BOR</span><div><h3 class="dict-title">Borooah English-Sanskrit Dictionary</h3><p class="dict-meta"><span class="lang-tag">English</span> · Cologne 2020 · prev. 2014</p></div></div></li>
+      <li class="dict-card lang-french" data-lang="French"><div title="prototype: only MW has a detail page"><span class="monogram">BUR</span><div><h3 class="dict-title">Burnouf Dictionnaire Sanscrit-Français</h3><p class="dict-meta"><span class="lang-tag">French</span> · Cologne 2020 · prev. 2013</p></div></div></li>
+      <li class="dict-card lang-english" data-lang="English"><div title="prototype: only MW has a detail page"><span class="monogram">CAE</span><div><h3 class="dict-title">Cappeller Sanskrit-English Dictionary</h3><p class="dict-meta"><span class="lang-tag">English</span> · Cologne 2020 · prev. 2014</p></div></div></li>
+      <li class="dict-card lang-german" data-lang="German"><div title="prototype: only MW has a detail page"><span class="monogram">CCS</span><div><h3 class="dict-title">Cappeller Sanskrit Wörterbuch</h3><p class="dict-meta"><span class="lang-tag">German</span> · Cologne 2020 · prev. 2014</p></div></div></li>
+      <li class="dict-card lang-other" data-lang="Other"><div><span class="monogram">FRI</span><div><h3 class="dict-title">Frisch Sanskrit Reader Vocabulary, 1956</h3><p class="dict-meta"><span class="lang-tag">Other</span> · Cologne 2025</p></div></div></li>
+      <li class="dict-card lang-german" data-lang="German"><div title="prototype: only MW has a detail page"><span class="monogram">GRA</span><div><h3 class="dict-title">Grassmann Wörterbuch zum Rig Veda</h3><p class="dict-meta"><span class="lang-tag">German</span> · Cologne 2020 · prev. 2014</p></div></div></li>
+      <li class="dict-card lang-english" data-lang="English"><div title="prototype: only MW has a detail page"><span class="monogram">GST</span><div><h3 class="dict-title">Goldstücker Sanskrit-English Dictionary</h3><p class="dict-meta"><span class="lang-tag">English</span> · Cologne 2020 · prev. 2014</p></div></div></li>
+      <li class="dict-card lang-other" data-lang="Other"><div><span class="monogram">IEG</span><div><h3 class="dict-title">Indian Epigraphical Glossary</h3><p class="dict-meta"><span class="lang-tag">Other</span> · Cologne 2020 · prev. 2014</p></div></div></li>
+      <li class="dict-card lang-other" data-lang="Other"><div><span class="monogram">INM</span><div><h3 class="dict-title">Index to the Names in the Mahabharata</h3><p class="dict-meta"><span class="lang-tag">Other</span> · Cologne 2020 · prev. 2013</p></div></div></li>
+      <li class="dict-card lang-other" data-lang="Other"><div><span class="monogram">KRM</span><div><h3 class="dict-title">Kṛdantarūpamālā</h3><p class="dict-meta"><span class="lang-tag">Other</span> · Cologne 2020 · prev. 2014</p></div></div></li>
+      <li class="dict-card lang-other" data-lang="Other"><div><span class="monogram">LAN</span><div><h3 class="dict-title">Lanman Sanskrit Reader Dictionary</h3><p class="dict-meta"><span class="lang-tag">Other</span> · Cologne 2020 · prev. 2019</p></div></div></li>
+      <li class="dict-card lang-english" data-lang="English"><div title="prototype: only MW has a detail page"><span class="monogram">LRV</span><div><h3 class="dict-title">Vaidya Standard Sanskrit-English Dictionary</h3><p class="dict-meta"><span class="lang-tag">English</span> · Cologne 2022 · prev. 2022</p></div></div></li>
+      <li class="dict-card lang-other" data-lang="Other"><div><span class="monogram">MCI</span><div><h3 class="dict-title">Mahabharata Cultural Index</h3><p class="dict-meta"><span class="lang-tag">Other</span> · Cologne 2020 · prev. 2014</p></div></div></li>
+      <li class="dict-card lang-english" data-lang="English"><div title="prototype: only MW has a detail page"><span class="monogram">MD</span><div><h3 class="dict-title">Macdonell Sanskrit-English Dictionary</h3><p class="dict-meta"><span class="lang-tag">English</span> · Cologne 2020 · prev. 2014</p></div></div></li>
+      <li class="dict-card lang-english" data-lang="English"><a href="dict.html"><span class="monogram">MW</span><div><h3 class="dict-title">Monier-Williams Sanskrit-English Dictionary</h3><p class="dict-meta"><span class="lang-tag">English</span> · Cologne 2020 · prev. 2014</p><p class="dict-meta detail-cue">catalogue record →</p></div></a></li>
+      <li class="dict-card lang-english" data-lang="English"><div title="prototype: only MW has a detail page"><span class="monogram">MW72</span><div><h3 class="dict-title">Monier-Williams Sanskrit-English Dictionary</h3><p class="dict-meta"><span class="lang-tag">English</span> · Cologne 2020 · prev. 2014</p></div></div></li>
+      <li class="dict-card lang-english" data-lang="English"><div title="prototype: only MW has a detail page"><span class="monogram">MWE</span><div><h3 class="dict-title">Monier-Williams English-Sanskrit Dictionary</h3><p class="dict-meta"><span class="lang-tag">English</span> · Cologne 2020 · prev. 2013</p></div></div></li>
+      <li class="dict-card lang-other" data-lang="Other"><div><span class="monogram">NMMB</span><div><h3 class="dict-title">Nāmamālikā of Bhoja</h3><p class="dict-meta"><span class="lang-tag">Other</span> · Cologne 2026</p></div></div></li>
+      <li class="dict-card lang-other" data-lang="Other"><div><span class="monogram">PD</span><div><h3 class="dict-title">An Encyclopedic Dictionary of Sanskrit on Historical Principles</h3><p class="dict-meta"><span class="lang-tag">Other</span> · Cologne 2020 · prev. 2014</p></div></div></li>
+      <li class="dict-card lang-other" data-lang="Other"><div><span class="monogram">PE</span><div><h3 class="dict-title">Puranic Encyclopedia</h3><p class="dict-meta"><span class="lang-tag">Other</span> · Cologne 2020 · prev. 2014</p></div></div></li>
+      <li class="dict-card lang-other" data-lang="Other"><div><span class="monogram">PGN</span><div><h3 class="dict-title">Personal and Geographical Names in the Gupta Inscriptions</h3><p class="dict-meta"><span class="lang-tag">Other</span> · Cologne 2020 · prev. 2014</p></div></div></li>
+      <li class="dict-card lang-other" data-lang="Other"><div><span class="monogram">PUI</span><div><h3 class="dict-title">The Purana Index</h3><p class="dict-meta"><span class="lang-tag">Other</span> · Cologne 2020 · prev. 2014</p></div></div></li>
+      <li class="dict-card lang-german" data-lang="German"><div title="prototype: only MW has a detail page"><span class="monogram">PW</span><div><h3 class="dict-title">Böhtlingk Sanskrit-Wörterbuch in kürzerer Fassung</h3><p class="dict-meta"><span class="lang-tag">German</span> · Cologne 2020 · prev. 2014</p></div></div></li>
+      <li class="dict-card lang-german" data-lang="German"><div title="prototype: only MW has a detail page"><span class="monogram">PWG</span><div><h3 class="dict-title">Böhtlingk and Roth Grosses Petersburger Wörterbuch</h3><p class="dict-meta"><span class="lang-tag">German</span> · Cologne 2020 · prev. 2013</p></div></div></li>
+      <li class="dict-card lang-german" data-lang="German"><div title="prototype: only MW has a detail page"><span class="monogram small">PWKVN</span><div><h3 class="dict-title">Böhtlingk Sanskrit-Wörterbuch (PW/PWG cross-reference variant)</h3><p class="dict-meta"><span class="lang-tag">German</span> · Cologne 2020 · prev. 2020</p></div></div></li>
+      <li class="dict-card lang-german" data-lang="German"><div title="prototype: only MW has a detail page"><span class="monogram">SCH</span><div><h3 class="dict-title">Schmidt Nachträge zum Sanskrit-Wörterbuch</h3><p class="dict-meta"><span class="lang-tag">German</span> · Cologne 2020 · prev. 2014</p></div></div></li>
+      <li class="dict-card lang-english" data-lang="English"><div title="prototype: only MW has a detail page"><span class="monogram">SHS</span><div><h3 class="dict-title">Shabda-Sagara Sanskrit-English Dictionary</h3><p class="dict-meta"><span class="lang-tag">English</span> · Cologne 2020 · prev. 2014</p></div></div></li>
+      <li class="dict-card lang-other" data-lang="Other"><div><span class="monogram">SKD</span><div><h3 class="dict-title">Sabda-kalpadruma</h3><p class="dict-meta"><span class="lang-tag">Other</span> · Cologne 2020 · prev. 2013</p></div></div></li>
+      <li class="dict-card lang-other" data-lang="Other"><div><span class="monogram">SNP</span><div><h3 class="dict-title">Meulenbeld Sanskrit Names of Plants</h3><p class="dict-meta"><span class="lang-tag">Other</span> · Cologne 2020 · prev. 2014</p></div></div></li>
+      <li class="dict-card lang-french" data-lang="French"><div title="prototype: only MW has a detail page"><span class="monogram">STC</span><div><h3 class="dict-title">Stchoupak Dictionnaire Sanscrit-Français</h3><p class="dict-meta"><span class="lang-tag">French</span> · Cologne 2020 · prev. 2013</p></div></div></li>
+      <li class="dict-card lang-other" data-lang="Other"><div><span class="monogram">VCP</span><div><h3 class="dict-title">Vacaspatyam</h3><p class="dict-meta"><span class="lang-tag">Other</span> · Cologne 2020 · prev. 2019</p></div></div></li>
+      <li class="dict-card lang-other" data-lang="Other"><div><span class="monogram">VEI</span><div><h3 class="dict-title">The Vedic Index of Names and Subjects</h3><p class="dict-meta"><span class="lang-tag">Other</span> · Cologne 2020 · prev. 2014</p></div></div></li>
+      <li class="dict-card lang-english" data-lang="English"><div title="prototype: only MW has a detail page"><span class="monogram">WIL</span><div><h3 class="dict-title">Wilson Sanskrit-English Dictionary</h3><p class="dict-meta"><span class="lang-tag">English</span> · Cologne 2020 · prev. 2014</p></div></div></li>
+      <li class="dict-card lang-english" data-lang="English"><div title="prototype: only MW has a detail page"><span class="monogram">YAT</span><div><h3 class="dict-title">Yates Sanskrit-English Dictionary</h3><p class="dict-meta"><span class="lang-tag">English</span> · Cologne 2020 · prev. 2014</p></div></div></li>
+    </ul>
+    <p class="no-results" id="no-results">No dictionaries in this language group.</p>
+  </section>
+</main>
+
+<footer class="provenance">
+  Design-direction prototype D2 (Library Catalogue) for the Cologne Digital Sanskrit Dictionaries redesign. Static preview — the dictionary list mirrors the live Cologne collection; only MW has a detail page here.
+</footer>
+
+<script>
+(function () {
+  'use strict';
+  var facetBtns = document.querySelectorAll('.facets button');
+  var cards = document.querySelectorAll('#dict-grid .dict-card');
+  var countEl = document.getElementById('dict-count');
+  var noResults = document.getElementById('no-results');
+  if (!facetBtns.length || !cards.length) { return; }
+
+  function applyFilter(lang) {
+    var shown = 0;
+    for (var i = 0; i < cards.length; i++) {
+      var match = (lang === 'all') || (cards[i].getAttribute('data-lang') === lang);
+      cards[i].style.display = match ? '' : 'none';
+      if (match) { shown++; }
+    }
+    if (countEl) {
+      countEl.textContent = (lang === 'all')
+        ? '45 dictionaries'
+        : shown + ' of 45 dictionaries · ' + lang;
+    }
+    if (noResults) { noResults.style.display = shown ? 'none' : 'block'; }
+  }
+
+  for (var i = 0; i < facetBtns.length; i++) {
+    facetBtns[i].addEventListener('click', function () {
+      for (var j = 0; j < facetBtns.length; j++) {
+        facetBtns[j].setAttribute('aria-pressed', 'false');
+      }
+      this.setAttribute('aria-pressed', 'true');
+      applyFilter(this.getAttribute('data-lang'));
+    });
+  }
+})();
+</script>
+</body>
+</html>
