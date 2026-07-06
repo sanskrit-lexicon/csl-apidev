@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>D4 Data-dense Scholar · Home — Cologne Sanskrit Lexicon prototype</title>
+<style>
+:root{
+ --bg:#0f172a; --panel:#1e293b; --text:#e2e8f0; --muted:#94a3b8;
+ --accent:#22d3ee; --amber:#fbbf24; --line:#334155;
+ --mono:Consolas,'Cascadia Mono','Courier New',monospace;
+ --sans:'Segoe UI',system-ui,-apple-system,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font:13px/1.5 var(--sans);}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+.banner{background:#0b1120;border-bottom:1px solid var(--line);color:var(--muted);
+ font:11px/1.4 var(--mono);padding:3px 12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.toolbar{position:sticky;top:0;z-index:10;background:var(--panel);border-bottom:1px solid var(--line);
+ display:flex;align-items:center;flex-wrap:wrap;gap:8px;padding:6px 12px}
+.logo{font:600 13px var(--mono);color:var(--text);letter-spacing:.5px}
+.logo .sl{color:var(--accent)}
+nav.d4nav{display:flex;gap:2px;font:12px var(--mono)}
+nav.d4nav a{padding:3px 8px;border:1px solid transparent;border-radius:2px;color:var(--muted)}
+nav.d4nav a:hover{color:var(--text);text-decoration:none;border-color:var(--line)}
+nav.d4nav a[aria-current="page"]{color:var(--accent);border-color:var(--accent);background:rgba(34,211,238,.08)}
+.spacer{flex:1 1 auto}
+.searchwrap{display:flex;align-items:center;gap:4px}
+input[type="search"],input[type="text"]{background:#0b1120;border:1px solid var(--line);border-radius:2px;
+ color:var(--text);font:13px var(--mono);padding:4px 8px;min-width:200px;outline:none}
+input[type="search"]:focus,input[type="text"]:focus{border-color:var(--accent)}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:2px;overflow:hidden}
+.seg button{background:var(--panel);border:0;border-right:1px solid var(--line);color:var(--muted);
+ font:11px var(--mono);padding:4px 8px;cursor:pointer}
+.seg button:last-child{border-right:0}
+.seg button[aria-pressed="true"]{background:rgba(34,211,238,.15);color:var(--accent)}
+.seg button:hover{color:var(--text)}
+kbd{background:#0b1120;border:1px solid var(--line);border-bottom-width:2px;border-radius:2px;
+ color:var(--muted);font:10px var(--mono);padding:1px 5px}
+.hints{color:var(--muted);font:11px var(--mono);white-space:nowrap}
+main{max-width:1200px;margin:0 auto;padding:14px 12px 40px}
+h1{font:600 16px var(--sans);margin:0 0 2px}
+h2{font:600 13px var(--sans);color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin:20px 0 6px}
+.sub{color:var(--muted);font-size:12px;margin:0 0 12px}
+.chips{display:flex;flex-wrap:wrap;gap:4px;margin:10px 0 8px;align-items:center}
+.chips button{background:var(--panel);border:1px solid var(--line);border-radius:2px;color:var(--muted);
+ font:11px var(--mono);padding:3px 9px;cursor:pointer}
+.chips button[aria-pressed="true"]{border-color:var(--accent);color:var(--accent);background:rgba(34,211,238,.08)}
+.chips button:hover{color:var(--text)}
+.count{color:var(--muted);font:11px var(--mono);margin-left:6px}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:2px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;font-size:12px}
+th,td{border-bottom:1px solid var(--line);padding:4px 10px;text-align:left;vertical-align:top;white-space:nowrap}
+th{background:#0b1120;color:var(--muted);font:600 11px var(--mono);text-transform:uppercase;letter-spacing:.5px;
+ cursor:pointer;user-select:none;position:sticky;top:0}
+th:hover{color:var(--accent)}
+th .arr{color:var(--accent);font-size:10px}
+tbody tr:hover{background:rgba(34,211,238,.05)}
+tbody tr:last-child td{border-bottom:0}
+td.code{font:600 12px var(--mono);color:var(--accent)}
+td.code .inert{color:var(--text)}
+td.title{white-space:normal;min-width:260px}
+td.year,td.older{font:12px var(--mono);color:var(--muted)}
+td.lang{font:11px var(--mono)}
+.lang-English{color:#67e8f9}.lang-German{color:#fbbf24}.lang-French{color:#f9a8d4}
+.lang-Latin{color:#a5b4fc}.lang-Other{color:#94a3b8}
+.prov{color:var(--muted);font-size:11px;margin-top:18px;border-top:1px solid var(--line);padding-top:8px}
+.formrow{font:12px var(--mono);color:var(--muted);margin:4px 0 0}
+.formrow .sf{color:var(--text)}
+@media (max-width:640px){
+ .toolbar{gap:6px}
+ input[type="search"]{min-width:120px;flex:1}
+ .hints{display:none}
+}
+</style>
+</head>
+<body>
+<div class="banner">Design-direction prototype D4 · Data-dense Scholar — static preview with real MW (1899) &amp; Apte (1890) text</div>
+<header class="toolbar">
+ <span class="logo">CSL<span class="sl">//</span>D4</span>
+ <nav class="d4nav" aria-label="Prototype pages">
+  <a href="home.html" aria-current="page">Home</a>
+  <a href="results.html">Results</a>
+  <a href="entry.html">Entry</a>
+  <a href="dict.html">Dict</a>
+  <a href="../index.html">&#8962; All prototypes</a>
+ </nav>
+ <span class="spacer"></span>
+ <div class="searchwrap">
+  <input type="search" id="q" placeholder="headword &#8594; results" aria-label="Search headword" autofocus>
+ </div>
+ <div class="seg" id="scriptSeg" role="group" aria-label="Script">
+  <button type="button" data-script="iast" aria-pressed="true">IAST</button>
+  <button type="button" data-script="deva" aria-pressed="false">Devanagari</button>
+  <button type="button" data-script="slp1" aria-pressed="false">SLP1</button>
+  <button type="button" data-script="hk" aria-pressed="false">HK</button>
+ </div>
+ <span class="hints"><kbd>/</kbd> search &nbsp;<kbd>Esc</kbd> blur</span>
+</header>
+<main>
+ <h1>Cologne Digital Sanskrit Dictionaries — command surface</h1>
+ <p class="sub">45 dictionaries. Type a headword and hit <kbd>Enter</kbd>, or sort the catalogue below.
+  Sample forms loaded in this preview:</p>
+ <p class="formrow">
+  <span class="sf" lang="sa" data-iast="agn&#237;" data-deva="&#x905;&#x917;&#x94D;&#x928;&#x93F;" data-slp1="agni" data-hk="agni">agn&#237;</span> ·
+  <span class="sf" lang="sa" data-iast="dh&#225;rma" data-deva="&#x927;&#x930;&#x94D;&#x92E;" data-slp1="Darma" data-hk="dharma">dh&#225;rma</span> ·
+  <span class="sf" lang="sa" data-iast="m&#225;nas" data-deva="&#x92E;&#x928;&#x938;&#x94D;" data-slp1="manas" data-hk="manas">m&#225;nas</span> ·
+  <span class="sf" lang="sa" data-iast="&#237;ndra" data-deva="&#x907;&#x928;&#x94D;&#x926;&#x94D;&#x930;" data-slp1="indra" data-hk="indra">&#237;ndra</span>
+ </p>
+
+ <h2>Dictionary catalogue</h2>
+ <div class="chips" id="langChips" role="group" aria-label="Language filter">
+  <button type="button" data-lang="" aria-pressed="true">All</button>
+  <button type="button" data-lang="English" aria-pressed="false">English</button>
+  <button type="button" data-lang="German" aria-pressed="false">German</button>
+  <button type="button" data-lang="French" aria-pressed="false">French</button>
+  <button type="button" data-lang="Latin" aria-pressed="false">Latin</button>
+  <button type="button" data-lang="Other" aria-pressed="false">Other</button>
+  <span class="count" id="dictCount">45 / 45 shown</span>
+ </div>
+ <div class="tablewrap">
+ <table id="dictTable">
+  <thead>
+   <tr>
+    <th data-key="code" scope="col">Code <span class="arr"></span></th>
+    <th data-key="title" scope="col">Title <span class="arr"></span></th>
+    <th data-key="lang" scope="col">Language <span class="arr"></span></th>
+    <th data-key="year" scope="col">Version <span class="arr"></span></th>
+    <th data-key="older" scope="col">Older <span class="arr"></span></th>
+   </tr>
+  </thead>
+  <tbody>
+   <tr data-code="ABCH" data-title="Abhidhānacintāmaṇi of Hemacandrācārya" data-lang="Other" data-year="2023" data-older=""><td class="code"><span class="inert">ABCH</span></td><td class="title">Abhidh&#257;nacint&#257;ma&#7751;i of Hemacandr&#257;c&#257;rya</td><td class="lang lang-Other">Other</td><td class="year">2023</td><td class="older">&#8212;</td></tr>
+   <tr data-code="ACC" data-title="Aufrecht Catalogus Catalogorum" data-lang="Other" data-year="2020" data-older="2014"><td class="code"><span class="inert">ACC</span></td><td class="title">Aufrecht Catalogus Catalogorum</td><td class="lang lang-Other">Other</td><td class="year">2020</td><td class="older">2014</td></tr>
+   <tr data-code="ACPH" data-title="Abhidhānacintāmaṇipariśiṣṭa of Hemacandrācārya" data-lang="Other" data-year="2023" data-older=""><td class="code"><span class="inert">ACPH</span></td><td class="title">Abhidh&#257;nacint&#257;ma&#7751;ipari&#347;i&#7779;&#7789;a of Hemacandr&#257;c&#257;rya</td><td class="lang lang-Other">Other</td><td class="year">2023</td><td class="older">&#8212;</td></tr>
+   <tr data-code="ACSJ" data-title="Abhidhānacintāmaṇiśiloñcha of Jinadeva" data-lang="Other" data-year="2023" data-older=""><td class="code"><span class="inert">ACSJ</span></td><td class="title">Abhidh&#257;nacint&#257;ma&#7751;i&#347;ilo&#241;cha of Jinadeva</td><td class="lang lang-Other">Other</td><td class="year">2023</td><td class="older">&#8212;</td></tr>
+   <tr data-code="AE" data-title="Apte Student English-Sanskrit Dictionary" data-lang="English" data-year="2020" data-older="2014"><td class="code"><span class="inert">AE</span></td><td class="title">Apte Student English-Sanskrit Dictionary</td><td class="lang lang-English">English</td><td class="year">2020</td><td class="older">2014</td></tr>
+   <tr data-code="AP" data-title="Apte Practical Sanskrit-English Dictionary, revised" data-lang="English" data-year="2020" data-older="2014"><td class="code"><span class="inert">AP</span></td><td class="title">Apte Practical Sanskrit-English Dictionary, revised</td><td class="lang lang-English">English</td><td class="year">2020</td><td class="older">2014</td></tr>
+   <tr data-code="AP90" data-title="Apte Practical Sanskrit-English Dictionary" data-lang="English" data-year="2020" data-older="2014"><td class="code"><span class="inert">AP90</span></td><td class="title">Apte Practical Sanskrit-English Dictionary</td><td class="lang lang-English">English</td><td class="year">2020</td><td class="older">2014</td></tr>
+   <tr data-code="ARMH" data-title="Abhidhānaratnamālā of Halāyudha" data-lang="Other" data-year="2020" data-older="2020"><td class="code"><span class="inert">ARMH</span></td><td class="title">Abhidh&#257;naratnam&#257;l&#257; of Hal&#257;yudha</td><td class="lang lang-Other">Other</td><td class="year">2020</td><td class="older">2020</td></tr>
+   <tr data-code="BEN" data-title="Benfey Sanskrit-English Dictionary" data-lang="English" data-year="2020" data-older="2014"><td class="code"><span class="inert">BEN</span></td><td class="title">Benfey Sanskrit-English Dictionary</td><td class="lang lang-English">English</td><td class="year">2020</td><td class="older">2014</td></tr>
+   <tr data-code="BHS" data-title="Edgerton Buddhist Hybrid Sanskrit Dictionary" data-lang="English" data-year="2020" data-older="2014"><td class="code"><span class="inert">BHS</span></td><td class="title">Edgerton Buddhist Hybrid Sanskrit Dictionary</td><td class="lang lang-English">English</td><td class="year">2020</td><td class="older">2014</td></tr>
+   <tr data-code="BOP" data-title="Bopp Glossarium Sanscritum" data-lang="Latin" data-year="2020" data-older="2014"><td class="code"><span class="inert">BOP</span></td><td class="title">Bopp Glossarium Sanscritum</td><td class="lang lang-Latin">Latin</td><td class="year">2020</td><td class="older">2014</td></tr>
+   <tr data-code="BOR" data-title="Borooah English-Sanskrit Dictionary" data-lang="English" data-year="2020" data-older="2014"><td class="code"><span class="inert">BOR</span></td><td class="title">Borooah English-Sanskrit Dictionary</td><td class="lang lang-English">English</td><td class="year">2020</td><td class="older">2014</td></tr>
+   <tr data-code="BUR" data-title="Burnouf Dictionnaire Sanscrit-Français" data-lang="French" data-year="2020" data-older="2013"><td class="code"><span class="inert">BUR</span></td><td class="title">Burnouf Dictionnaire Sanscrit-Fran&#231;ais</td><td class="lang lang-French">French</td><td class="year">2020</td><td class="older">2013</td></tr>
+   <tr data-code="CAE" data-title="Cappeller Sanskrit-English Dictionary" data-lang="English" data-year="2020" data-older="2014"><td class="code"><span class="inert">CAE</span></td><td class="title">Cappeller Sanskrit-English Dictionary</td><td class="lang lang-English">English</td><td class="year">2020</td><td class="older">2014</td></tr>
+   <tr data-code="CCS" data-title="Cappeller Sanskrit Wörterbuch" data-lang="German" data-year="2020" data-older="2014"><td class="code"><span class="inert">CCS</span></td><td class="title">Cappeller Sanskrit W&#246;rterbuch</td><td class="lang lang-German">German</td><td class="year">2020</td><td class="older">2014</td></tr>
+   <tr data-code="FRI" data-title="Frisch Sanskrit Reader Vocabulary, 1956" data-lang="Other" data-year="2025" data-older=""><td class="code"><span class="inert">FRI</span></td><td class="title">Frisch Sanskrit Reader Vocabulary, 1956</td><td class="lang lang-Other">Other</td><td class="year">2025</td><td class="older">&#8212;</td></tr>
+   <tr data-code="GRA" data-title="Grassmann Wörterbuch zum Rig Veda" data-lang="German" data-year="2020" data-older="2014"><td class="code"><span class="inert">GRA</span></td><td class="title">Grassmann W&#246;rterbuch zum Rig Veda</td><td class="lang lang-German">German</td><td class="year">2020</td><td class="older">2014</td></tr>
+   <tr data-code="GST" data-title="Goldstücker Sanskrit-English Dictionary" data-lang="English" data-year="2020" data-older="2014"><td class="code"><span class="inert">GST</span></td><td class="title">Goldst&#252;cker Sanskrit-English Dictionary</td><td class="lang lang-English">English</td><td class="year">2020</td><td class="older">2014</td></tr>
+   <tr data-code="IEG" data-title="Indian Epigraphical Glossary" data-lang="Other" data-year="2020" data-older="2014"><td class="code"><span class="inert">IEG</span></td><td class="title">Indian Epigraphical Glossary</td><td class="lang lang-Other">Other</td><td class="year">2020</td><td class="older">2014</td></tr>
+   <tr data-code="INM" data-title="Index to the Names in the Mahabharata" data-lang="Other" data-year="2020" data-older="2013"><td class="code"><span class="inert">INM</span></td><td class="title">Index to the Names in the Mahabharata</td><td class="lang lang-Other">Other</td><td class="year">2020</td><td class="older">2013</td></tr>
+   <tr data-code="KRM" data-title="Kṛdantarūpamālā" data-lang="Other" data-year="2020" data-older="2014"><td class="code"><span class="inert">KRM</span></td><td class="title">K&#7771;dantar&#363;pam&#257;l&#257;</td><td class="lang lang-Other">Other</td><td class="year">2020</td><td class="older">2014</td></tr>
+   <tr data-code="LAN" data-title="Lanman Sanskrit Reader Dictionary" data-lang="English" data-year="2020" data-older="2019"><td class="code"><span class="inert">LAN</span></td><td class="title">Lanman Sanskrit Reader Dictionary</td><td class="lang lang-English">English</td><td class="year">2020</td><td class="older">2019</td></tr>
+   <tr data-code="LRV" data-title="Vaidya Standard Sanskrit-English Dictionary" data-lang="English" data-year="2022" data-older="2022"><td class="code"><span class="inert">LRV</span></td><td class="title">Vaidya Standard Sanskrit-English Dictionary</td><td class="lang lang-English">English</td><td class="year">2022</td><td class="older">2022</td></tr>
+   <tr data-code="MCI" data-title="Mahabharata Cultural Index" data-lang="Other" data-year="2020" data-older="2014"><td class="code"><span class="inert">MCI</span></td><td class="title">Mahabharata Cultural Index</td><td class="lang lang-Other">Other</td><td class="year">2020</td><td class="older">2014</td></tr>
+   <tr data-code="MD" data-title="Macdonell Sanskrit-English Dictionary" data-lang="English" data-year="2020" data-older="2014"><td class="code"><span class="inert">MD</span></td><td class="title">Macdonell Sanskrit-English Dictionary</td><td class="lang lang-English">English</td><td class="year">2020</td><td class="older">2014</td></tr>
+   <tr data-code="MW" data-title="Monier-Williams Sanskrit-English Dictionary" data-lang="English" data-year="2020" data-older="2014"><td class="code"><a href="dict.html">MW</a></td><td class="title"><a href="dict.html">Monier-Williams Sanskrit-English Dictionary</a></td><td class="lang lang-English">English</td><td class="year">2020</td><td class="older">2014</td></tr>
+   <tr data-code="MW72" data-title="Monier-Williams Sanskrit-English Dictionary" data-lang="English" data-year="2020" data-older="2014"><td class="code"><span class="inert">MW72</span></td><td class="title">Monier-Williams Sanskrit-English Dictionary</td><td class="lang lang-English">English</td><td class="year">2020</td><td class="older">2014</td></tr>
+   <tr data-code="MWE" data-title="Monier-Williams English-Sanskrit Dictionary" data-lang="English" data-year="2020" data-older="2013"><td class="code"><span class="inert">MWE</span></td><td class="title">Monier-Williams English-Sanskrit Dictionary</td><td class="lang lang-English">English</td><td class="year">2020</td><td class="older">2013</td></tr>
+   <tr data-code="NMMB" data-title="Nāmamālikā of Bhoja" data-lang="Other" data-year="2026" data-older=""><td class="code"><span class="inert">NMMB</span></td><td class="title">N&#257;mam&#257;lik&#257; of Bhoja</td><td class="lang lang-Other">Other</td><td class="year">2026</td><td class="older">&#8212;</td></tr>
+   <tr data-code="PD" data-title="An Encyclopedic Dictionary of Sanskrit on Historical Principles" data-lang="Other" data-year="2020" data-older="2014"><td class="code"><span class="inert">PD</span></td><td class="title">An Encyclopedic Dictionary of Sanskrit on Historical Principles</td><td class="lang lang-Other">Other</td><td class="year">2020</td><td class="older">2014</td></tr>
+   <tr data-code="PE" data-title="Puranic Encyclopedia" data-lang="Other" data-year="2020" data-older="2014"><td class="code"><span class="inert">PE</span></td><td class="title">Puranic Encyclopedia</td><td class="lang lang-Other">Other</td><td class="year">2020</td><td class="older">2014</td></tr>
+   <tr data-code="PGN" data-title="Personal and Geographical Names in the Gupta Inscriptions" data-lang="Other" data-year="2020" data-older="2014"><td class="code"><span class="inert">PGN</span></td><td class="title">Personal and Geographical Names in the Gupta Inscriptions</td><td class="lang lang-Other">Other</td><td class="year">2020</td><td class="older">2014</td></tr>
+   <tr data-code="PUI" data-title="The Purana Index" data-lang="Other" data-year="2020" data-older="2014"><td class="code"><span class="inert">PUI</span></td><td class="title">The Purana Index</td><td class="lang lang-Other">Other</td><td class="year">2020</td><td class="older">2014</td></tr>
+   <tr data-code="PW" data-title="Böhtlingk Sanskrit-Wörterbuch in kürzerer Fassung" data-lang="German" data-year="2020" data-older="2014"><td class="code"><span class="inert">PW</span></td><td class="title">B&#246;htlingk Sanskrit-W&#246;rterbuch in k&#252;rzerer Fassung</td><td class="lang lang-German">German</td><td class="year">2020</td><td class="older">2014</td></tr>
+   <tr data-code="PWG" data-title="Böhtlingk and Roth Grosses Petersburger Wörterbuch" data-lang="German" data-year="2020" data-older="2013"><td class="code"><span class="inert">PWG</span></td><td class="title">B&#246;htlingk and Roth Grosses Petersburger W&#246;rterbuch</td><td class="lang lang-German">German</td><td class="year">2020</td><td class="older">2013</td></tr>
+   <tr data-code="PWKVN" data-title="Böhtlingk Sanskrit-Wörterbuch (PW/PWG cross-reference variant)" data-lang="German" data-year="2020" data-older="2020"><td class="code"><span class="inert">PWKVN</span></td><td class="title">B&#246;htlingk Sanskrit-W&#246;rterbuch (PW/PWG cross-reference variant)</td><td class="lang lang-German">German</td><td class="year">2020</td><td class="older">2020</td></tr>
+   <tr data-code="SCH" data-title="Schmidt Nachträge zum Sanskrit-Wörterbuch" data-lang="German" data-year="2020" data-older="2014"><td class="code"><span class="inert">SCH</span></td><td class="title">Schmidt Nachtr&#228;ge zum Sanskrit-W&#246;rterbuch</td><td class="lang lang-German">German</td><td class="year">2020</td><td class="older">2014</td></tr>
+   <tr data-code="SHS" data-title="Shabda-Sagara Sanskrit-English Dictionary" data-lang="English" data-year="2020" data-older="2014"><td class="code"><span class="inert">SHS</span></td><td class="title">Shabda-Sagara Sanskrit-English Dictionary</td><td class="lang lang-English">English</td><td class="year">2020</td><td class="older">2014</td></tr>
+   <tr data-code="SKD" data-title="Sabda-kalpadruma" data-lang="Other" data-year="2020" data-older="2013"><td class="code"><span class="inert">SKD</span></td><td class="title">Sabda-kalpadruma</td><td class="lang lang-Other">Other</td><td class="year">2020</td><td class="older">2013</td></tr>
+   <tr data-code="SNP" data-title="Meulenbeld Sanskrit Names of Plants" data-lang="Other" data-year="2020" data-older="2014"><td class="code"><span class="inert">SNP</span></td><td class="title">Meulenbeld Sanskrit Names of Plants</td><td class="lang lang-Other">Other</td><td class="year">2020</td><td class="older">2014</td></tr>
+   <tr data-code="STC" data-title="Stchoupak Dictionnaire Sanscrit-Français" data-lang="French" data-year="2020" data-older="2013"><td class="code"><span class="inert">STC</span></td><td class="title">Stchoupak Dictionnaire Sanscrit-Fran&#231;ais</td><td class="lang lang-French">French</td><td class="year">2020</td><td class="older">2013</td></tr>
+   <tr data-code="VCP" data-title="Vacaspatyam" data-lang="Other" data-year="2020" data-older="2019"><td class="code"><span class="inert">VCP</span></td><td class="title">Vacaspatyam</td><td class="lang lang-Other">Other</td><td class="year">2020</td><td class="older">2019</td></tr>
+   <tr data-code="VEI" data-title="The Vedic Index of Names and Subjects" data-lang="Other" data-year="2020" data-older="2014"><td class="code"><span class="inert">VEI</span></td><td class="title">The Vedic Index of Names and Subjects</td><td class="lang lang-Other">Other</td><td class="year">2020</td><td class="older">2014</td></tr>
+   <tr data-code="WIL" data-title="Wilson Sanskrit-English Dictionary" data-lang="English" data-year="2020" data-older="2014"><td class="code"><span class="inert">WIL</span></td><td class="title">Wilson Sanskrit-English Dictionary</td><td class="lang lang-English">English</td><td class="year">2020</td><td class="older">2014</td></tr>
+   <tr data-code="YAT" data-title="Yates Sanskrit-English Dictionary" data-lang="English" data-year="2020" data-older="2014"><td class="code"><span class="inert">YAT</span></td><td class="title">Yates Sanskrit-English Dictionary</td><td class="lang lang-English">English</td><td class="year">2020</td><td class="older">2014</td></tr>
+  </tbody>
+ </table>
+ </div>
+
+ <p class="prov">Entry text is the actual public-domain dictionary text (Monier-Williams 1899 &#183; Apte 1890), from the Cologne csl-orig source.</p>
+</main>
+<script>
+(function(){
+ 'use strict';
+ /* ---- script toggle (shared D4 contract) ---- */
+ var seg = document.getElementById('scriptSeg');
+ function applyScript(s){
+  var els = document.querySelectorAll('.sf');
+  for (var i=0;i<els.length;i++){
+   var v = els[i].getAttribute('data-'+s);
+   if (v !== null) { els[i].textContent = v; }
+  }
+  if (seg){
+   var btns = seg.querySelectorAll('button');
+   for (var j=0;j<btns.length;j++){
+    btns[j].setAttribute('aria-pressed', btns[j].getAttribute('data-script')===s ? 'true':'false');
+   }
+  }
+  try { localStorage.setItem('d4script', s); } catch(e){}
+ }
+ if (seg){
+  seg.addEventListener('click', function(ev){
+   var b = ev.target.closest ? ev.target.closest('button') : null;
+   if (b && b.getAttribute('data-script')) { applyScript(b.getAttribute('data-script')); }
+  });
+ }
+ var saved = null;
+ try { saved = localStorage.getItem('d4script'); } catch(e){}
+ if (saved && ['iast','deva','slp1','hk'].indexOf(saved) !== -1) { applyScript(saved); }
+
+ /* ---- search: Enter -> results ---- */
+ var q = document.getElementById('q');
+ if (q){
+  q.addEventListener('keydown', function(ev){
+   if (ev.key === 'Enter' && q.value.trim() !== ''){
+    location.href = 'results.html?q=' + encodeURIComponent(q.value.trim());
+   }
+  });
+ }
+
+ /* ---- keyboard: / focuses search, Esc blurs (never while typing) ---- */
+ document.addEventListener('keydown', function(ev){
+  var t = ev.target;
+  if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)){
+   if (ev.key === 'Escape' && t.blur) { t.blur(); }
+   return;
+  }
+  if (ev.key === '/' && q){ ev.preventDefault(); q.focus(); q.select(); }
+ });
+
+ /* ---- sortable catalogue ---- */
+ var table = document.getElementById('dictTable');
+ var tbody = table ? table.tBodies[0] : null;
+ var curKey = null, curAsc = true;
+ function sortBy(key){
+  if (!tbody) { return; }
+  if (curKey === key) { curAsc = !curAsc; } else { curKey = key; curAsc = true; }
+  var rows = Array.prototype.slice.call(tbody.rows);
+  var numeric = (key === 'year' || key === 'older');
+  rows.sort(function(a,b){
+   var av = a.getAttribute('data-'+key) || '';
+   var bv = b.getAttribute('data-'+key) || '';
+   var r;
+   if (numeric){
+    var an = av === '' ? -1 : parseInt(av,10);
+    var bn = bv === '' ? -1 : parseInt(bv,10);
+    r = an - bn;
+   } else {
+    r = av.localeCompare(bv);
+   }
+   return curAsc ? r : -r;
+  });
+  for (var i=0;i<rows.length;i++){ tbody.appendChild(rows[i]); }
+  var ths = table.tHead.rows[0].cells;
+  for (var j=0;j<ths.length;j++){
+   var arr = ths[j].querySelector('.arr');
+   if (arr){ arr.textContent = ths[j].getAttribute('data-key')===key ? (curAsc?'▴':'▾') : ''; }
+  }
+ }
+ if (table){
+  table.tHead.addEventListener('click', function(ev){
+   var th = ev.target.closest ? ev.target.closest('th') : null;
+   if (th && th.getAttribute('data-key')) { sortBy(th.getAttribute('data-key')); }
+  });
+ }
+
+ /* ---- language filter chips + live count ---- */
+ var chips = document.getElementById('langChips');
+ var countEl = document.getElementById('dictCount');
+ function applyFilter(lang){
+  if (!tbody) { return; }
+  var shown = 0, total = tbody.rows.length;
+  for (var i=0;i<total;i++){
+   var row = tbody.rows[i];
+   var ok = !lang || row.getAttribute('data-lang') === lang;
+   row.style.display = ok ? '' : 'none';
+   if (ok) { shown++; }
+  }
+  if (countEl){ countEl.textContent = shown + ' / ' + total + ' shown'; }
+  if (chips){
+   var btns = chips.querySelectorAll('button');
+   for (var j=0;j<btns.length;j++){
+    btns[j].setAttribute('aria-pressed', (btns[j].getAttribute('data-lang')||'') === (lang||'') ? 'true':'false');
+   }
+  }
+ }
+ if (chips){
+  chips.addEventListener('click', function(ev){
+   var b = ev.target.closest ? ev.target.closest('button') : null;
+   if (b) { applyFilter(b.getAttribute('data-lang') || ''); }
+  });
+ }
+})();
+</script>
+</body>
+</html>

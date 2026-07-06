@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>D3 Minimal Student · Results — Cologne Sanskrit Lexicon prototype</title>
+<style>
+  :root { --ink:#111827; --muted:#6b7280; --accent:#0f766e; --hairline:#e5e7eb; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  html { -webkit-text-size-adjust:100%; }
+  body {
+    font-family:system-ui,-apple-system,'Segoe UI',sans-serif;
+    color:var(--ink); background:#fff;
+    line-height:1.6; padding:1.25rem 1rem 4rem;
+  }
+  .wrap { max-width:640px; margin:0 auto; }
+  a { color:var(--accent); }
+  nav.top { display:flex; justify-content:flex-end; flex-wrap:wrap; gap:0.25rem 1rem; font-size:0.8rem; }
+  nav.top a { text-decoration:none; color:var(--muted); }
+  nav.top a:hover { color:var(--accent); }
+  nav.top a[aria-current="page"] { color:var(--accent); font-weight:600; }
+  .proto-note { font-size:0.72rem; color:var(--muted); text-align:right; margin-top:0.5rem; }
+  form.search { margin-top:1.75rem; }
+  .search input[type="search"] {
+    width:100%; font-size:1.25rem; font-family:inherit; color:var(--ink);
+    padding:0.75rem 1rem; border:1px solid var(--hairline); border-radius:0.75rem;
+    outline:none; background:#fff;
+  }
+  .search input[type="search"]:focus { border-color:var(--accent); box-shadow:0 1px 6px rgba(15,118,110,0.15); }
+  .preview-caption { margin-top:0.6rem; font-size:0.78rem; color:var(--muted); }
+  ol.results { list-style:none; margin-top:2.5rem; }
+  ol.results li + li { margin-top:1.25rem; }
+  a.hit {
+    display:block; text-decoration:none; color:inherit;
+    border:1px solid var(--hairline); border-radius:1rem; padding:1.4rem 1.4rem 1.3rem;
+  }
+  a.hit:hover, a.hit:focus { border-color:var(--accent); }
+  .hit .hw {
+    font-family:Georgia,'Times New Roman',serif;
+    font-size:1.9rem; line-height:1.25; color:var(--ink);
+  }
+  .hit .deva { font-family:Georgia,'Times New Roman',serif; font-size:1.25rem; color:var(--muted); margin-left:0.5rem; }
+  .hit .gloss { margin-top:0.35rem; font-size:1.05rem; }
+  .hit .snippet { margin-top:0.45rem; font-family:Georgia,'Times New Roman',serif; font-size:0.95rem; color:#374151; }
+  .hit .snippet .lbl { font-family:system-ui,-apple-system,'Segoe UI',sans-serif; font-size:0.72rem; color:var(--muted); }
+  .hit .dicts { margin-top:0.45rem; font-size:0.8rem; color:var(--muted); }
+  .hit .dicts b { color:var(--accent); font-weight:600; }
+  .none { margin-top:2.5rem; color:var(--muted); font-size:0.95rem; }
+  .provenance { margin-top:3rem; font-size:0.75rem; color:var(--muted); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <nav class="top" aria-label="Prototype pages">
+    <a href="home.html">Home</a>
+    <a href="results.html" aria-current="page">Results</a>
+    <a href="entry.html">Entry</a>
+    <a href="dict.html">About MW</a>
+    <a href="../index.html">⌂ All prototypes</a>
+  </nav>
+  <p class="proto-note">Design-direction prototype D3 · Minimal Student — static preview with real MW (1899) &amp; Apte (1890) text</p>
+
+  <form class="search" role="search">
+    <label for="q" style="position:absolute;left:-9999px;">Filter the sample words</label>
+    <input type="search" id="q" name="q" autocomplete="off"
+           placeholder="Type any Sanskrit word — agni, धर्म, manas…">
+    <p class="preview-caption">Only four words — <span lang="sa">agni</span>, <span lang="sa">dharma</span>, <span lang="sa">manas</span>, <span lang="sa">indra</span> — are loaded in this static preview.</p>
+  </form>
+
+  <ol class="results" id="results">
+    <li data-key="agni agní अग्नि">
+      <a class="hit" href="entry.html#agni">
+        <h2 class="hw"><span lang="sa">agní</span><span class="deva" lang="sa">अग्नि</span></h2>
+        <p class="gloss">fire; the god of fire</p>
+        <p class="snippet"><span class="lbl">MW 1899, sense 1 —</span> fire, sacrificial fire (of three kinds, <span lang="sa">Gārhapatya</span>, <span lang="sa">Āhavanīya</span>, and <span lang="sa">Dakṣiṇa</span>)</p>
+        <p class="dicts">in <b>MW</b> · <b>AP90</b></p>
+      </a>
+    </li>
+    <li data-key="dharma dhárma धर्म">
+      <a class="hit" href="entry.html#dharma">
+        <h2 class="hw"><span lang="sa">dhárma</span><span class="deva" lang="sa">धर्म</span></h2>
+        <p class="gloss">law, duty, virtue, nature</p>
+        <p class="snippet"><span class="lbl">MW 1899, sense 1 —</span> that which is established or firm, steadfast decree, statute, ordinance, law</p>
+        <p class="dicts">in <b>MW</b></p>
+      </a>
+    </li>
+    <li data-key="manas mánas मनस्">
+      <a class="hit" href="entry.html#manas">
+        <h2 class="hw"><span lang="sa">mánas</span><span class="deva" lang="sa">मनस्</span></h2>
+        <p class="gloss">mind, intellect, spirit</p>
+        <p class="snippet"><span class="lbl">MW 1899, sense 1 (opening) —</span> mind (in its widest sense as applied to all the mental powers), intellect, intelligence, understanding, perception, sense, conscience, will, <cite>RV.</cite> &amp;c. &amp;c. …</p>
+        <p class="dicts">in <b>MW</b></p>
+      </a>
+    </li>
+    <li data-key="indra índra इन्द्र">
+      <a class="hit" href="entry.html#indra">
+        <h2 class="hw"><span lang="sa">índra</span><span class="deva" lang="sa">इन्द्र</span></h2>
+        <p class="gloss">the god of the atmosphere and sky</p>
+        <p class="snippet"><span class="lbl">MW 1899, sense 2 (opening) —</span> the Indian Jupiter Pluvius or lord of rain (who in Vedic mythology reigns over the deities of the intermediate region or atmosphere …), <cite>RV.</cite>; <cite>AV.</cite>; <cite>ŚBr.</cite></p>
+        <p class="dicts">in <b>MW</b></p>
+      </a>
+    </li>
+  </ol>
+  <p class="none" id="noneMsg" hidden>Nothing in this small preview matches — try <a href="results.html?q=agni">agni</a>, dharma, manas or indra.</p>
+
+  <p class="provenance">Entry text is the actual public-domain dictionary text (Monier-Williams 1899 · Apte 1890), from the Cologne csl-orig source.</p>
+
+</div>
+<script>
+(function () {
+  'use strict';
+  function fold(s) {
+    return String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+  }
+  var input = document.getElementById('q');
+  var items = Array.prototype.slice.call(document.querySelectorAll('#results > li'));
+  var noneMsg = document.getElementById('noneMsg');
+  function applyFilter() {
+    if (!input) { return; }
+    var q = fold(input.value.trim());
+    var shown = 0;
+    items.forEach(function (li) {
+      var hit = !q || fold(li.getAttribute('data-key')).indexOf(q) !== -1 ||
+                fold(li.textContent).indexOf(q) !== -1;
+      li.hidden = !hit;
+      if (hit) { shown++; }
+    });
+    if (noneMsg) { noneMsg.hidden = shown > 0; }
+  }
+  if (input) {
+    try {
+      var params = new URLSearchParams(location.search);
+      var q0 = params.get('q');
+      if (q0) { input.value = q0; }
+    } catch (e) { /* older browsers: leave box empty */ }
+    input.addEventListener('input', applyFilter);
+    applyFilter();
+  }
+})();
+</script>
+</body>
+</html>
