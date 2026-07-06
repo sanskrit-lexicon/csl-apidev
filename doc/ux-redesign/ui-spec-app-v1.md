@@ -1,6 +1,6 @@
 # Cologne `app/` UI Spec v1 — Proposal A (Research Workbench), Slice 1
 
-_Created: 03-07-2026 · Last updated: 05-07-2026_
+_Created: 03-07-2026 · Last updated: 06-07-2026_
 
 Implementation spec for the unified Cologne Sanskrit Lexicon interface. Direction and
 scope were ruled by MG on 03-07-2026 (spec authored the same session, Fable 5
@@ -140,7 +140,7 @@ pages are untouched; `app/` is additive (brief's must-preserve).
 - `getword_batch.php` and everything in `app/` are inert on the live site until Jim pulls the server checkout (same as lookup Wave 1, [PR #63](https://github.com/sanskrit-lexicon/csl-apidev/pull/63)) — "not visible live" ≠ "not done".
 - Burst-ban: any accidental request loop can get the client IP throttled; the single-flight + cache rules above are not optional.
 
-## Slice 2 + visual redesign (05-07-2026)
+## Slice 2 + visual redesign (06-07-2026)
 
 Delivered this pass (MG asked to *modernise the ruled Proposal A as working
 code, all seven current pages unified*). No product-direction change — the
@@ -175,7 +175,7 @@ the two deferred slice-2 surfaces.
 - **Still open:** suffix-mode endpoint (unchanged from slice 1 — tab disabled);
   live deployment still gated on Jim's server checkout pull; `home.php`/`dict.php`
   are static catalogue surfaces, no live-server dependency.
-- **Verified 05-07-2026** offline via the XAMPP PHP built-in server: 45 cards +
+- **Verified 06-07-2026** offline via the XAMPP PHP built-in server: 45 cards +
   facets (15 en / 6 de / 2 fr / 1 la / 21 other), name filter (`monier` →
   MW/MW72/MWE), dark-mode toggle, `dict.php?dict=mw` metadata + actions, and the
   full slice-1 `?fixtures=1` search → badges → reader → scan-link flow intact.

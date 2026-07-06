@@ -1,6 +1,6 @@
 # Cologne Sanskrit Lexicon UX Redesign Proposal
 
-_Created: 03-07-2026 · Last updated: 03-07-2026_
+_Created: 03-07-2026 · Last updated: 06-07-2026_
 
 ## Prior-art verdict
 
@@ -89,6 +89,14 @@ It gives students one obvious search box while keeping exact, prefix, and suffix
 ## Prototype
 
 Open [cologne-redesign-prototype.html](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/doc/ux-redesign/cologne-redesign-prototype.html) in a browser. It is a static, self-contained clickable mockup with proposal switching and mode controls.
+
+## Built implementation
+
+The ruled Proposal A now exists as working code in
+[`app/`](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/app/README.md) —
+unified search + catalogue homepage + dictionary-detail route, with a light/dark
+theme. See [app/README.md](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/app/README.md)
+for the page map, file roles, conventions and how to run it locally.
 
 ## Implementation notes for a later phase
 

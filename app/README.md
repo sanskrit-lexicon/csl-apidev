@@ -1,6 +1,6 @@
 # `app/` — unified Cologne Sanskrit Lexicon interface
 
-_Created: 05-07-2026 · Last updated: 05-07-2026_
+_Created: 06-07-2026 · Last updated: 06-07-2026_
 
 The `app/` directory is the redesigned, unified front end for the Cologne
 Digital Sanskrit Dictionaries — the implementation of **Proposal A (Research

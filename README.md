@@ -20,6 +20,12 @@ API endpoint docs live in [`doc/`](doc/readme.md). Of note:
   dictionary entries, e.g. `/MW/bAQa` or `/MW/144239`
   ([COLOGNE#249](https://github.com/sanskrit-lexicon/COLOGNE/issues/249)); the HTML and
   collision-safe-routing face of the Salt permalink.
+- **Unified web interface** ([`app/`](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/app/README.md)) —
+  the redesigned front end that consolidates the classic Basic / List / Advanced /
+  Mobile / Simple pages into one responsive search, plus a catalogue homepage and
+  dictionary-detail route. Implements the ruled **Proposal A (Research Workbench)**;
+  design docs in [`doc/ux-redesign/`](https://github.com/sanskrit-lexicon/csl-apidev/tree/main/doc/ux-redesign).
+  Additive layer, existing endpoints and production URLs unchanged.
 <!-- END MANUAL: documentation -->
 
 ## Issues Overview
