@@ -126,18 +126,8 @@ class BasicAdjust {
       "BasicAdjust::ls_callback_mw",$line);
   //dbgprint(true,"after ls_callback_mw: $line\n");
 
-  $line = preg_replace('|<ls>ib[.]|','<ls><ab>ib.</ab>',$line);
- }
- if (in_array($this->getParms->dict,array('mw'))) {
-  // 03-07-2026 (H139). Vārttikas are numbered per-sūtra, not independently, and
-  // ashtadhyayi.com exposes no separate per-Vārttika anchor -- so an
-  // <ab>Vārtt.</ab> N inherits the ashtadhyayi.com href of the Pāṇini sūtra it is
-  // textually co-cited with on the same source line (the ls_callback_mw pass just
-  // above already turned that sūtra's <ls> into a <gralink href='...sutraani/a/p/s'>).
-  // If no such sūtra link is present on the line, leave the Vārttika unlinked --
-  // do not fabricate.
-  $line = $this->vartt_href_callback_mw($line);
- }
+  $line = preg_replace('|<ls>ib[.]|','<ls><ab>ib.</ab>',$line);    
+ } 
  if (in_array($this->getParms->dict,array('mw'))) {
   /* 04-16-2024  This change already present in mw.txt
   $line1 = preg_replace('|<lang n="greek">(.*?)</lang>@|',
@@ -472,15 +462,15 @@ public function ls_callback_pwg_href($code,$data) {
  $href = null; // default if no success
  $dbg = false;
  dbgprint($dbg,"ls_callback_pwg_href. data=$data\n");
- if (preg_match('|^(Spr[.]) ([0-9]+)|',$data,$matches)) {
-  if (in_array($this->dict,array('pw','pwkvn'))) {
-   // link to Spruche 2nd edition in pw
-   $pfx = $matches[1];
-   $verse = $matches[2];
-   $href = "https://sanskrit-lexicon-scans.github.io/boesp2/web1/boesp.html?$verse";
-   dbgprint($dbg,"Spr: href=$href\n");
-   return $href;
-  }
+  if (preg_match('|^(Spr[.]) ([0-9]+)|',$data,$matches)) {
+   if (in_array($this->dict,array('pw','pwkvn','ben'))) {
+    // link to Spruche 2nd edition in pw
+    $pfx = $matches[1];
+    $verse = $matches[2];
+    $href = "https://sanskrit-lexicon-scans.github.io/boesp2/web1/boesp.html?$verse";
+    dbgprint($dbg,"Spr: href=$href\n");
+    return $href;
+   }
   if ($this->dict == 'pwg') {
    // link to Spruche 1st edition in pw
    $pfx = $matches[1];
@@ -617,24 +607,24 @@ public function ls_callback_pwg_href($code,$data) {
   }
   }
  /******* link to Ṛgveda Prātiśākhya  ***********/
-  $temparr = array("ṚV. PRĀT.");
-  foreach($temparr as $temp) {
-   if (preg_match("|^($temp) *([0-9]+), *([0-9]+)|",$data,$matches)) {
-    $t = $matches[2]; // patala
-    $s = $matches[3]; // sutra
-    $href = "https://sanskrit-lexicon-scans.github.io/rvps/app1?$t,$s";
+   $temparr = array("ṚV. PRĀT.", "ṚV. PRĀTIŚ.");
+   foreach($temparr as $temp) {
+    if (preg_match("|^($temp) *([0-9]+), *([0-9]+)|",$data,$matches)) {
+     $t = $matches[2]; // patala
+     $s = $matches[3]; // sutra
+     $href = "https://sanskrit-lexicon-scans.github.io/rvps/app1?$t,$s";
+     dbgprint($dbg,"$pfx: href=$href\n");
+     return $href;
+    }
+   }
+   // ṚV. PRĀT./ṚV. PRĀTIŚ. Roman numeral → app2 by ipage
+   if (preg_match("|^ṚV\. PRĀ(TIŚ|T)\. ([IVXLCDM]+)|",$data,$matches)) {
+    $roman = $matches[2];
+    $ipage = $this->romanToInt($roman);
+    $href = "https://sanskrit-lexicon-scans.github.io/rvps/app2/?$ipage";
     dbgprint($dbg,"$pfx: href=$href\n");
     return $href;
    }
-  }
-  // ṚV. PRĀT. Roman numeral → app2 by ipage
-  if (preg_match("|^ṚV\. PRĀT\. ([IVXLCDM]+)|",$data,$matches)) {
-   $roman = $matches[1];
-   $ipage = $this->romanToInt($roman);
-   $href = "https://sanskrit-lexicon-scans.github.io/rvps/app2/?$ipage";
-   dbgprint($dbg,"$pfx: href=$href\n");
-   return $href;
-  }
  /******* link to YĀJÑAVALKYA'S Gesetzbuch  ***********/
   // pwg,pw,pwkvn  YĀJÑ. N,N;  
  $temparr = array("YĀJÑ.");
@@ -1454,6 +1444,124 @@ public function ls_callback_pwg_href($code,$data) {
  return $href; 
 }
 
+/******* ls_callback_ben_href: normalize BEN abbrev then delegate to PWG *******/
+public function ls_callback_ben_href($code,$n,$data) {
+ static $ben_to_pwg = array(
+  // Work-level (hardcoded patterns)
+  'MBh.' => 'MBH.', 'Man.' => 'M.', 'Pañc.' => 'PAÑCAT.',
+  'Rām.' => 'R.', 'Bhāg. P.' => 'BHĀG. P.',
+  'Chr.' => 'BENF. Chr.',
+  'Hit.' => 'HIT.', 'Rājat.' => 'RĀJA-TAR.',
+  'Vikr.' => 'VIKR.', 'Śāk.' => 'ŚĀK.',
+  'Ragh.' => 'RAGH.', 'Rigv.' => 'ṚV.',
+   'Bhartṛ.' => 'BHARTṚ.', 'Utt. Rāmac.' => 'UTT. RĀMAC.',
+   'Varāh. Bṛh. S.' => 'VARĀH. BṚH. S.',
+   'Kathās.' => 'KATHĀS.', 'Hariv.' => 'HARIV.',
+  'Yājñ.' => 'YĀJÑ.', 'Megh.' => 'MEGH.',
+   // 'Nal.' => 'N.',  // Bopp's Nala ≠ Böhtlingk's Chrestomathy (wrong ed.)
+   'Śiś.' => 'ŚIŚ.',
+  'Kir.' => 'KIR.', 'Bhag.' => 'BHAG.',
+  'Mālat.' => 'MĀLAT.', 'Bhāṣāp.' => 'BHĀṢĀP.',
+  'Mṛcch.' => 'MṚCCH.', 'Ṛt.' => 'ṚT.',
+  'Prab.' => 'PRAB.', 'Mālav.' => 'MĀLAV.',
+  'Mārk. P.' => 'MĀRK. P.',    'Cāṇ.' => 'CĀṆ.',
+   'Caurap.' => 'CAURAP.',
+   // 'Amar.' => 'AMAR.',  // Amaruçataka ≠ Amarakośa (wrong work)
+   'Nalod.' => 'NALOD.',
+   'Pāṇ.' => 'P.',
+   'Sāh.' => 'SĀH. D.', 'Gīt.' => 'GĪT.',
+  'Kumāras.' => 'KUMĀRAS.', 'Bhaṭṭ.' => 'BHAṬṬ.',
+  'Vedāntas.' => 'VEDĀNTAS.', 'Daśak.' => 'DAŚAK.',
+  // Pure lookup (pwgbib)
+  'Suśr.' => 'SUŚR.', 'Böhtl.' => 'BÖHTL.',
+  'Johns. Sel.' => 'JOHNS. Sel.',
+  'Lass.' => 'LASS.', 'Sāv.' => 'SĀV.',
+  'Indr.' => 'INDR.', 'Arj.' => 'ARJ.',
+  'Draup.' => 'DRAUP.', 'Hiḍ.' => 'HID.',
+  'Kām. Nītis.' => 'KĀM. NĪTIS.',
+  'Śṛṅgārat.' => 'ŚRṄGĀRAT.',
+  'Dev.' => 'DEV.', 'Sund.' => 'SUND.',
+  'Ghaṭ.' => 'GHAṬ.',
+ );
+ static $ben_composite_map = array(
+  'Böhtl. Ind. Spr.' => 'Böhtl.',
+  'Vedāntas. in Chr.' => 'Vedāntas.',
+  'Daśak. in Chr.' => 'Daśak.',
+  'Lass. 2. ed.' => 'Lass.',
+  'Lass. Anth.' => 'Lass.',
+  'Lass. Pentap.' => 'Lass.',
+  'Lass. Pentap. p.' => 'Lass.',
+  'Lass. ed.' => 'Lass.',
+  'Lass. p.' => 'Lass.',
+ );
+ $href = null;
+ $dbg = false;
+ dbgprint($dbg,"ls_callback_ben_href. code=$code, n=$n, data=$data\n");
+ $data1 = ($n == '') ? $data : "$n $data";
+ // Check for Gorresio edition marker
+ $has_gorr = (bool)preg_match('|<ab>Gorr[.\]]|',$data1);
+ // Strip <ab> tags from data1 for clean matching
+ $data1_clean = preg_replace('/<[^>]*>/','',$data1);
+ // Try composite source stripping first
+ $found_composite = false;
+ foreach ($ben_composite_map as $ben_comp => $core_abbr) {
+  if (strpos($data1_clean, $ben_comp) === 0) {
+   $rest = substr($data1_clean, strlen($ben_comp));
+   $data1_clean = $core_abbr . $rest;
+   $found_composite = true;
+   break;
+  }
+ }
+   // Map BEN abbreviation -> PWG abbreviation
+   // Find longest matching key in mapping (handles multi-word abbreviations)
+   $pwg_code = $code; // default: pass original code through
+   $best_key = null;
+   foreach ($ben_to_pwg as $ben_key => $pwg_val) {
+    if (strpos($data1_clean, $ben_key) === 0) {
+     if ($best_key === null || strlen($ben_key) > strlen($best_key)) {
+      $best_key = $ben_key;
+     }
+    }
+   }
+   if ($best_key !== null) {
+    $ben_abbr = $best_key;
+    $pwg_abbr = $ben_to_pwg[$best_key];
+    $pwg_code = $pwg_abbr;
+    dbgprint($dbg,"ls_callback_ben_href: mapped $ben_abbr -> $pwg_abbr\n");
+    // Handle Rāmāyaṇa edition distinction
+    if ($pwg_abbr == 'R.' && $has_gorr) {
+     $pwg_abbr = 'R. GORR.';
+     $pwg_code = 'R. GORR.';
+    }
+    $rest = substr($data1_clean, strlen($ben_abbr));
+    $data_pwg = $pwg_abbr . $rest;
+   } else {
+    $data_pwg = $data1_clean;
+   }
+   // Normalize ref format for PWG:
+   // - Remove distich marker <ab>d.</ab> (already stripped to 'd.')
+   // - For sources with native PWG Roman handlers (Pañc., Hit.):
+   //   uppercase lowercase Roman numerals and normalize 'pr.' -> 'Pr.'
+   // - For all other sources: convert Roman numerals to decimal digits
+   $data_pwg = preg_replace('/\bd\.\s*/', '', $data_pwg);
+   if (in_array($pwg_code, array('PAÑCAT.', 'HIT.'))) {
+    $data_pwg = preg_replace_callback(
+     '/\b([ivx]+)[.,]\s*/',
+     function($m) { return strtoupper($m[1]) . ', '; },
+     $data_pwg
+    );
+    $data_pwg = preg_replace('/\bpr\./', 'Pr.', $data_pwg);
+   } else {
+    $data_pwg = preg_replace_callback(
+     '/\b([ivx]+)[.,]\s*/',
+     function($m) { return $this->romanToInt(strtoupper($m[1])) . ', '; },
+     $data_pwg
+    );
+   }
+  dbgprint($dbg,"ls_callback_ben_href: data_pwg=$data_pwg\n");
+  return $this->ls_callback_pwg_href($pwg_code,$data_pwg);
+}
+
 public function ls_callback_mw($matches) {
  // Try to also handle ap90, ben, sch
  // Two situations envisioned:
@@ -1547,9 +1655,11 @@ public function ls_callback_mw($matches) {
    $href = $this->ls_callback_mw_href($code,$n,$data);
   }else if ($this->dict == 'bhs') {
    $href = $this->ls_callback_mw_href($code,$n,$data);
-  }else if ($this->dict == 'sch') {
-   $href = $this->ls_callback_sch_href($code,$n,$data);
-  }
+   }else if ($this->dict == 'sch') {
+    $href = $this->ls_callback_sch_href($code,$n,$data);
+   }else if ($this->dict == 'ben') {
+    $href = $this->ls_callback_ben_href($code,$n,$data);
+   }
   if ($href != null) {
    $this->lsrecs[] = array($ls_string,$href);
   }
@@ -2549,77 +2659,7 @@ public function ls_callback_mw_href($code,$n,$data) {
    return $href;
  }
 
- return $href;
-}
-/* 03-07-2026 (H139). Vārttikas (Kātyāyana's critical notes on Pāṇini) are
-   numbered per-sūtra, not in an independent sequence, and ashtadhyayi.com has
-   no separate per-Vārttika anchor -- a Vārttika is shown inside the commentary
-   panel of the sūtra page it belongs to. So an <ab>Vārtt.</ab> N in mw.txt
-   should link to the same https://ashtadhyayi.com/sutraani/{a}/{p}/{s} page as
-   whichever Pāṇini sūtra citation it is co-cited with on the same source line.
-   By the time this runs, ls_callback_mw (just above, same dict='mw' block) has
-   already turned any such <ls>Pāṇ. a,p,s</ls> into
-   <gralink href='.../sutraani/a/p/s' n='...'>...</gralink> -- reuse that href
-   rather than recomputing it. If no sūtra link exists on the line (e.g. <ls>ib.</ls>
-   or <ls>Pat. <ab>Introd.</ab></ls> with no attached sūtra number), leave the
-   Vārttika unlinked; do not fabricate a link.
-   Heuristic: nearest preceding sutraani gralink on the line, else nearest
-   following one (handles the rare "Vārtt. N on Pāṇ. ..." word order). Confirmed
-   against the full mw.txt corpus (H139 investigation): 897/921 <ab>Vārtt.</ab> N
-   occurrences resolve this way; the remaining 24 are genuinely unresolvable and
-   are left unlinked by design. */
-public function vartt_href_callback_mw($line) {
- $dbg = false;
- if (strpos($line,'Vārtt') === false) {return $line;}
- $npat = "|<gralink href='(https://ashtadhyayi\\.com/sutraani/[0-9]+/[0-9]+/[0-9]+)' n='(.*?)'>.*?</gralink>|";
- if (! preg_match_all($npat,$line,$gmatches,PREG_OFFSET_CAPTURE)) {
-  dbgprint($dbg,"vartt_href_callback_mw: no sutraani gralink on line, skipping\n");
-  return $line; // no sutra link on this line to inherit
- }
- $spans = array();
- foreach ($gmatches[0] as $i => $m) {
-  $start = $m[1];
-  $end = $start + strlen($m[0]);
-  $href = $gmatches[1][$i][0];
-  $tooltip = $gmatches[2][$i][0];
-  $spans[] = array($start,$end,$href,$tooltip);
- }
- if (! preg_match_all('|<ab>Vārtt\\.</ab> ([0-9]+)|',$line,$vmatches,PREG_OFFSET_CAPTURE)) {
-  return $line;
- }
- $replacements = array();
- foreach ($vmatches[0] as $i => $vm) {
-  $vstart = $vm[1];
-  $vend = $vstart + strlen($vm[0]);
-  $n = $vmatches[1][$i][0];
-  $best = null;
-  foreach ($spans as $s) {
-   if ($s[1] <= $vstart) { // preceding: prefer the nearest one
-    if ($best === null || $s[1] > $best[1]) {$best = $s;}
-   }
-  }
-  if ($best === null) {
-   foreach ($spans as $s) {
-    if ($s[0] >= $vend) { // no preceding sūtra link: fall back to nearest following
-     if ($best === null || $s[0] < $best[0]) {$best = $s;}
-    }
-   }
-  }
-  if ($best !== null) {
-   $href = $best[2];
-   $tooltip = $best[3];
-   $repl = "<gralink href='$href' n='$tooltip'><ab>Vārtt.</ab> $n</gralink>";
-   dbgprint($dbg,"vartt_href_callback_mw: n=$n -> href=$href\n");
-   $replacements[] = array($vstart,$vend,$repl);
-  }
- }
- // apply right-to-left so earlier offsets stay valid
- usort($replacements, function($a,$b) {return $b[0] - $a[0];});
- foreach ($replacements as $r) {
-  list($start,$end,$repl) = $r;
-  $line = substr_replace($line,$repl,$start,$end - $start);
- }
- return $line;
+ return $href; 
 }
 public function ls_callback_sch_href($code,$n,$data) {
  $href = null; // default if no success
