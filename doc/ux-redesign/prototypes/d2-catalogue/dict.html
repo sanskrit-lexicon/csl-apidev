@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>D2 Library Catalogue · Dictionary — Cologne Sanskrit Lexicon prototype</title>
+<style>
+:root{
+  --paper:#f8f3e9; --card:#fffdf7; --ink:#3a2d21; --ink-muted:#7a6a56;
+  --brown:#5b3a29; --maroon:#7a2e2a; --gold:#a5803a; --line:#e3d7bf;
+  --spine-english:#2e5d43; --spine-other:#8a8378;
+  --serif:'Palatino Linotype','Palatino','Book Antiqua',Georgia,serif;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--serif);line-height:1.6}
+a{color:var(--maroon)}
+.site-header{background:var(--brown);color:#f5ecdd;padding:.65rem 1.25rem;display:flex;flex-wrap:wrap;align-items:baseline;gap:.35rem 1.25rem}
+.site-header .brand{font-size:1.05rem;font-weight:700;letter-spacing:.04em}
+.site-header nav{display:flex;flex-wrap:wrap;gap:.25rem .9rem;font-size:.92rem;margin-left:auto}
+.site-header nav a{color:#e8dcc4;text-decoration:none;padding:.15rem .1rem;border-bottom:2px solid transparent}
+.site-header nav a:hover{color:#fff;border-bottom-color:#c9a55e}
+.site-header nav a[aria-current="page"]{color:#fff;font-weight:700;border-bottom-color:var(--gold)}
+.proto-banner{background:#efe4cd;border-bottom:1px solid var(--line);color:#6b5232;font-size:.8rem;padding:.35rem 1.25rem;text-align:center}
+main{max-width:52rem;margin:0 auto;padding:1.8rem 1.25rem 3rem}
+/* the library card */
+.record{background:var(--card);border:1px solid var(--line);border-left:8px solid var(--spine-english);border-radius:10px;box-shadow:0 3px 12px rgba(91,58,41,.16);overflow:hidden}
+.record-head{display:flex;gap:1.1rem;align-items:flex-start;padding:1.4rem 1.5rem 1.1rem;border-bottom:3px double var(--gold)}
+.monogram{flex:none;display:flex;align-items:center;justify-content:center;width:4.6rem;height:4.6rem;border-radius:9px;background:var(--spine-english);color:#f3ecdc;font-weight:700;font-size:1.5rem;letter-spacing:.03em;box-shadow:inset 3px 0 0 rgba(255,255,255,.3)}
+.record-head h1{margin:0 0 .3rem;font-size:clamp(1.25rem,3.6vw,1.7rem);color:var(--brown)}
+.record-head .byline{margin:0;font-style:italic;color:var(--ink-muted);font-size:.95rem}
+.record-body{padding:1.1rem 1.5rem 1.4rem}
+dl.card-facts{display:grid;grid-template-columns:auto 1fr;gap:.25rem 1.2rem;margin:0 0 1rem;font-size:.92rem}
+dl.card-facts dt{font-variant:small-caps;letter-spacing:.06em;color:var(--ink-muted)}
+dl.card-facts dd{margin:0}
+.description{max-width:66ch;margin:0 0 1.3rem}
+/* search within */
+.within-search{background:#fbf7ec;border:1px solid var(--line);border-radius:10px;padding:.9rem 1rem;margin:0 0 1.3rem}
+.within-search h2{margin:0 0 .5rem;font-size:.95rem;color:var(--brown);font-variant:small-caps;letter-spacing:.06em}
+.searchbar{display:flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--card)}
+.searchbar input{flex:1;min-width:0;border:0;background:transparent;padding:.65rem .9rem;font:inherit;font-size:1rem;color:var(--ink)}
+.searchbar input:focus{outline:2px solid var(--gold);outline-offset:-2px}
+.searchbar button{border:0;background:var(--maroon);color:#f8f0e0;font:inherit;font-size:.95rem;padding:0 1.2rem;cursor:pointer}
+.searchbar button:hover{background:#8f3a35}
+.within-search .mock{font-size:.75rem;color:var(--ink-muted);font-style:italic;margin:.4rem 0 0}
+/* actions */
+.record-actions{list-style:none;margin:0 0 .4rem;padding:0;display:flex;flex-wrap:wrap;gap:.6rem}
+.record-actions a{display:inline-block;border:1px solid var(--line);background:var(--card);color:var(--brown);border-radius:8px;padding:.45rem 1rem;font-size:.9rem;text-decoration:none;box-shadow:0 1px 3px rgba(91,58,41,.1)}
+.record-actions a:hover{border-color:var(--gold);color:var(--maroon)}
+/* sample shelf */
+section.samples,section.nearby{margin-top:2.2rem}
+section.samples h2,section.nearby h2{font-size:1.2rem;color:var(--brown);border-top:3px double var(--gold);padding-top:.9rem;margin:0 0 .9rem}
+.sample-shelf{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(10.5rem,1fr));gap:.8rem}
+.sample-shelf a{display:block;background:var(--card);border:1px solid var(--line);border-left:6px solid var(--gold);border-radius:10px;padding:.7rem .9rem;text-decoration:none;color:inherit;box-shadow:0 1px 4px rgba(91,58,41,.12)}
+.sample-shelf a:hover{box-shadow:0 3px 9px rgba(91,58,41,.2)}
+.sample-shelf .iast{display:block;font-size:1.15rem;font-style:italic;font-weight:700;color:var(--maroon)}
+.sample-shelf .deva{display:block;color:var(--brown)}
+.sample-shelf .g{display:block;font-size:.78rem;color:var(--ink-muted);margin-top:.15rem}
+/* nearby strip */
+.shelf-scroll{overflow-x:auto;padding-bottom:.5rem}
+.shelf-strip{list-style:none;margin:0;padding:0;display:flex;gap:.6rem;min-width:min-content}
+.shelf-strip li{flex:none;width:9.5rem;background:var(--card);border:1px solid var(--line);border-left:6px solid var(--spine-other);border-radius:10px;padding:.6rem .75rem;box-shadow:0 1px 3px rgba(91,58,41,.1)}
+.shelf-strip li.lang-english{border-left-color:var(--spine-english)}
+.shelf-strip .code{display:block;font-weight:700;color:var(--brown);font-size:.9rem}
+.shelf-strip .t{display:block;font-size:.74rem;color:var(--ink-muted);line-height:1.35;margin-top:.2rem}
+.nearby .note{font-size:.78rem;color:var(--ink-muted);font-style:italic;margin:.5rem 0 0}
+footer.provenance{max-width:52rem;margin:0 auto;padding:0 1.25rem 2rem;color:var(--ink-muted);font-size:.78rem;border-top:1px solid var(--line);padding-top:.8rem}
+@media (max-width:480px){
+  .site-header nav{margin-left:0}
+  .record-head{flex-direction:column}
+  .sample-shelf{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <span class="brand">Cologne Sanskrit Lexicon · Catalogue</span>
+  <nav aria-label="Prototype pages">
+    <a href="home.html">Home</a>
+    <a href="results.html">Results</a>
+    <a href="entry.html">Entry</a>
+    <a href="dict.html" aria-current="page">Dictionary</a>
+    <a href="../index.html">⌂ All prototypes</a>
+  </nav>
+</header>
+<p class="proto-banner">Design-direction prototype D2 · Library Catalogue — static preview with real MW (1899) &amp; Apte (1890) text</p>
+
+<main>
+  <article class="record" aria-labelledby="record-title">
+    <div class="record-head">
+      <span class="monogram" aria-hidden="true">MW</span>
+      <div>
+        <h1 id="record-title">Monier-Williams Sanskrit-English Dictionary</h1>
+        <p class="byline">Sir Monier Monier-Williams · Oxford, 1899</p>
+      </div>
+    </div>
+    <div class="record-body">
+      <dl class="card-facts">
+        <dt>Code</dt><dd>MW</dd>
+        <dt>Language</dt><dd>English</dd>
+        <dt>Cologne edition</dt><dd>2020 (previous 2014)</dd>
+      </dl>
+      <p class="description">Sir Monier Monier-Williams' <cite>A Sanskrit-English Dictionary</cite>, published at Oxford in 1899, remains the most widely consulted Sanskrit–English reference work. It was digitized by the Cologne Digital Sanskrit Dictionaries project, which links every entry back to the scanned pages of the printed edition.</p>
+
+      <div class="within-search">
+        <h2>Search within MW</h2>
+        <form class="searchbar" action="results.html" method="get" role="search">
+          <input type="search" name="q" placeholder="Search within this dictionary…" aria-label="Search within MW">
+          <input type="hidden" name="dict" value="MW">
+          <button type="submit">Search</button>
+        </form>
+        <p class="mock">Mock scope in this static preview — results are drawn from the 4 loaded headwords.</p>
+      </div>
+
+      <h2 style="font-size:.95rem;color:var(--brown);font-variant:small-caps;letter-spacing:.06em;margin:0 0 .5rem">Record actions</h2>
+      <ul class="record-actions">
+        <li><a href="https://www.sanskrit-lexicon.uni-koeln.de/scans/MWScan/2020/web/index.php" target="_blank" rel="noopener">Current Cologne interface ↗</a></li>
+        <li><a href="https://www.sanskrit-lexicon.uni-koeln.de/scans/MWScan/2020/web/webtc/servepdf.php?page=5,1" target="_blank" rel="noopener">Scanned pages ↗</a></li>
+        <li><a href="https://www.sanskrit-lexicon.uni-koeln.de/scans/csl-orig/v02/mw/" target="_blank" rel="noopener">Downloads (XML) ↗</a></li>
+      </ul>
+    </div>
+  </article>
+
+  <section class="samples" aria-labelledby="samples-h">
+    <h2 id="samples-h">Sample entries from this volume</h2>
+    <ul class="sample-shelf">
+      <li><a href="entry.html#agni"><span class="iast" lang="sa">agní</span><span class="deva" lang="sa">अग्नि</span><span class="g">fire; the god of fire</span></a></li>
+      <li><a href="entry.html#dharma"><span class="iast" lang="sa">dhárma</span><span class="deva" lang="sa">धर्म</span><span class="g">law, duty, virtue, nature</span></a></li>
+      <li><a href="entry.html#manas"><span class="iast" lang="sa">mánas</span><span class="deva" lang="sa">मनस्</span><span class="g">mind, intellect, spirit</span></a></li>
+      <li><a href="entry.html#indra"><span class="iast" lang="sa">índra</span><span class="deva" lang="sa">इन्द्र</span><span class="g">the god of the atmosphere and sky</span></a></li>
+    </ul>
+  </section>
+
+  <section class="nearby" aria-labelledby="nearby-h">
+    <h2 id="nearby-h">Nearby on the shelf</h2>
+    <div class="shelf-scroll">
+      <ul class="shelf-strip">
+        <li title="prototype: only MW has a detail page"><span class="code">IEG</span><span class="t">Indian Epigraphical Glossary</span></li>
+        <li title="prototype: only MW has a detail page"><span class="code">INM</span><span class="t">Index to the Names in the Mahabharata</span></li>
+        <li title="prototype: only MW has a detail page"><span class="code">KRM</span><span class="t">Kṛdantarūpamālā</span></li>
+        <li title="prototype: only MW has a detail page"><span class="code">LAN</span><span class="t">Lanman Sanskrit Reader Dictionary</span></li>
+        <li class="lang-english" title="prototype: only MW has a detail page"><span class="code">LRV</span><span class="t">Vaidya Standard Sanskrit-English Dictionary</span></li>
+        <li title="prototype: only MW has a detail page"><span class="code">MCI</span><span class="t">Mahabharata Cultural Index</span></li>
+        <li class="lang-english" title="prototype: only MW has a detail page"><span class="code">MD</span><span class="t">Macdonell Sanskrit-English Dictionary</span></li>
+        <li class="lang-english" title="prototype: only MW has a detail page"><span class="code">MW72</span><span class="t">Monier-Williams Sanskrit-English Dictionary</span></li>
+        <li class="lang-english" title="prototype: only MW has a detail page"><span class="code">MWE</span><span class="t">Monier-Williams English-Sanskrit Dictionary</span></li>
+        <li title="prototype: only MW has a detail page"><span class="code">NMMB</span><span class="t">Nāmamālikā of Bhoja</span></li>
+        <li title="prototype: only MW has a detail page"><span class="code">PD</span><span class="t">An Encyclopedic Dictionary of Sanskrit on Historical Principles</span></li>
+        <li title="prototype: only MW has a detail page"><span class="code">PE</span><span class="t">Puranic Encyclopedia</span></li>
+      </ul>
+    </div>
+    <p class="note">Shelf neighbours are browsable on the <a href="home.html">catalogue home</a>; only MW has a detail record in this prototype.</p>
+  </section>
+</main>
+
+<footer class="provenance">
+  Entry text is the actual public-domain dictionary text (Monier-Williams 1899 · Apte 1890), from the Cologne csl-orig source.
+</footer>
+
+</body>
+</html>
