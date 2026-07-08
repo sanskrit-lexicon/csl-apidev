@@ -258,9 +258,12 @@ if ($description === '' && $found) {
 }
 
 // Thin-content gate: index only a real stacked page reached at its
-// canonical address. Fixture pages, single-dict views, non-canonical
-// spellings and misses are noindex,follow.
-$is_canonical_view = ($found && $dictparam === '' && !$fixtures);
+// canonical address that actually rendered entry text. Fixture pages,
+// single-dict views, non-canonical spellings, misses, and the
+// "attested but no block rendered" degraded case (Dalglob matched but
+// every GetwordClass render failed -- a page with no definition body)
+// are all noindex,follow.
+$is_canonical_view = (count($blocks) > 0 && $dictparam === '' && !$fixtures);
 $robots = $is_canonical_view ? 'index,follow' : 'noindex,follow';
 
 /* ---- JSON-LD (SEO playbook: @id spine; DefinedTerm/DefinedTermSet) --- */
