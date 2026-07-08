@@ -23,6 +23,24 @@ require_once('parm.php');           // also initializes the transcoder
 require_once('dal.php');
 require_once('getword_data.php');   // pulls basicadjust.php, basicdisplay.php, dispitem.php
 
+// SPEC-3 parity finding: Parm's global default for the 'input'/transLit transliteration is
+// 'hk' (parm.php ~line 55), not 'slp1' -- but doc/salt_entries.md §1.6 documents the Salt
+// default as 'slp1' (and the doc's own example URLs omit `input` entirely, relying on that
+// default). Left unfixed, a client following the documented contract silently gets zero
+// results for any headword containing a letter where HK and SLP1 diverge (capital D/R/S/N/
+// T/... -- a large fraction of real SLP1 keys). Measured impact: 233/500 (46.6%) of a
+// stratified sample of real MW headwords, see reports/salt_parity_mw_2026-07.md.
+//
+// Scoped fix: default 'input' to 'slp1' for the THREE Salt controllers only, before they
+// construct Parm -- parm.php's own global default is left untouched (other, non-Salt
+// consumers of Parm may depend on the 'hk' default for citation-search entry points).
+function salt_apply_documented_defaults() {
+  if (!isset($_REQUEST['transLit']) && !isset($_REQUEST['input'])) {
+    $_REQUEST['input'] = 'slp1';
+    $_GET['input'] = 'slp1';
+  }
+}
+
 // ---- allowed values (match C-SALT exactly) ----
 function salt_fields()      { return array('id','headword_slp1','sense','re_headwords_slp1','created','xml'); }
 function salt_query_types() { return array('term','fuzzy','match','match_phrase','prefix','wildcard','regexp'); }

@@ -21,6 +21,7 @@ class SaltGraphqlClass {
   private $entriesError = null;
 
   public function __construct() {
+    salt_apply_documented_defaults();                // input defaults to slp1, not Parm's global 'hk'
     $this->parm = new Parm();                       // dict from $_REQUEST['dict']
     $body  = json_decode(file_get_contents('php://input'), true);
     $query = isset($body['query']) ? $body['query']
