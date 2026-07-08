@@ -1,13 +1,13 @@
 # Cologne `app/` UI Spec v1 — Proposal A (Research Workbench), Slice 1
 
-_Created: 03-07-2026 · Last updated: 03-07-2026_
+_Created: 03-07-2026 · Last updated: 06-07-2026_
 
 Implementation spec for the unified Cologne Sanskrit Lexicon interface. Direction and
 scope were ruled by MG on 03-07-2026 (spec authored the same session, Fable 5
 `claude-fable-5`). Companion documents:
 [proposal-brief.md](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/doc/ux-redesign/proposal-brief.md)
 (product direction) and
-[cologne-redesign-prototype.html](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/doc/ux-redesign/cologne-redesign-prototype.html)
+[cologne-redesign-prototype.html](https://sanskrit-lexicon.github.io/csl-apidev/doc/ux-redesign/cologne-redesign-prototype.html)
 (visual reference — the "Proposal A: Research Workbench" state is the one being built).
 
 ## MG rulings (03-07-2026) — locked
@@ -139,5 +139,46 @@ pages are untouched; `app/` is additive (brief's must-preserve).
 - Cologne server is currently down ([SERVER_OUTAGES.md](https://github.com/gasyoun/Uprava/blob/main/SERVER_OUTAGES.md)) — build against fixtures; live verification is a separate, gated step.
 - `getword_batch.php` and everything in `app/` are inert on the live site until Jim pulls the server checkout (same as lookup Wave 1, [PR #63](https://github.com/sanskrit-lexicon/csl-apidev/pull/63)) — "not visible live" ≠ "not done".
 - Burst-ban: any accidental request loop can get the client IP throttled; the single-flight + cache rules above are not optional.
+
+## Slice 2 + visual redesign (06-07-2026)
+
+Delivered this pass (MG asked to *modernise the ruled Proposal A as working
+code, all seven current pages unified*). No product-direction change — the
+R1–R8 rulings still hold; this is a visual glow-up of the slice-1 chrome plus
+the two deferred slice-2 surfaces.
+
+- **Design system** — [app/app.css](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/app/app.css)
+  rewritten as a token system (type scale, 4px spacing grid, radii, depth) with
+  a **light + dark theme**. Dark mode follows `prefers-color-scheme` and an
+  explicit toggle persisted to `localStorage` (`cologne-theme`) via
+  [app/theme.js](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/app/theme.js),
+  applied pre-paint to avoid FOUC. All existing `.ap-*` class names and the
+  slice-1 markup/JS are unchanged — the search/results/reader flow (= the old
+  Basic / List / Advanced / Mobile / Simple pages) is restyled, not rewired.
+- **Homepage** — [app/home.php](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/app/home.php)
+  + [app/home.js](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/app/home.js):
+  hero search (posts to `index.php`) + a browsable catalogue of all 45
+  dictionaries rendered from the static [lookup/dictmeta.js](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/lookup/dictmeta.js),
+  with a name/code filter and language facets. Language is derived with the
+  **same** `classifyLang()` rule as [lookup/lookup.js](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/lookup/lookup.js)
+  (no second scholarly claim). Fully offline — no server call.
+- **Dictionary detail** — [app/dict.php](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/app/dict.php)
+  + [app/dict.js](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/app/dict.js):
+  the MW-midpage replacement route (`dict.php?dict=CODE`). Metadata + a
+  search-within box that deep-links to `index.php?key=…&dict=CODE`, plus links
+  to the whole-corpus search and the classic interface. `?dict=` is validated
+  against `dictmeta.js` before use; every DOM write is escaped. Scan links stay
+  entry-level actions in the reader (must-preserve), not a page split.
+- **Page map now covered:** Homepage → `home.php`; MW midpage → `dict.php`;
+  Basic / List / Advanced → `index.php` modes; Mobile → responsive `index.php`;
+  Simple → `index.php`. All seven unified.
+- **Still open:** suffix-mode endpoint (unchanged from slice 1 — tab disabled);
+  live deployment still gated on Jim's server checkout pull; `home.php`/`dict.php`
+  are static catalogue surfaces, no live-server dependency.
+- **Verified 06-07-2026** offline via the XAMPP PHP built-in server: 45 cards +
+  facets (15 en / 6 de / 2 fr / 1 la / 21 other), name filter (`monier` →
+  MW/MW72/MWE), dark-mode toggle, `dict.php?dict=mw` metadata + actions, and the
+  full slice-1 `?fixtures=1` search → badges → reader → scan-link flow intact.
+  Model: Opus 4.8 (`claude-opus-4-8`).
 
 _Dr. Mārcis Gasūns_

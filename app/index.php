@@ -10,13 +10,15 @@ error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
 <title>Cologne Sanskrit Lexicon &mdash; Search</title>
 <link rel="stylesheet" type="text/css" href="../css/basic.css">
 <link rel="stylesheet" type="text/css" href="app.css">
+<script src="theme.js"></script>
+<script>window.THEME && THEME.applyEarly();</script>
 </head>
 <body>
 <noscript>This page needs JavaScript to search the dictionaries.</noscript>
 
 <header class="ap-topbar">
  <div class="ap-topbar-inner">
-  <a class="ap-brand" href="//www.sanskrit-lexicon.uni-koeln.de/">
+  <a class="ap-brand" href="home.php">
    <span class="ap-seal" aria-hidden="true">UzK</span>
    <span class="ap-brand-text">
     <span class="ap-brand-title">Cologne Sanskrit Lexicon</span>
@@ -24,6 +26,10 @@ error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
    </span>
   </a>
   <div class="ap-topbar-controls">
+   <nav class="ap-topbar-nav" aria-label="Primary">
+    <a class="ap-navlink" href="home.php">Home</a>
+    <a class="ap-navlink" href="index.php" aria-current="page">Search</a>
+   </nav>
    <div class="ap-field" id="ap-scheme-field">
     <label for="ap-scheme">input</label>
     <select id="ap-scheme">
@@ -41,6 +47,7 @@ error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
     <button type="button" id="ap-display-roman" aria-pressed="true">IAST</button>
     <button type="button" id="ap-display-deva" aria-pressed="false" lang="sa">&#2342;&#2375;&#2357;</button>
    </div>
+   <button type="button" id="ap-theme" class="ap-theme" aria-label="Toggle theme">&#9789;</button>
   </div>
  </div>
 </header>
