@@ -10,6 +10,7 @@ class SaltIdsClass {
   public $json;
 
   public function __construct() {
+    salt_apply_documented_defaults();               // input defaults to slp1, not Parm's global 'hk'
     $parm = new Parm();                             // dict from $_REQUEST['dict']
     $ids  = salt_multi_param('ids');                // repeated ids= (C-SALT multi-value)
     if (empty($ids)) {
