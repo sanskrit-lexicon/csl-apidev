@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PWKVN displays · Minimal — csl-apidev mockup</title>
+<style>
+  /* H563 DIRECTION 1 — MINIMAL
+     Paper-white, one ink colour, one indigo accent. Hairline rules, generous air,
+     no fills, no shadows. Non-destructive restyle of ../index.html — the real
+     "PWKVN display experiments" landing; the three experiment entries and their
+     descriptions are kept verbatim. Self-contained, opens by double-click.
+     Design language matched to Uprava/dashboard/mockups/01-minimal.html. */
+  :root{
+    --bg:#ffffff; --ink:#18181b; --mut:#71717a; --faint:#a1a1aa;
+    --line:#ececef; --acc:#4f46e5; --acc-soft:#eef0fe;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font:15px/1.55 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Inter,Roboto,sans-serif;
+    letter-spacing:-.01em;-webkit-font-smoothing:antialiased}
+  .page{max-width:760px;margin:0 auto;padding:64px 32px 88px}
+
+  header{margin-bottom:8px}
+  h1{margin:0;font-size:26px;font-weight:650;letter-spacing:-.02em}
+  .sub{color:var(--mut);font-size:13.5px;margin-top:8px;max-width:60ch}
+  .sub b{color:var(--ink);font-weight:600}
+
+  /* abbreviation legend — thin, hairline-ruled, no fills */
+  .legend{display:grid;grid-template-columns:repeat(2,1fr);gap:0;
+    border:1px solid var(--line);border-radius:14px;overflow:hidden;margin:32px 0 40px}
+  .legend div{padding:14px 18px;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .legend div:nth-child(2n){border-right:0}
+  .legend div:nth-last-child(-n+2){border-bottom:0}
+  .legend .k{font-family:Georgia,"Times New Roman",serif;font-size:15px;font-weight:600;color:var(--acc)}
+  .legend .v{color:var(--mut);font-size:12.5px;margin-top:4px;line-height:1.45}
+
+  .lead{color:var(--faint);font-size:11px;text-transform:uppercase;letter-spacing:.07em;
+    font-weight:600;margin:0 0 4px}
+
+  ol.exp{list-style:none;margin:0;padding:0}
+  ol.exp li{border-bottom:1px solid var(--line)}
+  ol.exp li:first-child{border-top:1px solid var(--line)}
+  ol.exp a{display:flex;align-items:baseline;gap:16px;padding:18px 8px;
+    text-decoration:none;color:var(--ink);transition:.15s}
+  ol.exp a:hover,ol.exp a:focus-visible{background:#fafafa}
+  ol.exp .num{font-variant-numeric:tabular-nums;font-weight:600;color:var(--acc);
+    font-size:14px;min-width:24px}
+  ol.exp .desc{flex:1;font-family:Georgia,"Times New Roman",serif;font-size:16px}
+  ol.exp .desc code{font-family:inherit;font-style:italic;color:var(--ink)}
+  ol.exp .arrow{color:var(--faint);font-size:15px}
+  ol.exp a:hover .arrow{color:var(--acc)}
+
+  .foot{color:var(--faint);font-size:12px;margin-top:36px;line-height:1.6}
+  .foot a{color:var(--acc);text-decoration:none}
+</style>
+</head>
+<body>
+<div class="page">
+  <header>
+    <h1>PWKVN display experiments</h1>
+    <p class="sub">Side-by-side rendering experiments for the Böhtlingk dictionary family with
+       Richard Schmidt's <i>Nachträge</i>. Each display lays out the same headword across a
+       different combination of source columns.</p>
+  </header>
+
+  <section class="legend" aria-label="dictionary abbreviations">
+    <div><div class="k">pwg</div><div class="v">Großes Petersburger Wörterbuch (Böhtlingk &amp; Roth)</div></div>
+    <div><div class="k">pwk</div><div class="v">Petersburger Wörterbuch, kürzere Fassung (Böhtlingk)</div></div>
+    <div><div class="k">pwkvn</div><div class="v">experimental combined pwk display (this repo)</div></div>
+    <div><div class="k">sch</div><div class="v">Schmidt, Nachträge zum Sanskrit-Wörterbuch</div></div>
+  </section>
+
+  <p class="lead">Displays</p>
+  <ol class="exp">
+    <li><a href="../01/">
+      <span class="num">01</span>
+      <span class="desc"><code>pwk | sch + pwkvn</code></span>
+      <span class="arrow" aria-hidden="true">&rarr;</span>
+    </a></li>
+    <li><a href="../02/">
+      <span class="num">02</span>
+      <span class="desc"><code>pwg + pwk | pwkvn + sch</code></span>
+      <span class="arrow" aria-hidden="true">&rarr;</span>
+    </a></li>
+    <li><a href="../03/">
+      <span class="num">03</span>
+      <span class="desc"><code>pwg | pwk | pwkvn + sch</code></span>
+      <span class="arrow" aria-hidden="true">&rarr;</span>
+    </a></li>
+  </ol>
+
+  <p class="foot">Minimal-direction mockup (H563) of the real
+     <a href="../index.html">pwkvn/index.html</a> landing — content unchanged, restyle only.
+     The three experiments load live data from the Cologne server. Citation-suggestion search
+     runs over headwords present in either Schmidt or pwkvn.</p>
+</div>
+</body>
+</html>
