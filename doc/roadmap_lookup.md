@@ -9,7 +9,7 @@ served by
 [/scans/csl-apidev/sample/dalglob1.php](https://sanskrit-lexicon.uni-koeln.de/scans/csl-apidev/sample/dalglob1.php)).
 Authored from a repo audit + MG interview (4 rulings, 03-07-2026, recorded
 below). Wave 1 is agent-executable via handoff
-[H088](https://github.com/gasyoun/Uprava/blob/main/handoffs/H088-Sonnet_csl-apidev_apidev_lookup_wave1_03.07.26.md).
+[H088](https://github.com/gasyoun/Uprava/blob/main/handoffs/archive/H088-Sonnet_csl-apidev_apidev_lookup_wave1_03.07.26.md).
 
 ---
 
