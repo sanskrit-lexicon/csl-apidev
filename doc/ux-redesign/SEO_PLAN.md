@@ -10,7 +10,7 @@ headword list, and the thin-content gate — following the org
 and the competitive lessons of
 [kosha/COMPARISON.md](https://github.com/gasyoun/kosha/blob/main/COMPARISON.md)
 ("What each site teaches", steal items 1, 2, 7, 8, 11). Handoff:
-[H227](https://github.com/gasyoun/Uprava/blob/main/handoffs/H227-Opus_csl-apidev_ux_seo_crawlable_structured_data_06.07.26.md).
+[H227](https://github.com/gasyoun/Uprava/blob/main/handoffs/archive/H227-Opus_csl-apidev_ux_seo_crawlable_structured_data_06.07.26.md).
 
 **Why.** COMPARISON.md names the failure mode the current
 [app/index.php](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/app/index.php)
