@@ -15,7 +15,7 @@ scope were ruled by MG on 03-07-2026 (spec authored the same session, Fable 5
 | # | Question | Ruling |
 |---|---|---|
 | R1 | Direction | **Proposal A — Research Workbench** |
-| R2 | Code home | **New `app/` directory** in csl-apidev (lookup/ stays a focused citation tool; its Wave 3 = [H140](https://github.com/gasyoun/Uprava/blob/main/handoffs/H140_lookup_wave3.md) proceeds independently) |
+| R2 | Code home | **New `app/` directory** in csl-apidev (lookup/ stays a focused citation tool; its Wave 3 = [H140](https://github.com/gasyoun/Uprava/blob/main/handoffs/H140-Sonnet_csl-apidev_apidev_lookup_wave3_03.07.26.md) proceeds independently) |
 | R3 | Default input mode | **Auto-detect + fuzzy `default`**; explicit `<select>` for ASCII schemes (per the locked simple-search v1.2 rulings) |
 | R4 | First slice | **Search + results + entry reader** (catalogue homepage and dictionary detail routes = slice 2) |
 | R5 | Display script | **IAST default, one-click toggle to Devanagari** |
