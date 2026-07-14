@@ -278,7 +278,7 @@ so `order_by_wf` can never hit those 458 raw spellings — those words already r
 normkeys against `normalize(wf0key)` in
 [build_wf_from_dcs.py](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/simple-search/wf1/build_wf_from_dcs.py)
 (or migrate the 458 rows to normkey spelling under the M1 dedup) — folded into
-[H122](https://github.com/gasyoun/Uprava/blob/main/handoffs/H122-Sonnet_csl-apidev_simple_search_review_fixups_03.07.26.md)
+[H122](https://github.com/gasyoun/Uprava/blob/main/handoffs/archive/H122-Sonnet_csl-apidev_simple_search_review_fixups_03.07.26.md)
 step 5. Verdict (a) unchanged: wf1 is no *worse* than wf0 here.
 
 **A2 (MINOR) — `in_cdsl` ≠ "CDSL headword"; wf0 is a frequency list, not the

@@ -5,7 +5,7 @@ _Created: 08-07-2026 · Last updated: 08-07-2026_
 **What this is.** A hostile, re-derive-everything review of the H227 server-rendered
 entry-permalink pass ([PR #78](https://github.com/sanskrit-lexicon/csl-apidev/pull/78),
 merged to `main` at `17f7ea6`), executed per
-[H233](https://github.com/gasyoun/Uprava/blob/main/handoffs/H233-Fable_csl-apidev_h227_entry_seo_adversarial_code_review_06.07.26.md).
+[H233](https://github.com/gasyoun/Uprava/blob/main/handoffs/archive/H233-Fable_csl-apidev_h227_entry_seo_adversarial_code_review_06.07.26.md).
 Discipline: trust no claim; re-execute everything executable; re-derive every number.
 Model: **Fable 5 (`claude-fable-5`)**. Same method as the simple-search adversarial review
 ([simple-search/review_fable5_findings.md](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/simple-search/review_fable5_findings.md)).

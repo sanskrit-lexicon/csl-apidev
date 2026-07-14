@@ -18,6 +18,7 @@ class SaltEntriesClass {
   public $parm, $field, $query, $query_type, $size;
 
   public function __construct() {
+    salt_apply_documented_defaults();                      // input defaults to slp1, not Parm's global 'hk'
     $this->parm       = new Parm();                       // dict, filterin(input), filter(output), accent, key
     $this->field      = isset($_REQUEST['field'])      ? $_REQUEST['field']      : 'headword_slp1';
     $this->query      = isset($_REQUEST['query'])      ? $_REQUEST['query']      : $this->parm->keyin;
