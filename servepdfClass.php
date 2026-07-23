@@ -208,16 +208,22 @@ HTML;
    page before current page (analogous to $pagestr_in0)
    page after current page. 
   */
-  // Next line for MW, where pagestr_in0 may start with 'Page', which we remove
-  $pagestr_in0 = preg_replace('|^[^0-9]+|','',$pagestr_in0);
-  /* Recognize two basic cases: vol-page or page.
-   The pdffiles cases are usually one of the two
+  // MW <pc> values may start with 'Page' — strip that prefix only.
+  // Do NOT strip all leading non-digits: front-matter pages use ids like
+  // "t36" (pdffiles.txt), and stripping the "t" routed t36 → dictionary
+  // page 36 (csl-apidev#45 / czhao report).
+  $pagestr_in0 = preg_replace('|^Page\s*|i','',$pagestr_in0);
+  /* Recognize three basic cases: vol-page, title/front-matter tNN, or page.
+   The pdffiles cases are usually one of these.
    For these, we remove characters (such as column designations) 
    that may be present if pagestr_in0 comes from the <pc> elt of the dictionary
    as when the 'key' input GET parameter.
   */
   if (preg_match('|^([1-9]-[0-9]+)|',$pagestr_in0,$matches)) {
    $pagestr_in = $matches[1];
+  }elseif (preg_match('|^(t[0-9]+)|i',$pagestr_in0,$matches)) {
+   // Title/front-matter page id (e.g. MW t36 = scan Page xxxii)
+   $pagestr_in = strtolower($matches[1]);
   }elseif (preg_match('|^([0-9]+)|',$pagestr_in0,$matches)) {
    $pagestr_in = $matches[1];
   }else {
