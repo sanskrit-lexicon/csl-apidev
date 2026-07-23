@@ -138,7 +138,9 @@ EOF;
   if ($imageParm) {
    $imageElt = "<img src='$pdf' $imageParm />";
   } else {
-   $android = " <a href='$pdf' style='position:relative; left:100px;'>Click to load pdf</a>" ;
+   // Fallback when the browser cannot embed PDF (e.g. some Firefox/Android).
+   // Wording: "open" not "load" — users expected in-page load (COLOGNE#300).
+   $android = " <a href='$pdf' style='position:relative; left:100px;'>Click to open PDF</a>" ;
    $imageElt = "<object id='servepdf' type='application/pdf' data='$pdf'" . 
               "style='width: 98%; height:98%'>" . $android . "</object>" ;
   }
