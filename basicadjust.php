@@ -228,6 +228,12 @@ class BasicAdjust {
   $line = preg_replace_callback('|<ls n="(.*?)">(.*?)</ls>|',"BasicAdjust::lanman_link_callback",$line);
   dbgprint($dbg,"BasicAdjust after lanman_link: $line\n");
  }
+ if ($this->getParms->dict == 'stc') {
+  // csl-orig#2821: line-break split leaves bare "s." + <ab>v.</ab> instead of
+  // the stcab entry "s. v." (sub vocabulo). Rejoin for tooltip linking.
+  $line = preg_replace('/\(s\.\s*<ab>v\.<\/ab>\)/','(<ab>s. v.</ab>)',$line);
+  $line = preg_replace('/(?<![\p{L}.])s\.\s*<ab>v\.<\/ab>/u','<ab>s. v.</ab>',$line);
+ }
  // Get tooltip for <lex>X</lex>, for all dictionaries
  $line = preg_replace_callback('|<lex(.*?)>(.*?)</lex>|',"BasicAdjust::add_lex_markup",$line);
   // 10-31-2023  remove <hom>X</hom> within head portion
