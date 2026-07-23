@@ -38,7 +38,7 @@ import re
 import sqlite3
 import sys
 import urllib.parse
-from xml.sax.saxutils import escape
+from html import escape  # stdlib; avoid xml.* (CodeQL use-defused-xml)
 
 sys.stdout.reconfigure(encoding='utf-8')
 sys.stderr.reconfigure(encoding='utf-8')
