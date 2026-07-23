@@ -296,6 +296,10 @@ class BasicAdjust {
     '<div n="cont"/>$1',
     $line
    );
+   // CORRECTIONS#434 residual (H1523): bare --Comp./--COMP. in ap90.txt can
+   // leave literal "-Comp." text after make_xml (e.g. plavaMgama L=21426).
+   // Promote to a normal Comp. header until the source batch lands.
+   $line = preg_replace('/-Comp\.\s*/', '<div n="1"/><b>Comp.</b> ', $line);
   }
   else if ($this->getParms->dict == "ap") {
    // replace -- with mdash : perhaps should be part of ap.txt
