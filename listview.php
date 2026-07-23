@@ -21,7 +21,21 @@ error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
  foreach($cookienames as $name) {
   // use $_REQUEST, which includes $_GET and $_POST
   if (isset($_REQUEST[$name])) {
-   setcookie($name,$_REQUEST[$name]);
+   $val = $_REQUEST[$name];
+   // Whitelist short token values only (dict codes / encoding names).
+   // JS reads these cookies — do not set HttpOnly.
+   if (!is_string($val) || !preg_match('/^[A-Za-z0-9_.-]{1,32}$/', $val)) {
+    continue;
+   }
+   // PHP 7.3+ options array: SameSite=Lax avoids modern browser rejection
+   // of cookies without SameSite (Firefox console warning on Cologne).
+   setcookie($name, $val, array(
+    'expires' => 0,
+    'path' => '/',
+    'secure' => (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off'),
+    'httponly' => false,
+    'samesite' => 'Lax'
+   ));
   }
  }
 
