@@ -1971,25 +1971,26 @@ public function ls_callback_mw_href($code,$n,$data) {
   }
  }
  /******* link to Hitopadeśa, ed. Schlegel und Lassen, 1829 mw  ***********/
+ // Use $data1 (not $data) so <ls n="Hit.">…</ls> continuations also match (H1523)
  $temparr = array("Hit.");
  foreach($temparr as $temp) {
-  if (preg_match("|^($temp) *([0-9]+), *([0-9]+)|",$data,$matches)) {
+  if (preg_match("|^($temp) *([0-9]+), *([0-9]+)|",$data1,$matches)) {
    $t = $matches[2]; // page
    $s = $matches[3]; // linenum
    $href = "https://sanskrit-lexicon-scans.github.io/hitopadesha/app2?$t,$s";
    dbgprint($dbg,"$pfx: href=$href\n");
    return $href;
-  }else if (preg_match("|^($temp) ([iv]+), *([0-9]+), *([0-9]+)|",$data,$matches)) {
+  }else if (preg_match("|^($temp) ([iv]+), *([0-9]+), *([0-9]+)|",$data1,$matches)) {
    // deactivate RNN (tantra, kaTA, verse)
    return $href; // no link
-  }else if (preg_match("|^($temp) ([iv]+), *([0-9]+)|",$data,$matches)) {
+  }else if (preg_match("|^($temp) ([iv]+), *([0-9]+)|",$data1,$matches)) {
    $tantra = $matches[2]; // roman-numeral
    $t = $this->romanToInt($tantra);
    $v = $matches[3]; // verse
    dbgprint($dbg,"$pfx: href=$href\n");
    $href = "https://sanskrit-lexicon-scans.github.io/hitopadesha/app1?$t,$v";
    return $href;
-  }else if (preg_match("|^($temp) (Introd\.) *([0-9]+)|",$data,$matches)) {
+  }else if (preg_match("|^($temp) (Introd\.) *([0-9]+)|",$data1,$matches)) {
    $tantra = $matches[2]; // prastAva
    $t = 0; 
    $v = $matches[3]; // verse
@@ -2024,7 +2025,8 @@ public function ls_callback_mw_href($code,$n,$data) {
  }
 
 /******* link to harivamsa  ***********/
- if (preg_match('|^(Hariv[.]) *([0-9]+)[.]?$|',$data,$matches)) {
+ // $data1 so <ls n="Hariv.">12360</ls> links (csl-websanlexicon#23 / H1523)
+ if (preg_match('|^(Hariv[.]) *([0-9]+)[.]?$|',$data1,$matches)) {
   // Mahabharata, Calcutta edition for harivamsa. For MW.
   $pfx = $matches[1];
   $verse = $matches[2];
@@ -2033,7 +2035,7 @@ public function ls_callback_mw_href($code,$n,$data) {
   return $href;
  }
  /******* link to meghaduta for mw  ***********/
- if (preg_match('|^(Megh[.]) *([0-9]+)[.]?$|',$data,$matches)) {
+ if (preg_match('|^(Megh[.]) *([0-9]+)[.]?$|',$data1,$matches)) {
   $pfx = $matches[1];
   $verse = $matches[2];
   $href = "https://sanskrit-lexicon-scans.github.io/meghasrnga/app1?$verse";
@@ -2041,7 +2043,7 @@ public function ls_callback_mw_href($code,$n,$data) {
   return $href;
  }
  /******* link to Srngaratilaka for mw  ***********/
- if (preg_match('|^(Śṛṅgār[.]) *([0-9]+)[.]?$|',$data,$matches)) {
+ if (preg_match('|^(Śṛṅgār[.]) *([0-9]+)[.]?$|',$data1,$matches)) {
   $pfx = $matches[1];
   $verse = $matches[2];
   $href = "https://sanskrit-lexicon-scans.github.io/meghasrnga/app2?$verse";
