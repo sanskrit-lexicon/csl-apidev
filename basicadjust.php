@@ -1149,6 +1149,7 @@ public function ls_callback_pwg_href($code,$data) {
 
 /******* link to Medinikosha   ***********/
  // pwg,pw,pwkvn  MED. A. N;  
+ // also bare <ls>MED.</ls> → headword lookup (csl-websanlexicon#52 / H1523)
  $temparr = array("MED.");
  foreach($temparr as $temp) {
   if (preg_match("|^($temp) *([khgṅcjñṭḍṇtdnpbmyrlvśṣsao]+)[.] *([0-9]+)|",$data,$matches)) {
@@ -1157,6 +1158,15 @@ public function ls_callback_pwg_href($code,$data) {
    $href = "https://sanskrit-lexicon-scans.github.io/medini/app1?$t,$s";
    dbgprint($dbg,"$pfx: href=$href\n");
    return $href;
+  }
+  // Bare MED. (no chapter/verse): link by current headword (e.g. pAWIna)
+  if (preg_match("|^($temp)\s*$|u",$data,$matches)) {
+   $k = $this->key;
+   if ($k !== null && $k !== '') {
+    $href = "https://sanskrit-lexicon-scans.github.io/medini/app4/?" . rawurlencode($k);
+    dbgprint($dbg,"$pfx: bare MED href=$href\n");
+    return $href;
+   }
   }
  }
  /******* link to Trikandashesha of Purushottamadeva  ***********/
