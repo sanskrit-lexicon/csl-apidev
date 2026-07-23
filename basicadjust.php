@@ -281,6 +281,15 @@ class BasicAdjust {
    // any remaining -- to mdash
    $line = preg_replace('|--|','&#x2014; ',$line);
    */
+   // COLOGNE#254 (H1523): parenthetical gender/continuation compounds like
+   // {#--(tI)#} → <div n="1"/><b>-</b> <s>(tI)</s> sit at the same visual
+   // level as {#--dUtaH#}, so rAmadUtI is misread as independent -tI.
+   // Mark them n="cont" for deeper indent in basicdisplay.
+   $line = preg_replace(
+    '|<div n="1"/>(\s*<b>-</b>\s*<s>\([^)]+\)</s>)|',
+    '<div n="cont"/>$1',
+    $line
+   );
   }
   else if ($this->getParms->dict == "ap") {
    // replace -- with mdash : perhaps should be part of ap.txt

@@ -369,11 +369,19 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
      $ans = "<div>";
     } 
     return $ans;
+   }else if ($this->dict == 'ap90') {
+    // COLOGNE#254 (H1523): n="cont" = parenthetical continuation under a
+    // compound subhead (e.g. —(tI) after —dUtaH → rAmadUtI). Deeper indent.
+    // Other n values keep the historical empty-div line break.
+    if ($n == 'cont') {
+     return "<div style='margin-top:0.3em;padding-left:2.5em;'>";
+    }
+    return "<div style='margin-top:0.6em;'></div>";
    }else { // default
     // currently applies to:
     // cae with <div n="p"/>
     // mw 
-    // ap90 with <div n="1"/> or <div n="P"/>. See basicadjust
+    // (ap90 handled above)
     return "<div style='margin-top:0.6em;'></div>";
   }
  }
