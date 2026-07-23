@@ -137,6 +137,13 @@ class ListhierClass {
    }
    // Apr 10, 2013. key2show: 
    $key2show=$key2;
+   // H1523 / csl-websanlexicon#46: for MW use XML key2 so list pane shows
+   // accents/hyphens that distinguish homographic k1 entries (anarman).
+   if (in_array($getParms->dict,array('mw'))) {
+    if (preg_match('|<key2>(.*?)</key2>|',$data2,$matches)) {
+     $key2show = $matches[1];
+    }
+   }
 
    if (!$getParms->english) {
     $key2show ="<SA>$key2show</SA>";
