@@ -8,6 +8,7 @@ Dates are UTC+3 (project local).
 
 ### Fixed
 
+- **RV/AV links never emit `rv00.*`** ([COLOGNE#370](https://github.com/sanskrit-lexicon/COLOGNE/issues/370)): `parse_rv_mandala()` + guards in `ls_callback_mw_href` / `rgveda_link` / GRA callback so a bad mandala token cannot become `rv00.147.html`. Twin of csl-websanlexicon makotemplates fix.
 - **`servepdfClass.php` preface/title-page navigation** ([#45](https://github.com/sanskrit-lexicon/csl-apidev/issues/45), H1522): `getImagefiles()` used to strip *all* leading non-digits from the `page` parameter, so front-matter ids like `t36` became `36` and hit dictionary page `0036` instead of title-scan `t36`. Now strips only a leading `Page` prefix and preserves `tNN` title-page ids. Same fix landed in the csl-websanlexicon makotemplates twin.
 
 ## [0.2.0] - 2026-07-04
