@@ -1,4 +1,4 @@
-/* Uses jQuery.cookie */
+/* Uses js-cookie (Cookies global) */
 CologneDisplays.dictionaries.cookieUpdate = function(flag) {
  // Cookie for holding input, output, accent, dict1 values;
  // When flag is true, update cookies from corresponding dom values
@@ -14,7 +14,7 @@ CologneDisplays.dictionaries.cookieUpdate = function(flag) {
    cookieName=cookieNames[i];
    domid=domids[i];
    cookieValue=$(domid).val();
-   $.cookie(cookieName,cookieValue,cookieOptions);
+   Cookies.set(cookieName, cookieValue, cookieOptions);
   }
   return;
  }
@@ -23,11 +23,11 @@ CologneDisplays.dictionaries.cookieUpdate = function(flag) {
  for(i=0;i<cookieNames.length;i++) {
   cookieName=cookieNames[i];
   domid=domids[i];
-  cookieValue = $.cookie(cookieName); // old value of cookie
-  //console.log(i,cookieName,domid,cookieValue,cookieDefaultValues[i]);
+  cookieValue = Cookies.get(cookieName); // old value of cookie
+  //console.log(i, cookieName, domid,cookieValue,cookieDefaultValues[i]);
   if(! cookieValue) { // cookie not defined. 
    cookieValue= cookieDefaultValues[i]; // Use default value
-   $.cookie(cookieName,cookieValue,cookieOptions); // and set cook
+   Cookies.set(cookieName, cookieValue, cookieOptions); // and set cook
   }
   // set dom value
   $(domid).val(cookieValue);

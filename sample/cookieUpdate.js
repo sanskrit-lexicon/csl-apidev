@@ -1,4 +1,4 @@
-/* Uses jQuery.cookie */
+/* Uses js-cookie (Cookies global) */
 CologneDisplays.dictionaries.cookieUpdate = function(flag) {
  // Cookie for holding input, output, accent, dict values;
  // When flag is true, update cookies from corresponding dom values
@@ -15,14 +15,14 @@ CologneDisplays.dictionaries.cookieUpdate = function(flag) {
    domid=domids[i];
    cookieValue=$(domid).val();
    //console.log('cookieUpdate: ',cookieName,domid,cookieValue);
-   if((cookieValue === 'null')|| (cookieValue === null) || (cookieValue === '')) {  
+   if ((cookieValue === undefined) || (cookieValue === 'null') || (cookieValue === null) || (cookieValue === '')) {  
     cookieValue= cookieDefaultValues[i]; // Use default value
-    $.cookie(cookieName,cookieValue,cookieOptions); // and set cook
+    Cookies.set(cookieName, cookieValue, cookieOptions); // and set cook
     $(domid).val(cookieValue);
     //console.log('Reseting cookie:',cookieName,domid,cookieValue);
    } else {
    // set dom value
-   $.cookie(cookieName,cookieValue,cookieOptions);
+   Cookies.set(cookieName, cookieValue, cookieOptions);
    }
   }
   return;
@@ -31,14 +31,14 @@ CologneDisplays.dictionaries.cookieUpdate = function(flag) {
  for(i=0;i<cookieNames.length;i++) {
   cookieName=cookieNames[i];
   domid=domids[i];
-  cookieValue = $.cookie(cookieName); // old value of cookie
+  cookieValue = Cookies.get(cookieName); // old value of cookie
   
   // When not defined, cookieValue seems to be string 'null', not
   // JS object null.  12-10-2020
   //if(! cookieValue) {  
-  if((cookieValue === 'null')|| (cookieValue === null) || (cookieValue === '')) {  
+  if ((cookieValue === undefined) || (cookieValue === 'null') || (cookieValue === null) || (cookieValue === '')) {  
    cookieValue= cookieDefaultValues[i]; // Use default value
-   $.cookie(cookieName,cookieValue,cookieOptions); // and set cook
+   Cookies.set(cookieName, cookieValue, cookieOptions); // and set cook
   }
   // set dom value
   $(domid).val(cookieValue);

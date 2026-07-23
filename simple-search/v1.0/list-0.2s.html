@@ -7,7 +7,7 @@
 <!-- links to jquery, using CDNs -->
 <script type="text/javascript" src="//code.jquery.com/jquery-2.1.4.min.js"></script>
 
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/3.0.5/js.cookie.min.js"></script>
 <!-- jquery-ui is used -->
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
 <script type="text/javascript" src="//www.sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/sample/dictnames.js"></script>
@@ -59,8 +59,10 @@ body {
 #citationdiv{
  padding-bottom:5px;
 }
+#correction, #abbreviations {
+ padding-left: 20px;
+}
 #correction {
-
  padding-left: 130px;
 }
 
@@ -437,6 +439,11 @@ changeActions();  // initialize now that #dict, etc are set.
   <!--<input type="button" id="correction" value="Corrections" /> -->
   <!-- href is set in change function on #dict -->
   <a id="correction" href="#" target="Corrections">Corrections</a>
+  <!-- csl-websanlexicon#48 / H1523: dict abbreviation lists (csldoc hub) -->
+  <a id="abbreviations"
+     href="https://www.sanskrit-lexicon.uni-koeln.de/scans/csldoc/build/dictionaries/index.html"
+     target="Abbreviations"
+     title="Cologne dictionary abbreviation lists">Abbreviations</a>
  </div>
   
  <div id="simpleinfo"></div>
