@@ -1764,12 +1764,9 @@ public function ls_callback_mw_href($code,$n,$data) {
   if (preg_match('|^(.*?)[.] *([^ ,]+)[ ,]+([0-9]+)[ ,]+([0-9]+)(.*)$|',$data1,$matches)) {
    $code0 = $matches[1];
    $mandala = $matches[2];  
-   if ($this->dict == 'mw') {
-    // in lower-case roman numerals for mw
-    $imandala = $this->roman_int($mandala);
-   }else if ($this->dict == 'gra') {
-    $imandala = (int)($mandala);
-   }
+   // COLOGNE#370: roman or arabic mandala; never emit rv00.* on parse failure
+   $imandala = $this->parse_rv_mandala($mandala);
+   if ($imandala == 0) {return $href;}
    $ihymn = (int)$matches[3];
    $iverse = (int)$matches[4];
    dbgprint($dbg,"ls_callback_mw_href. $code0, $mandala, $ihymn, $iverse\n");
@@ -1786,8 +1783,8 @@ public function ls_callback_mw_href($code,$n,$data) {
   }else if (preg_match('|^(.*?)[.] *([^ ,]+)[ ,]+([0-9]+)(.*)$|',$data1,$matches))
   { // two parameter version. Supply verse number = 1
    $code0 = $matches[1];
-   $mandala = $matches[2];  // in lower-case roman numerals for mw
-   $imandala = $this->roman_int($mandala);
+   $mandala = $matches[2];  // arabic or lower-case roman (MW)
+   $imandala = $this->parse_rv_mandala($mandala);
    if ($imandala == 0) {return $href;}
    $ihymn = (int)$matches[3];
    $iverse = 1;  // line to verse 1.
@@ -4062,9 +4059,16 @@ public function rgveda_link($gra1,$gra2) {
  */ 
  $dbg=false;
  dbgprint($dbg,"rgveda_link: gra1=$gra1, gra2=$gra2\n");
- list($mandala,$hymn) = explode(".",$gra1);
+ // COLOGNE#370: never emit rv00.* when mandala conversion failed
+ if ($gra1 === '?' || $gra1 === '' || strpos((string)$gra1, '.') === false) {
+  return array('', '');
+ }
+ list($mandala,$hymn) = explode(".",$gra1, 2);
  $imandala = (int)$mandala;
  $ihymn = (int)$hymn;
+ if ($imandala <= 0 || $ihymn <= 0) {
+  return array('', '');
+ }
  $hymnfilepfx = sprintf("rv%02d.%03d",$imandala,$ihymn);
  $hymnfile = "$hymnfilepfx.html";
  $iverse = (int)$gra2;
@@ -4093,6 +4097,10 @@ public function rgveda_verse_callback($matches0) {
  $modern = $this->rgveda_verse_modern((int)$gra1);
  # This version provides a link
  list($rvfile,$rvanchor) = $this->rgveda_link($modern,$gra2);
+ if ($rvfile === '' || $rvanchor === '') {
+  // COLOGNE#370: leave unlinked rather than rv00.*
+  return $x0;
+ }
  # 2018-08-30  use github location
  $dir = "https://sanskrit-lexicon.github.io/rvlinks/rvhymns";
  $href = "$dir/$rvfile#$rvanchor";
@@ -4152,6 +4160,30 @@ public function roman_int($roman) {
  return 0; // error
  }
  return 0;
+}
+
+/**
+ * Parse an RV/AV mandala token from an <ls> citation into a positive int.
+ * Accepts arabic digits, lower-case roman (MW style), upper-case roman,
+ * and strips a single layer of surrounding () or [].
+ * Returns 0 on failure - callers must not emit rv00.* links (COLOGNE#370).
+ */
+public function parse_rv_mandala($mandala) {
+ $m = trim((string)$mandala);
+ if ($m === '') { return 0; }
+ // strip one layer of display parentheses/brackets
+ $m = preg_replace('/^[(\[]+|[\])]+$/u', '', $m);
+ $m = trim($m);
+ if ($m === '') { return 0; }
+ if (preg_match('/^[0-9]+$/', $m)) {
+  $n = (int)$m;
+  return $n > 0 ? $n : 0;
+ }
+ $lo = strtolower($m);
+ $n = $this->roman_int($lo);
+ if ($n > 0) { return $n; }
+ $n = $this->romanToInt($m);
+ return $n > 0 ? $n : 0;
 }
 public function lanman_link_callback($matches) {
 /* 
