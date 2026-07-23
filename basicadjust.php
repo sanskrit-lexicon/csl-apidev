@@ -192,6 +192,10 @@ class BasicAdjust {
    list($page,$col_unused) = preg_split("|,|",$pc);
    $line = preg_replace('|<ab>col\.</ab> ([1-3]+)|', "<ab>col.</ab> <cref>$page \\1</cref>", $line);
   }
+  // H1523 / MWS#86: bare &c. (Latin et cetera) — same sense as <ab>etc.</ab>
+  // Display-layer tooltip; ~21k bare &c. in mw.txt. (?<!>) avoids re-wrap.
+  // Optional later: bulk <ab>&c.</ab> in csl-orig (Dhaval 2026-06-28).
+  $line = preg_replace('/(?<!>)&c\./', '<ab n="et cetera; and so on">&c.</ab>', $line);
  }
  /* 12-14-2017
   'local' abbreviation handled here. Generate an n attribute if one
