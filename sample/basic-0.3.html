@@ -11,7 +11,7 @@
 <!-- firefox dev tool note on next two:
 This site makes use of a SHA-1 Certificate; it's recommended you use certificates with signature algorithms that use hash functions stronger than SHA-1.
 -->
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/3.0.5/js.cookie.min.js"></script>
 <!-- jquery-ui is used -->
 
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
@@ -102,7 +102,7 @@ cookieUpdate = function(flag) {
    cookieName=cookieNames[i];
    domid=domids[i];
    cookieValue=$(domid).val();
-   $.cookie(cookieName,cookieValue,cookieOptions);
+   Cookies.set(cookieName, cookieValue, cookieOptions);
   }
   return;
  } // end flag is true
@@ -111,10 +111,10 @@ cookieUpdate = function(flag) {
  for(i=0;i<cookieNames.length;i++) {
   cookieName=cookieNames[i];
   domid=domids[i];
-  cookieValue = $.cookie(cookieName); // old value of cookie
+  cookieValue = Cookies.get(cookieName); // old value of cookie
   if(! cookieValue) { // cookie not defined. 
    cookieValue= cookieDefaultValues[i]; // Use default value
-   $.cookie(cookieName,cookieValue,cookieOptions); // and set cook
+   Cookies.get(cookieName, cookieValue, cookieOptions); // and set cook
   }
   // set dom value
   $(domid).val(cookieValue);

@@ -21,7 +21,7 @@ error_reporting(E_ALL & ~E_NOTICE);
 <!-- links to jquery, using CDNs -->
 <script type="text/javascript" src="//code.jquery.com/jquery-2.1.4.min.js"></script>
 
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/3.0.5/js.cookie.min.js"></script>
 <!-- jquery-ui is used -->
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
 <script type="text/javascript" src="//www.sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/sample/dictnames.js"></script>
