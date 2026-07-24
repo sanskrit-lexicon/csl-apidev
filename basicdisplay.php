@@ -432,7 +432,7 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
    $this->row .= "<span style='font-size:smaller; font-weight:100'>";
   } else if ($el == "gralink") {
     $href = $attribs['href'];
-    $tooltip = $attribs['n'];
+    $tooltip = $this->htmlspecial($attribs['n']);
     $style = 'text-decoration: none; border-bottom: 1px dotted #000;';
     $this->row .= "<a href='$href' title='$tooltip' style='$style' target='_rvlink'>";
   } else if ($el == "lanlink") {
@@ -442,7 +442,7 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
     $href = preg_replace('|_page|','&page',$href);
     # next so line number will appear in url of displayed page.
     $href = preg_replace('|_line|','&line',$href); 
-    $tooltip = $attribs['n'];
+    $tooltip = $this->htmlspecial($attribs['n']);
     $target = $attribs['target'];
     $this->row .= "<a href='$href' title='$tooltip' target='$target'>";
   } else if ($el == "lex"){ // m. f., etc.
@@ -546,7 +546,7 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
     // no display
   } else if ($el == "ls") {
    if (isset($attribs['n'])) {
-    $tooltip = $attribs['n'];
+    $tooltip = $this->htmlspecial($attribs['n']);
     $this->row .= "<span class='ls' title='$tooltip'>";   
     #$this->row .= "<span class='ls' title=\"$tooltip\">";   
    }else {
@@ -556,15 +556,15 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
    // This could be generalized to do any attribute.
    $temp = "<span";
    if (isset($attribs['class'])) {
-    $class = $attribs['class'];
+    $class = $this->htmlspecial($attribs['class']);
     $temp .= " class='$class'";
    }
    if (isset($attribs['style'])) {
-    $style = $attribs['style'];
+    $style = $this->htmlspecial($attribs['style']);
     $temp .= " style='$style'";
    }
    if (isset($attribs['title'])) {
-    $title = $attribs['title'];
+    $title = $this->htmlspecial($attribs['title']);
     $temp .= " title='$title'";
    }
    $temp .= ">";  // close the span
@@ -577,7 +577,7 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
   } else if ($el == "is") {
     //pwg, pw
    if (isset($attribs['n'])) {
-    $tooltip = $attribs['n'];
+    $tooltip = $this->htmlspecial($attribs['n']);
     $style = 'letter-spacing:2px; text-decoration: none; border-bottom: 1px dotted #000;';
     $spantext .= " title='$tooltip' style='$style'";
    }else {
@@ -589,7 +589,7 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
     // 07-25-2023 allow tooltip at attribute n
     // 12-23-2023 treat zoo like bot
    if (isset($attribs['n'])) {
-    $tooltip = $attribs['n'];
+    $tooltip = $this->htmlspecial($attribs['n']);
     $style = 'color: brown; text-decoration: none; border-bottom: 1px dotted #000;';
     $spantext .= " title='$tooltip' style='$style'";
    }else {
@@ -604,7 +604,7 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
   } else if ($el == "ab"){
     if (isset($attribs['n'])) {
      // local abbreviation <ab n="tooltip for X.">X.</ab>
-     $tran = $attribs['n'];
+     $tran = $this->htmlspecial($attribs['n']);
      // this style provides a 'dotted underline'
      $style = "border-bottom: 1px dotted #000; text-decoration: none;";
      $this->row .= "<span title='$tran' style='$style'>";
@@ -863,6 +863,14 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
    $this->row .= $data;
    dbgprint($this->dbg,"chrhdl: data = $data, parentEl = {$this->parentEl}\n");
   }
+}
+public function htmlspecial($text) {
+ /* H1523: escape dynamic attribute values for single-quoted HTML attrs.
+    Mirrors BasicAdjust::htmlspecial — ENT_QUOTES then &#039;→&#8217;.
+ */
+ $tooltip = htmlspecialchars((string)$text, ENT_QUOTES);
+ $tooltip = preg_replace('/&#039;/', '&#8217;', $tooltip);
+ return $tooltip;
 }
 public function getHrefPage_serve() {
  /* 11-14-2024. Previous logic
