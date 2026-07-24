@@ -174,11 +174,15 @@ class Parm {
  }
  public function listhierParms() {
   /* extensions for listhier parameters. See listhierClass*/
-  $lnumin = $_REQUEST['lnum'];  
+  // H1523: only accept numeric L (optional decimals); refuse freeform strings
+  $lnumin = isset($_REQUEST['lnum']) ? $_REQUEST['lnum'] : '';
+  if (!is_string($lnumin) || !preg_match('/^[0-9]+(\.[0-9]+)?$/', $lnumin)) {
+   $lnumin = '';
+  }
   $this->lnumin=$lnumin;
 
   // direction: either 'UP', 'DOWN', or 'CENTER' (default)
-  $direction = $_REQUEST['direction'];
+  $direction = isset($_REQUEST['direction']) ? $_REQUEST['direction'] : '';
   if (($direction != 'UP') && ($direction != 'DOWN')) {
    $direction = 'CENTER';
   }
