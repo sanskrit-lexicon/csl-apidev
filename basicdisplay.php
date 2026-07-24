@@ -61,11 +61,13 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
 
  // The constructed html is in public variable $table.
  // $this->table is the instance variable
+ // H1523: escape key for HTML (key sanitizer strips <> but not quotes/&).
+ $key_html = $this->htmlspecial($key);
  if (in_array($this->dict,array('ae','mwe','bor'))) {
   // no transliteration of $key for English headword
-  $this->table = "<h1>&nbsp;$key</h1>\n";
+  $this->table = "<h1>&nbsp;$key_html</h1>\n";
  }else {
-  $this->table = "<h1 class='$sdata'>&nbsp;<SA>$key</SA></h1>\n";
+  $this->table = "<h1 class='$sdata'>&nbsp;<SA>$key_html</SA></h1>\n";
  }
  $this->table .= "<table class='display'>\n";
 
@@ -437,7 +439,8 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
   } else if ($el == "graverse") {
    $this->row .= "<span style='font-size:smaller; font-weight:100'>";
   } else if ($el == "gralink") {
-    $href = $attribs['href'];
+    // H1523: escape href after read (quotes/& break single-quoted attrs)
+    $href = $this->htmlspecial($attribs['href']);
     $tooltip = $this->htmlspecial($attribs['n']);
     $style = 'text-decoration: none; border-bottom: 1px dotted #000;';
     $this->row .= "<a href='$href' title='$tooltip' style='$style' target='_rvlink'>";
@@ -447,9 +450,10 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
     # we have, in basicadjust, put '_page=...'.  change back to '&page'
     $href = preg_replace('|_page|','&page',$href);
     # next so line number will appear in url of displayed page.
-    $href = preg_replace('|_line|','&line',$href); 
+    $href = preg_replace('|_line|','&line',$href);
+    $href = $this->htmlspecial($href); // H1523: after _page/_line expansion
     $tooltip = $this->htmlspecial($attribs['n']);
-    $target = $attribs['target'];
+    $target = $this->htmlspecial($attribs['target']);
     $this->row .= "<a href='$href' title='$tooltip' target='$target'>";
   } else if ($el == "lex"){ // m. f., etc.
    $this->row .= "<strong>"; 
