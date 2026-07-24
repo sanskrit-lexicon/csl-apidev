@@ -19,7 +19,7 @@ error_reporting(E_ALL & ~E_NOTICE);
 <html>
 <head>
 <META charset="UTF-8">
-<title>list-0.2dict</title>
+<title>Cologne Digital Sanskrit Dictionaries Dual Listview</title>
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.css">
 <!-- links to jquery, using CDNs -->
 <script type="text/javascript" src="//code.jquery.com/jquery-3.7.1.min.js"></script>
@@ -123,11 +123,11 @@ $(document).ready(function() {
   // TODO: check for valid inputs before ajax call
   var urlbase="//www.sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/listview.php";
   var url =  urlbase +  
-   "?key=" +escape(key) + 
-   "&output=" +escape(output) +
-   "&dict=" + escape(dict) +
-   "&accent=" + escape(accent) +
-   "&input=" + escape(input);
+   "?key=" +encodeURIComponent(key) + 
+   "&output=" +encodeURIComponent(output) +
+   "&dict=" + encodeURIComponent(dict) +
+   "&accent=" + encodeURIComponent(accent) +
+   "&input=" + encodeURIComponent(input);
     //jQuery("#disp").html(""); // clear output
   //console.log('listDisplay. idict=',idict,' , url=',url);
   jQuery(dataframeid).attr("src",url);

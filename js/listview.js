@@ -112,11 +112,11 @@ function keyboard_parms(keyserver,listurlFlag) {
 
    var ans = 
    url + 
-   "?key=" +escape(word)+ 
-   "&input=" + escape(input) +
-   "&output=" + escape(output) +
-   "&accent=" + escape(accent) +
-   "&dict=" + escape(dict);
+   "?key=" +encodeURIComponent(word)+ 
+   "&input=" + encodeURIComponent(input) +
+   "&output=" + encodeURIComponent(output) +
+   "&accent=" + encodeURIComponent(accent) +
+   "&dict=" + encodeURIComponent(dict);
    return ans;
 }
 function listhier_lnum(lnum,link) {  
@@ -132,11 +132,11 @@ function listhier_lnum(lnum,link) {
    var accent = readCookie("accent");
    var url = 
    urlbase + 
-   "?lnum=" +escape(lnum)+ 
-   "&input=" + escape(input) +
-   "&output=" + escape(output) +
-   "&accent=" + escape(accent) +
-   "&dict=" + escape(dict);
+   "?lnum=" +encodeURIComponent(lnum)+ 
+   "&input=" + encodeURIComponent(input) +
+   "&output=" + encodeURIComponent(output) +
+   "&accent=" + encodeURIComponent(accent) +
+   "&dict=" + encodeURIComponent(dict);
    //var $this =$(this);  // the link in 'disp' that was clicked
     getWordlist_link(url,link);
     //console.log('listhier_lnum url=',url);

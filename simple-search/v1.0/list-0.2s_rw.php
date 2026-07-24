@@ -230,11 +230,11 @@ $(document).ready(function() {
   // TODO: check for valid inputs before ajax call
   var urlbase="../../listview.php";
   var url =  urlbase +  
-   "?key=" +escape(key) + 
-   "&output=" +escape(output) +
-   "&dict=" + escape(dict) +
-   "&accent=" + escape(accent) +
-   "&input=" + escape(input);
+   "?key=" +encodeURIComponent(key) + 
+   "&output=" +encodeURIComponent(output) +
+   "&dict=" + encodeURIComponent(dict) +
+   "&accent=" + encodeURIComponent(accent) +
+   "&input=" + encodeURIComponent(input);
     //jQuery("#disp").html(""); // clear output
   //console.log('listDisplay: url=',url);
   jQuery("#dataframe").attr("src",url);
