@@ -57,6 +57,7 @@ body {
 @font-face { 
  src: url(../../fonts/siddhanta1.ttf);   /* location specific */
  font-family: siddhanta_deva;
+ font-display: swap;
 }
 .sdata { /* Sanskrit-data -- Devanagari */
  font-family: siddhanta_deva;

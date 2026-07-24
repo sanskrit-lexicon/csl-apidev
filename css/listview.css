@@ -68,15 +68,18 @@ text-decoration: none
 @font-face { /* for 'ls' text in pwg */
  src: url(../fonts/CharterIndoCapital.otf);
  font-family: charterindocapital;
+ font-display: swap;
 }
 /* 01-05-2018 */
 @font-face { /* for normal text in pwg */
  src: url(../fonts/oldstandard.otf);
  font-family: oldstandard;
+ font-display: swap;
 }
 @font-face { 
  src: url(../fonts/oldstandarditalic.otf);
  font-family: oldstandard_i;
+ font-display: swap;
 }
 
 #CologneListview .botcap {
@@ -90,6 +93,7 @@ font-family:charterindocapital;
 @font-face { 
  src: url(../fonts/siddhanta.ttf);
  font-family: siddhanta_deva;
+ font-display: swap;
 }
 #CologneListview .sdata {
  font-family: siddhanta_deva;
@@ -107,10 +111,12 @@ Capital.otf);
 @font-face { /* for normal text in pwg */
  src: url(../fonts/oldstandard.otf);
  font-family: oldstandard;
+ font-display: swap;
 }
 @font-face { 
  src: url(../fonts/oldstandarditalic.otf);
  font-family: oldstandard_i;
+ font-display: swap;
 }
 
 #CologneListview .botcap {
@@ -124,6 +130,7 @@ font-family:charterindocapital;
 @font-face { 
  src: url(../fonts/siddhanta.ttf);
  font-family: siddhanta_deva;
+ font-display: swap;
 }
 #CologneListview .sdata {
  font-family: siddhanta_deva;
