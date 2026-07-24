@@ -162,17 +162,22 @@ class API {
   $_REQUEST['dict'] = $dict;
   $temp = new GetwordXmlClass();
   $jsonobj = $temp->json;
+  // H1523: skip dict if decode fails (null is not indexable under PHP 8+)
   $obj = json_decode($jsonobj,$assoc=True);
-  $status = $obj['status'];
+  if (!is_array($obj)) {
+   dbgprint($dbg,"api_trial.php: $dict, invalid JSON payload\n");
+   continue;
+  }
+  $status = isset($obj['status']) ? $obj['status'] : 0;
   dbgprint($dbg,"api_trial.php: $dict, $status\n");
   $result=array();
   if ($status  == 200 ) {
    #jsonobj = r.json()
-   $datarr = $obj['xml'];  # list of data string
-   $htmlarr = $obj['html'];
+   $datarr = (isset($obj['xml']) && is_array($obj['xml'])) ? $obj['xml'] : array();
+   $htmlarr = (isset($obj['html']) && is_array($obj['html'])) ? $obj['html'] : array();
    for ($idata = 0; $idata < count($datarr); $idata++) {
     $data = $datarr[$idata];
-    $html = $htmlarr[$idata];
+    $html = isset($htmlarr[$idata]) ? $htmlarr[$idata] : '';
     $result[] = $this->block1($data,$html);
    }
    $final[$dict] = $result;

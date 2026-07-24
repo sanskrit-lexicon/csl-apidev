@@ -25,26 +25,32 @@ if (! isset($_REQUEST['pretty'])){
  $esc = function ($v) {
   return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8');
  };
+ // H1523: json_encode failure / empty payload → null; do not index null
  $a = json_decode($json,true);  // true indicates associative
- 
- $status = $a['status'];
+ if (!is_array($a)) {
+  echo "\n<br/>status = 500\n";
+  echo "<br/>errorinfo = " . $esc('servepdf pretty: invalid JSON payload') . "\n";
+  return;
+ }
+
  echo "\n";
- echo "<br/>status = " . $esc($a['status']) . "\n";
- echo "<br/>errorinfo = " . $esc($a['errorinfo']) . "\n";
+ echo "<br/>status = " . $esc(isset($a['status']) ? $a['status'] : '') . "\n";
+ echo "<br/>errorinfo = " . $esc(isset($a['errorinfo']) ? $a['errorinfo'] : '') . "\n";
  echo "<br/>request: ";
- $request = $a['request'];
+ $request = (isset($a['request']) && is_array($a['request'])) ? $a['request'] : array();
  foreach($request as $k => $v) {
    $out = "  '" . $esc($k) . "' : '" . $esc($v) . "'";
    $out = "<br/>&nbsp;&nbsp; $out";
    echo "$out\n";
  }
- $links = $a['links'];
+ $links = (isset($a['links']) && is_array($a['links'])) ? $a['links'] : array();
  $nlinks = count($links);
  echo "<br/>links: (" . $esc($nlinks) . ")\n";
  $ilink = 0;
  foreach($links as $link) {
   $ilink = $ilink + 1;
   echo "<br/>Link # " . $esc($ilink) . ": ";
+  if (!is_array($link)) { continue; }
   foreach($link as $k => $v) {
    $out = "  '" . $esc($k) . "' : '" . $esc($v) . "'";
    $out = "<br/>&nbsp;&nbsp; $out";
