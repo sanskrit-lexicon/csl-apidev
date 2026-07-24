@@ -46,9 +46,11 @@ REGENERATE
   (all four args optional; defaults resolve relative to this folder. Requires the
    VisualDCS repo as a sibling of csl-apidev for the default lemmas.csv path.)
 
-TO ACTIVATE  (engine change -- left for Jim; v1.1 is frozen)
-  In v1.1/getword_list_1.0_main.php, init_word_frequency() currently reads
-  simple-search/wf0/wf.txt.  Point it at simple-search/wf1/wf.txt.
+ACTIVATED  (2026-07-24, Fix I)
+  v1.1 and v1.1a getword_list_1.0_main.php default to simple-search/wf1/wf.txt.
+  Rollback: pass ?freqsrc=wf0 on the getword_list API.
+  Response JSON includes "freq_source": "wf1" | "wf0".
+  (Live Cologne server must deploy this csl-apidev commit for the public API.)
 
 CAVEAT (roadmap Q11)
   lemmas.csv(clean) token_count sums to ~134k -- a filtered slice, not the full

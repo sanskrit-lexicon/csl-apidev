@@ -13,6 +13,8 @@
   08-11-2017. getword_list_processone() function does all the work,
         using values from php $_REQUEST global. Generates no stdout output
   08-17-2017. word_frequency now from ../wf0/wf.txt -- 
+  07-24-2026. Fix I: default ranking frequencies from wf1 (DCS-2026);
+              optional ?freqsrc=wf0 for legacy rollback.
 */
 require_once('get_parent_dirpfx.php');
 function getword_list_processone() {
@@ -44,8 +46,9 @@ $dal = new Dal($dict);
 $dirpfx = get_parent_dirpfx("simple-search");
 $hwnorm1 = $dirpfx . "simple-search/hwnorm1";
 $dalnorm = new Dalnorm('hwnorm1c',$hwnorm1);
-// Ordering of results depends on a word frequency file.
-$wfreqs = init_word_frequency();
+// Ordering of results depends on a word frequency file (DCS-2026 by default).
+$freq_source = 'wf1';
+$wfreqs = init_word_frequency($freq_source);
 
 // keyparmin is the key input. It is what the user requested.
 // Assumed to be in utf-8 encoding
@@ -167,6 +170,8 @@ $result1 = put_user_word_first($result1a);
 // and certain other conditions
 $result2 = restrict_to_user_word($result1,$inputparmin);
 $ans['result']=$result2;
+// Expose which ranking table was used (wf1 = DCS-2026 merge; wf0 = 2017 legacy).
+$ans['freq_source']=$freq_source;
 
 $ru3 = microtime(true); //getrusage();
 $utime = $ru3 - $ru2;
@@ -191,14 +196,27 @@ function restrict_to_user_word($result1,$inputparmin){
  $result2 = array($ans1);
  return $result2;
 }
-function init_word_frequency() {
- # word_frequency_adj.txt removes duplicates from word_frequency.txt
- # see readme.org in ../v0.1
- #$filein = "../v0.1/word_frequency_adj.txt";
- #$filein = "../wf0/wf.txt";  // 08-17-2017
+function init_word_frequency(&$freq_source = null) {
+ # Ranking frequencies for order_by_wf().
+ # Fix I (2026-07): default is wf1 = DCS-2026 token counts merged over the
+ # 2017 wf0 key universe (simple-search/wf1/readme.txt).
+ # Rollback: ?freqsrc=wf0  (or legacy). Explicit DCS: ?freqsrc=wf1|dcs
  $dirpfx = get_parent_dirpfx("simple-search");
- $filein = $dirpfx . "simple-search/wf0/wf.txt";
+ $req = isset($_REQUEST['freqsrc']) ? strtolower(trim($_REQUEST['freqsrc'])) : 'wf1';
+ if ($req === 'wf0' || $req === 'legacy') {
+  $rel = "simple-search/wf0/wf.txt";
+  $freq_source = 'wf0';
+ } else {
+  $rel = "simple-search/wf1/wf.txt";
+  $freq_source = 'wf1';
+ }
+ $filein = $dirpfx . $rel;
  $lines = file($filein,FILE_IGNORE_NEW_LINES);
+ if ($lines === false) {
+  $filein = $dirpfx . "simple-search/wf0/wf.txt";
+  $lines = file($filein,FILE_IGNORE_NEW_LINES);
+  $freq_source = 'wf0';
+ }
  $ans = array();
  $nans = 0;
  $dbg=false;
