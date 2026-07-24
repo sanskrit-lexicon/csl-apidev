@@ -85,10 +85,10 @@ $(document).ready(function() {
   
   var urlbase = urlbaseF() + "/csl-apidev/dalglob.php";
   var url =  urlbase +  
-   "?key=" +escape(key) + 
-   "&output=" +escape(output) +
-   "&accent=" + escape(accent) +
-   "&input=" + escape(input) + 
+   "?key=" +encodeURIComponent(key) + 
+   "&output=" +encodeURIComponent(output) +
+   "&accent=" + encodeURIComponent(accent) +
+   "&input=" + encodeURIComponent(input) + 
    "&dbglob=keydoc_glob1" +
    "&dev=no";
   console.log('dictlistDisplay url=',url);
@@ -132,11 +132,11 @@ getdataForkeyDict_url = function(key,dict) {
   var accent = 'no'; //$('#accent').val();
   var urlbase = urlbaseF() + "/csl-apidev/getword.php";
   var url =  urlbase +  
-   "?key=" +escape(key) + 
-   "&output=" +escape(output) +
-   "&dict=" + escape(dict) +
-   "&accent=" + escape(accent) +
-   "&input=" + escape(input) + 
+   "?key=" +encodeURIComponent(key) + 
+   "&output=" +encodeURIComponent(output) +
+   "&dict=" + encodeURIComponent(dict) +
+   "&accent=" + encodeURIComponent(accent) +
+   "&input=" + encodeURIComponent(input) + 
    "&dev=yes";
   return url;
 }

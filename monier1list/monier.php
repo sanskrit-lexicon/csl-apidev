@@ -17,8 +17,10 @@ include("../webtc/monierdisp.php");
 // use relative pathnames for the sqlite databases (see $db=.. below)
 // interpret GET parameters.
 // 'key'
-$keyin = $_GET['key'];
+// H1523: isset + length bound (parity monierlisthier / Parm 200-char cap)
+$keyin = isset($_GET['key']) ? $_GET['key'] : '';
 if (! $keyin) {$keyin='a';};
+if (is_string($keyin) && strlen($keyin) > 200) { $keyin = 'a'; }
 // new style
  list($filter ,$filterin ) = getParameters_keyboard();
 $keyin = trim($keyin);

@@ -200,11 +200,11 @@ $(document).ready(function() {
   var accent = $('#accent').val();
   var urlbase="../../listview.php";
   var url =  urlbase +  
-   "?key=" +escape(key) + 
-   "&output=" +escape(output) +
-   "&dict=" + escape(dict) +
-   "&accent=" + escape(accent) +
-   "&input=" + escape(input);
+   "?key=" +encodeURIComponent(key) + 
+   "&output=" +encodeURIComponent(output) +
+   "&dict=" + encodeURIComponent(dict) +
+   "&accent=" + encodeURIComponent(accent) +
+   "&input=" + encodeURIComponent(input);
   jQuery("#dataframe").attr("src",url);
   // Update the browser address bar so the URL is bookmarkable (issue #21)
   var baseseg = window.location.pathname.split('/')[1]; // e.g. 'simple' or 'simple1.1a'
