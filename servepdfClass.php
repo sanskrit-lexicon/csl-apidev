@@ -77,7 +77,7 @@ class ServepdfClass {
 <html>
 <head>
 <meta charset="UTF-8" />
-<title>$dictupper Cologne Scan</title>
+<title>$dictupper_attr Cologne Scan</title>
 <link rel='stylesheet' type='text/css' href='css/serveimg.css' />
 </head>
 <body>
@@ -121,6 +121,12 @@ EOF;
   $pdfpages_url = $dictinfo->get_pdfpages_url();
   dbgprint($dbg,"servepdf: pdfpages_url=$pdfpages_url\n");
   $pdf = "$pdfpages_url/$filename";
+  // H1523: escape PDF URL + nav tokens for attrs / heredoc
+  $pdf_attr = htmlspecialchars($pdf, ENT_QUOTES);
+  $dict_attr = htmlspecialchars((string)$dict, ENT_QUOTES);
+  $pageprev_attr = htmlspecialchars((string)$pageprev, ENT_QUOTES);
+  $pagenext_attr = htmlspecialchars((string)$pagenext, ENT_QUOTES);
+  $dictupper_attr = htmlspecialchars((string)$dictupper, ENT_QUOTES);
 
   $imageParms = array(
    'WIL' => "width ='1000' height='1500'",
@@ -136,15 +142,15 @@ EOF;
    $imageParm = false;
   }
   if ($imageParm) {
-   $imageElt = "<img src='$pdf' $imageParm />";
+   $imageElt = "<img src='$pdf_attr' $imageParm />";
   } else {
    // When embed fails, browsers often show a blank <object> and hide nested
    // fallback (Firefox Android / intermittent desktop — COLOGNE#153, MWS#61).
    // Always-visible link above the object + nested fallback (COLOGNE#300 wording).
-   $openPdf = "<a href='$pdf' target='_blank' rel='noopener'>Click to open PDF</a>";
+   $openPdf = "<a href='$pdf_attr' target='_blank' rel='noopener'>Click to open PDF</a>";
    $imageElt =
     "<div id='pdfopen' style='margin:6px 0 4px 100px;'>$openPdf</div>" .
-    "<object id='servepdf' type='application/pdf' data='$pdf' " .
+    "<object id='servepdf' type='application/pdf' data='$pdf_attr' " .
     "style='width:98%;height:calc(100vh - 90px);'>$openPdf</object>";
   }
   // Use PHP 'heredoc' syntax to generate html
@@ -153,16 +159,16 @@ EOF;
 <html>
 <head>
 <meta charset="UTF-8" />
-<title>$dictupper Cologne Scan</title>
+<title>$dictupper_attr Cologne Scan</title>
 <link rel='stylesheet' type='text/css' href='css/serveimg.css' />
 </head>
 <body>
 $imageElt
 
 <div id='pagenav'>
-<a href="servepdf.php?dict=$dict&page=$pageprev" 
+<a href="servepdf.php?dict=$dict_attr&page=$pageprev_attr" 
    class='nppage'><span class='nppage1'>&lt;</span>&nbsp;</a>
-<a href="servepdf.php?dict=$dict&page=$pagenext" 
+<a href="servepdf.php?dict=$dict_attr&page=$pagenext_attr" 
    class='nppage'><span class='nppage1'>&gt;</span>&nbsp;</a>
 </div>
 </body>
