@@ -6,6 +6,8 @@
 //ejf 10-11-2012  Assume 'keyboard' types of input parameters.
 //ejf April, 2013  listhierskip, and some minor alterations
 //ejf May 23, 2013 Use '<see type="nonhier"/>' for listhierskip.
+// H1523: baseline headers + CSP-Report-Only
+require_once(__DIR__ . '/../security_headers.php');
 require_once('../utilities/utilities.php');
 require_once('../webtc/dal_mysql.php');
 require_once('listhierskip.php');  //Apr 2013

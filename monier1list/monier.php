@@ -6,6 +6,8 @@
 //ejf 10-11-2012  modified to support just one style, 'keyboard'.
 //  I think the other style (translit,filter) is old, and not needed.
 //ejf 10-31-2012 access mw database via routine dal_monier1
+// H1523: baseline headers + CSP-Report-Only
+require_once(__DIR__ . '/../security_headers.php');
 $dir = dirname(__FILE__); //directory containing this php file
 require_once('../utilities/utilities.php');
 require_once('../webtc/dal_mysql.php');
@@ -46,7 +48,9 @@ if ($keydata1 != '') {
 
 
 if ($nmatches == 0) {
- echo "<h2>not found: $keyin1</h2>\n";
+ // H1523: keyin1 is user-controlled; escape before HTML
+ $keyin1_html = htmlspecialchars((string)$keyin1, ENT_QUOTES, 'UTF-8');
+ echo "<h2>not found: $keyin1_html</h2>\n";
  exit;
 }
 
