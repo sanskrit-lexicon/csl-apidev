@@ -72,16 +72,19 @@ class ServepdfClass {
  }
  public function html_construct_error($errormsg) { 
   #$errormsg = "<div>Servepdf error. No dictionary mentioned? </div>";
+  // H1523: $dictupper_attr was never set in this scope (empty/notice title).
+  // Escape the message — dicterr can include the raw dict parameter.
+  $errormsg_html = htmlspecialchars((string)$errormsg, ENT_QUOTES, 'UTF-8');
   $html = <<<EOF
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8" />
-<title>$dictupper_attr Cologne Scan</title>
+<title>Cologne Scan</title>
 <link rel='stylesheet' type='text/css' href='css/serveimg.css' />
 </head>
 <body>
- $errormsg
+ $errormsg_html
 </body>
 </html>
 EOF;
