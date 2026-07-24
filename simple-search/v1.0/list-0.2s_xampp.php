@@ -1,4 +1,5 @@
 <?php
+require_once(__DIR__ . '/../../security_headers.php');
  /* Same as list-0.2s_xampp.html, but accepts some or all inputs as
    $_REQUEST parameters (i.e. either 'GET' or 'POST')
  */
