@@ -64,13 +64,16 @@ class ListhierClass {
   while($i < count($listmatches)) {
    list($code,$key2,$lnum2,$data2) = $listmatches[$i];
    if ($data2 == null) {$data2 = "";} //01-13-2025
+   // H1523: escape for onclick only (UP previously raw; display key2 stays raw)
+   if ($key2 === null) { $key2 = ""; }
+   $key2_js = htmlspecialchars((string)$key2, ENT_QUOTES);
    //dbgprint(true,"i=$i, $code,$key2,$lnum2,data2=$data2\n");
    $hom2=$this->get_hom($data2);
    dbgprint($dbg,"listhierClass: lnum2=$lnum2, key2=$key2, hom2='$hom2'data2=\n$data2\n");
    if ($i == 0) {
     //  put 'upward button'
     $spc="&nbsp;&nbsp;";
-    $out1 = "$spc<a  onclick='getWordlistUp_keyboard(\"$key2\");'>&#x25B2;</a><br/>\n";  
+    $out1 = "$spc<a  onclick='getWordlistUp_keyboard(\"$key2_js\");'>&#x25B2;</a><br/>\n";  
     $table .= $out1;
    }
    $i++;
@@ -155,24 +158,20 @@ class ListhierClass {
     However, just escaping doesn't solve the problem.  We removed
     the apostrophe in the 'key1' element in MWE.
    */
-   // php 8.1.10 deprecate 'null' for first parameter.
-   if ($key2 == null) {
-    $key2 = "";
-   }
-   $key2 = htmlspecialchars($key2,ENT_QUOTES);
+   // H1523: key2 already escaped at loop start
    if (preg_match('/<H.[BC]>/',$data2)) { // MW only
     // put key2show in parens
     $key2show = "($key2show)";
    }
-   //$out1 = "$spc<a  onclick='getWordAlt_keyboard(\"$key2\");'>$key2show$hom2</a><br/>\n";
+   //$out1 = "$spc<a  onclick='getWordAlt_keyboard(\"$key2_js\");'>$key2show$hom2</a><br/>\n";
    // 07-07-2024
-   $out1 = "$spc<a  onclick='getWordAlt_keyboard(\"$key2\");'>$key2show$hom2 $revsup</a><br/>\n";
+   $out1 = "$spc<a  onclick='getWordAlt_keyboard(\"$key2_js\");'>$key2show$hom2 $revsup</a><br/>\n";
    $table .= $out1;
    //dbgprint(true,"Listhier extra: key2=$key2, hom='$hom2'\nout1=$out1\n");
    if ($i == count($listmatches)) {
     //  put 'downward button'
     $spc="&nbsp;&nbsp;";
-    $out1 = "$spc<a  onclick='getWordlistDown_keyboard(\"$key2\");'>&#x25BC;</a>\n";  
+    $out1 = "$spc<a  onclick='getWordlistDown_keyboard(\"$key2_js\");'>&#x25BC;</a>\n";  
     $table .= $out1;
    }
 
