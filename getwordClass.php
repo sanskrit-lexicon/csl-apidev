@@ -37,7 +37,10 @@ class GetwordClass {
   $keyin = $getParms->keyin1;
   if ($nmatches == 0) {
    $table1 = '';
-   $table1 .= "<h2>not found: '$keyin' (slp1 = $key)</h2>\n";
+   // H1523: keyin/key are user-influenced; escape before HTML
+   $keyin_html = htmlspecialchars((string)$keyin, ENT_QUOTES, 'UTF-8');
+   $key_html = htmlspecialchars((string)$key, ENT_QUOTES, 'UTF-8');
+   $table1 .= "<h2>not found: '$keyin_html' (slp1 = $key_html)</h2>\n";
   }else {
    //$dbg = true;
    $table = $this->getwordDisplay($getParms,$matches);
