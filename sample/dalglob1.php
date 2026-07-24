@@ -183,14 +183,14 @@ getdataForkeyDict = function(parmstr) {
    let input = resultval.input;
    let serverval = resultval.result;
    let key = resultval.key;
-   let id = `disp_${key}`;
+   let id = 'disp_' + String(key).replace(/[^A-Za-z0-9_.-]/g, '_');
    let html0 = `<div id="${id}" class="tabcontent">`;
    if (i == 0) {id0 = id;}
    html0 = html0 + serverval + "</div>";
    html = html + html0;
   }
   $('#disp').html(html);
-  let btnid0 = `button_${id0}`;
+  let btnid0 = 'button_' + id0;
   document.getElementById(btnid0).click(); // To show first result
  };
  
