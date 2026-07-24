@@ -111,6 +111,10 @@ class Parm {
  */
  $invalid_characters = array("$", "#", "<", ">", "=", "(", ")", '"');
  $ans = str_replace($invalid_characters, "", $x);
+ // H1523: bound headword key length
+ if (is_string($ans) && mb_strlen($ans) > 200) {
+  $ans = mb_substr($ans, 0, 200);
+ }
  return $ans;
 }
  public function getsuggestParms() {
@@ -120,6 +124,11 @@ class Parm {
    $this->getsuggestTerm = $_REQUEST['term'];
   }
   $term = $this->getsuggestTerm;
+  // H1523: bound autocomplete term (dal like-query cost)
+  if (is_string($term) && mb_strlen($term) > 100) {
+   $term = mb_substr($term, 0, 100);
+   $this->getsuggestTerm = $term;
+  }
   return $this->compute_text($term);
  }
 
