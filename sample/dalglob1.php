@@ -22,7 +22,20 @@ init_dalglob1_parms();
 <meta charset="UTF-8">
 <title>dalgob1-dev</title>
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.css">
-<script type="text/javascript" src="//code.jquery.com/jquery-3.7.1.min.js"></script>
+<script type="text/javascript" src="//code.jquery.com/jquery-3.7.1.min.js">
+// H1523: escape helpers for sample multi-dict demo HTML construction
+function cslEscHtml(s) {
+  return String(s == null ? '' : s)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+function cslEscJsDq(s) {
+  return String(s == null ? '' : s)
+    .replace(/\\/g, '\\\\').replace(/"/g, '\\"').replace(/'/g, "\\'")
+    .replace(/\n/g, '\\n').replace(/\r/g, '\\r')
+    .replace(/</g, '\\x3c').replace(/>/g, '\\x3e');
+}
+</script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/3.0.5/js.cookie.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
 <link rel="stylesheet" type="text/css" href="../css/basic.css">
@@ -96,14 +109,14 @@ $(document).ready(function() {
        let dockeys = dictrec.dockeys;
        let dockeystr = dockeys.join(" ");
        let parm = dict + " " + dockeystr;
-       let button = "<button onclick='getdataForkeyDict(\"" +parm + "\")'>" + dict + "</button>";
+       let button = "<button onclick='getdataForkeyDict(\"" + cslEscJsDq(parm) + "\")'>" + cslEscHtml(dict) + "</button>";
        let ans = button + "  " + dockeystr + "<br/>";
        return ans;
      };
      a = dictdata.map(f);
      html = a.join("  ");
     }else {
-     html = key + " not found in any dictionary: status=" + data.status;
+     html = cslEscHtml(key) + " not found in any dictionary: status=" + cslEscHtml(data.status);
     }
     $('#dictlist').html(html);
   }
@@ -151,9 +164,9 @@ getdataForkeyDict = function(parmstr) {
   for(var i=0;i<resultarr.length;i++) {
    let resultval = resultarr[i];
    let key = resultval.key;
-   let id = `disp_${key}`;
-   let btnid = `button_${id}`;
-   html = html + `<button id="${btnid}" class="tablinks" onclick="openHw(event,'${id}')">${key}</button>`;
+   let id = 'disp_' + String(key).replace(/[^A-Za-z0-9_.-]/g, '_');
+   let btnid = 'button_' + id;
+   html = html + `<button id="${btnid}" class="tablinks" onclick="openHw(event,'${id}')">${cslEscHtml(key)}</button>`;
   }
   html = html + "</div>";  // close class tab
   html = html + "</div>";  // close class sticky
@@ -163,7 +176,7 @@ getdataForkeyDict = function(parmstr) {
  var showResults = function(resultarr) {
   let html = "";
   html = html + showResults_tabs(resultarr,dict);
-  html = html + `<h3>${dict}</h3>`;
+  html = html + `<h3>${cslEscHtml(dict)}</h3>`;
   let id0 = "";
   for(var i=0;i<resultarr.length;i++) {
    let resultval = resultarr[i];
