@@ -816,7 +816,10 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
    $dictup = strtoupper($dict);
    $args = "dict=$dict&page=$page";
    $style = "";
-   $link = "<a href='$serve?$args' target='_$dictup' title='page $page'>$col</a>";
+   // H1523: escape full href (dict/page from data can break single-quoted attrs)
+   $href = $this->htmlspecial("$serve?$args");
+   $title = $this->htmlspecial("page $page");
+   $link = "<a href='$href' target='_$dictup' title='$title'>$col</a>";
    // $this->row .= "<span style='$style'>$ans</span>";
    $this->row .= "<span style='$style'> $link</span>";
   } else if ($this->parentEl == "L") {
@@ -925,7 +928,9 @@ public function getHrefPage($data) {
    #$ans = "<a href='$serve?$args' target='_Blank'>$lnum</a>";
    $dictup = strtoupper($dict);
    $style = "color:rgb(130,130,130);";
-   $ans = "<a href='$serve?$args' target='_$dictup' style='$style'>$lnum</a>";
+   // H1523: escape href attr built from dict/page
+   $href = $this->htmlspecial("$serve?$args");
+   $ans = "<a href='$href' target='_$dictup' style='$style'>$lnum</a>";
   }else {
    $ans .= ",$lnum";
   }
@@ -977,7 +982,8 @@ public function mw_extra_line($line) {
   $elts=array();
   foreach ($results as $rec) {
    list($whitkey,$whitpage) = preg_split("|,|",$rec);
-   $href = "$href0" . "?page=$whitpage";
+   // H1523: escape Whitney page href (page token from <info whitneyroots>)
+   $href = $this->htmlspecial("$href0" . "?page=$whitpage");
    $whitkey1 = $whitkey; 
    $whitkey2 = "";
    if (preg_match('|^([^1-9]*)([1-9]*)$|',$whitkey,$matches)) {
@@ -1003,7 +1009,8 @@ public function mw_extra_line($line) {
    // westsutra is of form (section.rootnum)
    // our links require the section
    list($westsection,$westrootnum) = preg_split("|[.]|",$westsutra);
-   $href = "$href0" . "?section=$westsection";
+   // H1523: escape Westergaard section href
+   $href = $this->htmlspecial("$href0" . "?section=$westsection");
    $elt = "<a href='$href' target='_Westergaard'>$westsutra</a>";
    $elts[] = $elt;
   }
