@@ -1,4 +1,5 @@
 <?php
+require_once(__DIR__ . '/../../security_headers.php');
 /*
  getword_list_1.0.php  Begun 06-01-2017.
  Used by Javascript 'simpleFunction' in list-0.2s_rw.php.

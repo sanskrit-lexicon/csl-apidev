@@ -1,4 +1,5 @@
 <?php
+require_once(__DIR__ . '/../security_headers.php');
 // Exclude WARNING messages also, to solve Peter Scharf Mac version.
 error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
 ?>

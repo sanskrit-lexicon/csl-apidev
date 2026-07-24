@@ -1,4 +1,5 @@
 <?php
+require_once(__DIR__ . '/../../security_headers.php');
  /* This is file list-0.2s_rw.php.  ('rw' = rewrite)
   Allows /simple/ urls to be parsed.
   See .htaccess in root directory.

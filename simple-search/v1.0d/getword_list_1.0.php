@@ -1,4 +1,5 @@
 <?php
+require_once(__DIR__ . '/../../security_headers.php');
 /*
  getword_list_0.1.php  
  Variant of getword_list_1.0.php of fetching_v0.3b.
