@@ -1,4 +1,5 @@
 <?php
+require_once(__DIR__ . '/security_headers.php');
 error_reporting( error_reporting() & ~E_NOTICE );
  header("Access-Control-Allow-Origin: *");
 /* removed 08-15-2019.
