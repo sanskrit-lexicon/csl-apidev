@@ -1,4 +1,5 @@
 <?php
+require_once(__DIR__ . '/../security_headers.php');
 // salt_selftest.php — CLI smoke test for the Salt API controllers (developer harness).
 //
 //   php api1/salt_selftest.php  [dict]  [headword ...]

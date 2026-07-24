@@ -1,4 +1,5 @@
 <?php
+require_once(__DIR__ . '/security_headers.php');
 error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
 // cleanurl.php — clean-URL (permalink) router: /{DICT}/{ref}, unified with the Salt API
 // permalink (doc/cleanurl.md, doc/salt_entries.md §1.3/§1.7).

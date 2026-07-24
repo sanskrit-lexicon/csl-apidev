@@ -1,4 +1,5 @@
 <?php
+require_once(__DIR__ . '/security_headers.php');
 /* dalglob.php  Feb 2, 2020.  sqlite files that are 'global', i.e. not
    tied to a dictionary
 */
