@@ -225,8 +225,9 @@ dbgprint($dbg,"dispitem. key2=$key2\n");
   $dict = $this->dict;
   $args = "dict=$dict&page=$page,$col";
   $dictup = strtoupper($dict);
-  
-  $ans = "<span style='$style'>rev </span><a href='$serve?$args' target='_$dictup'><span style='$style'>($page</span></a><span style='$style'>,$col)</span>";
+  // H1523: escape servepdf href (page/col from L1 rev markup)
+  $href = htmlspecialchars("$serve?$args", ENT_QUOTES);
+  $ans = "<span style='$style'>rev </span><a href='$href' target='_$dictup'><span style='$style'>($page</span></a><span style='$style'>,$col)</span>";
 
   return $ans;
  }
@@ -358,7 +359,9 @@ public function getHrefPage() {
  foreach($lnums as $lnum) {
   if ($ans == "") {
    $args = "dict=$dict&page=$lnum"; #"page=$page";
-   $ans = "<a href='$serve?$args' target='_$dict'>$lnum</a>";
+   // H1523: escape servepdf href built from pginfo page token
+   $href = htmlspecialchars("$serve?$args", ENT_QUOTES);
+   $ans = "<a href='$href' target='_$dict'>$lnum</a>";
   }else {
    $ans .= ",$lnum";
   }
