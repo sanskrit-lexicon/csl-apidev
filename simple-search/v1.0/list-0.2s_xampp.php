@@ -264,6 +264,28 @@ simpleFunction = function(){
 
 };
 
+
+// H1523: escape helpers for result-list HTML/JS construction
+function cslEscHtml(s) {
+  return String(s)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+function cslEscJsDq(s) {
+  // for embedding inside a double-quoted JS string in an HTML attribute
+  return String(s)
+    .replace(/\\/g, '\\\\')
+    .replace(/"/g, '\\"')
+    .replace(/'/g, "\\'")
+    .replace(/\n/g, '\\n')
+    .replace(/\r/g, '\\r')
+    .replace(/</g, '\\x3c')
+    .replace(/>/g, '\\x3e');
+}
+
 displayOption2Helper = function(dicthw,index,nresults) {
  for(var i=0;i<nresults;i++) {
   var selector = '#hwlink_'+i;
@@ -304,7 +326,7 @@ displayOption2 = function(json) {
    if (index == 0) {
     dicthwfirst = dicthw;
    }
-   dicthwoutput = result['dicthwoutput'];
+   dicthwoutput = cslEscHtml(result['dicthwoutput']);
    if (dicthwFlag) { 
     // 11-01-2017. Bold when this is user input
     dicthwoutput = "<strong>" + dicthwoutput + "</strong>";
@@ -317,7 +339,7 @@ displayOption2 = function(json) {
    //console.log("classattr=",classattr);
    var x = "<a class='hwlinks' id='hwlink_" + 
         index + "' onclick='displayOption2Helper(" +
-        '"' + dicthw + '"' + "," + index + "," + nresults + ");'>" +
+        '"' + cslEscJsDq(dicthw) + '"' + "," + index + "," + nresults + ");'>" +
     "<span" + classattr + ">" + dicthwoutput + "</span></a>";
    //console.log('x=',x);
    htmlarr.push('<li style="display:inline; padding:5px;" >' +x + '</li>');
