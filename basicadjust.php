@@ -4395,7 +4395,9 @@ public function htmlspecial($text) {
     
     $label_html = "[$label: ";
     if ($href != "") {
-     $label_html = "<a href='$href' target='_blank' style='color:red; text-decoration:none;'>$label_html</a>";
+     // H1523: chg markup is final HTML (not gralink intermediate); escape href
+     $href_attr = htmlspecialchars($href, ENT_QUOTES);
+     $label_html = "<a href='$href_attr' target='_blank' style='color:red; text-decoration:none;'>$label_html</a>";
     }
 
     $ansnew = "<span></span> " .
@@ -4447,7 +4449,9 @@ public function htmlspecial($text) {
 
     $label_html = "[$label: ";
     if ($href != "") {
-     $label_html = "<a href='$href' target='_blank' style='color:red; text-decoration:none;'>$label_html</a>";
+     // H1523: chg markup is final HTML (not gralink intermediate); escape href
+     $href_attr = htmlspecialchars($href, ENT_QUOTES);
+     $label_html = "<a href='$href_attr' target='_blank' style='color:red; text-decoration:none;'>$label_html</a>";
     }
 
     $ansold = "<abbr title='$tooltip' style='color:red; display:inline; text-decoration:underline red dotted;'>" .
