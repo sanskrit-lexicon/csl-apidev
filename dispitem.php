@@ -321,7 +321,9 @@ dbgprint($dbg,"dispitem. key2=$key2\n");
    /* for use of 'this', refer
 //stackoverflow.com/questions/925734/whats-this-in-javascript-onclick
    */
-   $a = "<a class='$class' onclick='listhier_lnum(\"$lnum\",this);'>$symbol</a>&nbsp;\n";
+   // H1523: escape lnum for JS onclick
+   $lnum_js = htmlspecialchars((string)$lnum, ENT_QUOTES);
+   $a = "<a class='$class' onclick='listhier_lnum(\"$lnum_js\",this);'>$symbol</a>&nbsp;\n";
    $pre = $a . $pre;
   }
   # 01-17-2019
