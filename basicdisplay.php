@@ -389,10 +389,16 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
  public function sthndl_elt_attribs($attribs,$elt) {
   // 11-20-2023  new function used for abch, nmmb.
   // But may have general use
+  // H1523: escape attribute names/values for single-quoted HTML attrs.
+  // Unescaped $val broke titles/attrs on ' and is an injection surface if
+  // XML ever carried untrusted content into table/tr/td/th.
   $attrib_keys = array_keys($attribs);
   $ar = array();
   foreach($attrib_keys as $key) {
-   $val = $attribs[$key];
+   if (!preg_match('/^[A-Za-z_][A-Za-z0-9_:-]*$/', $key)) {
+    continue; // drop non-identifier attribute names
+   }
+   $val = $this->htmlspecial($attribs[$key]);
    array_push($ar," $key='$val'");
   }
   $a = join("",$ar);
