@@ -123,7 +123,7 @@ cookieUpdate = function(flag) {
   cookieValue = Cookies.get(cookieName); // old value of cookie
   if(! cookieValue) { // cookie not defined. 
    cookieValue= cookieDefaultValues[i]; // Use default value
-   Cookies.get(cookieName, cookieValue, cookieOptions); // and set cook
+   Cookies.set(cookieName, cookieValue, cookieOptions); // and set cook
   }
   // set dom value
   $(domid).val(cookieValue);
