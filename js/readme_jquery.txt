@@ -13,6 +13,7 @@ _Created: 05-03-2023 · Last updated: 24-07-2026_
 
 ## Current layout
 - js/jquery.min.js — jQuery 3.7.1 (local; listview.php)
+- js/jquery.min.prev.js removed (H1523; was stale 1.x/3.5 backup, unused)
 - CDN simple-search / sample: jquery-3.7.1.min.js
 - jquery-ui 1.11.4 remains on cdnjs (separate package)
 
