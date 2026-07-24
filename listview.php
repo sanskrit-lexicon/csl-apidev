@@ -86,8 +86,9 @@ error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
    $dict = $getParms->dict;
    $key = $getParms->key;
   ?>
-  var key = <?php echo "'$key'";?>;
-  var dict = <?php echo "'$dict'";?>;
+  // H1523: json_encode for JS string safety (parity with websan webtc/indexcaller.php)
+  var key = <?php echo json_encode($key, JSON_HEX_TAG|JSON_HEX_AMP|JSON_HEX_APOS|JSON_HEX_QUOT);?>;
+  var dict = <?php echo json_encode($dict, JSON_HEX_TAG|JSON_HEX_AMP|JSON_HEX_APOS|JSON_HEX_QUOT);?>;
   //console.log('listview.php script: key=',key,'dict=',dict);
   orphus.init({
     correctionsUrl: correctionsUrl,
