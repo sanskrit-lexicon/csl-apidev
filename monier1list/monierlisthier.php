@@ -65,11 +65,14 @@ $spcchar = "&nbsp;";
 $spcchar = ".";
 while($i < count($listmatches)) {
  list($code,$key2,$lnum2,$data2) = $listmatches[$i];
+ // H1523: escape key for JS onclick only
+ if ($key2 === null) { $key2 = ""; }
+ $key2_js = htmlspecialchars((string)$key2, ENT_QUOTES);
  $hom2=get_hom($data2);
  if ($i == 0) {
   //  put 'upward button'
   $spc="&nbsp;&nbsp;";
-  $out1 = "$spc<a  onclick='getWordlistUp_keyboard(\"<SA>$key2</SA>\");'><span style='$c'>&#x25B2;</span></a><br/>\n";  
+  $out1 = "$spc<a  onclick='getWordlistUp_keyboard(\"<SA>$key2_js</SA>\");'><span style='$c'>&#x25B2;</span></a><br/>\n";  
   $table .= $out1;
  }
  $i++;
@@ -108,13 +111,13 @@ while($i < count($listmatches)) {
  if(listhierskip_data($data2)) {
   $xtraskip='<span style="font-size:x-small; color:blue;"> (x)</span>';
  }
- $out1 = "$spc<a  onclick='getWordAlt_keyboard(\"<SA>$key2</SA>\");'><span style='$c'><SA>$key2show</SA></span>$hom2</a>$xtraskip<br/>\n";
+ $out1 = "$spc<a  onclick='getWordAlt_keyboard(\"<SA>$key2_js</SA>\");'><span style='$c'><SA>$key2show</SA></span>$hom2</a>$xtraskip<br/>\n";
 
  $table .= $out1;
  if ($i == count($listmatches)) {
   //  put 'downward button'
   $spc="&nbsp;&nbsp;";
-  $out1 = "$spc<a  onclick='getWordlistDown_keyboard(\"<SA>$key2</SA>\");'><span style='$c'>&#x25BC;</span></a><br/>\n";  
+  $out1 = "$spc<a  onclick='getWordlistDown_keyboard(\"<SA>$key2_js</SA>\");'><span style='$c'>&#x25BC;</span></a><br/>\n";  
   $table .= $out1;
  }
 
