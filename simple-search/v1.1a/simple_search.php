@@ -237,12 +237,16 @@ class Simple_Search{
 
   $json = getword_simpleslp1($word);
   dbgprint($dbg,"back from getword_simpleslp1\n");
+  // H1523: invalid/non-object JSON must not touch ->status (PHP 8+ TypeError)
   $obj = json_decode($json);
-  if ($obj->status != 200) {
+  if (!is_object($obj) || !isset($obj->status) || $obj->status != 200) {
    dbgprint($dbg,"getVariants_from_db: word=$word, json = $json\n");
    return;
   }
-  $matches = $obj->result; // array of slp1 spellings
+  $matches = isset($obj->result) ? $obj->result : null; // array of slp1 spellings
+  if (!is_array($matches)) {
+   return;
+  }
   if ($dbg) {
    $temp = join(' ',$matches);
    dbgprint($dbg,"getVariants_from_db: $word -> $temp\n");
