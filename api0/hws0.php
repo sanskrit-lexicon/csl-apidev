@@ -22,20 +22,25 @@ if (! isset($_REQUEST['pretty'])){
  hws0_prettyPrint($result);
 }
 function hws0_prettyPrint($result) {
+ // H1523: pretty mode emits HTML; htmlspecialchars covers <>&"' (replaces
+ // the prior partial preg_replace of only < and > on match fields).
+ $esc = function ($v) {
+  return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8');
+ };
  $a = $result;
  $status = $a['status'];
  echo "\n";
- echo "<br/>status: ${a['status']}\n";
- echo "<br/>errorinfo: ${a['errorinfo']}\n";
+ echo "<br/>status: " . $esc($a['status']) . "\n";
+ echo "<br/>errorinfo: " . $esc($a['errorinfo']) . "\n";
  echo "<br/>request: ";
  $request = $a['request'];
  foreach($request as $k => $v) {
-   $out = "  '$k' : '$v'";
+   $out = "  '" . $esc($k) . "' : '" . $esc($v) . "'";
    $out = "<br/>&nbsp;&nbsp; $out";
    echo "$out\n";
  }
  $nmatches = $a['nmatches'];
- echo "<br/> nmatches: $nmatches\n";
+ echo "<br/> nmatches: " . $esc($nmatches) . "\n";
 
  $matches = $a['matches'];
  echo "<br/> matches: \n";
@@ -43,12 +48,9 @@ function hws0_prettyPrint($result) {
  foreach($matches as $match0) {
   $imatch = $imatch + 1;
   $match = $match0;  # this is also an object
-  echo "<br/>Match # $imatch: \n";
+  echo "<br/>Match # " . $esc($imatch) . ": \n";
   foreach($match as $k => $v) {
-   $out = "  '$k' : '$v'";
-   # handle <>
-   $out = preg_replace('/>/','&gt;',$out);
-   $out = preg_replace('/</','&lt;',$out);
+   $out = "  '" . $esc($k) . "' : '" . $esc($v) . "'";
    $out = "<br/>&nbsp;&nbsp; $out";
    echo "$out\n";
   }
