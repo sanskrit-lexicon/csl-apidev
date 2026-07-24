@@ -23,10 +23,20 @@ class SaltGraphqlClass {
   public function __construct() {
     salt_apply_documented_defaults();                // input defaults to slp1, not Parm's global 'hk'
     $this->parm = new Parm();                       // dict from $_REQUEST['dict']
-    $body  = json_decode(file_get_contents('php://input'), true);
+    // H1523: invalid JSON / empty body → null from json_decode; treat as empty map.
+    // Non-array $vars would TypeError in resolveIds foreach under PHP 8+.
+    $raw   = file_get_contents('php://input');
+    $body  = (is_string($raw) && $raw !== '') ? json_decode($raw, true) : null;
+    if (!is_array($body)) {
+      $body = array();
+    }
     $query = isset($body['query']) ? $body['query']
            : (isset($_REQUEST['query']) ? $_REQUEST['query'] : '');
-    $vars  = isset($body['variables']) ? $body['variables'] : array();
+    if (!is_string($query)) {
+      $query = '';
+    }
+    $vars  = (isset($body['variables']) && is_array($body['variables']))
+           ? $body['variables'] : array();
 
     if ((strpos($query, 'ids') !== false) && (strpos($query, 'entries') === false)) {
       $this->json = json_encode(array('data' => array('ids' => $this->resolveIds($vars))),
@@ -72,7 +82,7 @@ class SaltGraphqlClass {
 
   // ids(ids: [String])  — pass ids via variables until webonyx is wired
   private function resolveIds($vars) {
-    $ids = isset($vars['ids']) ? $vars['ids'] : array();
+    $ids = (isset($vars['ids']) && is_array($vars['ids'])) ? $vars['ids'] : array();
     $out = array();
     foreach ($ids as $id) {
       foreach (salt_entries_for_id($this->parm, $id) as $e) { $out[] = $e; }
