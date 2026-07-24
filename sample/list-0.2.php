@@ -2,6 +2,8 @@
  /* Same as list-0.2.html, but accepts some or all inputs as
    $_GET parameters
  */
+// H1523: baseline headers + CSP-Report-Only
+require_once(__DIR__ . '/../security_headers.php');
 // Report all errors except E_NOTICE  (also E_WARNING?)
 error_reporting(E_ALL & ~E_NOTICE);
 /* See phpinit
