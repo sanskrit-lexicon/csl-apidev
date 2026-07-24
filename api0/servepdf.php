@@ -18,28 +18,33 @@ $json = $temp->json;
 if (! isset($_REQUEST['pretty'])){
  echo $json;
 }else {
+ // H1523: pretty mode emits HTML; escape every dynamic field (request
+ // values / errorinfo / link fields are user- or path-influenced).
+ $esc = function ($v) {
+  return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8');
+ };
  $a = json_decode($json,true);  // true indicates associative
  
  $status = $a['status'];
  echo "\n";
- echo "<br/>status = ${a['status']}\n";
- echo "<br/>errorinfo = ${a['errorinfo']}\n";
+ echo "<br/>status = " . $esc($a['status']) . "\n";
+ echo "<br/>errorinfo = " . $esc($a['errorinfo']) . "\n";
  echo "<br/>request: ";
  $request = $a['request'];
  foreach($request as $k => $v) {
-   $out = "  '$k' : '$v'";
+   $out = "  '" . $esc($k) . "' : '" . $esc($v) . "'";
    $out = "<br/>&nbsp;&nbsp; $out";
    echo "$out\n";
  }
  $links = $a['links'];
  $nlinks = count($links);
- echo "<br/>links: ($nlinks)\n";
+ echo "<br/>links: (" . $esc($nlinks) . ")\n";
  $ilink = 0;
  foreach($links as $link) {
   $ilink = $ilink + 1;
-  echo "<br/>Link # $ilink: ";
+  echo "<br/>Link # " . $esc($ilink) . ": ";
   foreach($link as $k => $v) {
-   $out = "  '$k' : '$v'";
+   $out = "  '" . $esc($k) . "' : '" . $esc($v) . "'";
    $out = "<br/>&nbsp;&nbsp; $out";
    echo "$out\n";
   }
