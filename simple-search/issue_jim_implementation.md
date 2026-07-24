@@ -31,10 +31,12 @@ the wiring is yours.
 ---
 
 ## Phase 0 — quick wins (do first, low risk)
-- [ ] **Wire the DCS-2026 frequencies (Fix I).** One line: point
-  `init_word_frequency()` in [simple-search/v1.1/getword_list_1.0_main.php](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/simple-search/v1.1/getword_list_1.0_main.php) at
-  [simple-search/wf1/wf.txt](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/simple-search/wf1/wf.txt) instead of [wf0/wf.txt](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/simple-search/wf0/wf.txt). **(data ready)** —
+- [x] **Wire the DCS-2026 frequencies (Fix I).** Default `init_word_frequency()` in
+  [simple-search/v1.1/getword_list_1.0_main.php](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/simple-search/v1.1/getword_list_1.0_main.php)
+  (and v1.1a) to [simple-search/wf1/wf.txt](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/simple-search/wf1/wf.txt);
+  rollback via `?freqsrc=wf0`; JSON exposes `freq_source`. **(data ready + wired 2026-07-24)** —
   12,096 lines refreshed direct + 90 via legacy-spelling re-normalize (addendum A1); `tad 180→3734`, `kf 163→1083`, `rAjan 84→588`.
+  **Deploy note:** live Cologne still serves until this commit is deployed on the server.
 - [ ] **Record the live baseline.** On the server run
   `python simple-search/eval/eval_search.py --live` (see [eval_search.py](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/simple-search/eval/eval_search.py))
   and save the numbers. Offline baseline today (non-aspirational rows —
