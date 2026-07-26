@@ -61,6 +61,16 @@ jobs:
       - name: Ruff (warn-only — repo contains legacy Python 2 scripts)
         run: ruff check . || echo "::warning::ruff reported findings (includes legacy Python 2)"
 
+  js-check:
+    name: JS transcoder regression check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: app/rowSlp1.check.js — IAST case-folding (hard gate, zero deps)
+        run: |
+          node --check app/app.js
+          node app/rowSlp1.check.js
+
   yaml-lint:
     name: YAML lint
     runs-on: ubuntu-latest

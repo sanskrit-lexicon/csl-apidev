@@ -8,9 +8,14 @@ Dates are UTC+3 (project local).
 
 ### Fixed
 
+- **`app.js` `rowSlp1()` now case-folds IAST before transcoding** ([SanskritLexicography#779](https://github.com/gasyoun/SanskritLexicography/issues/779), [H1695](https://github.com/gasyoun/Uprava/blob/main/handoffs/H1695-Opus_csl-apidev_rowslp1-iast-case-fold_26.07.26.md)): `sanskrit-util`'s `to_slp1` maps lowercase IAST and passes everything else through verbatim — into an output alphabet where case is **phonemic** (`R`=ṇ, `B`=bh, `E`=ai). A capitalised headword therefore transcoded to a different, plausible-looking word with no error path: `Rāma` → `RAma`, which **rendered in the results list as `ṇāma`** and looked up the wrong `dalglob|` key. `IAST_RE` deliberately auto-detects capitalised input, so the path was reachable by design, not by accident. `foldIast()` (NFC + lowercase, the same defence [csl-atlas](https://github.com/sanskrit-lexicon/csl-atlas) already applies in `lookup-normalize.js`) now runs first; SLP1 input is explicitly never folded, since there the case carries meaning. Found by the org-wide `to_slp1` caller audit that followed the same bug corrupting 60% of the keys in SanskritLexicography's ACC×NCC works crosswalk.
 - **MW bare `&c.` tooltip** ([MWS#86](https://github.com/sanskrit-lexicon/MWS/issues/86), H1523): display-layer wrap of ~21k bare `&c.` occurrences so hover shows "et cetera; and so on" (same sense as already-marked `etc.`). Twin of csl-websanlexicon makotemplates fix. Optional bulk `<ab>&c.</ab>` in csl-orig remains a separate monthly-batch path.
 - **RV/AV links never emit `rv00.*`** ([COLOGNE#370](https://github.com/sanskrit-lexicon/COLOGNE/issues/370)): `parse_rv_mandala()` + guards in `ls_callback_mw_href` / `rgveda_link` / GRA callback so a bad mandala token cannot become `rv00.147.html`. Twin of csl-websanlexicon makotemplates fix.
 - **`servepdfClass.php` preface/title-page navigation** ([#45](https://github.com/sanskrit-lexicon/csl-apidev/issues/45), H1522): `getImagefiles()` used to strip *all* leading non-digits from the `page` parameter, so front-matter ids like `t36` became `36` and hit dictionary page `0036` instead of title-scan `t36`. Now strips only a leading `Page` prefix and preserves `tNN` title-page ids. Same fix landed in the csl-websanlexicon makotemplates twin.
+
+### Added
+
+- **`app/rowSlp1.check.js` — a zero-dependency regression check** for the IAST case-folding above, wired into CI as a hard gate (`js-check`). The root cause of the `to_slp1` trap was not the bug but that *nothing pinned what a capital does* — the function is documented as "IAST → SLP1" with no word on case and is tested only on lowercase. 10 assertions, no runner, no npm: `node app/rowSlp1.check.js`.
 
 ## [0.2.0] - 2026-07-04
 

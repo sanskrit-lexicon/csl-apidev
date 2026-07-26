@@ -283,11 +283,27 @@
   return els.scheme.value;
  }
 
+ // IAST must be case-folded (and NFC-normalized) before to_slp1. SLP1 uses
+ // uppercase as DISTINCT phonemes (R=ṇ, B=bh, E=ai, ...) and to_slp1 has no
+ // uppercase IAST keys, so a capital passes through untouched and is then read
+ // as the other letter: 'Rāma' -> 'RAma' -> renders as 'ṇāma' and looks up the
+ // wrong dalglob key. IAST_RE deliberately auto-detects capitalised input, so
+ // this path is reachable by design, not by accident. Sanskrit has no case
+ // distinction, so folding loses nothing. NFC first, so a decomposed 'a'+U+0304
+ // reaches to_slp1 as the precomposed 'ā' its table is keyed on.
+ // Same defence csl-atlas applies in lookup-normalize.js; see SanskritLexicography
+ // FINDINGS §469 for the org-wide audit and the ACC×NCC corpus this bug corrupted.
+ function foldIast(word) {
+  var s = word || '';
+  if (s.normalize) { s = s.normalize('NFC'); }
+  return s.toLowerCase();
+ }
+
  function rowSlp1(word, scheme) {
   var SU = window.SanskritUtil;
   if (!SU) { return null; }
-  if (scheme === 'slp1') { return word; }
-  if (scheme === 'iast') { return SU.to_slp1(word); }
+  if (scheme === 'slp1') { return word; } // NEVER fold: SLP1 case is phonemic
+  if (scheme === 'iast') { return SU.to_slp1(foldIast(word)); }
   if (scheme === 'deva') { return SU.deva_to_slp1(word); }
   return null; // hk/itrans/velthuis: no client-side transcoder; server resolves
  }
