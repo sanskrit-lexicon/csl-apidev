@@ -54,6 +54,12 @@ error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
   </select>
  </div>
 
+ <div class="lk-field lk-field-accent">
+  <label for="lk-accent" class="lk-accent-label">
+   <input type="checkbox" id="lk-accent"> accents
+  </label>
+ </div>
+
  <button type="submit" id="lk-submit">Search</button>
  <button type="button" id="lk-copylink" class="lk-copylink" hidden>Copy link</button>
 </form>

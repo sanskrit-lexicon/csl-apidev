@@ -29,7 +29,10 @@
  var LANG_LABELS = { en: 'English', de: 'German', fr: 'French', la: 'Latin', other: 'Other' };
 
  var els = {};
- var state = { dicts: [], tabs: [], preferred: loadPreferred(), langFilter: {}, eraFilter: {} };
+ var state = {
+  dicts: [], tabs: [], preferred: loadPreferred(), langFilter: {}, eraFilter: {},
+  accent: false, activeDictRec: null, activeTabIndex: 0
+ };
 
  // ---- dictionary metadata (doc/roadmap_lookup.md Wave 2 item 1) --------
 
@@ -165,7 +168,7 @@
    '&keys=' + encodeURIComponent(dockeys.join(',')) +
    '&input=slp1' + // dockeys from dalglob.php are already SLP1-normalized
    '&output=' + encodeURIComponent(output) +
-   '&accent=no';
+   '&accent=' + (state.accent ? 'yes' : 'no');
   return fetchText(url).then(function (res) {
    if (res.status === 404) { return null; } // not deployed yet -> fall back
    if (!res.ok) { throw new Error('HTTP ' + res.status); }
@@ -181,7 +184,7 @@
    '?key=' + encodeURIComponent(key) +
    '&output=' + encodeURIComponent(output) +
    '&dict=' + encodeURIComponent(dict) +
-   '&accent=no' +
+   '&accent=' + (state.accent ? 'yes' : 'no') +
    '&input=slp1' +
    '&dispcss=no';
   return fetchText(url).then(function (res) {
@@ -211,7 +214,7 @@
   return chain.then(function () { return results; });
  }
 
- function loadDictEntries(dictRec, output) {
+ function loadDictEntries(dictRec, output, preferTabIndex) {
   setStatus('Loading ' + dictRec.dict.toUpperCase() + '...', 'loading');
   return fetchBatch(dictRec.dict, dictRec.dockeys, output)
    .then(function (batchResults) {
@@ -219,7 +222,7 @@
    })
    .then(function (results) {
     setStatus('', null);
-    renderTabs(dictRec.dict, results);
+    renderTabs(dictRec.dict, results, preferTabIndex);
    })
    .catch(function (err) {
     setStatus('Network error loading ' + dictRec.dict.toUpperCase() + ': ' + err.message, 'error');
@@ -360,7 +363,9 @@
      if (c.setAttribute) { c.setAttribute('aria-pressed', 'false'); }
     });
     card.setAttribute('aria-pressed', 'true');
-    loadDictEntries(item.dictRec, output);
+    state.activeDictRec = item.dictRec;
+    state.activeTabIndex = 0;
+    loadDictEntries(item.dictRec, output, 0);
    }
    card.addEventListener('click', select);
    card.addEventListener('keydown', function (evt) {
@@ -371,11 +376,81 @@
   });
  }
 
- function renderTabs(dict, results) {
+ // ---- entry enhancement: scan click-through + copy-citation (Wave 3) ---
+ //
+ // getword.php/getword_batch.php entries already embed a servepdf.php link
+ // for the scanned page inside a '.hrefdata' span ("[Printed book page
+ // <a href=servepdf.php...>N</a>,C]") and a per-record 'Cologne record ID'
+ // span -- no new server endpoint is needed, this just surfaces both as
+ // first-class, discoverable controls instead of small inline text. A page
+ // block only repeats when the page changes, so state is carried forward
+ // row-by-row within one entry's table.
+
+ function enhanceEntryHtml(container, dictCode, entryKey) {
+  var currentPage = null; // { text: '5,1', href, target }
+  var rows = container.querySelectorAll('tr');
+  Array.prototype.forEach.call(rows, function (tr) {
+   var hrefSpan = tr.querySelector('.hrefdata');
+   if (hrefSpan) {
+    var scanLink = hrefSpan.querySelector('a[href*="servepdf.php"]');
+    var m = hrefSpan.textContent.match(/page\s+([^\]]+)\]/i);
+    currentPage = {
+     text: m ? m[1].replace(/\s+/g, '') : hrefSpan.textContent.trim(),
+     href: scanLink ? scanLink.getAttribute('href') : (currentPage && currentPage.href),
+     target: scanLink ? (scanLink.getAttribute('target') || '_blank') : (currentPage && currentPage.target)
+    };
+    if (scanLink) {
+     var scanBtn = document.createElement('a');
+     scanBtn.className = 'lk-scanbtn';
+     scanBtn.href = scanLink.getAttribute('href');
+     scanBtn.target = currentPage.target || '_blank';
+     scanBtn.rel = 'noopener';
+     scanBtn.textContent = 'View scan (p. ' + scanLink.textContent.trim() + ')';
+     scanBtn.setAttribute('aria-label',
+      'View scanned page ' + scanLink.textContent.trim() + ' for ' + dictCode.toUpperCase());
+     hrefSpan.insertAdjacentElement('afterend', scanBtn);
+    }
+   }
+
+   var idSpan = tr.querySelector('span[title="Cologne record ID"]');
+   if (idSpan) {
+    var idText = idSpan.textContent.trim();
+    var pageAtRow = currentPage; // close over this row's page state
+    var citeBtn = document.createElement('button');
+    citeBtn.type = 'button';
+    citeBtn.className = 'lk-citebtn';
+    citeBtn.textContent = 'Cite';
+    citeBtn.setAttribute('aria-label', 'Copy citation for this entry');
+    citeBtn.addEventListener('click', function () {
+     copyToClipboard(buildCitation(dictCode, entryKey, pageAtRow, idText), 'Citation copied to clipboard.');
+    });
+    idSpan.parentNode.appendChild(citeBtn);
+   }
+  });
+ }
+
+ // Preferred-quotation format per csl-apidev#29: headword, dictionary +
+ // year, printed-book page/column, Cologne record ID, and a permalink back
+ // to this search -- the pieces the issue calls "hard to quote" today.
+ function buildCitation(dictCode, entryKey, page, idText) {
+  var meta = metaFor(dictCode);
+  var parts = [entryKey, '—', dictCode.toUpperCase() + (meta.year ? ' ' + meta.year : '')];
+  if (page && page.text) { parts.push('p. ' + page.text); }
+  parts.push('(' + idText + ').');
+  parts.push(meta.title + '.');
+  parts.push(window.location.href);
+  return parts.join(' ');
+ }
+
+ function renderTabs(dict, results, preferTabIndex) {
   state.tabs = results;
   els.tabs.innerHTML = '';
   els.panels.innerHTML = '';
   els.tabs.hidden = results.length < 2; // one homonym needs no tab chrome
+
+  var initial = (preferTabIndex != null && preferTabIndex >= 0 && preferTabIndex < results.length)
+   ? preferTabIndex : 0;
+  state.activeTabIndex = initial;
 
   results.forEach(function (r, i) {
    var tabId = 'lk-tab-' + dict + '-' + i;
@@ -387,8 +462,8 @@
    tab.className = 'lk-tab';
    tab.setAttribute('role', 'tab');
    tab.setAttribute('aria-controls', panelId);
-   tab.setAttribute('aria-selected', i === 0 ? 'true' : 'false');
-   tab.tabIndex = i === 0 ? 0 : -1;
+   tab.setAttribute('aria-selected', i === initial ? 'true' : 'false');
+   tab.tabIndex = i === initial ? 0 : -1;
    tab.textContent = r.key + (r.status === 404 ? ' (not found)' : '');
    tab.addEventListener('click', function () { activateTab(i); });
    els.tabs.appendChild(tab);
@@ -398,12 +473,14 @@
    panel.className = 'lk-panel';
    panel.setAttribute('role', 'tabpanel');
    panel.setAttribute('aria-labelledby', tabId);
-   panel.hidden = i !== 0;
+   panel.hidden = i !== initial;
    panel.innerHTML = r.html;
+   enhanceEntryHtml(panel, dict, r.key);
    els.panels.appendChild(panel);
   });
 
   function activateTab(index) {
+   state.activeTabIndex = index;
    var tabs = els.tabs.querySelectorAll('[role="tab"]');
    var panels = els.panels.querySelectorAll('[role="tabpanel"]');
    Array.prototype.forEach.call(tabs, function (t, i) {
@@ -492,7 +569,9 @@
    setStatus('', null);
    state.dicts = data.dicts;
    renderDictCards(data.dicts, output);
-   loadDictEntries(data.dicts[0], output);
+   state.activeDictRec = data.dicts[0];
+   state.activeTabIndex = 0;
+   loadDictEntries(data.dicts[0], output, 0);
   }).catch(function (err) {
    setStatus('Network error: ' + err.message, 'error');
   });
@@ -512,27 +591,30 @@
 
  // ---- copy-link -----------------------------------------------------
 
- function copyLink() {
-  var url = window.location.href;
-  var done = function () { setStatus('Link copied to clipboard.', 'copied'); };
+ function copyToClipboard(text, doneMessage) {
+  var done = function () { setStatus(doneMessage, 'copied'); };
   var fail = function () {
    // Fallback for browsers without the async Clipboard API (still zero
    // external dependencies -- a hidden textarea + the legacy command).
    var ta = document.createElement('textarea');
-   ta.value = url;
+   ta.value = text;
    ta.style.position = 'fixed';
    ta.style.opacity = '0';
    document.body.appendChild(ta);
    ta.select();
    try { document.execCommand('copy'); done(); }
-   catch (e) { setStatus('Could not copy automatically -- copy from the address bar.', 'error'); }
+   catch (e) { setStatus('Could not copy automatically -- copy manually.', 'error'); }
    document.body.removeChild(ta);
   };
   if (navigator.clipboard && navigator.clipboard.writeText) {
-   navigator.clipboard.writeText(url).then(done, fail);
+   navigator.clipboard.writeText(text).then(done, fail);
   } else {
    fail();
   }
+ }
+
+ function copyLink() {
+  copyToClipboard(window.location.href, 'Link copied to clipboard.');
  }
 
  // ---- init ----------------------------------------------------------
@@ -553,6 +635,8 @@
   els.tabs = qs('#lk-tabs');
   els.panels = qs('#lk-panels');
 
+  els.accent = qs('#lk-accent');
+
   els.form.addEventListener('submit', function (evt) {
    evt.preventDefault();
    runSearch();
@@ -564,6 +648,15 @@
   els.scheme.addEventListener('change', updatePreview);
   els.output.addEventListener('change', updatePreview);
   els.copylink.addEventListener('click', copyLink);
+  els.accent.addEventListener('change', function () {
+   state.accent = els.accent.checked;
+   // Reload only the currently displayed dictionary's entries, at the same
+   // homonym tab -- accent is a display option, not a new search (Wave 3
+   // acceptance: key/dict/homonym selection must survive the toggle).
+   if (state.activeDictRec) {
+    loadDictEntries(state.activeDictRec, state.output, state.activeTabIndex);
+   }
+  });
   window.addEventListener('popstate', restoreFromLocation);
 
   var prefill = window.LOOKUP_PREFILL || {};

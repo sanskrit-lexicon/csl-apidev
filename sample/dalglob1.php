@@ -268,6 +268,9 @@ getdataForkeyDict = function(parmstr) {
 </head>
 
 <body>
+ <div id="lk-newpage-banner" style="background:#fff8d6;border-bottom:1px solid #e0c95c;padding:8px 12px;font-family:Verdana,Arial,Helvetica,sans-serif;font-size:0.9rem;">
+  A newer lookup page is available: <a href="../lookup/">Sanskrit Lexicon Lookup</a>.
+ </div>
  <div id="logo">
      <a href="//www.sanskrit-lexicon.uni-koeln.de/">
       <img id="unilogo" src="//www.sanskrit-lexicon.uni-koeln.de/images/cologne_univ_seal.gif"

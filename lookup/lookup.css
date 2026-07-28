@@ -253,9 +253,103 @@ body {
 }
 .lk-panel[hidden] { display: none; }
 
+.lk-accent-label {
+ display: flex;
+ align-items: center;
+ gap: 4px;
+ font-size: 0.85rem;
+ color: #444;
+ cursor: pointer;
+}
+
+/* Wave 3: scan click-through + copy-citation, injected into the fetched
+   entry HTML by enhanceEntryHtml() in lookup.js. */
+.lk-scanbtn {
+ display: inline-block;
+ margin-left: 6px;
+ font-size: 0.78rem;
+ padding: 1px 8px;
+ border: 1px solid #2a5a8c;
+ border-radius: 999px;
+ background: #eaf1fc;
+ color: #1a3a5c;
+ text-decoration: none;
+ cursor: pointer;
+}
+.lk-scanbtn:hover,
+.lk-scanbtn:focus-visible {
+ background: #dce7f7;
+}
+.lk-citebtn {
+ margin-left: 6px;
+ font-size: 0.72rem;
+ padding: 0 6px;
+ border: 1px solid #aab4c0;
+ border-radius: 3px;
+ background: #fff;
+ color: #444;
+ cursor: pointer;
+}
+.lk-citebtn:hover,
+.lk-citebtn:focus-visible {
+ background: #eef1f5;
+}
+
 @media (max-width: 480px) {
  .lk-form { flex-direction: column; align-items: stretch; }
  .lk-field-key { min-width: 0; }
  #lk-submit { width: 100%; }
  .lk-copylink { width: 100%; }
+}
+
+/* Print: keep only the currently visible dictionary entry, drop all
+   interactive chrome (search form, cards, tabs, scan/cite/pin buttons). */
+@media print {
+ .lk-header, .lk-form, .lk-copylink, .lk-status, .lk-filterbar,
+ .lk-dictlist, .lk-tabs, .lk-pin, .lk-scanbtn, .lk-citebtn {
+  display: none !important;
+ }
+ body { background: #fff; color: #000; padding: 0; }
+ .lk-panels { border: none; padding: 0; }
+ .lk-panel[hidden] { display: none !important; }
+}
+
+@media (prefers-color-scheme: dark) {
+ body { background-color: #14181f; color: #e4e7ec; }
+ .lk-form { background: #1c2129; border-color: #2c333f; }
+ .lk-field label, .lk-accent-label { color: #aab2c0; }
+ .lk-field input, .lk-field select {
+  background: #10131a; color: #e4e7ec; border-color: #3a4250;
+ }
+ .lk-badge { background: #1b3a2b; color: #7fd6a8; }
+ #lk-submit { background: #3a72c9; border-color: #2a5a8c; }
+ #lk-submit:hover, #lk-submit:focus-visible { background: #2f5fa8; }
+ .lk-copylink { background: #1c2129; color: #e4e7ec; border-color: #3a4250; }
+ .lk-copylink:hover, .lk-copylink:focus-visible { background: #262c37; }
+ .lk-preview, .lk-filtergroup-label { color: #9aa3b2; }
+ .lk-status-loading { color: #9aa3b2; }
+ .lk-status-retry { color: #d9a441; }
+ .lk-status-error { color: #e2666d; }
+ .lk-status-notfound { color: #9aa3b2; }
+ .lk-status-copied { color: #4fbf8a; }
+ .lk-filterchip { background: #1c2129; border-color: #3a4250; color: #e4e7ec; }
+ .lk-filterchip[aria-pressed="true"] { background: #223756; border-color: #3a72c9; color: #cfe0fa; }
+ .lk-dictlist-empty { color: #9aa3b2; }
+ .lk-dictcard { background: #1c2129; border-color: #3a4250; }
+ .lk-dictcard[aria-pressed="true"] { background: #1c2c47; border-color: #3a72c9; box-shadow: 0 0 0 1px #3a72c9 inset; }
+ .lk-dictcard-title { color: #c3c9d4; }
+ .lk-dictcard-year { color: #8a93a3; }
+ .lk-dictcard-lang { background: #262c37; color: #cfd3db; }
+ .lk-pin[aria-pressed="false"] { color: #5a6270; }
+ .lk-tab { background: #1c2129; border-color: #3a4250; color: #cfd3db; }
+ .lk-tab[aria-selected="true"] { background: #262c37; color: #fff; }
+ .lk-citebtn { background: #1c2129; border-color: #3a4250; color: #cfd3db; }
+ .lk-citebtn:hover, .lk-citebtn:focus-visible { background: #262c37; }
+ .lk-scanbtn { background: #223756; border-color: #3a72c9; color: #cfe0fa; }
+ .lk-scanbtn:hover, .lk-scanbtn:focus-visible { background: #1c2c47; }
+ /* The fetched dictionary-entry HTML (inside .lk-panels) is server-rendered
+    with its own inline colors we don't control per-dictionary -- keep that
+    island on a light background so its text stays legible rather than
+    guessing at every dictionary's inline styles. */
+ .lk-panels { background: #f5f7fa; border-color: #3a4250; color: #1a1a1a; }
 }
