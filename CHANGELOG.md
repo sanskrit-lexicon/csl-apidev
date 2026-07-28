@@ -6,6 +6,8 @@ Dates are UTC+3 (project local).
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-07-28
+
 ### Added
 
 - **`docs/WEB_BACKEND_MANUAL.md` — operator manual for the whole web backend**
@@ -17,6 +19,14 @@ Dates are UTC+3 (project local).
   CSP-Report-Only), Cologne deploy/outage reality, symptom→cause→cure, glossary,
   maintainer appendix. Plus `docs/WEB_BACKEND_MANUAL.meta.md` and a README docs-index
   link.
+- **`app/rowSlp1.check.js` — a zero-dependency regression check** for the IAST case-folding below, wired into CI as a hard gate (`js-check`). The root cause of the `to_slp1` trap was not the bug but that *nothing pinned what a capital does* — the function is documented as "IAST → SLP1" with no word on case and is tested only on lowercase. 10 assertions, no runner, no npm: `node app/rowSlp1.check.js`.
+- **Bengali script → SLP1 transcoder table** (`utilities/transcoder/bengali_slp1.xml`, H1497, [#128](https://github.com/sanskrit-lexicon/csl-apidev/pull/128)).
+- **Crawlable SSR entry permalinks + JSON-LD + sitemap** (`app/entry.php`, H227, [#78](https://github.com/sanskrit-lexicon/csl-apidev/pull/78)), adversarially reviewed with a thin-content-gate fix (H233, [#80](https://github.com/sanskrit-lexicon/csl-apidev/pull/80)); **`app/` slice 2** — visual redesign + catalogue homepage + dictionary-detail routes, all 7 pages unified ([#74](https://github.com/sanskrit-lexicon/csl-apidev/pull/74)); Velthuis input scheme + finalized input-select order (R8, [#72](https://github.com/sanskrit-lexicon/csl-apidev/pull/72)).
+- **SPEC-3 C-SALT MW parity report** ([reports/salt_parity_mw_2026-07.md](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/reports/salt_parity_mw_2026-07.md), [#81](https://github.com/sanskrit-lexicon/csl-apidev/pull/81)) — incl. the Salt `input`-default bugfix (`salt_apply_documented_defaults()`: `Parm`'s global `hk` default silently broke 46.6% of a 500-headword sample) and the start of `/MW/{ref}` clean-URL routing.
+
+### Changed
+
+- **simple-search default ranking now uses the DCS-2026 `wf1` frequencies** (Fix I, H1562, [#105](https://github.com/sanskrit-lexicon/csl-apidev/pull/105)) — `init_word_frequency()` pointed at `simple-search/wf1/wf.txt`.
 
 ### Fixed
 
@@ -24,10 +34,11 @@ Dates are UTC+3 (project local).
 - **MW bare `&c.` tooltip** ([MWS#86](https://github.com/sanskrit-lexicon/MWS/issues/86), H1523): display-layer wrap of ~21k bare `&c.` occurrences so hover shows "et cetera; and so on" (same sense as already-marked `etc.`). Twin of csl-websanlexicon makotemplates fix. Optional bulk `<ab>&c.</ab>` in csl-orig remains a separate monthly-batch path.
 - **RV/AV links never emit `rv00.*`** ([COLOGNE#370](https://github.com/sanskrit-lexicon/COLOGNE/issues/370)): `parse_rv_mandala()` + guards in `ls_callback_mw_href` / `rgveda_link` / GRA callback so a bad mandala token cannot become `rv00.147.html`. Twin of csl-websanlexicon makotemplates fix.
 - **`servepdfClass.php` preface/title-page navigation** ([#45](https://github.com/sanskrit-lexicon/csl-apidev/issues/45), H1522): `getImagefiles()` used to strip *all* leading non-digits from the `page` parameter, so front-matter ids like `t36` became `36` and hit dictionary page `0036` instead of title-scan `t36`. Now strips only a leading `Page` prefix and preserves `tNN` title-page ids. Same fix landed in the csl-websanlexicon makotemplates twin.
+- **MW `n=` continuations for Hariv./Megh./Hit.** ([#89](https://github.com/sanskrit-lexicon/csl-apidev/pull/89)), **bare MED. linked to medini app4 by headword** ([#94](https://github.com/sanskrit-lexicon/csl-apidev/pull/94) series), **STC split `s. v.` rejoined** (csl-orig#2821), **AP90 parenthetical-compound indentation** ([COLOGNE#254](https://github.com/sanskrit-lexicon/COLOGNE/issues/254)), **always-visible servepdf open-PDF link** ([COLOGNE#153](https://github.com/sanskrit-lexicon/COLOGNE/issues/153)), **MW XML key2 shown in the list pane** — the display-parity half of the H1523 sweep ([#85](https://github.com/sanskrit-lexicon/csl-apidev/pull/85)–[#98](https://github.com/sanskrit-lexicon/csl-apidev/pull/98)).
 
-### Added
+### Security
 
-- **`app/rowSlp1.check.js` — a zero-dependency regression check** for the IAST case-folding above, wired into CI as a hard gate (`js-check`). The root cause of the `to_slp1` trap was not the bug but that *nothing pinned what a capital does* — the function is documented as "IAST → SLP1" with no word on case and is tested only on lowercase. 10 assertions, no runner, no npm: `node app/rowSlp1.check.js`.
+- **H1523 hardening sweep, ~40 PRs** ([#96](https://github.com/sanskrit-lexicon/csl-apidev/pull/96)–[#126](https://github.com/sanskrit-lexicon/csl-apidev/pull/126)): `security_headers.php` (baseline headers + CSP-Report-Only) required by every live HTML/JSON entry point incl. `api0/`, `sample/`, `pwkvn/`, app/lookup/simple-search UIs; systematic `htmlspecialchars`/`json_encode` escaping of echoed keys, hrefs, titles, XML element attrs, not-found pages and api0 pretty mode; `lnum`/key/term length + numeric validation; null-safe `json_decode` and hardened Salt GraphQL body parsing; jQuery 2.1.4 → 3.7.1 (CDN + local), `jquery.cookie` → `js-cookie` with `SameSite=Lax`; shell-arg escaping in `simpleslp` query3; `html.escape` in `build_sitemap.py` (CodeQL).
 
 ## [0.2.0] - 2026-07-04
 
