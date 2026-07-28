@@ -6,6 +6,8 @@ Dates are UTC+3 (project local).
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-07-29
+
 ### Added
 
 - **`lookup/` Wave 3** (H140, `doc/roadmap_lookup.md` §Wave 3): scan click-through
