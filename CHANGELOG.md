@@ -6,6 +6,18 @@ Dates are UTC+3 (project local).
 
 ## [Unreleased]
 
+### Added
+
+- **`docs/WEB_BACKEND_MANUAL.md` — operator manual for the whole web backend**
+  ([H1784](https://github.com/gasyoun/Uprava/blob/main/handoffs/H1784-Fable_csl-apidev_web-backend-operator-manual_28.07.26.md)):
+  cheat-sheet, anatomy, request data-flow, endpoint catalogue (indexing the canonical
+  `doc/*` specs), local run + csl-sqlite data staging (incl. the `csl-apidev`-basename
+  trap), Salt/C-SALT phase status, the csl-websanlexicon fork-sync runbook, scan/PDF
+  path contract + 404 table, security posture (CI gates, JSONP whitelist idiom,
+  CSP-Report-Only), Cologne deploy/outage reality, symptom→cause→cure, glossary,
+  maintainer appendix. Plus `docs/WEB_BACKEND_MANUAL.meta.md` and a README docs-index
+  link.
+
 ### Fixed
 
 - **`app.js` `rowSlp1()` now case-folds IAST before transcoding** ([SanskritLexicography#779](https://github.com/gasyoun/SanskritLexicography/issues/779), [H1695](https://github.com/gasyoun/Uprava/blob/main/handoffs/H1695-Opus_csl-apidev_rowslp1-iast-case-fold_26.07.26.md)): `sanskrit-util`'s `to_slp1` maps lowercase IAST and passes everything else through verbatim — into an output alphabet where case is **phonemic** (`R`=ṇ, `B`=bh, `E`=ai). A capitalised headword therefore transcoded to a different, plausible-looking word with no error path: `Rāma` → `RAma`, which **rendered in the results list as `ṇāma`** and looked up the wrong `dalglob|` key. `IAST_RE` deliberately auto-detects capitalised input, so the path was reachable by design, not by accident. `foldIast()` (NFC + lowercase, the same defence [csl-atlas](https://github.com/sanskrit-lexicon/csl-atlas) already applies in `lookup-normalize.js`) now runs first; SLP1 input is explicitly never folded, since there the case carries meaning. Found by the org-wide `to_slp1` caller audit that followed the same bug corrupting 60% of the keys in SanskritLexicography's ACC×NCC works crosswalk.

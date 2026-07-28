@@ -1,6 +1,6 @@
 # csl-apidev
 
-_Created: 06-08-2018 · Last updated: 11-07-2026_
+_Created: 06-08-2018 · Last updated: 28-07-2026_
 
 CDSL **web-backend** repository in the Sanskrit Lexicon project — the plain-PHP
 API endpoints (`getword`, `dispitem`, `salt_entries`, …) plus the Python/JS
@@ -19,6 +19,11 @@ Keep the two copies in sync (drift check: `/cologne-fork-sync-check`).
 
 <!-- BEGIN MANUAL: documentation — hand-maintained; the Cologne Tooling Runbook preserves everything between these markers verbatim across README regeneration. Do not remove the markers. -->
 ## Documentation
+
+- **Operator manual** — [`docs/WEB_BACKEND_MANUAL.md`](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/docs/WEB_BACKEND_MANUAL.md): the
+  one-stop map + runbook to run, extend, and fork-sync this backend (endpoint catalogue,
+  local data staging, Salt surface status, scan serving, security posture, deploy reality,
+  symptom→cause→cure).
 
 API endpoint docs live in [`doc/`](doc/readme.md). Of note:
 
