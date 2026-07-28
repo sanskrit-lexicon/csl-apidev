@@ -6,6 +6,19 @@ Dates are UTC+3 (project local).
 
 ## [Unreleased]
 
+### Added
+
+- **`lookup/` Wave 3** (H140, `doc/roadmap_lookup.md` §Wave 3): scan click-through
+  buttons surfacing the `servepdf.php` link already embedded in each entry's HTML,
+  a copy-citation button per record (headword, dict + year, page/col, Cologne
+  record ID, permalink — the pain point from
+  [#29](https://github.com/sanskrit-lexicon/csl-apidev/issues/29)), an
+  `accent=yes/no` display toggle that reloads only the active dictionary/homonym
+  without a full re-search, a print stylesheet, and `prefers-color-scheme: dark`
+  support. Plus a one-line "try the new lookup page" banner on `sample/dalglob1.php`
+  (opt-in, not a redirect — no removal without Jim's sign-off, per D1/Wave 3
+  non-goals).
+
 ## [0.3.0] - 2026-07-28
 
 ### Added
