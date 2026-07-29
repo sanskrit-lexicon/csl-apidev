@@ -77,157 +77,77 @@ $(document).ready(function() {
   }
  }
  dictlistDisplay = function () {
-  console.clear();  // So console.log messages don't pile up.
+  console.clear();
   var key = $('#key').val();
   var input = $('#input').val();
   var output = $('#output').val();
-  var accent = 'no'; //$('#accent').val();
-  // TODO: check for valid inputs before ajax call
-  
-  var urlbase = urlbaseF() + "/csl-apidev/dalglob.php";
-  var url =  urlbase +  
-   "?key=" +encodeURIComponent(key) + 
-   "&output=" +encodeURIComponent(output) +
-   "&accent=" + encodeURIComponent(accent) +
-   "&input=" + encodeURIComponent(input) + 
-   "&dbglob=keydoc_glob1" +
-   "&dev=no";
-  console.log('dictlistDisplay url=',url);
+
+  var urlbase = urlbaseF() + "/csl-apidev/api1/salt_multidict.php";
+  var url = urlbase +
+   "?key=" + encodeURIComponent(key) +
+   "&input=" + encodeURIComponent(input) +
+   "&output=" + encodeURIComponent(output) +
+   "&field=csl";
+
+  console.log('dictlistDisplay url=', url);
   $('#dictlist').html("");
   $('#disp').html("");
+
   $.ajax({
-   url:url,
-   datatype:"json",   
-   success: function(data0) {
-    console.log('returned data',data0);
-    console.log('data is of type',typeof data0);
-    data = JSON.parse(data0);
-    console.log('parsed data',data);
-    let html;
-    if(data.status == 200) {
-     let dictdata = data.dicts;
-     
-     let f = function(dictrec) {
-       let dict = dictrec.dict;
-       let dockeys = dictrec.dockeys;
-       let dockeystr = dockeys.join(" ");
-       let parm = dict + " " + dockeystr;
-       let button = "<button onclick='getdataForkeyDict(\"" + cslEscJsDq(parm) + "\")'>" + cslEscHtml(dict) + "</button>";
-       let ans = button + "  " + dockeystr + "<br/>";
-       return ans;
-     };
-     a = dictdata.map(f);
-     html = a.join("  ");
-    }else {
-     html = cslEscHtml(key) + " not found in any dictionary: status=" + cslEscHtml(data.status);
+   url: url,
+   datatype: "json",
+    success: function(data) {
+     console.log('returned data', data);
+     if (!data || data.status != 200) {
+      $('#dictlist').html(cslEscHtml(key) + " not found in any dictionary");
+      return;
+     }
+     var dicts = data.dicts;
+     var dictmeta = data.dictmeta || {};
+     var dictCodes = Object.keys(dicts);
+     if (dictCodes.length === 0) {
+      $('#dictlist').html(cslEscHtml(key) + " not found in any dictionary");
+      return;
+     }
+
+     var tabHtml = '<div class="sticky"><div class="tab">';
+     var contentHtml = '';
+     var firstId = '';
+
+     for (var idx = 0; idx < dictCodes.length; idx++) {
+      var dict = dictCodes[idx];
+      var entries = dicts[dict];
+      var dictName = (dictmeta[dict] && dictmeta[dict].name) ? dictmeta[dict].name : dict;
+      var id = 'dict_' + dict;
+      var btnId = 'button_' + id;
+      if (idx === 0) firstId = id;
+
+      tabHtml += '<button id="' + btnId + '" class="tablinks" onclick="openHw(event,\'' + id + '\')">' + cslEscHtml(dictName) + '</button>';
+
+      var html = '<div id="' + id + '" class="tabcontent">';
+      html += '<h3>' + cslEscHtml(dictName) + '</h3>';
+      for (var ei = 0; ei < entries.length; ei++) {
+       var entry = entries[ei];
+       if (entry.csl && entry.csl.html) {
+        html += entry.csl.html;
+       }
+      }
+      html += '</div>';
+      contentHtml += html;
+     }
+     tabHtml += '</div></div>';
+
+     $('#disp').html(tabHtml + contentHtml);
+     if (firstId) {
+      document.getElementById('button_' + firstId).click();
+     }
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
+     $('#dictlist').html('Request failed: ' + cslEscHtml(textStatus));
+     console.log('dictlistDisplay error:', textStatus, errorThrown);
     }
-    $('#dictlist').html(html);
-  }
- });
-}; // function dictlistDisplay
-
-getdataForkeyDict_url = function(key,dict) {
-  var input = $('#input').val();
-  input = 'slp1';
-  var output = $('#output').val();
-  var accent = 'no'; //$('#accent').val();
-  var urlbase = urlbaseF() + "/csl-apidev/getword.php";
-  var url =  urlbase +  
-   "?key=" +encodeURIComponent(key) + 
-   "&output=" +encodeURIComponent(output) +
-   "&dict=" + encodeURIComponent(dict) +
-   "&accent=" + encodeURIComponent(accent) +
-   "&input=" + encodeURIComponent(input) + 
-   "&dev=yes";
-  return url;
-}
-getdataForkeyDict = function(parmstr) {
- let parmarr = parmstr.split(" ");
- let dict = parmarr[0];
- let dockeys = parmarr.slice(1);
- console.log('getdataForkeyDict: dict=',dict,'dockeys=',dockeys);
- var totalRequestCount = dockeys.length;  // 1 url for each dockey
- var resultarr= []; 
- for(var i=0;i<dockeys.length;i++) {
-  let key = dockeys[i];
-  let result = {
-   key:key,
-   url:getdataForkeyDict_url(key,dict),
-   status: 404,  // initially unavailable
-   result: `<p>Result not available for ${key}</p>`
-  }; // result
-  resultarr[i] = result;
- }
-
- var showResults_tabs = function(resultarr,dict) {
-  let html = "";
-  html = html + `<div class="sticky">`;
-  html = html + `<div class="tab">`;
-  console.log('showResults_tabs. resultarr length=',resultarr.length)
-  for(var i=0;i<resultarr.length;i++) {
-   let resultval = resultarr[i];
-   let key = resultval.key;
-   let id = 'disp_' + String(key).replace(/[^A-Za-z0-9_.-]/g, '_');
-   let btnid = 'button_' + id;
-   html = html + `<button id="${btnid}" class="tablinks" onclick="openHw(event,'${id}')">${cslEscHtml(key)}</button>`;
-  }
-  html = html + "</div>";  // close class tab
-  html = html + "</div>";  // close class sticky
-  console.log('showResults_tabs returns',html);
-  return html;
- };
- var showResults = function(resultarr) {
-  let html = "";
-  html = html + showResults_tabs(resultarr,dict);
-  html = html + `<h3>${cslEscHtml(dict)}</h3>`;
-  let id0 = "";
-  for(var i=0;i<resultarr.length;i++) {
-   let resultval = resultarr[i];
-   let input = resultval.input;
-   let serverval = resultval.result;
-   let key = resultval.key;
-   let id = 'disp_' + String(key).replace(/[^A-Za-z0-9_.-]/g, '_');
-   let html0 = `<div id="${id}" class="tabcontent">`;
-   if (i == 0) {id0 = id;}
-   html0 = html0 + serverval + "</div>";
-   html = html + html0;
-  }
-  $('#disp').html(html);
-  let btnid0 = 'button_' + id0;
-  document.getElementById(btnid0).click(); // To show first result
- };
- 
- makeRequest = function(i){  
-  var input = $('#key' + i).val();
-  var resultarrElt = resultarr[i-1]; // 1<=i<=totalRequestCount
-  var reqUrl = resultarrElt.url;
-  console.log('reqUrl=',reqUrl);
-  fetch(reqUrl)  
-   .then(response => response.text())  // convert to text
-   .then(text => {
-    console.log('makeRequest for',i,reqUrl);
-    resultarrElt.status = 200;
-    // correct a reference to basic.css
-    let text1 = text.replace("css/basic.css","../css/basic.css");
-    resultarrElt.result = text1;
-    // console.log('   result text=',text1);
-    executedRequest++;  
-    if (totalRequestCount == executedRequest) {
-     console.log("All Requests are executed");  
-     showResults(resultarr);
-    }
-   }); // .then text => ...
- }; // makeRequest
-
- var totalRequestCount = dockeys.length;  // 1 url for each dockey
- var executedRequest = 0;
- // Start async call inside loops  
- for(var i=totalRequestCount;i>=1;i--) {
-  makeRequest(i);  
- } // for i
-
-
-}; // getdataForkeyDict
+  });
+ }; // function dictlistDisplay
 
 
 // Allow parameter input for key, input, and output
