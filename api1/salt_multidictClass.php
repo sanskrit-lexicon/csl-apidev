@@ -96,8 +96,12 @@ class SaltMultidictClass {
           $csl_allow_list[$f] = true;
         }
       }
+      // If csl sub-fields were requested, implicitly include 'csl' in top-level
+      // so its value survives top-level filtering and gets scoped below.
+      if (!empty($csl_allow_list)) {
+        $top_allow['csl'] = true;
+      }
       $csl_allow = $csl_allow_list;
-      if (empty($top_allow)) { $top_allow = null; }
     }
 
     // Build dictmeta map for ordering and human-readable names
