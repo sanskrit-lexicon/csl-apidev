@@ -33,6 +33,7 @@ and is currently one of:
 |[salt_entries](salt_entries.md) | C-SALT-compatible entry search, `/dicts/{id}/restful/entries`|
 |[salt_ids](salt_ids.md) | C-SALT-compatible batch fetch by id, `/dicts/{id}/restful/ids`|
 |[salt_graphql](salt_graphql.md) | C-SALT-compatible GraphQL (`entries`, `ids`), `/dicts/{id}/graphql`|
+|[salt_multidict](salt_multidict.md) | CSL extension: resolve a headword across **all** dictionaries, `salt_multidict.php?key=…`|
 
 [restfulparm](restfulparm.md) shows all the restful parameters used by any of the endpoints.
 

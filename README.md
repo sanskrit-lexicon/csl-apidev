@@ -32,7 +32,7 @@ API endpoint docs live in [`doc/`](doc/readme.md). Of note:
   uses the same endpoint shapes against `sanskrit-lexicon.uni-koeln.de`, with Phase 1
   caveats documented in the Salt specs. Endpoint specs:
   [`salt_entries`](doc/salt_entries.md), [`salt_ids`](doc/salt_ids.md),
-  [`salt_graphql`](doc/salt_graphql.md); Phase 1 controller skeleton in
+  [`salt_graphql`](doc/salt_graphql.md), [`salt_multidict`](doc/salt_multidict.md); Phase 1 controller skeleton in
   [csl-apidev#46](https://github.com/sanskrit-lexicon/csl-apidev/pull/46). The normative
   contract, schemas, and roadmap live in
   [csl-standards#2](https://github.com/sanskrit-lexicon/csl-standards/pull/2).
