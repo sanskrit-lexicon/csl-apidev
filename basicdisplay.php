@@ -139,7 +139,7 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
    return;
   }
   dbgprint($this->dbg,"chk 2\n");
-  xml_parser_free($p);
+  if (PHP_VERSION_ID < 80000) { xml_parser_free($p); }
   dbgprint($this->dbg,"chk 3\n");
   $this->table .= "<tr>";
   $this->table .= "<td>";
