@@ -24,7 +24,7 @@ https://www.sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/api1/salt_multidict
 | input | slp1 | One of `slp1`, `deva`, `hk`, `roman`, `itrans`, `velthuis`. Default `slp1`. |
 | output | deva | Output transliteration for `csl.html` / `csl.text`. One of `deva`, `slp1`, `hk`, `roman`. Default `deva`. |
 | size | 3 | Max entries **per dictionary**; 0 = unlimited (default). |
-| field | id,csl | Comma-separated response fields per entry (default: all fields). |
+| field | id,html,lnum | Comma-separated response fields; bare csl sub-field names (`html`, `lnum`, `text`, …) are auto-scoped to the `csl` object. Use `csl` for the full csl object. Default: all fields. |
 
 `input`, `output`, `size`, `field` follow the same convention as [salt_entries](salt_entries.md) §1.2.
 
@@ -54,13 +54,19 @@ https://www.sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/api1/salt_multidict
     https://sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/api1/salt_multidict.php?key=agni&input=roman&size=2
     ```
 
-4.  Field-limited (id + csl only):
+4.  Field-limited (top-level only, no csl):
 
     ```
-    https://sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/api1/salt_multidict.php?key=agni&field=id,csl
+    https://sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/api1/salt_multidict.php?key=agni&field=headword_slp1
     ```
 
-5.  JSONP:
+5.  CSL sub-fields only (bare names, no prefix):
+
+    ```
+    https://sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/api1/salt_multidict.php?key=agni&field=id,html,lnum
+    ```
+
+6.  JSONP:
 
     ```
     https://sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/api1/salt_multidict.php?key=agni&callback=myFunc
@@ -72,7 +78,7 @@ https://www.sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/api1/salt_multidict
 2.  input — `slp1`, `deva`, `hk`, `roman`, `itrans`, `velthuis`.
 3.  output — `slp1`, `deva`, `hk`, `roman`.
 4.  size — positive integer (0 = unlimited).
-5.  field — comma-separated list from: `id`, `headword_slp1`, `sense`, `re_headwords_slp1`, `created`, `xml`, `csl`.
+5.  field — comma-separated list from: top-level names (`id`, `headword_slp1`, `sense`, `re_headwords_slp1`, `created`, `xml`), `csl` (full csl object), and bare csl sub-field names (`lnum`, `page`, `column`, `scanUrl`, `html`, `text`, `xmlCsl`, `references`, `headwordDeva`, `headwordIast`, `accentedKey`). No dot-notation needed.
 
 ### 1.6. Defaults
 
@@ -163,7 +169,8 @@ Status 400 — missing or empty `key` parameter:
 }
 ```
 
-With `field=id,csl` the per-entry response is limited to those fields:
+With `field=id,html,lnum` the per-entry response is limited to `id` and the
+requested `csl` sub-fields:
 
 ```json
 {
@@ -174,7 +181,7 @@ With `field=id,csl` the per-entry response is limited to those fields:
   "dictmeta": { … },
   "dicts": {
     "mw": [
-      { "id": "lemma-agni-L890", "csl": { "html": "…", "text": "…", … } }
+      { "id": "lemma-agni-L890", "csl": { "html": "…", "lnum": "890" } }
     ]
   }
 }

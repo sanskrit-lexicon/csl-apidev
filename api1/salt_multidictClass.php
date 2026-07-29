@@ -78,10 +78,27 @@ class SaltMultidictClass {
     $size = isset($_REQUEST['size']) ? max(0, (int)$_REQUEST['size']) : 0;
     $field = isset($_REQUEST['field']) ? $_REQUEST['field'] : '';
 
-    // Field filtering
-    $allowed_fields = ($field !== '')
-      ? array_flip(array_map('trim', explode(',', $field)))
-      : null;
+    // Parse field parameter: bare csl sub-field names (html, lnum, text) are
+    // automatically scoped to the csl object since no top-level field shares them.
+    $csl_sub_names = array_flip(array('lnum','page','column','scanUrl','html','text','xmlCsl','references','headwordDeva','headwordIast','accentedKey'));
+    $top_names     = array_flip(array('id','headword_slp1','sense','re_headwords_slp1','created','xml'));
+    $top_allow = null;   // null = keep all top-level fields
+    $csl_allow = null;   // null = (no field param) no filtering; [..] = keep those sub-fields; [] = exclude
+    if ($field !== '') {
+      $top_allow = array();
+      $csl_allow_list = array();
+      foreach (array_map('trim', explode(',', $field)) as $f) {
+        if ($f === 'csl') {
+          $csl_allow_list = $csl_sub_names;   // plain 'csl' = all sub-fields
+        } elseif (isset($top_names[$f])) {
+          $top_allow[$f] = true;
+        } elseif (isset($csl_sub_names[$f])) {
+          $csl_allow_list[$f] = true;
+        }
+      }
+      $csl_allow = $csl_allow_list;
+      if (empty($top_allow)) { $top_allow = null; }
+    }
 
     // Build dictmeta map for ordering and human-readable names
     global $APP_DICTMETA;
@@ -99,10 +116,20 @@ class SaltMultidictClass {
         $entries = array_slice($entries, 0, $size);
       }
 
-      // Apply field filtering
-      if ($allowed_fields !== null && !empty($entries)) {
+      // Apply field filtering (top-level + csl sub-fields).
+      // $top_allow=null → keep all top-level fields.
+      // $csl_allow=null → keep full csl; empty array → exclude csl.
+      if ($top_allow !== null || $csl_allow !== null) {
         foreach ($entries as $i => $e) {
-          $entries[$i] = array_intersect_key($e, $allowed_fields);
+          if ($top_allow !== null) { $e = array_intersect_key($e, $top_allow); }
+          if ($csl_allow !== null && isset($e['csl'])) {
+            if (empty($csl_allow)) {
+              unset($e['csl']);
+            } else {
+              $e['csl'] = array_intersect_key($e['csl'], $csl_allow);
+            }
+          }
+          $entries[$i] = $e;
         }
       }
 
