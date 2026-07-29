@@ -70,9 +70,10 @@ function salt_query_to_slp1($parm, $query) {
 // ===== search: query -> array of Salt entries =====================================
 function salt_search_entries($parm, $field, $query, $query_type, $size) {
   $dict = $parm->dict;
+  $output = isset($parm->filter) ? $parm->filter : 'deva';
   $entries = array();
   foreach (salt_search_keys($parm, $field, $query, $query_type, $size) as $key) {
-    foreach (salt_entries_for_key($key, $dict) as $e) {
+    foreach (salt_entries_for_key($key, $dict, $output) as $e) {
       $entries[] = $e;
       if (count($entries) >= $size) { return $entries; }
     }
@@ -130,7 +131,8 @@ function salt_entries_for_id($parm, $id) {
   $disambiguated = false;
   if (preg_match('/^(.*)-L[0-9.]+$/', $rest, $m))      { $key = $m[1]; $disambiguated = true; }
   elseif (preg_match('/^(.*)-[0-9]+$/', $rest, $m))    { $key = $m[1]; $disambiguated = true; }
-  $all = salt_entries_for_key($key, $parm->dict);
+  $output = isset($parm->filter) ? $parm->filter : 'deva';
+  $all = salt_entries_for_key($key, $parm->dict, $output);
   if (!$disambiguated) { return $all; }                 // bare lemma-{key}: whole headword
   $out = array();
   foreach ($all as $e) { if ($e['id'] === $id) { $out[] = $e; } }   // pick the exact record
@@ -138,7 +140,7 @@ function salt_entries_for_id($parm, $id) {
 }
 
 // ===== build every Salt entry for one SLP1 key, via the tested getword pipeline ====
-function salt_entries_for_key($key, $dict) {
+function salt_entries_for_key($key, $dict, $output = 'deva') {
   // Getword_data is driven by Parm, which reads $_REQUEST (the codebase convention).
   // VERIFY: a cleaner refactor would give Getword_data a direct (dict, key) constructor.
   $save = $_REQUEST;
@@ -154,13 +156,13 @@ function salt_entries_for_key($key, $dict) {
   $entries = array();
   for ($i = 0; $i < $n; $i++) {
     $xmlmatch = isset($xmlmatches[$i]) ? $xmlmatches[$i] : array($key, $matches[$i][1], '');
-    $entries[] = salt_entry_from_record($dict, $matches[$i], $xmlmatch, $n);
+    $entries[] = salt_entry_from_record($dict, $matches[$i], $xmlmatch, $n, $output);
   }
   return $entries;
 }
 
 // One getword record (matches row + xmlmatches row) -> Salt entry object.
-function salt_entry_from_record($dict, $match, $xmlmatch, $homCount) {
+function salt_entry_from_record($dict, $match, $xmlmatch, $homCount, $output = 'deva') {
   list($k, $lnum, $htmlinfo) = $match;
   $xml = isset($xmlmatch[2]) ? $xmlmatch[2] : '';
 
@@ -168,6 +170,12 @@ function salt_entry_from_record($dict, $match, $xmlmatch, $homCount) {
   $info = ''; $body = $htmlinfo;
   if (preg_match('|<info>(.*?)</info><body>(.*)</body>|s', $htmlinfo, $m)) {
     $info = $m[1]; $body = $m[2];
+  }
+
+  // Apply output transliteration to the HTML body (converts <SA>slp1</SA> → <SA>deva</SA>).
+  $ofilter = transcoder_standardize_filter($output);
+  if ($ofilter !== 'slp1') {
+    $body = transcoder_processElements($body, 'slp1', $ofilter, 'SA');
   }
   $page = null; $col = null; $key2 = null; $hom = null;
   if (strtolower($dict) === 'mw') {
@@ -207,8 +215,8 @@ function salt_entry_from_record($dict, $match, $xmlmatch, $homCount) {
       'page'         => $page,
       'column'       => $col,
       'scanUrl'      => ($page !== null) ? salt_scan_url($dict, $page) : null,
-      'html'         => $body,                             // VERIFY: SLP1-tagged; apply transcoder_processElements for final display
-      'text'         => trim(strip_tags($body)),
+      'html'         => $body,                             // transcoded to $output (via <SA> replacement above)
+      'text'         => trim(strip_tags($body)),     // body already transcoded to $output
       'xmlCsl'       => $xml,                              // CSL display-XML, available now
       'references'   => salt_extract_refs($xml),           // best-effort (see below)
       'headwordDeva' => salt_translit($k, 'deva'),

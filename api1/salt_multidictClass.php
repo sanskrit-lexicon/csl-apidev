@@ -70,11 +70,12 @@ class SaltMultidictClass {
     $dictlist = $dal->ans['dicts'];
     $dal->close();
 
-    // Fetch Salt-format entries for each dictionary
+    // Fetch Salt-format entries for each dictionary, with output transliteration
+    $output = isset($_REQUEST['output']) ? $_REQUEST['output'] : 'deva';
     $dicts = array();
     foreach ($dictlist as $rec) {
       $dict = $rec['dict'];
-      $entries = salt_entries_for_key($slp1, $dict);
+      $entries = salt_entries_for_key($slp1, $dict, $output);
       if (!empty($entries)) {
         $dicts[$dict] = $entries;
       }
@@ -94,6 +95,7 @@ class SaltMultidictClass {
       'status' => 200,
       'key' => $slp1,
       'input' => $input,
+      'output' => $output,
       'dicts' => $dicts,
     ), $json_flags);
   }
