@@ -24,7 +24,8 @@ init_dalglob1_parms();
 <meta charset="UTF-8">
 <title>dalgob1-dev</title>
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.css">
-<script type="text/javascript" src="//code.jquery.com/jquery-3.7.1.min.js">
+<script type="text/javascript" src="//code.jquery.com/jquery-3.7.1.min.js"></script>
+<script>
 // H1523: escape helpers for sample multi-dict demo HTML construction
 function cslEscHtml(s) {
   return String(s == null ? '' : s)
@@ -268,9 +269,6 @@ getdataForkeyDict = function(parmstr) {
 </head>
 
 <body>
- <div id="lk-newpage-banner" style="background:#fff8d6;border-bottom:1px solid #e0c95c;padding:8px 12px;font-family:Verdana,Arial,Helvetica,sans-serif;font-size:0.9rem;">
-  A newer lookup page is available: <a href="../lookup/">Sanskrit Lexicon Lookup</a>.
- </div>
  <div id="logo">
      <a href="//www.sanskrit-lexicon.uni-koeln.de/">
       <img id="unilogo" src="//www.sanskrit-lexicon.uni-koeln.de/images/cologne_univ_seal.gif"
