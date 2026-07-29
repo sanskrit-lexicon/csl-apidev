@@ -22,9 +22,11 @@ https://www.sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/api1/salt_multidict
 |---|---|---|
 | key | agni | Headword in the `input` transliteration scheme. Required. |
 | input | slp1 | One of `slp1`, `deva`, `hk`, `roman`, `itrans`, `velthuis`. Default `slp1`. |
-| output | deva | For reference; the entry shape always includes `headwordDeva` / `headwordIast`. |
+| output | deva | Output transliteration for `csl.html` / `csl.text`. One of `deva`, `slp1`, `hk`, `roman`. Default `deva`. |
+| size | 3 | Max entries **per dictionary**; 0 = unlimited (default). |
+| field | id,csl | Comma-separated response fields per entry (default: all fields). |
 
-`input` and `output` follow the same convention as [salt_entries](salt_entries.md) §1.2.
+`input`, `output`, `size`, `field` follow the same convention as [salt_entries](salt_entries.md) §1.2.
 
 ### 1.3. Suggested Clean URL
 
@@ -34,7 +36,7 @@ https://www.sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/api1/salt_multidict
 
 ### 1.4. Examples
 
-1.  SLP1 input:
+1.  SLP1 input (default output=deva):
 
     ```
     https://sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/api1/salt_multidict.php?key=agni
@@ -46,13 +48,19 @@ https://www.sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/api1/salt_multidict
     https://sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/api1/salt_multidict.php?key=अग्नि&input=deva
     ```
 
-3.  IAST input:
+3.  IAST input with size cap:
 
     ```
-    https://sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/api1/salt_multidict.php?key=agni&input=roman
+    https://sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/api1/salt_multidict.php?key=agni&input=roman&size=2
     ```
 
-4.  JSONP:
+4.  Field-limited (id + csl only):
+
+    ```
+    https://sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/api1/salt_multidict.php?key=agni&field=id,csl
+    ```
+
+5.  JSONP:
 
     ```
     https://sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/api1/salt_multidict.php?key=agni&callback=myFunc
@@ -63,6 +71,8 @@ https://www.sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/api1/salt_multidict
 1.  key — any headword in the supported transliteration schemes.
 2.  input — `slp1`, `deva`, `hk`, `roman`, `itrans`, `velthuis`.
 3.  output — `slp1`, `deva`, `hk`, `roman`.
+4.  size — positive integer (0 = unlimited).
+5.  field — comma-separated list from: `id`, `headword_slp1`, `sense`, `re_headwords_slp1`, `created`, `xml`, `csl`.
 
 ### 1.6. Defaults
 
@@ -71,6 +81,8 @@ https://www.sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/api1/salt_multidict
 | key | *(required — no default)* |
 | input | `slp1` |
 | output | `deva` |
+| size | `0` (unlimited) |
+| field | *(all fields)* |
 
 ### 1.7. Rewrite rules
 
@@ -80,13 +92,27 @@ RewriteRule ^multidict/(.*)$  /scans/awork/apidev/api1/salt_multidict.php?key=$1
 
 ### 1.8. Expected output
 
-Status 200 — one or more dictionaries contain the headword:
+Status 200 — one or more dictionaries contain the headword. Dictionaries are
+ordered by the canonical `$APP_DICTMETA` order (the same ordering as
+`app/entry.php`). A `dictmeta` map provides human-readable names and years so
+clients do not need their own mapping table.
 
 ```json
 {
   "status": 200,
   "key": "agni",
   "input": "slp1",
+  "output": "deva",
+  "dictmeta": {
+    "mw": {
+      "name": "Monier-Williams Sanskrit-English Dictionary",
+      "year": "2020"
+    },
+    "ap90": {
+      "name": "Apte Practical Sanskrit-English Dictionary",
+      "year": "2020"
+    }
+  },
   "dicts": {
     "mw": [
       {
@@ -101,10 +127,10 @@ Status 200 — one or more dictionaries contain the headword:
           "page": "5",
           "column": "1",
           "scanUrl": "/MW/page/5",
-          "html": "<span class='sdata_siddhanta'><SA>agni</SA></span>   m. (√ag, Uṇ.) fire, …",
-          "text": "agni   m. (√ag, Uṇ.) fire, …",
+          "html": "<span class='sdata_siddhanta'><SA>अग्नि</SA></span>   m. (√अग्, उण.) fire, …",
+          "text": "अग्नि   m. (√अग्, उण.) fire, …",
           "xmlCsl": "<H1><h><key1>agni</key1>…</H1>",
-          "references": ["Uṇ."],
+          "references": ["उण."],
           "headwordDeva": "अग्नि",
           "headwordIast": "agni",
           "accentedKey": "agni/"
@@ -134,6 +160,23 @@ Status 400 — missing or empty `key` parameter:
 ```json
 {
   "error": "Missing parameter: 'key'"
+}
+```
+
+With `field=id,csl` the per-entry response is limited to those fields:
+
+```json
+{
+  "status": 200,
+  "key": "agni",
+  "input": "slp1",
+  "output": "deva",
+  "dictmeta": { … },
+  "dicts": {
+    "mw": [
+      { "id": "lemma-agni-L890", "csl": { "html": "…", "text": "…", … } }
+    ]
+  }
 }
 ```
 
@@ -177,12 +220,4 @@ echo $t->json;
 '
 ```
 
-## 3. Questions
 
-1.  Pagination — the current response returns every record for the headword
-    across all matching dictionaries. Should a `size` parameter cap the total?
-2.  Order — dicts appear in `keydoc_glob1` order (alphabetical). Should the
-    response follow the canonical `dictmeta` order (the same ordering as
-    `app/entry.php`)?
-3.  Field filtering — should a `field` parameter (like `salt_entries`) allow
-    selecting only `headword_slp1` + `csl.text` for lightweight responses?
