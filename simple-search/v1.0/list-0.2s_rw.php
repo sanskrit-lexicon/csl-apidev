@@ -78,13 +78,13 @@ for($i=0;$i<count($keys);$i++) {
   echo '<BASE href="http://localhost/cologne/csl-apidev/simple-search/v1.0/list-0.2s_xampp.php">' . "\n";
  }
 ?>
-<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.css">
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/base/jquery-ui.min.css">
 <!-- links to jquery, using CDNs -->
 <script type="text/javascript" src="//code.jquery.com/jquery-3.7.1.min.js"></script>
 
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/3.0.5/js.cookie.min.js"></script>
 <!-- jquery-ui is used -->
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
 <script type="text/javascript" src="../../sample/dictnames.js"></script>
 <script type="text/javascript" src="../../sample/cookieUpdate.js"></script>
 
@@ -152,12 +152,11 @@ a.hwlinks {
 a.hwlinks:active,a.hwlinks:visisted {
 color:red;
 }
-/*
-#hwlinksmenu {
- height: 25px;line-height:25px;
- margin-top: 10px; margin-bottom:10px;
+
+.ui-autocomplete {
+ z-index: 10000;
 }
-*/
+
 </style>
 <script> 
  // Jquery
@@ -449,27 +448,25 @@ $("#key").autocomplete({
    url:"../../getsuggest.php",
    datatype:"jsonp",
    data: {
-    //q: request.term
     term: request.term,
     dict: $('#dict').val(),
     input: $('#input').val()
    },
    success: function(data) {
-    response(data);  // 'response' is passed in as source argument
+    response(data);
    }
-   }); // ajax
+   });
   },
-  delay : 500, // 500 ms delay
-  minLength : 2, // user must type at least 2 characters
+  delay: 500,
+  minLength: 2,
   select: function(event,ui) {
    if (ui.item) {
    $("#key").val(ui.item.value);
     listDisplay();
    }
   },
-  autoFocus: true,
+  autoFocus: true
  }); //key-autocomplete
-// new for php version
 cookieUpdate(false);  // for initializing cookie
 changeActions();  // initialize now that #dict is set.
 
