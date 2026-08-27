@@ -1,5 +1,14 @@
 # simple-search — DH-grade roadmap (beyond v1.2)
 
+_Created: 11-06-2026 · Last updated: 27-08-2026_
+
+> Truth-pass 27-08-2026 (Opus 5 `claude-opus-5`, [H3002](https://github.com/gasyoun/Uprava/blob/main/handoffs/archive/H3002-Opus_multi_stale-roadmap-s4-cologne-ask-replan_17.08.26.md), stale-roadmap slice 4):
+> header added, no content changed. This is an implementer specification written for the
+> Cologne maintainer, not an agent backlog; the repository's own open work sits in
+> [`.ai_state.md`](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/.ai_state.md)
+> and is `@WAITING` on the Cologne server, per
+> [Uprava/SERVER_OUTAGES.md](https://github.com/gasyoun/Uprava/blob/main/SERVER_OUTAGES.md).
+
 For Jim, to implement from directly. This is the layer **above** the engine
 fixes in [`roadmap_v1.2.md`](roadmap_v1.2.md) (Fixes A–I). v1.2 makes fuzzy
 lookup *correct and ranked*; this file makes the search a **FAIR,
@@ -269,3 +278,5 @@ So the order below is about dependencies, not importance.
    csl-standards = model + TEI/OntoLex + loss; simple-search = retrieve + rank +
    address + corpus-ground. Still open: any *shared* component in between — e.g.
    who owns the DCS↔CDSL crosswalk (currently `simple-search/dcs_xref/`)?
+
+_Dr. Mārcis Gasūns_
