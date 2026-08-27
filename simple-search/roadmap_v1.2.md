@@ -1,5 +1,14 @@
 # simple-search v1.2 — implementation roadmap
 
+_Created: 11-06-2026 · Last updated: 27-08-2026_
+
+> Truth-pass 27-08-2026 (Opus 5 `claude-opus-5`, [H3002](https://github.com/gasyoun/Uprava/blob/main/handoffs/archive/H3002-Opus_multi_stale-roadmap-s4-cologne-ask-replan_17.08.26.md), stale-roadmap slice 4):
+> header added, no content changed. An implementer specification for the Cologne maintainer.
+> Q5 was closed here on 04-07-2026 by the R8 input-scheme ruling (Velthuis added end-to-end);
+> everything else remains `@WAITING` on live re-verification against the Cologne server, which
+> is down — see [Uprava/SERVER_OUTAGES.md](https://github.com/gasyoun/Uprava/blob/main/SERVER_OUTAGES.md)
+> before re-probing it.
+
 This note is written for Jim (funderburkjim) to implement from directly. It
 is the design feedback solicited in
 [csl-apidev#26](https://github.com/sanskrit-lexicon/csl-apidev/issues/26)
@@ -717,3 +726,5 @@ v1.2:  1–2 results (manas, +mAnasa)   — unchanged unless A2 softens the guar
 13. **Frequency × edit-score (Fix I + B).** Combine as
     `f(edit_cost) · g(log(1+freq))`, or keep frequency only as a tie-breaker
     after the edit-score (today's behaviour)?
+
+_Dr. Mārcis Gasūns_
