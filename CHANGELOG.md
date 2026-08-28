@@ -6,6 +6,18 @@ Dates are UTC+3 (project local).
 
 ## [Unreleased]
 
+### Fixed
+
+- **`download_hwnorm1c_sqlite.sh` robustness** (H3487 audit G11 / finding A23, H3641):
+  an empty or unparseable release tag (airplane mode, API rate limit) no longer
+  reads as "Already up-to-date" with exit 0 — the script now fails nonzero with a
+  clear message; the artifact is verified before staging (published
+  `hwnorm1c.sqlite.zip.sha256` when present, otherwise an `unzip -t` integrity
+  test, plus a sqlite `PRAGMA integrity_check` on the extracted database); and
+  the live `simple-search/hwnorm1/hwnorm1c.sqlite` + `.csl_sqlite_release_tag`
+  are only touched after a fully verified download, so a mid-run failure leaves
+  them byte-identical.
+
 ## [0.4.0] - 2026-07-29
 
 ### Added
