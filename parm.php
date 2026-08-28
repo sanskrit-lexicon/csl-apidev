@@ -109,7 +109,7 @@ class Parm {
  /* keys with extended ascii (e.g. roman or deva) are, at this point in the
    code, strings with '%' included. Thus, "%" is NOT an invalid character
  */
- $invalid_characters = array("$", "#", "<", ">", "=", "(", ")", '"');
+ $invalid_characters = array("$", "#", "<", ">", "=", "(", ")", '"', "'");
  $ans = str_replace($invalid_characters, "", $x);
  // H1523: bound headword key length
  if (is_string($ans) && mb_strlen($ans) > 200) {

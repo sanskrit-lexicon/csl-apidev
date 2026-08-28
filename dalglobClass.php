@@ -93,23 +93,27 @@ class Dalglob {
    $this->file_db = null;  //ref: //php.net/manual/en/pdo.connections.php
   }
  }
- public function get($sql) {
+ public function get($sql,$params=array()) {
   $ansarr = array();
   if (!$this->file_db) {
    //"file_db is null for $this->sqlitefile.
    return $ansarr;
   }
   dbgprint($this->dbg,"Dalglob.get: sql=$sql\n");
-  $result = $this->file_db->query($sql);
-  if ($result == false) {
+  // H3639 A13: always bind values through a prepared statement; a PDO error
+  // still degrades to the empty array (and the caller's 404 envelope), never
+  // an uncaught exception.
+  try {
+   $stmt = $this->file_db->prepare($sql);
+   $stmt->execute($params);
+  } catch (PDOException $e) {
    return $ansarr;
   }
-  
-  foreach($result as $m) {
+  foreach($stmt as $m) {
    $rec = array($m['key'],$m['data']);
    $ansarr[]=$rec;
   }
-  return $ansarr; 
+  return $ansarr;
 
  }
 
@@ -118,8 +122,10 @@ class Dalglob {
   // 7/14/2020  Normalize the key before searching for it.
   //
   $keynorm = $this->normalize_key($key);
-  $sql = "select * from {$this->tabname} where key='$keynorm'";
-  $ansarr =  $this->get($sql);
+  // H3639 A13: $keynorm is user input; bind it, so a quote-bearing key
+  // reaches SQL as data, never as syntax.
+  $sql = "select * from {$this->tabname} where key=:key";
+  $ansarr =  $this->get($sql,array(':key'=>$keynorm));
   if (count($ansarr) == 0) {
    return $this->errans;
   }

@@ -379,9 +379,18 @@ class BasicAdjust {
   //$tabid = 'code'; // pw, pwg, pwkvn
   $key = $matches[1];
   $key1 = $key . '%';
-  $sql = "select * from $table where $fieldname LIKE '$key1'";
+  $sql = "select * from $table where $fieldname LIKE :pat";
   dbgprint($dbg,"ls_matchabbr: sql=$sql\n");
-  $result = $this->dal_auth->file_db->query($sql);
+  // H3639 A14/W4: $key1 derives from <ls> XML bodies; bind the LIKE value
+  // instead of interpolating it, and turn a failed lookup into "no match"
+  // rather than an uncaught PDOException.
+  try {
+   $stmt = $this->dal_auth->file_db->prepare($sql);
+   $stmt->execute(array(':pat'=>$key1));
+   $result = $stmt;
+  } catch (PDOException $e) {
+   $result = array();
+  }
   $ansarr = array();
   $max = -1;
   $ansmax = null;
