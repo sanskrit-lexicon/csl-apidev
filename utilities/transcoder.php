@@ -37,7 +37,12 @@ function transcoder_fsm($from,$to) {
   return;
  }
  $filein = $transcoder_dir . "/" . $fromto . ".xml";
- if (!file_exists($filein)) {return;}
+ if (!file_exists($filein)) {
+  // H3635 W11: a missing FSM XML is a deploy bug; log it instead of
+  // silently skipping the FSM registration.
+  error_log("transcoder: FSM XML missing: $filein");
+  return;
+ }
  $mtime = filemtime($filein);
  $fsm = transcoder_fsm_cache_get($fromto,$mtime);
  if ($fsm !== false) {
@@ -180,9 +185,18 @@ function transcoder_fsm_cache_set($fromto,$mtime,$fsm) {
  if (function_exists('apcu_store')) {
   apcu_store($key,$entry);
  }
- $cachefile = $transcoder_dir . "/" . $key . ".ser";
- @file_put_contents($cachefile,serialize($entry));
-}
+  $cachefile = $transcoder_dir . "/" . $key . ".ser";
+  if (file_put_contents($cachefile,serialize($entry)) === false) {
+   // H3635 W12: on a read-only transcoder/ dir (hardened docroot) this write
+   // fails on every request; warn once per process instead of failing silently
+   // (the PR #83 cache win silently evaporates without this log line).
+   static $fsm_cache_write_warned = false;
+   if (!$fsm_cache_write_warned) {
+    error_log("transcoder: cannot write FSM cache file $cachefile (read-only dir?); APCu-only caching");
+    $fsm_cache_write_warned = true;
+   }
+  }
+ }
 function unichr($dec) {
   if ($dec < 128) {
     $utf = chr($dec);
@@ -330,9 +344,12 @@ function transcoder_processString($line,$from,$to) {
   $fsm = $transcoder_fsmarr[$fromto];
  }else {
   transcoder_fsm($from,$to);
-  $fsm = $transcoder_fsmarr[$fromto];
+  $fsm = isset($transcoder_fsmarr[$fromto]) ? $transcoder_fsmarr[$fromto] : null;
   if (!$fsm) {
-   return $line;
+   // H3635 W11/A17: never silently return untranscoded input — a Devanagari
+   // page showing raw SLP1 means a broken deploy; fail loud instead.
+   error_log("transcoder: no FSM for $fromto; failing loud");
+   throw new RuntimeException("transcoder: FSM XML missing or unparsable for language pair $fromto");
   }
  }
  $ps = preg_split('| +|',$line);
