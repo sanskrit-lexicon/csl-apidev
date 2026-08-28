@@ -35,11 +35,17 @@ class ListhierClass {
    if (count($matches) == 0) { // error condition
     dbgprint($dbg,"<p>listhier problem. lnum=$lnumin</p>\n");
     dbgprint($dbg,"<p>dict=$dict, ('" . $dal->dict . "')</p>\n");
-    exit(1);
+    // H3636 A10: fail loud with an envelope instead of a blank HTTP 200.
+    throw new RuntimeException("listhier: no record for lnum $lnumin (dict $dict)");
    }
    list($key1,$lnum1,$data1) = $matches[0];
   }else { // use 'key'
    $matches = $this->match_key($key,$dal);
+   // H3636 A9: guard the empty-match destructure (missing/empty sqlite or
+   // unknown key) instead of an undefined-offset fatal.
+   if (count($matches) == 0) {
+    throw new RuntimeException("listhier: no record for key $key (dict $dict)");
+   }
    list($key1,$lnum1,$data1) = $matches[0];
   }
   //dbgprint(true,"listhierClass: key1=$key1, lnum1=$lnum1, data1=\n$data1\n");
@@ -442,7 +448,10 @@ class ListhierClass {
 
   $info = $matchrec[1];
   $html = $matchrec[2];
-  list($pginfo,$hcode,$key2,$hom) = preg_split('/:/',$info);
+  // H3636 A22: pad the colon-split so <4 fields cannot produce undefined
+  // offsets (silently nulled metadata) on missing/empty sqlite records.
+  $info_parts = array_pad(preg_split('/:/',$info),4,'');
+  list($pginfo,$hcode,$key2,$hom) = $info_parts;
   // Mimic part of the MW structure
   $out=array();
   $out[] = "<$hcode>";

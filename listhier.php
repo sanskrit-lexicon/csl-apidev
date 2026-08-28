@@ -11,7 +11,16 @@ if (isset($_GET['callback'])) {
 header("Access-Control-Allow-Origin: *");
 require_once("listhierClass.php");
 function listhierCall() {
-  $temp = new ListhierClass();
+  try {
+   $temp = new ListhierClass();
+  } catch (Throwable $e) {
+   // H3636 A9/A10: no record (or malformed data) now throws; serve a
+   // truthful 404 envelope instead of a blank HTTP 200.
+   http_response_code(404);
+   header('content-type: text/html; charset=utf-8');
+   echo "<p>listhier error: " . htmlspecialchars($e->getMessage(), ENT_QUOTES) . "</p>";
+   return;
+  }
   $table1 = $temp->table1;
   if (isset($_GET['callback'])) {
    $json = json_encode($table1);

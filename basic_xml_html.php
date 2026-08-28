@@ -62,7 +62,8 @@ public function getword_data_html_adapter($key,$lnum,$data,$dict,$getParms)
   for ($i=0;$i<$ntablines;$i++) {
    #dbgprint(true,"tablines[$i]=" .$tablines[$i]."\n");
   }
-  exit(1);
+  // H3636 A10: fail loud with an envelope instead of a blank HTTP 200.
+  throw new RuntimeException("Basic_xml_html: unexpected table line count $ntablines");
  }
 
  $info = $tablines[2];
@@ -84,7 +85,8 @@ public function getword_data_html_adapter($key,$lnum,$data,$dict,$getParms)
  if ($dict == 'mw') {
   if(!preg_match('|>([^<]*?)</a>,(.*?)\]|',$info,$matches)) {
    #dbgprint(true,"html ERROR 2: \n" . $info . "\n");
-   exit(1);
+   // H3636 A10: fail loud with an envelope instead of a blank HTTP 200.
+   throw new RuntimeException("Basic_xml_html: malformed MW page-info: $info");
   }
   $page=$matches[1];
   $col = $matches[2];
@@ -92,7 +94,8 @@ public function getword_data_html_adapter($key,$lnum,$data,$dict,$getParms)
  }else {
   if(!preg_match('|>([^<]*?)</a>|',$info,$matches)) {
    #dbgprint(true,"html ERROR 2: \n" . $info . "\n");
-   exit(1);
+   // H3636 A10: fail loud with an envelope instead of a blank HTTP 200.
+   throw new RuntimeException("Basic_xml_html: malformed page-info: $info");
   }
   $pageref=$matches[1];
  }
@@ -138,7 +141,8 @@ public function adjust_key2_mw($key2) {
  $ans1 = preg_replace('|<shortlong/>|','',$ans1);
  if (preg_match('|<|',$ans1)) {
   #dbgprint(true,"adjust_key2: $ans1\n");
-  exit(1);
+  // H3636 A10: fail loud with an envelope instead of a blank HTTP 200.
+  throw new RuntimeException("adjust_key2_mw: leftover markup in key2: $ans1");
  }
  return $ans;
  $ans = preg_replace('||','',$ans);

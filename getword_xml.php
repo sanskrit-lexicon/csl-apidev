@@ -14,8 +14,22 @@ header("Access-Control-Allow-Origin: *");
 require_once("getwordXmlClass.php");
 
 function getwordXmlCall() {
-  $temp = new GetwordXmlClass();
+  try {
+   $temp = new GetwordXmlClass();
+  } catch (Throwable $e) {
+   // H3636 A10: record-level data anomalies now throw; serve a truthful
+   // 500 envelope instead of a blank HTTP 200.
+   http_response_code(500);
+   header('content-type: application/json; charset=utf-8');
+   echo json_encode(array('status' => 500, 'error' => $e->getMessage()));
+   return;
+  }
   $json = $temp->json;
+  // H3636 A19: a not-found (or dict-error) payload must not masquerade as
+  // HTTP 200. Body shape is unchanged (the status field stays in the body).
+  if (isset($temp->status) && $temp->status != 200) {
+   http_response_code($temp->status);
+  }
   if (isset($_GET['callback'])) {
    $callback = $_GET['callback'];
    // Only allow a safe JSONP callback identifier. Echoing the raw callback
