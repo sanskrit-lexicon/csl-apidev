@@ -1057,3 +1057,5 @@ public function mci_extra_line($line) {
 }
 } ## end of class 
 ?>
+
+// TWIN-GUARD DRILL: injected drift (H3634 acceptance proof)
