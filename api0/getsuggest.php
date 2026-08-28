@@ -13,10 +13,22 @@ Parameters:
 */
 // communicate to api0_getsuggestClass and other classes that we
 // are in an 'api0' mode.
-$_REQUEST['api0'] = true; 
+$_REQUEST['api0'] = true;
 require_once('../api0_getsuggestClass.php');
-$temp = new api0_getsuggestClass();
+try {
+ $temp = new api0_getsuggestClass();
+} catch (Throwable $e) {
+ // H3636 A10: data anomalies now throw; serve a truthful 500 envelope.
+ http_response_code(500);
+ header('content-type: application/json; charset=utf-8');
+ echo json_encode(array('status' => 500, 'error' => $e->getMessage()));
+ return;
+}
 $result = $temp->result;
+// H3636 A19: a not-found result must not masquerade as HTTP 200.
+if (isset($result['status']) && $result['status'] != 200) {
+ http_response_code($result['status']);
+}
 if (! isset($_REQUEST['pretty'])){
  $json = json_encode($result);
  echo $json;

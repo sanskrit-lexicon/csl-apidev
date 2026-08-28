@@ -94,6 +94,12 @@ public function getword_data_html_adapter($key,$lnum,$adjxml,$dict,$getParms,$xm
  $filter = $getParms->filter;
  dbgprint(false,"getword_data_html_adapter, adjxml=\n  $adjxml\n");
  $display = new BasicDisplay($key,array($adjxml),$filter,$dict);
+ // H3636 A12: BasicDisplay->status=false means the record's XML failed to
+ // parse and the display silently degraded to stripped text. Surface the
+ // failure to the caller (error envelope) instead of swallowing it.
+ if ($display->status === false) {
+  throw new RuntimeException("BasicDisplay: XML parse failure for key $key (dict $dict)");
+ }
  $row1 = $display->row1;
  $row1x = $display->row1x; 
  $row = $display->row;
@@ -120,21 +126,23 @@ public function getword_data_html_adapter($key,$lnum,$adjxml,$dict,$getParms,$xm
   }
  }
  // adjust $info - keep only the dislayed page
- if ($dict == 'mw') {
-  if(!preg_match('|>([^<]*?)</a>,(.*?)\]|',$info,$matches)) {
-   dbgprint(false,"html ERROR 2: \n" . $info . "\n");
-   exit(1);
+  if ($dict == 'mw') {
+   if(!preg_match('|>([^<]*?)</a>,(.*?)\]|',$info,$matches)) {
+    dbgprint(false,"html ERROR 2: \n" . $info . "\n");
+    // H3636 A10: fail loud with an envelope instead of a blank HTTP 200.
+    throw new RuntimeException("getword_data: malformed MW page-info: $info");
+   }
+   $page=$matches[1];
+   $col = $matches[2];
+   $pageref = "$page,$col";
+  }else {
+   if(!preg_match('|>([^<]*?)</a>|',$info,$matches)) {
+    dbgprint(false,"html ERROR 2: \n" . $info . "\n");
+    // H3636 A10: fail loud with an envelope instead of a blank HTTP 200.
+    throw new RuntimeException("getword_data: malformed page-info: $info");
+   }
+   $pageref=$matches[1];
   }
-  $page=$matches[1];
-  $col = $matches[2];
-  $pageref = "$page,$col";
- }else {
-  if(!preg_match('|>([^<]*?)</a>|',$info,$matches)) {
-   dbgprint(false,"html ERROR 2: \n" . $info . "\n");
-   exit(1);
-  }
-  $pageref=$matches[1];
- }
  if ($dict == 'mw') {
   // 08-17-2024. $hui 
   list($hcode,$key2,$hom,$hui) = $this->adjust_info_mw($xmldata); 
@@ -188,11 +196,12 @@ public function adjust_key2_mw($key2) {
  $ans1 = preg_replace('|</?root/?>|','',$ans);
  $ans1 = preg_replace('|</?hom>|','',$ans1);
  $ans1 = preg_replace('|<shortlong/>|','',$ans1);
- if (preg_match('|<|',$ans1)) {
-  //dbgprint(false,"adjust_key2: $ans1\n");
-  exit(1);
- }
- return $ans;
+  if (preg_match('|<|',$ans1)) {
+   //dbgprint(false,"adjust_key2: $ans1\n");
+   // H3636 A10: fail loud with an envelope instead of a blank HTTP 200.
+   throw new RuntimeException("adjust_key2_mw: leftover markup in key2: $ans1");
+  }
+  return $ans;
  $ans = preg_replace('||','',$ans);
  $ans = preg_replace('||','',$ans);
  return $ans;

@@ -20,8 +20,21 @@ header("Access-Control-Allow-Origin: *");
 require_once('servepdfClass.php');
 
 function servepdfCall() {
-  $temp = new ServepdfClass();
+  try {
+   $temp = new ServepdfClass();
+  } catch (Throwable $e) {
+   // H3636 A10: data anomalies now throw; serve a truthful 500 page.
+   http_response_code(500);
+   header('content-type: text/html; charset=utf-8');
+   echo "<p>servepdf error: " . htmlspecialchars($e->getMessage(), ENT_QUOTES) . "</p>";
+   return;
+  }
   $table1 = $temp->html;
+  // H3636 A8: page-not-found / dict-error degraded to the error page;
+  // surface it as a truthful HTTP status instead of 200.
+  if (isset($temp->status) && $temp->status != 200) {
+   http_response_code($temp->status);
+  }
   if (isset($_GET['callback'])) {
    $json = json_encode($table1);
    $callback = $_GET['callback'];

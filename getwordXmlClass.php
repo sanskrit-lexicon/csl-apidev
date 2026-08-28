@@ -14,6 +14,9 @@ require_once("dbgprint.php");
 class GetwordXmlClass {
  public $json;
  public $dbg;
+ // H3636 A19: the HTTP status the endpoint should serve (200 or 404),
+ // surfaced from the payload's status so JSON bodies stay unchanged.
+ public $status;
  public function __construct() {
   $getParms = new Parm();
   
@@ -87,6 +90,7 @@ class GetwordXmlClass {
   }
   $json = json_encode($ans);
   $this->json = $json;
+  $this->status = $ans['status'];
  }
  public function get_html($rec,$dict,$getParms) {
   // rec: ($m['key'],$m['lnum'],$m['data'])

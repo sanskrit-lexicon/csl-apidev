@@ -29,7 +29,10 @@ function accent_adjust_MW($line,$accent) {
  }else {
   $newhtml = preg_replace_callback("|<span class='sdata'><SA>(.*?)</SA></span>|",
          "accent_no",$html);
-  list($pginfo,$hcode,$key2,$hom) = preg_split('/:/',$info);
+  // H3636 A22: pad the colon-split so <4 fields cannot produce undefined
+  // offsets (silently nulled metadata).
+  $info_parts = array_pad(preg_split('/:/',$info),4,'');
+  list($pginfo,$hcode,$key2,$hom) = $info_parts;
   // A little more subtle. (Sep 3, 2015) Example:
   // key2 = vi-<root>vf<hom>1</hom></root>:
   // Only remove accents after a vowel.  Note this is still an approximation.

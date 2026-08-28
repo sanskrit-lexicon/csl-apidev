@@ -11,6 +11,9 @@ class ServepdfClass {
  public $json;
  public $getParms, $dictinfo;
  public $request;
+ // H3636 A8: HTTP status the endpoint should serve; 404 once the display
+ // degraded to the error page (unknown dict or page-not-found).
+ public $status = 200;
  public function __construct() {
   $getParms = new Parm();
   $dictinfo = new DictInfo($getParms->dict);
@@ -75,6 +78,9 @@ class ServepdfClass {
   // H1523: $dictupper_attr was never set in this scope (empty/notice title).
   // Escape the message — dicterr can include the raw dict parameter.
   $errormsg_html = htmlspecialchars((string)$errormsg, ENT_QUOTES, 'UTF-8');
+  // H3636 A8: the error page is a not-found condition; let the endpoint
+  // surface it as a truthful HTTP status.
+  $this->status = 404;
   $html = <<<EOF
 <!DOCTYPE html>
 <html>
@@ -120,6 +126,12 @@ EOF;
   $dictupper = $dictinfo->dictupper;
   $imageFiles = $this->getImagefiles($lines,$page,$dictupper);
   list($status,$filename,$pageprev,$pagenext)=$imageFiles;
+  // H3636 A8: a page-not-found must not fall back to rendering page 1 with
+  // HTTP 200; serve the error page with a truthful status instead.
+  if (!$status) {
+   $this->html_construct_error("servepdf ERROR: page $page not found in $dictupper");
+   return;
+  }
 
   $pdfpages_url = $dictinfo->get_pdfpages_url();
   dbgprint($dbg,"servepdf: pdfpages_url=$pdfpages_url\n");
@@ -195,13 +207,16 @@ HTML;
    $key1 = $dbrec[0];
    $lnum = $dbrec[1];
    $rec= $dbrec[2];  // html
-   if (preg_match('|<info>(.*?)</info><body>(.*?)</body>|',$rec,$matchrec)) {
-    $info = $matchrec[1];
-    if($dict == 'mw') {
-     list($pginfo,$hcode,$key2,$hom) = preg_split('/:/',$info);
-    }else {
-     $pginfo = $info;
-    }
+    if (preg_match('|<info>(.*?)</info><body>(.*?)</body>|',$rec,$matchrec)) {
+     $info = $matchrec[1];
+     if($dict == 'mw') {
+      // H3636 A22: pad the colon-split so <4 fields cannot produce
+      // undefined offsets (silently nulled metadata).
+      $info_parts = array_pad(preg_split('/:/',$info),4,'');
+      list($pginfo,$hcode,$key2,$hom) = $info_parts;
+     }else {
+      $pginfo = $info;
+     }
     $lnums = preg_split('/[,]/',$pginfo);  
     if(count($lnums)>0) {
      $page = $lnums[0];

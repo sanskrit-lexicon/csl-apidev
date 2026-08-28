@@ -14,10 +14,24 @@ header("Access-Control-Allow-Origin: *");
 #echo "<br>url=$url";
 #$apiObj = API($url);
 function getapiCall($url) {
-  $temp = new API($url);
+  try {
+   $temp = new API($url);
+  } catch (Throwable $e) {
+   // H3636 A10: record-level data anomalies now throw; serve a truthful
+   // 500 envelope instead of a blank HTTP 200.
+   http_response_code(500);
+   header('content-type: application/json; charset=utf-8');
+   echo json_encode(array('status' => 500, 'error' => $e->getMessage()));
+   return;
+  }
   $ans = $temp->ans;
   $table1 = $ans['final'];
   #print_r($table1);
+  // H3636 A19: no dictionary produced a result -> truthful 404. The body
+  // shape is unchanged.
+  if ($table1 === '' || (is_array($table1) && count($table1) === 0)) {
+   http_response_code(404);
+  }
   if (isset($_GET['callback'])) {
    $json = json_encode($table1);
    $callback = $_GET['callback'];
