@@ -1,4 +1,4 @@
-<?php error_reporting (E_ALL ^ E_NOTICE); ?>
+<?php //error_reporting ((E_ALL & ~E_NOTICE) & ~E_WARNING); ?>
 <?php
 // Sep 24, 2012 ejf modified for sanskrit1d
 // Jan 25, 2010
@@ -28,6 +28,9 @@ function transcoder_fsm($from,$to) {
 // is saved in the global hash variable $transcoder_fsmarr under name
 // from_to; transcoder_fsmarr[from_to] already exists, its value is
 // returned, so the xml file does not have to be re-parsed.
+// H087 03-07-2026: also cache the parsed $fsm across requests (APCu,
+// with a serialized-file fallback), so xml parsing happens at most
+// once per deploy per language pair instead of once per PHP request.
  global $transcoder_dir,$transcoder_fsmarr;
  $fromto = $from . "_" . $to;
  if (isset($transcoder_fsmarr[$fromto])) {
@@ -35,6 +38,12 @@ function transcoder_fsm($from,$to) {
  }
  $filein = $transcoder_dir . "/" . $fromto . ".xml";
  if (!file_exists($filein)) {return;}
+ $mtime = filemtime($filein);
+ $fsm = transcoder_fsm_cache_get($fromto,$mtime);
+ if ($fsm !== false) {
+  $transcoder_fsmarr[$fromto]=$fsm;
+  return;
+ }
  // The php routine simplexml_load_file  parses the xml file.
  // It was discovered that unicode values expressed as html entities
  // '&#xHHHH;' are converted to unicode!
@@ -61,7 +70,7 @@ function transcoder_fsm($from,$to) {
    //    [^aAiIuUfFxXeEoO^/\\].
    //    Note that the last 3 elements '^', '/', and '\' are present only
    //    because of accents. 
-   if ( ($fromto != 'slp1_deva') && ($fromto != 'slp1_deva1')&& 
+   if ( ($fromto != 'slp1_deva') && ($fromto != 'slp1_deva1') &&
         ($fromto != 'slp1_deva2')&& 
         ($fromto != 'hkt_tamil')&&
         ($fromto != 'deva_slp1')) {continue;}
@@ -103,31 +112,77 @@ function transcoder_fsm($from,$to) {
 // and whose value at a key is an array of subscripts into $fsmentries.
 //  $i is a subscript for a key provided that the $fsmentries[$i]['in'] = 
 //  first character of $key
- $states=array();
- foreach($fsmentries as $i => $fsmentry) {
-  if (isset($fsmentry['in'])) {
-   $in = $fsmentry['in'];
-   if (isset($in[0])) {
-    $c = $in[0];
+  $states=array();
+  foreach($fsmentries as $i => $fsmentry) {
+   if (isset($fsmentry['in'])) {
+    $in = $fsmentry['in'];
+    if (isset($in[0])) {
+     $c = $in[0];
+    } else {
+     $c = null;
+    }
    } else {
     $c = null;
    }
-  } else {
-   $c = null;
+   if (isset($states[$c])) {
+    $state=$states[$c];
+    $state[]=$i;
+    $states[$c]=$state;
+   }else {
+    $state = array();
+    $state[]=$i;
+    $states[$c]=$state;
+   }
   }
-  if (isset($states[$c])) {
-   $state=$states[$c];
-   $state[]=$i;
-   $states[$c]=$state;
-  }else {
-   $state = array();
-   $state[]=$i;
-   $states[$c]=$state;
-  }
- }
  $fsm['states']=$states;
  $transcoder_fsmarr[$fromto]=$fsm;
-} 
+ transcoder_fsm_cache_set($fromto,$mtime,$fsm);
+}
+function transcoder_fsm_cache_key($fromto) {
+ // $fromto is always one of the small fixed set of language-pair codes
+ // produced by transcoder_standardize_filter(); sanitize anyway before
+ // it's used to build a cache filename.
+ $safe = preg_replace('/[^A-Za-z0-9_]/','',$fromto);
+ return "csl_transcoder_fsm_" . $safe;
+}
+function transcoder_fsm_cache_get($fromto,$mtime) {
+// Returns the cached $fsm array if a fresh (mtime-matching) entry is
+// found in APCu or the serialized-file fallback; FALSE on a miss.
+ global $transcoder_dir;
+ $key = transcoder_fsm_cache_key($fromto);
+ if (function_exists('apcu_fetch')) {
+  $ok = false;
+  $entry = apcu_fetch($key,$ok);
+  if ($ok && is_array($entry) && isset($entry['mtime']) && $entry['mtime'] == $mtime) {
+   return $entry['fsm'];
+  }
+ }
+ $cachefile = $transcoder_dir . "/" . $key . ".ser";
+ if (file_exists($cachefile)) {
+  $data = @file_get_contents($cachefile);
+  $entry = ($data !== false) ? @unserialize($data) : false;
+  if (is_array($entry) && isset($entry['mtime']) && $entry['mtime'] == $mtime) {
+   if (function_exists('apcu_store')) {
+    apcu_store($key,$entry);
+   }
+   return $entry['fsm'];
+  }
+ }
+ return false;
+}
+function transcoder_fsm_cache_set($fromto,$mtime,$fsm) {
+// Populates APCu (if available) and always writes the serialized-file
+// fallback, so a deploy without APCu still avoids re-parsing xml on
+// every request once the cache file exists.
+ global $transcoder_dir;
+ $key = transcoder_fsm_cache_key($fromto);
+ $entry = array('mtime'=>$mtime,'fsm'=>$fsm);
+ if (function_exists('apcu_store')) {
+  apcu_store($key,$entry);
+ }
+ $cachefile = $transcoder_dir . "/" . $key . ".ser";
+ @file_put_contents($cachefile,serialize($entry));
+}
 function unichr($dec) {
   if ($dec < 128) {
     $utf = chr($dec);
@@ -165,6 +220,7 @@ function transcoder_unicode_parse_alt($val) {
    return $newinval;
 }
 function transcoder_unicode_parse($val){
+  if ($val == '') {return $val;}  //07-02/2024
   $utf="";
   $vals=array();
   $u1 = $val;
@@ -239,7 +295,6 @@ global $transcoder_htmlentities;
    if ($k == -1) {continue;}
    $match = transcoder_processString_match($line,$n,$m,$fsmentry);
    $nmatch=strlen($match);
-//   echo "chk2: n=$n, c='$c', nmatch=$nmatch<br>\n";
    if ($nmatch > $nbest) {
     $best = $match;
     $nbest=$nmatch;
@@ -271,15 +326,12 @@ function transcoder_processString($line,$from,$to) {
  global $transcoder_dir,$transcoder_fsmarr;
  if ($from == $to) {return $line;}
  $fromto = $from . "_" . $to;
- 
  if (isset($transcoder_fsmarr[$fromto])) {
   $fsm = $transcoder_fsmarr[$fromto];
  }else {
   transcoder_fsm($from,$to);
-  if (isset($transcoder_fsmarr[$fromto])) {
-   $fsm = $transcoder_fsmarr[$fromto];
-  }else {
-//   echo "could not find fsm\n";
+  $fsm = $transcoder_fsmarr[$fromto];
+  if (!$fsm) {
    return $line;
   }
  }
@@ -320,10 +372,12 @@ function transcoder_processString_match($line,$n,$m,$fsmentry) {
   if (!$b) { return $match;}
   if ($k != $nedge)  { return $match;}
   $match=$edge;
-  if (!isset($fsmentry['regex'])){
+  /*
+  if (!$fsmentry['regex']) {
    return $match;
   }
-  if (!$fsmentry['regex']) {
+  */
+  if (!isset($fsmentry['regex'])) {
    return $match;
   }
   //  additional logic when $fsmentry['regex'] is DEVA or TAMIL
@@ -335,7 +389,7 @@ function transcoder_processString_match($line,$n,$m,$fsmentry) {
   if ($n1 == $m) {return $match;} 
   $d = $line[$n1];
   if (($fsmentry['regex'] == 'slp1_deva') || 
-     ($fsmentry['regex'] == 'slp1_deva1') ||
+     ($fsmentry['regex'] == 'slp1_deva1') || 
      ($fsmentry['regex'] == 'slp1_deva2')) {
    if (preg_match('/[^aAiIuUfFxXeEoO^\/\\\\]/',$d)) {return $match;}
    return "";
@@ -344,8 +398,8 @@ function transcoder_processString_match($line,$n,$m,$fsmentry) {
    if (preg_match('/[^aAiIuUeEoO]/',$d)) {return $match;}
    return "";
   }
-  if (($fsmentry['regex'] == 'deva_slp1') ||  
-     ($fsmentry['regex'] == 'slp1_deva1') ||
+  if (($fsmentry['regex'] == 'deva_slp1') || 
+     ($fsmentry['regex'] == 'slp1_deva1') || 
      ($fsmentry['regex'] == 'slp1_deva2')) {
    // u094d is virama, the rest are vowel signs
    $vowel_signs = array('\u094d','\u093e','\u093f','\u0940','\u0941','\u0942','\u0943','\u0944','\u0962','\u0963','\u0947','\u0948','\u094b','\u094c');
@@ -407,26 +461,34 @@ function transcoder_standardize_filter($filter) {
   "SKTDEVAUNICODE"=>"deva",
   "SKTROMANUNICODE"=>"roman",
   "SLP2SLP"=>"slp1",
+  "SLP1"=>"slp1", // 12-01-2022
   "SLP2HK" =>"hk",
   "HK2SLP" =>"hk",
   "SLP2ITRANS" => "itrans",
   "ITRANS2SLP" => "itrans",
   "HK" =>"hk",
-  "KH" =>"hk",
   "ITRANS" => "itrans",
   "IT" => "itrans",
   "HKT" => "hkt",
   "HKT2HKT" => "hkt",
   "TAMIL" => "tamil",
   "ROMAN" => "roman",
-  "DEVA" => "deva",
-  "IAST" => "roman",
-  "SLP1" => "slp1"
+  "DEVA" => "deva"
  );
-if (! $filter) {$filter = "";}
-$filter = strtoupper($filter);
-$result=$standard_hash[$filter];
-if (!$result) {$result="slp1";}
+// 12-01-2022  
+$default = "slp1";
+if (! isset($filter)) {
+ $result = $default;
+}else if (! $filter) {
+ $result = $default;
+}else {
+ $filter1 = strtoupper($filter);
+ if (! isset($standard_hash[$filter1]))  {
+  $result = $default;
+ } else {
+  $result=$standard_hash[$filter1];
+ }
+}
 return $result;
 }
 function transcoder_set_htmlentities($flag) {
@@ -445,7 +507,6 @@ function transcoder_set_dir($dir) {
   echo "transcoder_set_dir ERROR: \ndir = $dir\nnewdir = $newdir\n";
   return;
  }
-//  echo "transcoder_set_dir change: \ndir = $dir\nold = $transcoder_dir\nnewdir = $newdir\n";
  $transcoder_dir=$newdir;
  return $transcoder_dir;
 }

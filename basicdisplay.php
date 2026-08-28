@@ -61,7 +61,7 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
 
  // The constructed html is in public variable $table.
  // $this->table is the instance variable
- // H1523: escape key for HTML (key sanitizer strips <> but not quotes/&).
+ // H1523: escape key for HTML (init_inputs_key strips <> but not quotes/&).
  $key_html = $this->htmlspecial($key);
  if (in_array($this->dict,array('ae','mwe','bor'))) {
   // no transliteration of $key for English headword
@@ -379,6 +379,10 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
      return "<div style='margin-top:0.3em;padding-left:2.5em;'>";
     }
     return "<div style='margin-top:0.6em;'></div>";
+   }else if ($this->dict == 'nybj') {
+    // n="1" = meaning division (from [ka], [Ka], ... markers in nybj.txt)
+    // show each meaning on its own line, slightly indented
+    return "<div style='margin-top:0.4em;padding-left:1.0em;'>";
    }else { // default
     // currently applies to:
     // cae with <div n="p"/>
@@ -879,7 +883,8 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
 }
 public function htmlspecial($text) {
  /* H1523: escape dynamic attribute values for single-quoted HTML attrs.
-    Mirrors BasicAdjust::htmlspecial — ENT_QUOTES then &#039;→&#8217;.
+    Mirrors BasicAdjust::htmlspecial — ENT_QUOTES then &#039;→&#8217; so a
+    later xml_parser pass does not re-break title='…'.
  */
  $tooltip = htmlspecialchars((string)$text, ENT_QUOTES);
  $tooltip = preg_replace('/&#039;/', '&#8217;', $tooltip);

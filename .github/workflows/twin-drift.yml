@@ -1,0 +1,72 @@
+name: Twin drift guard
+
+# H3634 (audit G4): csl-apidev carries hand-synced twins of Cologne template
+# files owned by csl-websanlexicon. The sync vehicle is v02/apidev_copy.sh
+# (run by hand in the websanlexicon checkout). This workflow fails when a
+# true twin drifts, naming the sync action.
+#
+# GUARDED true twins (must be byte-identical):
+#   basicadjust.php          <-> websan v02/makotemplates/web/webtc/basicadjust.php
+#   basicdisplay.php         <-> websan v02/makotemplates/web/webtc/basicdisplay.php
+#   getword_data.php         <-> websan v02/makotemplates/web/webtc/getword_data.php
+#   utilities/transcoder.php <-> websan v02/makotemplates/web/utilities/transcoder.php
+#
+# ALLOWLISTED deliberate drift (api-mode trims, documented major-drift-by-design
+# in the H3487 adversarial audit §8/G4) — intentionally NOT guarded here:
+#   parm.php, dispitem.php, security_headers.php, dal.php,
+#   servepdf* (api-mode), dictinfo tables.
+#
+# Change either side of a guarded twin in both repos in the same pass; the
+# guard only tolerates the windows where both sides have landed.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  WEBSAN_REF: main
+
+jobs:
+  twin-drift:
+    name: apidev <-> websanlexicon twin diff
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/checkout@v7
+        with:
+          repository: sanskrit-lexicon/csl-websanlexicon
+          ref: ${{ env.WEBSAN_REF }}
+          path: websan
+
+      - name: Diff true twins
+        run: |
+          set -u
+          fail=0
+          twins=(
+            "basicadjust.php:v02/makotemplates/web/webtc/basicadjust.php"
+            "basicdisplay.php:v02/makotemplates/web/webtc/basicdisplay.php"
+            "getword_data.php:v02/makotemplates/web/webtc/getword_data.php"
+            "utilities/transcoder.php:v02/makotemplates/web/utilities/transcoder.php"
+          )
+          for pair in "${twins[@]}"; do
+            apidev_file="${pair%%:*}"
+            websan_file="${pair#*:}"
+            if cmp -s "$apidev_file" "websan/$websan_file"; then
+              echo "OK    $apidev_file == websan:$websan_file"
+            else
+              echo "DRIFT $apidev_file != websan:$websan_file"
+              diff -u "$apidev_file" "websan/$websan_file" | head -60 || true
+              fail=1
+            fi
+          done
+          if [ "$fail" -ne 0 ]; then
+            echo "::error::Twin drift detected. Named action: sync from csl-websanlexicon — run v02/apidev_copy.sh in the websanlexicon checkout, or copy websan/<file> over the apidev twin — then open a sync PR (H3634)."
+            exit 1
+          fi
+          echo "All guarded twins identical."

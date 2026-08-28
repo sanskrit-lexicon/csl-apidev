@@ -1796,7 +1796,7 @@ public function ls_callback_mw_href($code,$n,$data) {
  if (in_array($pfx,array('rv','av'))) {
   if (preg_match('|^(.*?)[.] *([^ ,]+)[ ,]+([0-9]+)[ ,]+([0-9]+)(.*)$|',$data1,$matches)) {
    $code0 = $matches[1];
-   $mandala = $matches[2];  
+   $mandala = $matches[2];
    // COLOGNE#370: roman or arabic mandala; never emit rv00.* on parse failure
    $imandala = $this->parse_rv_mandala($mandala);
    if ($imandala == 0) {return $href;}
@@ -4094,7 +4094,7 @@ public function rgveda_link($gra1,$gra2) {
  */ 
  $dbg=false;
  dbgprint($dbg,"rgveda_link: gra1=$gra1, gra2=$gra2\n");
- // COLOGNE#370: never emit rv00.* when mandala conversion failed
+ // COLOGNE#370: never emit rv00.* when mandala conversion failed ("?")
  if ($gra1 === '?' || $gra1 === '' || strpos((string)$gra1, '.') === false) {
   return array('', '');
  }
@@ -4196,17 +4196,16 @@ public function roman_int($roman) {
  }
  return 0;
 }
-
 /**
  * Parse an RV/AV mandala token from an <ls> citation into a positive int.
  * Accepts arabic digits, lower-case roman (MW style), upper-case roman,
  * and strips a single layer of surrounding () or [].
- * Returns 0 on failure - callers must not emit rv00.* links (COLOGNE#370).
+ * Returns 0 on failure — callers must not emit rv00.* links (COLOGNE#370).
  */
 public function parse_rv_mandala($mandala) {
  $m = trim((string)$mandala);
  if ($m === '') { return 0; }
- // strip one layer of display parentheses/brackets
+ // strip one layer of display parentheses/brackets: "(i" / "i)" / "(i)"
  $m = preg_replace('/^[(\[]+|[\])]+$/u', '', $m);
  $m = trim($m);
  if ($m === '') { return 0; }
