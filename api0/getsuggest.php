@@ -28,6 +28,10 @@ $result = $temp->result;
 // H3636 A19: a not-found result must not masquerade as HTTP 200.
 if (isset($result['status']) && $result['status'] != 200) {
  http_response_code($result['status']);
+}elseif (isset($result['nmatches']) && $result['nmatches'] === 0) {
+ // H3636 live-validation followup: the class keeps status=200 on a plain
+ // zero-match search (its 404 path is input errors only); a miss is a miss.
+ http_response_code(404);
 }
 if (! isset($_REQUEST['pretty'])){
  $json = json_encode($result);
