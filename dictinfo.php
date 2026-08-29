@@ -59,7 +59,10 @@ class DictInfo {
   }
   if ((isset($_REQUEST['version'])) &&($_REQUEST['version'] == '1')) {
    // older version -- 2014 or 2013
-   $this->year = self::$dictyear_older[$this->dictupper];
+   // dicts with no older scan (abch,acph,acsj,nmmb,fri) fall back to
+   // their only scan year (audit A20)
+   $this->year = isset(self::$dictyear_older[$this->dictupper]) ? self::$dictyear_older[$this->dictupper] :
+                 self::$dictyear[$this->dictupper];
   }else {
    // $this->year = '2020';  
    $this->year = self::$dictyear[$this->dictupper]; // 
