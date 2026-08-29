@@ -637,7 +637,7 @@ public function __construct($key,$string_or_array,$filterin,$dict) {
   } else if ($el == "mark"){ 
    // skd. n = H,P
    $n = $attribs['n'];
-   $row .= "<strong>($n) </strong>";   
+   $this->row .= "<strong>($n) </strong>";
   // } else if ( ($el == "pic")&&($this->dict == "ben")) {
   } else if ($el == "pic") {
    $filename = $attribs['name'];
