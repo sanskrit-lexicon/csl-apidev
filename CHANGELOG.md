@@ -6,6 +6,7 @@ Dates are UTC+3 (project local).
 
 ## [Unreleased]
 
+## [0.4.1] - 2026-08-30
 ### Fixed
 
 - **`download_hwnorm1c_sqlite.sh` robustness** (H3487 audit G11 / finding A23, H3641):
