@@ -6,6 +6,7 @@ Dates are UTC+3 (project local).
 
 ## [Unreleased]
 
+## [0.4.2] - 2026-09-01
 ### Fixed
 
 - **`listhierClass.php` empty-key dead links** (H3853, [csl-apidev#153](https://github.com/sanskrit-lexicon/csl-apidev/issues/153)):
