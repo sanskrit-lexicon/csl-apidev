@@ -24,10 +24,18 @@ class ListhierClass {
   $lnumin = $getParms->lnumin;
   $direction = $getParms->direction;
 
-  $dbg=false;
-  $dict = $getParms->dict;
-  $dal = new Dal($dict);
-  $key = $getParms->key;
+   $dbg=false;
+   $dict = $getParms->dict;
+   $dal = new Dal($dict);
+   $key = $getParms->key;
+   // H3853: an empty/whitespace key (bad transcode, junk query) can never
+   // match; fail loud up front instead of rendering an empty-key list.
+   if ($lnumin === null || $lnumin === "") {
+    $key = trim((string)$key);
+    if ($key === "") {
+     throw new RuntimeException("listhier: empty key (dict $dict)");
+    }
+   }
 
   // step 1: get initial record.
   if ($lnumin) { // use 'lnum'
@@ -66,23 +74,34 @@ class ListhierClass {
   $table="";
   //$spcchar = "&nbsp;";
   $spcchar = ".";
-  dbgprint($dbg,"Extra listhier: listmatches = " . count($listmatches) . "\n");
-  while($i < count($listmatches)) {
-   list($code,$key2,$lnum2,$data2) = $listmatches[$i];
-   if ($data2 == null) {$data2 = "";} //01-13-2025
-   // H1523: escape for onclick only (UP previously raw; display key2 stays raw)
-   if ($key2 === null) { $key2 = ""; }
-   $key2_js = htmlspecialchars((string)$key2, ENT_QUOTES);
-   //dbgprint(true,"i=$i, $code,$key2,$lnum2,data2=$data2\n");
-   $hom2=$this->get_hom($data2);
-   dbgprint($dbg,"listhierClass: lnum2=$lnum2, key2=$key2, hom2='$hom2'data2=\n$data2\n");
-   if ($i == 0) {
-    //  put 'upward button'
-    $spc="&nbsp;&nbsp;";
-    $out1 = "$spc<a  onclick='getWordlistUp_keyboard(\"$key2_js\");'>&#x25B2;</a><br/>\n";  
-    $table .= $out1;
-   }
-   $i++;
+   dbgprint($dbg,"Extra listhier: listmatches = " . count($listmatches) . "\n");
+   $updone = false;   // H3853: 'up' button anchors on the first non-empty key
+   $lastkey_js = "";  // H3853: 'down' button anchors on the last non-empty key
+   while($i < count($listmatches)) {
+    list($code,$key2,$lnum2,$data2) = $listmatches[$i];
+    if ($data2 == null) {$data2 = "";} //01-13-2025
+    // H1523: escape for onclick only (UP previously raw; display key2 stays raw)
+    if ($key2 === null) { $key2 = ""; }
+    // H3853 (#153): a row with an empty key renders a dead onclick link.
+    // Never emit it; with the match_key/empty-key throws above this is
+    // defence in depth (e.g. a degenerate record from an auxiliary table).
+    // NOTE: the onclick payload stays RAW key1 (slp1) - apidev's
+    // listview.js always sends input=slp1, unlike the websanlexicon twin
+    // whose <SA>-wrapped payload relies on cookie-driven inputType.
+    if ($key2 === "") { $i++; continue; }
+    $key2_js = htmlspecialchars((string)$key2, ENT_QUOTES);
+    $lastkey_js = $key2_js;
+    //dbgprint(true,"i=$i, $code,$key2,$lnum2,data2=$data2\n");
+    $hom2=$this->get_hom($data2);
+    dbgprint($dbg,"listhierClass: lnum2=$lnum2, key2=$key2, hom2='$hom2'data2=\n$data2\n");
+    if (!$updone) {
+     //  put 'upward button'
+     $spc="&nbsp;&nbsp;";
+     $out1 = "$spc<a  onclick='getWordlistUp_keyboard(\"$key2_js\");'>&#x25B2;</a><br/>\n";  
+     $table .= $out1;
+     $updone = true;
+    }
+    $i++;
    $filter = $getParms->filter;
    if ($filter == "deva") {
     /* use $filterin to generate the class to use for Sanskrit (<s>) text 
@@ -174,14 +193,14 @@ class ListhierClass {
    $out1 = "$spc<a  onclick='getWordAlt_keyboard(\"$key2_js\");'>$key2show$hom2 $revsup</a><br/>\n";
    $table .= $out1;
    //dbgprint(true,"Listhier extra: key2=$key2, hom='$hom2'\nout1=$out1\n");
-   if ($i == count($listmatches)) {
-    //  put 'downward button'
-    $spc="&nbsp;&nbsp;";
-    $out1 = "$spc<a  onclick='getWordlistDown_keyboard(\"$key2_js\");'>&#x25BC;</a>\n";  
-    $table .= $out1;
-   }
 
   } // end while loop
+  if ($lastkey_js !== "") {
+   //  put 'downward button' (H3853: after the loop, anchored on last non-empty key)
+   $spc="&nbsp;&nbsp;";
+   $out1 = "$spc<a  onclick='getWordlistDown_keyboard(\"$lastkey_js\");'>&#x25BC;</a>\n";  
+   $table .= $out1;
+  }
   // spit it out
   $filter = $getParms->filter;
   $this->table = $table;
@@ -218,8 +237,14 @@ class ListhierClass {
     if ($nmatches == 0) {$n1--;}
    } 
   }
-  dbgprint($dbg,"Listhier match_key chk2: $key, $nmatches\n");
-  return $matches;
+   // H3853: fail loud when even the single-letter fallback found nothing.
+   // Previously this returned an empty array whose destructure produced
+   // empty-key rows with dead onclick links (issue #153).
+   if (count($matches) == 0) {
+    throw new RuntimeException("listhier: no record for key $key");
+   }
+   dbgprint($dbg,"Listhier match_key chk2: $key, $nmatches\n");
+   return $matches;
   }
 
  public function list1a($key,$dal) {

@@ -6,6 +6,23 @@ Dates are UTC+3 (project local).
 
 ## [Unreleased]
 
+### Fixed
+
+- **`listhierClass.php` empty-key dead links** (H3853, [csl-apidev#153](https://github.com/sanskrit-lexicon/csl-apidev/issues/153)):
+  the simple-search left pane could render rows with `onclick='getWordAlt_keyboard("")'` -
+  links that look clickable but silently do nothing (reproduced live with
+  `listview.php?key=mahArASwrIya` against prod SLP1 where the normalized spelling is
+  `mahArAzwrIya`). Root cause: `match_key()` could return an empty match array, whose
+  destructure produced a center row with empty `key1`; the pre-H3636 deployment also
+  surfaced this as a silent blank-ish pane. Now: an empty/whitespace key fails loud
+  up front, `match_key()` throws (H3636 envelope style) when even the single-letter
+  fallback finds nothing, and the render loop skips any empty-key row (defence in
+  depth) while anchoring the Up/Down buttons on non-empty keys. The onclick payload
+  stays raw slp1 `key1` (apidev `listview.js` always sends `input=slp1`; deliberately
+  NOT the `<SA>`-wrapped form of the websanlexicon twin). New deterministic probes:
+  `tools/listhier_harness.php` + `tools/listhier_empty_key_probe.php` (9-assertion
+  matrix over the guru family + failure shapes).
+
 ## [0.4.1] - 2026-08-30
 ### Fixed
 
