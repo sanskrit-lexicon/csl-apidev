@@ -1,3 +1,5 @@
+_Created: 11-06-2026 · Last updated: 05-09-2026_
+
 # Salt API: entries
 
 C-SALT-compatible search over one dictionary. This mirrors the C-SALT / Kosh
@@ -7,8 +9,8 @@ APIs uses the same endpoint shapes against `sanskrit-lexicon.uni-koeln.de`, with
 caveats documented in the Salt specs.
 
 Render path is unchanged: this endpoint wraps the existing `getword` data (see
-[getword](getword.md)) in the Salt JSON envelope. Parameters reuse the `Parm` class
-([restfulparm](restfulparm.md)). Normative contract: `csl-standards/docs/SALT_API_PROFILE.md`
+[getword](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/doc/getword.md)) in the Salt JSON envelope. Parameters reuse the `Parm` class
+([restfulparm](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/doc/restfulparm.md)). Normative contract: `csl-standards/docs/SALT_API_PROFILE.md`
 (+ `data/schema/salt-api.openapi.yaml`).
 
 ## 1. Search entries
@@ -21,7 +23,7 @@ https://www.sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/api1/salt_entries.p
 
 | restful | example | Parm / notes |
 |---|---|---|
-| dict | mw | Cologne dict code, lower-cased ([restfulparm](restfulparm.md) `dict`). Pilot: `mw` only. |
+| dict | mw | Cologne dict code, lower-cased ([restfulparm](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/doc/restfulparm.md) `dict`). Pilot: `mw` only. |
 | field | headword_slp1 | one of `id`, `headword_slp1`, `sense`, `re_headwords_slp1`, `created`, `xml`; Phase 1 implements `headword_slp1` only |
 | query | agni | the search string, in the `input` transliteration (Parm `keyin`) |
 | query_type | term | one of `term`, `fuzzy`, `match`, `match_phrase`, `prefix`, `wildcard`, `regexp` |
@@ -53,7 +55,7 @@ Permalink form (subsumes the `cleanurl` roadmap, COLOGNE#249):
 
 ### 1.5. Allowable values
 
-1. dict — the Cologne dict codes ([restfulparm](restfulparm.md) `dict`). Pilot: `mw`.
+1. dict — the Cologne dict codes ([restfulparm](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/doc/restfulparm.md) `dict`). Pilot: `mw`.
 2. field — `id` / `headword_slp1` / `sense` / `re_headwords_slp1` / `created` / `xml`.
 3. query_type — `term` / `fuzzy` / `match` / `match_phrase` / `prefix` / `wildcard` / `regexp`.
 4. input, output — `s/d/h/r/i` (slp1/deva/hk/roman/itrans).
@@ -79,15 +81,15 @@ RewriteRule ^dicts/([^/]*)/restful/entries$  /scans/awork/apidev/api1/salt_entri
 RewriteRule ^([A-Za-z0-9]+)/([^/]+)$  /scans/awork/apidev/api1/salt_entries.php?dict=$1&query=$2  [L]
 ```
 
-> **Reconciliation note — see [cleanurl](cleanurl.md) §0.** The permalink rule above is
+> **Reconciliation note — see [cleanurl](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/doc/cleanurl.md) §0.** The permalink rule above is
 > collision-unsafe as written: `^([A-Za-z0-9]+)/([^/]+)$` captures *every* two-segment
 > root path (`/images/x`, `/php/x`, `/css/x`, …), not only dictionaries — reserving just
 > `restful`/`graphql` is insufficient. The unified `/{DICT}/{ref}` rewrite must
-> (a) restrict `{dict}` to the **dict-code whitelist** in [cleanurl](cleanurl.md) §4;
+> (a) restrict `{dict}` to the **dict-code whitelist** in [cleanurl](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/doc/cleanurl.md) §4;
 > (b) **content-negotiate** — `Accept: text/html` → the listview display
 > (`cleanurl.php`), `Accept: application/json` (or `?format=json`) → `salt_entries.php`
 > as above; and (c) preserve the homonym form `/{DICT}/{KEY}/{HOM}` and decimal `lnum`
-> (`/MW/144239.1`) from [cleanurl](cleanurl.md) §3.
+> (`/MW/144239.1`) from [cleanurl](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/doc/cleanurl.md) §3.
 
 ### 1.8. Expected output
 
@@ -142,7 +144,7 @@ Notes:
   `lemma-ka-2`), else **`-L{lnum}`** (the per-record Cologne `lnum`, e.g. `lemma-agni-L890`).
   The `-L{lnum}` fallback is a **sanctioned divergence** from C-SALT's `-{n}` for sub-records
   the print does not number — reconcile in the profile during the Phase-3 parity pass (§1.9 Q3).
-- `csl.lnum` is the existing `lnum` ([restfulparm](restfulparm.md)); it equals the TEI
+- `csl.lnum` is the existing `lnum` ([restfulparm](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/doc/restfulparm.md)); it equals the TEI
   `monier_<lnum>` on the C-SALT side.
 - `csl.scanUrl` is a relative permalink (`/MW/page/{page}`); clients prefix the host.
 
@@ -185,6 +187,8 @@ search need a later resolver/index and must not silently run a headword search.
   The body is a JSON error envelope; the cause is named, not swallowed.
 - **JSONP** — append `&callback={fn}` to wrap the JSON in `fn(...)`. The callback name is
   validated against `^[A-Za-z_$][A-Za-z0-9_$.]{0,127}$`; anything else returns
-  `400 invalid callback` (reflected-XSS guard — see [`salt_api_handoff.md`](salt_api_handoff.md)).
+  `400 invalid callback` (reflected-XSS guard — see [`salt_api_handoff.md`](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/doc/salt_api_handoff.md)).
 - **CORS** — every response sends `Access-Control-Allow-Origin: *` (matches C-SALT, open).
 - An empty `entries` array is a valid "no match", **not** an error.
+
+_Dr. Mārcis Gasūns_

@@ -1,8 +1,10 @@
+_Created: 11-06-2026 · Last updated: 05-09-2026_
+
 # Salt API: ids
 
 Batch-fetch entries by id. Mirrors the C-SALT / Kosh `/dicts/{id}/restful/ids` contract:
 this is a **get-by-id**, not a search. Each id is an `lemma-{headword_slp1}` token (§
-[salt_entries](salt_entries.md)); internally it resolves to a `lnum` lookup via the
+[salt_entries](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/doc/salt_entries.md)); internally it resolves to a `lnum` lookup via the
 existing `getword` record path.
 
 Normative contract: `csl-standards/docs/SALT_API_PROFILE.md` §5.
@@ -19,7 +21,7 @@ https://www.sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/api1/salt_ids.php?d
 |---|---|---|
 | dict | mw | Cologne dict code, lower-cased. |
 | ids | lemma-agni | repeated (multi-value) parameter; one or more entry ids. |
-| input | slp1 | CSL extension (display transliteration), as in [salt_entries](salt_entries.md). |
+| input | slp1 | CSL extension (display transliteration), as in [salt_entries](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/doc/salt_entries.md). |
 | output | deva | CSL extension. |
 | accent | no | CSL extension. |
 
@@ -37,7 +39,7 @@ https://www.sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/api1/salt_ids.php?d
 ### 2.5. Allowable values
 
 1. dict — Cologne dict codes. Pilot: `mw`.
-2. ids — entry-id tokens in any of the three forms minted by [salt_entries](salt_entries.md) §1.8:
+2. ids — entry-id tokens in any of the three forms minted by [salt_entries](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/doc/salt_entries.md) §1.8:
    - `lemma-{headword_slp1}` — a single-record headword, **or** "the whole headword" (returns
      every record under the key);
    - `lemma-{headword_slp1}-{n}` — the `n`-th homonym (`<hom>`-numbered, C-SALT form);
@@ -59,7 +61,7 @@ RewriteRule ^dicts/([^/]*)/restful/ids$  /scans/awork/apidev/api1/salt_ids.php?d
 
 ### 2.8. Expected output
 
-Entry objects, identical shape to [salt_entries](salt_entries.md) §1.8, under `data.ids`.
+Entry objects, identical shape to [salt_entries](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/doc/salt_entries.md) §1.8, under `data.ids`.
 **Real round-trip** (verified 2026-06-14): `ids=lemma-agni-L890&ids=lemma-agni-L891` returns
 exactly those two records — id ↔ record is 1:1 once a record is addressed by its full id:
 
@@ -83,3 +85,5 @@ form). Unknown ids resolve to no entry (omitted from the array), not an error.
    `lemma-…` forms? (C-SALT only accepts its own id; `-L{lnum}` already encodes the lnum.)
 2. Order: C-SALT returns ids in request order. Phase 1 returns them grouped per resolved
    headword — confirm the required ordering in the parity pass.
+
+_Dr. Mārcis Gasūns_

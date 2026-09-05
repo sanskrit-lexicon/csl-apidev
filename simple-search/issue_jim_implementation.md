@@ -1,3 +1,5 @@
+_Created: 12-06-2026 · Last updated: 05-09-2026_
+
 <!-- Body of GitHub issue sanskrit-lexicon/csl-apidev#47.
      Title: simple-search: v1.2 + DH-grade implementation — master task list
      Labels: enhancement, major ; Milestone: User Experience ; assignee: funderburkjim
@@ -125,3 +127,5 @@ the wiring is yours.
 | Eval harness + gate | [simple-search/eval/](https://github.com/sanskrit-lexicon/csl-apidev/tree/main/simple-search/eval) | done |
 | DCS↔CDSL crosswalk | [simple-search/dcs_xref/dcs_cdsl_xref.tsv](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/simple-search/dcs_xref/dcs_cdsl_xref.tsv) | done |
 | Changelog | [CHANGELOG.md](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/CHANGELOG.md) | maintained |
+
+_Dr. Mārcis Gasūns_

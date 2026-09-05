@@ -1,7 +1,9 @@
+_Created: 11-11-2019 · Last updated: 05-09-2026_
+
 
 # listhier
 
-The listhier endpoint was written to work as a subcomponent of the [listview](listview.md) endpoint.
+The listhier endpoint was written to work as a subcomponent of the [listview](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/doc/listview.md) endpoint.
 
 But listhier does generate html, and viewing urls constructed with it gives insight into its different uses.
 
@@ -32,3 +34,4 @@ https://www.sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/listhier.php?dict=m
 Incidentally, if both the *key* and *lnum* parameters appear in the url, then the *lnum* parameter takes precedence.
 Also note that the *direction* parameter could be used with the *lnum* parameter.
 
+_Dr. Mārcis Gasūns_

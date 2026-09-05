@@ -1,3 +1,5 @@
+_Created: 11-11-2019 · Last updated: 05-09-2026_
+
 # getsuggest
 
 getsuggest.php returns a list of words from a given dictionary with a given prefix.
@@ -6,7 +8,7 @@ getsuggest.php returns a list of words from a given dictionary with a given pref
 
 The words are returned as a JSON array of strings.
 
-For a dictionary with Sanskrit headwords, the spelling can be in one of the Sanskrit encodings known by [transcoder](transcoder.md) such as slp1, hk, iast, deva, itrans.   
+For a dictionary with Sanskrit headwords, the spelling can be in one of the Sanskrit encodings known by [transcoder](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/doc/transcoder.md) such as slp1, hk, iast, deva, itrans.   
 
 getsuggest also works for a dictionary with English headwords.
 
@@ -21,3 +23,4 @@ As usual with restful APIs,  getsuggest can be used directly as part of a browse
 
 https://www.sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/getsuggest.php?dict=mw&input=slp1&term=sev
 
+_Dr. Mārcis Gasūns_

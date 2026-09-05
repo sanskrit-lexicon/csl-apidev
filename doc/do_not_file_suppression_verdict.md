@@ -1,6 +1,6 @@
 # Do-not-file suppression corpus — applicability verdict (H083)
 
-_Created: 03-07-2026 · Last updated: 03-07-2026_
+_Created: 03-07-2026 · Last updated: 05-09-2026_
 
 ## Context
 
@@ -33,15 +33,15 @@ corpus has nothing to suppress.
 
 `simple-search/v1.1/` is a **prototype**, not wired into the production
 `getword.php`/`getsuggest.php`/Salt API endpoints, still under active roadmap
-discussion ([`simple-search/roadmap_v1.2.md`](../simple-search/roadmap_v1.2.md),
+discussion ([`simple-search/roadmap_v1.2.md`](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/simple-search/roadmap_v1.2.md),
 csl-apidev#26). It does generate spelling variants and could, if shipped
 as-is, fold a deliberately non-standard headword into a different one:
 
-- [`simple-search/v1.1/simple_search.php`](../simple-search/v1.1/simple_search.php)
+- [`simple-search/v1.1/simple_search.php`](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/simple-search/v1.1/simple_search.php)
   `$transitionTable_default` (~line 26) defines phonetic equivalence classes
   (e.g. `["S","z","s","zh","sh"]`, `["b","v"]`, `["n","Y","N","m","R","M"]`)
   applied recursively by `doVariant()` (~line 269).
-- [`simple-search/v1.1/dalnorm.php`](../simple-search/v1.1/dalnorm.php)
+- [`simple-search/v1.1/dalnorm.php`](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/simple-search/v1.1/dalnorm.php)
   `Dalnorm::normalize()` (line 69) canonicalizes anusvara/geminate/sandhi
   spelling before the variant is checked for existence against
   `hwnorm1c.sqlite`.

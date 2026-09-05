@@ -1,7 +1,9 @@
+_Created: 11-06-2026 · Last updated: 05-09-2026_
+
 # simple-search evaluation harness
 
 Measured IR quality for simple-search — the "make it reproducible" half of DH
-rigor. Roadmap: [`../roadmap_dh.md`](../roadmap_dh.md) Stream D.
+rigor. Roadmap: [`../roadmap_dh.md`](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/simple-search/roadmap_dh.md) Stream D.
 
 ## Files
 - `gold.tsv` — gold set: `query · input · dict · intended_dicthw · note ·
@@ -79,3 +81,5 @@ poisoning the pass/fail number.
 Add rows to `gold.tsv`. For ambiguous queries the *full* relevant set needs
 scholarly judgement (roadmap Q D1) — start with the unambiguous intended word.
 To refresh fixtures from live, run `--live` and capture the `dicthw` lists.
+
+_Dr. Mārcis Gasūns_

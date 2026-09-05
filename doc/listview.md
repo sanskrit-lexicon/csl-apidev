@@ -1,3 +1,5 @@
+_Created: 11-11-2019 · Last updated: 05-09-2026_
+
 # listview
 listview.php can function as a restful endpoint, either as a web page or as a component in a web page.
 
@@ -41,4 +43,6 @@ The most important restful parameters for listview are: *dict, key, input, outpu
 
 Since listview 'includes' listhier, parameters used by listhier calls are also used indirectly. These  parameters are *lnum and direction*.
 
-See [Restful Parameters](restfulparm.md) Parameters for details.
+See [Restful Parameters](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/doc/restfulparm.md) Parameters for details.
+
+_Dr. Mārcis Gasūns_

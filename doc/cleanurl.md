@@ -1,14 +1,16 @@
+_Created: 11-06-2026 · Last updated: 05-09-2026_
+
 # cleanurl
 
 This is a roadmap for a *clean-URL* (permalink) layer that lets a person link
 directly to a dictionary entry, as requested in
 [COLOGNE#249](https://github.com/sanskrit-lexicon/COLOGNE/issues/249).
 
-The entry-display and list machinery already exist ([listview](listview.md),
-[listhier](listhier.md), [getword](getword.md), and the `dal->get2` id lookup).
+The entry-display and list machinery already exist ([listview](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/doc/listview.md),
+[listhier](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/doc/listhier.md), [getword](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/doc/getword.md), and the `dal->get2` id lookup).
 What is new here is only a thin **routing** layer: a server-root rewrite that
 sends `/{DICT}/...` to a new `cleanurl.php`, which parses the path, resolves it to
-the same restful parameters [listview](listview.md) already understands, and serves
+the same restful parameters [listview](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/doc/listview.md) already understands, and serves
 the existing listview display.
 
 ## 0. Status — unified with the Salt API permalink
@@ -16,7 +18,7 @@ the existing listview display.
 Since this roadmap was first written, the same user-facing permalink —
 `/{DICT}/{ref}`, `ref` = headword (any input transliteration) or `lnum` — has been
 adopted by the **Salt API** as its permalink form
-([salt_entries](salt_entries.md) §1.3, §1.7), which "subsumes" this document. The two
+([salt_entries](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/doc/salt_entries.md) §1.3, §1.7), which "subsumes" this document. The two
 are **the same URL**, resolved by **one** rewrite, and must not ship as competing
 schemes. Division of labor:
 
@@ -63,7 +65,7 @@ term form becomes a clean path, so both forms are SEO-friendly permalinks.
 
 One positional grammar, top-level, keyed on the dictionary code. It is the same
 "positional path segments" idea already used by `/simple/` (see
-[parse_uri](../simple-search/v1.1/parse_uri.php)), lifted to the domain root and
+[parse_uri](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/simple-search/v1.1/parse_uri.php)), lifted to the domain root and
 keyed by dictionary:
 
 ```
@@ -107,7 +109,7 @@ lexical and unambiguous, because slp1 headwords are never all-numeric:
 
 Display options (input/output/accent) are **not** in the permalink — they come from
 the user's cookie, exactly as the `/simple/` page already does
-([list-0.2s_rw.php](../simple-search/v1.1/list-0.2s_rw.php) -> `cookieUpdate`). This
+([list-0.2s_rw.php](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/simple-search/v1.1/list-0.2s_rw.php) -> `cookieUpdate`). This
 keeps permalinks short and stable.
 
 ## 4. The rewrite (server-root `.htaccess`)
@@ -127,7 +129,7 @@ RewriteRule ^(MW72|AP90|ARMH|WIL|YAT|GST|BEN|LAN|CAE|SHS|BHS|MWE|BOR|BUR|STC|PWG
 # -----------------------------------------------------------------------
 ```
 
-The full code list is the same set [parse_uri.php](../simple-search/v1.1/parse_uri.php)
+The full code list is the same set [parse_uri.php](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/simple-search/v1.1/parse_uri.php)
 already whitelists (`wil yat gst ben mw72 ap90 lan cae md mw shs bhs ap pd mwe bor ae
 bur stc pwg gra pw ccs sch bop skd vcp inm vei pui acc krm ieg snp pe pgn mci armh
 fri`), uppercased. `cleanurl.php` reads `$_SERVER['REQUEST_URI']` itself, so the rule
@@ -136,25 +138,25 @@ need not capture the tail.
 ## 5. The router — `cleanurl.php`
 
 A new file at the repo root, a sibling of `listview.php`. It is
-[list-0.2s_rw.php](../simple-search/v1.1/list-0.2s_rw.php) generalized from one fixed
+[list-0.2s_rw.php](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/simple-search/v1.1/list-0.2s_rw.php) generalized from one fixed
 `/simple/` prefix to a dict-keyed prefix. It does **not** re-implement the display —
 it serves the existing listview page seeded with parameters.
 
 Flow:
 
 1. **Parse** `$_SERVER['REQUEST_URI']` with a `parse_cleanurl()` helper modelled on
-   `parse_uri()` ([parse_uri.php](../simple-search/v1.1/parse_uri.php)): split into
+   `parse_uri()` ([parse_uri.php](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/simple-search/v1.1/parse_uri.php)): split into
    `[DICT, SEG1, SEG2, ...]`, lowercase + validate `DICT` against the whitelist.
 2. **Classify** `SEG1` by the §3 rules -> `{matched: id|headword|front, lnum?, key?, hom?}`.
 3. **Resolve**:
    - id route -> `key` via `dal->get2(lnum, lnum)` (`dal.php:158`); keep `lnum` so
      listview/listhier center exactly on that homonym (lnum takes precedence over key,
-     see [listhier](listhier.md)).
+     see [listhier](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/doc/listhier.md)).
    - headword route -> `key` as given; if `hom` present, map (key, hom) -> the right
      `lnum` (the n-th record with that `key`, via `dal->get3`/the homonym walk in
      `listhierClass`).
 4. **Seed + serve** the existing listview page: reuse the
-   [list-0.2s_rw.php](../simple-search/v1.1/list-0.2s_rw.php) body and its `phpinit()`
+   [list-0.2s_rw.php](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/simple-search/v1.1/list-0.2s_rw.php) body and its `phpinit()`
    injection of `$phpvals` (`key, dict, input, input_simple, output, accent`), adding
    an `lnum` value when known. The page's existing JS then calls `listview.php` and
    renders the two-pane display.
@@ -163,7 +165,7 @@ Reuse map:
 
 | Need | Existing code |
 |---|---|
-| path -> params parsing | [parse_uri.php](../simple-search/v1.1/parse_uri.php) (`parse_uri`) |
+| path -> params parsing | [parse_uri.php](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/simple-search/v1.1/parse_uri.php) (`parse_uri`) |
 | cologne-vs-xampp detection | `dictinfowhich.php` |
 | id -> key,data | `dal->get2` (`dal.php:158`) |
 | homonym walk | `listhierClass` (`get2`/`get4a`/`get4b`) |
@@ -281,3 +283,5 @@ is a larger data-pipeline question — out of scope here.)
    `?format=json` — for clients that can't set `Accept` (and what wins when both are
    present)? (Recommend: `Accept` as default, explicit `.json`/`?format=` override
    wins; relates to the suffix policy in Q6.)
+
+_Dr. Mārcis Gasūns_

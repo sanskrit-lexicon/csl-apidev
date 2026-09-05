@@ -1,6 +1,6 @@
 # simple-search — DH-grade roadmap (beyond v1.2)
 
-_Created: 11-06-2026 · Last updated: 27-08-2026_
+_Created: 11-06-2026 · Last updated: 05-09-2026_
 
 > Truth-pass 27-08-2026 (Opus 5 `claude-opus-5`, [H3002](https://github.com/gasyoun/Uprava/blob/main/handoffs/archive/H3002-Opus_multi_stale-roadmap-s4-cologne-ask-replan_17.08.26.md), stale-roadmap slice 4):
 > header added, no content changed. This is an implementer specification written for the
@@ -10,7 +10,7 @@ _Created: 11-06-2026 · Last updated: 27-08-2026_
 > [Uprava/SERVER_OUTAGES.md](https://github.com/gasyoun/Uprava/blob/main/SERVER_OUTAGES.md).
 
 For Jim, to implement from directly. This is the layer **above** the engine
-fixes in [`roadmap_v1.2.md`](roadmap_v1.2.md) (Fixes A–I). v1.2 makes fuzzy
+fixes in [`roadmap_v1.2.md`](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/simple-search/roadmap_v1.2.md) (Fixes A–I). v1.2 makes fuzzy
 lookup *correct and ranked*; this file makes the search a **FAIR,
 corpus-grounded, measurable discovery resource** that meets digital-humanities
 standards.
@@ -214,7 +214,7 @@ query**, tracked against **recall** (did we still return the intended word?).
 Use it to (a) set a baseline on v1.1, (b) gate Fixes A–I, (c) tune the Fix B
 hard-drop `DELTA` by evidence.
 
-**Baseline — superseded — see [eval/readme.md](eval/readme.md) for the
+**Baseline — superseded — see [eval/readme.md](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/simple-search/eval/readme.md) for the
 current (47-case) baseline, gate, and the `rama` design-tension note.** The
 block below is the original seed-gold-set snapshot (n=16, 2026-06-11); it
 predates the `expect`/`aspirational` gate mechanism (H122/M1) and the

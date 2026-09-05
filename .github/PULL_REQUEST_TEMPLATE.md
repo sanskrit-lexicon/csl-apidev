@@ -1,3 +1,5 @@
+_Created: 12-06-2026 · Last updated: 05-09-2026_
+
 ## Summary
 - What changed:
 - Why this change exists:
@@ -22,3 +24,5 @@
 
 ## Review Request
 - Narrow question for reviewer:
+
+_Dr. Mārcis Gasūns_

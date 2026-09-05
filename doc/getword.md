@@ -1,3 +1,5 @@
+_Created: 11-11-2019 · Last updated: 05-09-2026_
+
 
 # getword
 
@@ -24,3 +26,4 @@ By contrast, with basic.css loaded (as previous example), the css and getword ma
 ## A 'Basic' display with getword 
 getword.php has utility in addition to its use as a listview component.  Several examples of using getword.php as part of a VueJS application are https://funderburkjim.github.io/sanlex-vue/index.html.  For example there are several examples which are functionally quite similar to the Basic Displays (such as https://www.sanskrit-lexicon.uni-koeln.de/scans/MWScan/2014/web/webtc/indexcaller.php).
 
+_Dr. Mārcis Gasūns_

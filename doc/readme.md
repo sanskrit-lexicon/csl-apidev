@@ -1,3 +1,5 @@
+_Created: 11-11-2019 · Last updated: 05-09-2026_
+
 # apidev
 
 This is documentation regarding the 
@@ -23,19 +25,19 @@ and is currently one of:
 
 |X|description|
 |---|----------|
-|[listview](listview.md) | generate display like simple-search|
-|[listhier](listhier.md) | generate the list pane of the listview display|
-|[getword](getword.md) | generate the entry display pane of the listview display|
-|[getsuggest](getsuggest.md) | return short list of words with a certain prefix|
-|[servepdf](servepdf.md) | generates link to scanned images for a particular page of a particular dictionary|
-|[getword_xml](getword_xml.md) | for a given headword, return matching records from <dict>.xml.  Currently not used.|
-|[cleanurl](cleanurl.md) | roadmap: clean-URL permalinks to entries, e.g. /MW/bAQa or /MW/144239 (COLOGNE#249); unified with the Salt permalink — cleanurl is its HTML + collision-safe-routing face, see [cleanurl](cleanurl.md) §0 and [salt_entries](salt_entries.md) §1.3/§1.7|
-|[salt_entries](salt_entries.md) | C-SALT-compatible entry search, `/dicts/{id}/restful/entries`|
-|[salt_ids](salt_ids.md) | C-SALT-compatible batch fetch by id, `/dicts/{id}/restful/ids`|
-|[salt_graphql](salt_graphql.md) | C-SALT-compatible GraphQL (`entries`, `ids`), `/dicts/{id}/graphql`|
-|[salt_multidict](salt_multidict.md) | CSL extension: resolve a headword across **all** dictionaries, `salt_multidict.php?key=…`|
+|[listview](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/doc/listview.md) | generate display like simple-search|
+|[listhier](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/doc/listhier.md) | generate the list pane of the listview display|
+|[getword](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/doc/getword.md) | generate the entry display pane of the listview display|
+|[getsuggest](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/doc/getsuggest.md) | return short list of words with a certain prefix|
+|[servepdf](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/doc/servepdf.md) | generates link to scanned images for a particular page of a particular dictionary|
+|[getword_xml](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/doc/getword_xml.md) | for a given headword, return matching records from <dict>.xml.  Currently not used.|
+|[cleanurl](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/doc/cleanurl.md) | roadmap: clean-URL permalinks to entries, e.g. /MW/bAQa or /MW/144239 (COLOGNE#249); unified with the Salt permalink — cleanurl is its HTML + collision-safe-routing face, see [cleanurl](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/doc/cleanurl.md) §0 and [salt_entries](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/doc/salt_entries.md) §1.3/§1.7|
+|[salt_entries](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/doc/salt_entries.md) | C-SALT-compatible entry search, `/dicts/{id}/restful/entries`|
+|[salt_ids](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/doc/salt_ids.md) | C-SALT-compatible batch fetch by id, `/dicts/{id}/restful/ids`|
+|[salt_graphql](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/doc/salt_graphql.md) | C-SALT-compatible GraphQL (`entries`, `ids`), `/dicts/{id}/graphql`|
+|[salt_multidict](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/doc/salt_multidict.md) | CSL extension: resolve a headword across **all** dictionaries, `salt_multidict.php?key=…`|
 
-[restfulparm](restfulparm.md) shows all the restful parameters used by any of the endpoints.
+[restfulparm](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/doc/restfulparm.md) shows all the restful parameters used by any of the endpoints.
 
 The `salt_*` endpoints implement the **Salt API** — a C-SALT-compatible REST + GraphQL face
 so that a client written for `api.c-salt.uni-koeln.de` can use the same endpoint shapes
@@ -45,12 +47,13 @@ normative contract, a CSL↔C-SALT field mapping, and a loss report live in `csl
 (`docs/SALT_API_PROFILE.md`, `data/schema/salt-api.openapi.yaml`,
 `data/schema/salt-api.graphql`).
 
-[transcoder](transcoder.md) provides details of the transcoding from one to another computer representation of Sanskrit.
+[transcoder](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/doc/transcoder.md) provides details of the transcoding from one to another computer representation of Sanskrit.
 
-[do_not_file_suppression_verdict](do_not_file_suppression_verdict.md) records why the SanskritSpellCheck do-not-file suppression corpus is not wired into the production API (exact/prefix match only) and the pre-ship gate for the experimental `simple-search` v1.2 folding engine.
+[do_not_file_suppression_verdict](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/doc/do_not_file_suppression_verdict.md) records why the SanskritSpellCheck do-not-file suppression corpus is not wired into the production API (exact/prefix match only) and the pre-ship gate for the experimental `simple-search` v1.2 folding engine.
 
 The current convention of restful interface APIs is to return data in JSON format.
 This is the case with *getsuggest*, but the other formats are returned as strings of HTML.  
 
 The links above will provide more details, in particular the expected input parameters.
 
+_Dr. Mārcis Gasūns_

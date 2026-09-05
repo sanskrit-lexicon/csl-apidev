@@ -1,3 +1,5 @@
+_Created: 12-06-2026 · Last updated: 05-09-2026_
+
 # Changelog
 
 All notable changes to **simple-search** (and related `csl-apidev` work) are
@@ -205,3 +207,5 @@ Dates are UTC+3 (project local).
 ### Notes
 - Overgeneration verified as a **`default`-mode** phenomenon only:
   `restrict_to_user_word` already collapses precise input to the exact word.
+
+_Dr. Mārcis Gasūns_

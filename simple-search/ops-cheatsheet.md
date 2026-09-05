@@ -1,3 +1,5 @@
+_Created: 12-06-2026 · Last updated: 05-09-2026_
+
 # Ops cheat-sheet (PowerShell)
 
 Commands for driving this repo's GitHub ops from a local PowerShell terminal.
@@ -48,3 +50,4 @@ python "C:\Users\user\Documents\GitHub\csl-apidev\simple-search\dcs_xref\build_x
 - The branch can change under you (external "codex"/"human push" commits). Pin work to
   main with `git -C "<REPO>"`; verify with `git -C "<REPO>" branch --show-current`.
 
+_Dr. Mārcis Gasūns_

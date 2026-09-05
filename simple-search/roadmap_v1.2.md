@@ -1,6 +1,6 @@
 # simple-search v1.2 — implementation roadmap
 
-_Created: 11-06-2026 · Last updated: 27-08-2026_
+_Created: 11-06-2026 · Last updated: 05-09-2026_
 
 > Truth-pass 27-08-2026 (Opus 5 `claude-opus-5`, [H3002](https://github.com/gasyoun/Uprava/blob/main/handoffs/archive/H3002-Opus_multi_stale-roadmap-s4-cologne-ask-replan_17.08.26.md), stale-roadmap slice 4):
 > header added, no content changed. An implementer specification for the Cologne maintainer.
@@ -548,7 +548,7 @@ Example (`Kr̥ṣṇa` typed as folk `krishna` / `krushna` / `kRShNa`):
 **Expected output:** `krishna`, `krushna`, `kRShNa` and `kRSNa` all reach
 `kfzRa` (कृष्ण) as the top-scored result. `hari`, `giri`, `buddha`, `sattva`
 must reach their own correct headwords, not `haf`/`gif`/`budha`/`satva` — see
-the C1/M3 tripwire rows added to [eval/gold.tsv](eval/gold.tsv).
+the C1/M3 tripwire rows added to [eval/gold.tsv](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/simple-search/eval/gold.tsv).
 
 ---
 

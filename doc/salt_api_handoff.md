@@ -1,3 +1,5 @@
+_Created: 20-06-2026 · Last updated: 05-09-2026_
+
 # Salt API — implementation handoff (Phase 1)
 
 Status: the `api1/` controllers are **wired to the real data layer** (`Dal` / `Getword_data` /
@@ -36,18 +38,18 @@ guide to test, deploy, and finish it.
 
 - Contract (normative): [`SALT_API_PROFILE.md`](https://github.com/sanskrit-lexicon/csl-standards/blob/main/docs/SALT_API_PROFILE.md) · [`salt-api.openapi.yaml`](https://github.com/sanskrit-lexicon/csl-standards/blob/main/data/schema/salt-api.openapi.yaml) · [`salt-api.graphql`](https://github.com/sanskrit-lexicon/csl-standards/blob/main/data/schema/salt-api.graphql)
 - Plan: [`SALT_API_INTEGRATION_ROADMAP.md`](https://github.com/sanskrit-lexicon/csl-standards/blob/main/docs/SALT_API_INTEGRATION_ROADMAP.md) · Divergences: [`SALT_API_LOSS_REPORT.md`](https://github.com/sanskrit-lexicon/csl-standards/blob/main/docs/SALT_API_LOSS_REPORT.md) · Phase 0 checklist: [`SALT_API_PHASE0_CHECKLIST.md`](https://github.com/sanskrit-lexicon/csl-standards/blob/main/docs/SALT_API_PHASE0_CHECKLIST.md)
-- Endpoint specs: [`salt_entries.md`](salt_entries.md) · [`salt_ids.md`](salt_ids.md) · [`salt_graphql.md`](salt_graphql.md)
-- Use cases & recipes: [`salt_api_usecases.md`](salt_api_usecases.md) — 10 copy-paste examples (curl + GraphQL + JSONP)
+- Endpoint specs: [`salt_entries.md`](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/doc/salt_entries.md) · [`salt_ids.md`](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/doc/salt_ids.md) · [`salt_graphql.md`](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/doc/salt_graphql.md)
+- Use cases & recipes: [`salt_api_usecases.md`](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/doc/salt_api_usecases.md) — 10 copy-paste examples (curl + GraphQL + JSONP)
 
 ## 1. Files
 
 | File | Role |
 |---|---|
-| [`api1/salt_common.php`](../api1/salt_common.php) | shared search + envelope builder (`salt_search_entries`, `salt_entries_for_id`, `salt_entries_for_key`, `salt_translit`) |
-| [`api1/salt_entries.php`](../api1/salt_entries.php) + `salt_entriesClass.php` | `GET /dicts/{id}/restful/entries` |
-| [`api1/salt_ids.php`](../api1/salt_ids.php) + `salt_idsClass.php` | `GET /dicts/{id}/restful/ids` (batch by id) |
-| [`api1/salt_graphql.php`](../api1/salt_graphql.php) + `salt_graphqlClass.php` | `POST /dicts/{id}/graphql` (`entries`, `ids`) |
-| [`api1/salt_selftest.php`](../api1/salt_selftest.php) | CLI smoke test (§2) |
+| [`api1/salt_common.php`](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/api1/salt_common.php) | shared search + envelope builder (`salt_search_entries`, `salt_entries_for_id`, `salt_entries_for_key`, `salt_translit`) |
+| [`api1/salt_entries.php`](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/api1/salt_entries.php) + `salt_entriesClass.php` | `GET /dicts/{id}/restful/entries` |
+| [`api1/salt_ids.php`](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/api1/salt_ids.php) + `salt_idsClass.php` | `GET /dicts/{id}/restful/ids` (batch by id) |
+| [`api1/salt_graphql.php`](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/api1/salt_graphql.php) + `salt_graphqlClass.php` | `POST /dicts/{id}/graphql` (`entries`, `ids`) |
+| [`api1/salt_selftest.php`](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/api1/salt_selftest.php) | CLI smoke test (§2) |
 
 It reuses the existing pipeline (no new runtime): `Dal` for headword search, `Getword_data`
 for per-record rendering, `transcoder_processString` for transliteration.
@@ -150,8 +152,8 @@ Expected: HTTP 400 with an explicit error. Phase 1 must not silently run headwor
 when the client asks for an unimplemented field or body-search mode.
 
 The human permalink `/{DICT}/{ref}` (headword or lnum) is **not** added here — it stays with
-[`cleanurl`](cleanurl.md) as its HTML + collision-safe-routing face, per
-[`salt_entries.md`](salt_entries.md) §1.7 (whitelist the dict code, content-negotiate
+[`cleanurl`](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/doc/cleanurl.md) as its HTML + collision-safe-routing face, per
+[`salt_entries.md`](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/doc/salt_entries.md) §1.7 (whitelist the dict code, content-negotiate
 `Accept: application/json` → `salt_entries.php`).
 
 ### 3.3 Post-deploy parity
@@ -168,7 +170,7 @@ especially the `-L{lnum}` id fallback, `prefix` `size` semantics, and homonym or
 
 ## 4. VERIFY: punch-list (assumptions to confirm against real data)
 
-Each is also flagged `VERIFY:` at the relevant line in [`salt_common.php`](../api1/salt_common.php).
+Each is also flagged `VERIFY:` at the relevant line in [`salt_common.php`](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/api1/salt_common.php).
 
 | Assumption | What to confirm |
 |---|---|
@@ -192,7 +194,7 @@ Each is also flagged `VERIFY:` at the relevant line in [`salt_common.php`](../ap
 ## 6. Open questions (recommended defaults — all provisional, none blocking)
 
 1. **GraphQL library** — `webonyx/graphql-php` (a wiring block is in
-   [`salt_graphqlClass.php`](../api1/salt_graphqlClass.php)), or keep the hand-rolled
+   [`salt_graphqlClass.php`](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/api1/salt_graphqlClass.php)), or keep the hand-rolled
    dispatcher? *Default: webonyx for production.*
 2. **`id` / `lnum` stability** — is `lnum` stable across the server’s
    `redo_xampp_selective.sh` refresh? *Default: yes; `id = lemma-{key}[-{n}]` matches
@@ -214,3 +216,5 @@ python data/pilot/parity_mw.py --csl-base https://sanskrit-lexicon.uni-koeln.de
 It diffs entry `id`s/counts against `api.c-salt.uni-koeln.de/dicts/mw`. Divergences are
 expected where CSL covers homonyms or scan apparatus the 7-dictionary derivative does not.
 Use the results to decide 7-vs-40 dictionary scope.
+
+_Dr. Mārcis Gasūns_

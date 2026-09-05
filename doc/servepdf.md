@@ -1,3 +1,5 @@
+_Created: 11-11-2019 · Last updated: 05-09-2026_
+
 # servepdf
 servepdf.php can function as a restful endpoint, either as a web page or as a component in a web page.
 
@@ -30,7 +32,7 @@ For example, search for word rAma (slp1) in [simple-search](https:www.sanskrit-l
 ## input parameters
 The most important restful parameters for servepdf are: *dict and page* (see first example above) or *dict, key, input*  (see other examples above).
 
-See also [Restful Parameters](restfulparm.md).
+See also [Restful Parameters](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/doc/restfulparm.md).
 
 
 ## Programming analysis - Cologne server
@@ -66,3 +68,4 @@ There is some provision for using scanned images from applications run on other 
 * **TODO** servepdf.php is currently is written in a functional style; it should be converted to Class style
   
 
+_Dr. Mārcis Gasūns_

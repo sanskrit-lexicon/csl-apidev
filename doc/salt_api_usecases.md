@@ -1,10 +1,12 @@
+_Created: 20-06-2026 · Last updated: 05-09-2026_
+
 # Salt API — use cases & recipes
 
 Practical, copy-paste recipes for the C-SALT-compatible Salt API over CDSL data. Every
 example is **run-verified (2026-06-14)** against the real MW data (`mw.sqlite`, 286,560
-records) unless marked *Phase N*. Contract: [`salt_entries.md`](salt_entries.md) ·
-[`salt_ids.md`](salt_ids.md) · [`salt_graphql.md`](salt_graphql.md) · run/deploy notes:
-[`salt_api_handoff.md`](salt_api_handoff.md).
+records) unless marked *Phase N*. Contract: [`salt_entries.md`](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/doc/salt_entries.md) ·
+[`salt_ids.md`](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/doc/salt_ids.md) · [`salt_graphql.md`](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/doc/salt_graphql.md) · run/deploy notes:
+[`salt_api_handoff.md`](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/doc/salt_api_handoff.md).
 
 Base path on the server is `scans/awork/apidev/api1/`; the clean forms below assume the
 rewrite rules in each spec's "Rewrite rules" section are installed. `$H` =
@@ -24,7 +26,7 @@ Returns the 5 `agni` records, each a full entry with `csl.text` (clean prose),
 `csl.page`/`column` and `csl.scanUrl`. The query is transcoded to SLP1 first, so the
 call works when the declared input script matches the query text: use
 `query=agni&input=slp1`, `query=अग्नि&input=deva`, or `query=agni&input=roman` for
-IAST-style roman input. See [`salt_entries.md`](salt_entries.md) §1.8 for the verbatim
+IAST-style roman input. See [`salt_entries.md`](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/doc/salt_entries.md) §1.8 for the verbatim
 response.
 
 ## 2. Address one exact record (deep link / citation)
@@ -61,7 +63,7 @@ curl "$H/dicts/mw/restful/entries?field=headword_slp1&query=agni&query_type=pref
 
 Backed by `Dal::get3c` (`key LIKE 'agni%'`). **Caveat (Phase-3 parity):** `size` currently
 caps *records*, so a dense headword like `agni` can fill the page before later headwords
-appear — see [`salt_entries.md`](salt_entries.md) §1.10. For a strict headword-suggest list,
+appear — see [`salt_entries.md`](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/doc/salt_entries.md) §1.10. For a strict headword-suggest list,
 raise `size` or wait on the parity decision.
 
 ## 5. Wildcard search
@@ -123,7 +125,7 @@ curl -X POST "$H/dicts/mw/graphql" -H 'content-type: application/json' -d '{
 
 Returns only `id`, `headwordSlp1`, and the three `csl` fields requested. Note the **camelCase**
 GraphQL spelling (`queryType`, `headwordSlp1`) vs. REST snake_case — both match C-SALT.
-`ids(ids: [...])` needs an array variable in the JSON body (see [`salt_graphql.md`](salt_graphql.md)
+`ids(ids: [...])` needs an array variable in the JSON body (see [`salt_graphql.md`](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/doc/salt_graphql.md)
 §3.4.1).
 
 ## 10. Migrate an existing C-SALT client (the whole point)
@@ -143,3 +145,5 @@ The REST query form, GraphQL schema, envelope shape, and `lemma-…` id scheme m
 `sense` / `re_headwords_slp1` are `[]` and `xml` (TEI) is `null` until Phase 5; the
 `-L{lnum}` id fallback addresses sub-records the C-SALT `-{n}` scheme does not number; and the
 `prefix` `size` unit (records vs. headwords) is still to be confirmed.
+
+_Dr. Mārcis Gasūns_

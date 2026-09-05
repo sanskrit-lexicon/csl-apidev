@@ -1,8 +1,10 @@
+_Created: 12-06-2026 · Last updated: 05-09-2026_
+
 # REVIEW HANDOFF — Cologne "simple-search" overhaul (for Fable 5)
 
 Paste this into a fresh **Fable 5** agent that has read/shell access to the
 `csl-apidev` clone. For a version that needs **no repo or network access** (key
-source embedded inline), use [review_handoff_fable5_inlined.md](review_handoff_fable5_inlined.md).
+source embedded inline), use [review_handoff_fable5_inlined.md](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/simple-search/review_handoff_fable5_inlined.md).
 
 ---
 
@@ -99,3 +101,5 @@ give evidence.
   (c) Is the DH plan (`roadmap_dh.md`) sound and correctly scoped against csl-standards?
 - A list of claims you could **not** verify, and why.
 Be concrete and skeptical. Cite line numbers. Re-run the scripts and re-hit the API where you can.
+
+_Dr. Mārcis Gasūns_

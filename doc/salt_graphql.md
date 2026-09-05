@@ -1,9 +1,11 @@
+_Created: 11-06-2026 · Last updated: 05-09-2026_
+
 # Salt API: graphql
 
 C-SALT-compatible GraphQL face. Mirrors the C-SALT / Kosh GraphQL schema verified live
 (introspected against `api.c-salt.uni-koeln.de/dicts/mw/graphql`, 2026-06-11). Two root
 fields only: `entries` (search) and `ids` (get-by-id). Resolvers MUST call the same
-`getword` data path as the REST endpoints ([salt_entries](salt_entries.md)) so the two
+`getword` data path as the REST endpoints ([salt_entries](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/doc/salt_entries.md)) so the two
 faces cannot diverge.
 
 Schema (authoritative): `csl-standards/data/schema/salt-api.graphql`.
@@ -58,7 +60,7 @@ queryType: term, size: 2) { id headwordSlp1 csl { lnum page column } } }`:
 ```
 
 Only the selected fields are returned (GraphQL projection). The `id` scheme is identical to
-REST ([salt_entries](salt_entries.md) §1.8), including the `-L{lnum}` fallback.
+REST ([salt_entries](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/doc/salt_entries.md) §1.8), including the `-L{lnum}` fallback.
 
 For the current hand-rolled Phase-1 dispatcher, send ids through JSON variables, for example:
 
@@ -91,3 +93,5 @@ RewriteRule ^dicts/([^/]*)/graphql$  /scans/awork/apidev/api1/salt_graphql.php?d
    resolver for just `entries`/`ids`? (Recommendation: `webonyx/graphql-php`.)
 2. The live C-SALT service names the entry object type after the dict (`mw`, `ap90`, …).
    Follow that, or use a single `Entry` type? (Profile uses `Entry`.)
+
+_Dr. Mārcis Gasūns_

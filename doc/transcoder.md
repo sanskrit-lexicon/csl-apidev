@@ -1,3 +1,5 @@
+_Created: 11-11-2019 · Last updated: 05-09-2026_
+
 # transcoder
 
 The utilities folder of apidev contains transcoder.php and the transcoder subdirectory.
@@ -109,3 +111,4 @@ Another implementation of transcoder_unicode_parse function.  Function could be 
 ### transcoder_dbg
 Function transcoder_dbg($line,$from,$to,$ans) writes a debug message to the 'tempout' file in the directory containing this transcoder.php file.
 
+_Dr. Mārcis Gasūns_

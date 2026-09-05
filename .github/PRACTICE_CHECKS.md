@@ -1,3 +1,5 @@
+_Created: 12-06-2026 · Last updated: 05-09-2026_
+
 # Practice Checks For csl-apidev
 
 Use these checks for Salt API, PHP controller, data-layer, and deployment PRs.
@@ -27,3 +29,5 @@ Please rerun the Salt API smoke command in the target PHP environment and compar
 - [ ] Output shape was compared with the Salt API profile.
 - [ ] Bad input returns the documented failure mode.
 - [ ] Remaining unverified assumptions are listed with owner and next environment.
+
+_Dr. Mārcis Gasūns_

@@ -1,9 +1,11 @@
+_Created: 11-06-2026 · Last updated: 05-09-2026_
+
 # DCS ↔ CDSL crosswalk
 
 `dcs_cdsl_xref.tsv` maps every Digital Corpus of Sanskrit (2026) lemma to the
 CDSL normalized head-key (`normkey`) that simple-search uses internally. The
 `normkey` is the **join key**: at query time `hwnorm1c` resolves it to the
-per-dictionary headword spelling. Roadmap: [`../roadmap_dh.md`](../roadmap_dh.md)
+per-dictionary headword spelling. Roadmap: [`../roadmap_dh.md`](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/simple-search/roadmap_dh.md)
 Stream B (Q B2).
 
 ## Columns
@@ -49,3 +51,5 @@ python build_xref.py [lemmas.csv] [out.tsv]
 ```
 Defaults resolve relative to this folder; needs the VisualDCS repo as a sibling
 for the default `lemmas.csv` path.
+
+_Dr. Mārcis Gasūns_

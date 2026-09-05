@@ -1,8 +1,10 @@
+_Created: 12-06-2026 · Last updated: 05-09-2026_
+
 # REVIEW HANDOFF (fully inlined) — Cologne "simple-search" overhaul, for Fable 5
 
 Paste into a fresh **Fable 5** session. **No repo or network access is required for
 the core checks** — the critical source is embedded below. (A repo-access version
-with run-it-yourself steps is in [review_handoff_fable5.md](review_handoff_fable5.md).)
+with run-it-yourself steps is in [review_handoff_fable5.md](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/simple-search/review_handoff_fable5.md).)
 
 You are a senior reviewer doing a FULL, CRITICAL, ADVERSARIAL review of work an AI
 (Claude) produced on the Cologne Sanskrit Lexicon **simple-search** engine. Re-derive,
@@ -261,3 +263,5 @@ the problem, the evidence, and a fix. Then a **VERDICT**: (a) is the ported
 (b) is the gold set Sanskrit-correct enough to gate real changes? (c) any metric flaw that
 would let a regression slip through? End with claims you could not verify without the repo
 or the live API.
+
+_Dr. Mārcis Gasūns_

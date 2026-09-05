@@ -1,10 +1,12 @@
+_Created: 29-07-2026 · Last updated: 05-09-2026_
+
 # Salt API: multidict
 
 Resolve a headword across **all** Cologne dictionaries in one call. This is a
 CSL extension — there is no C-SALT equivalent (C-SALT covers 7 dictionaries;
 CSL covers 45+). Internally it uses `Dalglob` (`keydoc_glob1`) to find which
 dictionaries contain the headword, then calls `salt_entries_for_key()` (the
-same render path as [salt_entries](salt_entries.md)) per dictionary.
+same render path as [salt_entries](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/doc/salt_entries.md)) per dictionary.
 
 Normative contract: single-dict entry shape matches `csl-standards/docs/SALT_API_PROFILE.md` §1–§4.
 
@@ -26,7 +28,7 @@ https://www.sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/api1/salt_multidict
 | size | 3 | Max entries **per dictionary**; 0 = unlimited (default). |
 | field | id,html,lnum | Comma-separated response fields; bare csl sub-field names (`html`, `lnum`, `text`, …) are auto-scoped to the `csl` object. Use `csl` for the full csl object. Default: all fields. |
 
-`input`, `output`, `size`, `field` follow the same convention as [salt_entries](salt_entries.md) §1.2.
+`input`, `output`, `size`, `field` follow the same convention as [salt_entries](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/doc/salt_entries.md) §1.2.
 
 ### 1.3. Suggested Clean URL
 
@@ -227,4 +229,4 @@ echo $t->json;
 '
 ```
 
-
+_Dr. Mārcis Gasūns_
