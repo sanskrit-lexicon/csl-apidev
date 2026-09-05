@@ -7,6 +7,23 @@ recorded here. Format loosely follows [Keep a Changelog](https://keepachangelog.
 Dates are UTC+3 (project local).
 
 ## [Unreleased]
+### Fixed
+
+- **`listhierClass.php` prefix fallback revived — the #153 root cause**:
+  `list1b()` initialized its capture flag `$more=false`, making its loop body
+  unreachable — it always returned an empty array, so `match_key()`'s
+  prefix-walk + `"a"` fallback (0.4.2's assumed recovery path) had been dead
+  code since the 2015 refactor out of `monier1list/monierlisthier.php` (whose
+  May-2013 original correctly reads `$more=true`). Any key without an exact
+  headword match therefore fell through to the empty match array that produced
+  the degenerate empty-key center row — the `getWordAlt_keyboard("")` dead
+  links of [csl-apidev#153](https://github.com/sanskrit-lexicon/csl-apidev/issues/153) —
+  and, after H3853, to an unconditional 404 (e.g. `mahArASwrIya` vs
+  `mahArAzwrIya`). Now approximate keys degrade gracefully: the pane anchors at
+  the nearest headword with the longest case-sensitive prefix match; H3853
+  throws remain for empty keys and missing/empty data.
+  `tools/listhier_empty_key_probe.php` extended: `zzqqqx` → z-anchored pane,
+  `mahArASwrIya` → mahArA-family pane, no empty-key onclick anywhere.
 
 ## [0.4.2] - 2026-09-01
 ### Fixed

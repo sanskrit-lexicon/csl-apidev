@@ -269,7 +269,13 @@ class ListhierClass {
   $matches=array();
   $nmatches=0;
   $keylen = strlen($key);
-  $more=false;
+  // #153 root cause: must be true (same idiom as list1a and as the May-2013
+  // monier1list/monierlisthier.php original). With false the loop body was
+  // unreachable, list1b() always returned array(), and match_key()'s whole
+  // prefix fallback was dead code - approximate/unmatchable keys fell through
+  // to the degenerate empty-key center row (the dead onclick links of #153),
+  // or after H3853 to an unconditional 404.
+  $more=true;
   foreach($recarr as $rec) {
    if ($more) {
     list($key1,$lnum1,$data1) = $rec;
