@@ -75,7 +75,7 @@ server-side for offline development (always `noindex`).
 
 ## 3. JSON-LD shapes (playbook P0 spine, scholarly adaptation)
 
-One `@graph` per entry page ([validation](#6-validation-results) below):
+One `@graph` per entry page (validation below):
 
 - `Organization` — `@id: {site}/#org` (Cologne Digital Sanskrit Dictionaries,
   University of Cologne). The playbook's entity spine: every other node

@@ -147,7 +147,7 @@ mapping for free. Recommend deciding at the same time as doc/salt_graphql.md §3
 
 ## 4. `/MW/{ref}` clean-URL — started, whitelist = mw only
 
-New [`cleanurl.php`](https://github.com/sanskrit-lexicon/csl-apidev/blob/master/cleanurl.php)
+New [`cleanurl.php`](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/cleanurl.php)
 implements [doc/cleanurl.md](https://github.com/sanskrit-lexicon/csl-apidev/blob/master/doc/cleanurl.md)'s
 own **Build & test plan step 1**: `parse_cleanurl()` + the routing decision, served as
 the §7 diagnostic `?format=json` envelope (content-negotiated HTML/listview rendering,
