@@ -14,20 +14,14 @@ error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
 header("Access-Control-Allow-Origin: *");
 header('content-type: application/json; charset=utf-8');
 require_once(__DIR__ . '/salt_multidictClass.php');
+require_once(__DIR__ . '/../jsonp_callback_guard.php');
 
 function saltMultidictCall() {
   $temp = new SaltMultidictClass();
   $json = $temp->json;
   if (isset($_GET['callback'])) {
-    $callback = $_GET['callback'];
-    if (!preg_match('/^[A-Za-z_$][A-Za-z0-9_$.]{0,127}$/', $callback)) {
-      header('content-type: text/plain; charset=utf-8');
-      http_response_code(400);
-      echo "invalid callback";
-      return;
-    }
-    header('content-type: application/javascript; charset=utf-8');
-    echo htmlentities($callback) . "($json)";
+    // Shared whitelist+reply guard (H4212).
+    jsonp_reply($_GET['callback'], $json, true);
   } else {
     echo $json;
   }

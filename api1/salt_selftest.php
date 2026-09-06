@@ -74,5 +74,6 @@ show("graphql  entries  '{$words[0]}'", $c->json);
 echo "# done.\n";
 echo "# Empty 'entries' usually means the {$dict}.sqlite database was not found from the repo\n";
 echo "# root, or a 'VERIFY:' assumption in salt_common.php needs adjusting. The constructors\n";
-echo "# reuse the getword pipeline, so a malformed record can exit(1) inside getword_data.php.\n";
+echo "# reuse the getword pipeline, so a malformed record throws inside\n";
+echo "# getword_data.php (H3636 A10/A12) and selftest dies on that word.\n";
 ?>

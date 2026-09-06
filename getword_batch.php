@@ -47,12 +47,24 @@ function getword_batch_call() {
  $results = array();
  foreach ($keys as $key) {
   $_REQUEST['key'] = $key;
-  $temp = new GetwordClass();
-  $results[] = array(
-   'key' => $key,
-   'status' => $temp->status ? 200 : 404,
-   'html' => $temp->table1,
-  );
+  try {
+   $temp = new GetwordClass();
+   $results[] = array(
+    'key' => $key,
+    'status' => $temp->status ? 200 : 404,
+    'html' => $temp->table1,
+   );
+  } catch (Throwable $e) {
+   // H4212: H3636 A10/A12 made record-level data anomalies throw; a batch
+   // endpoint must degrade PER KEY (a 500 row) instead of letting one
+   // malformed record fatal the whole response into broken JSON.
+   $results[] = array(
+    'key' => $key,
+    'status' => 500,
+    'html' => '',
+    'error' => $e->getMessage(),
+   );
+  }
  }
 
  if ($savedKey === null) { unset($_REQUEST['key']); } else { $_REQUEST['key'] = $savedKey; }

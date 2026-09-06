@@ -12,6 +12,7 @@ if (isset($_GET['callback'])) {
 }
 header("Access-Control-Allow-Origin: *");
 require_once("getwordXmlClass.php");
+require_once(__DIR__ . '/jsonp_callback_guard.php');
 
 function getwordXmlCall() {
   try {
@@ -31,16 +32,8 @@ function getwordXmlCall() {
    http_response_code($temp->status);
   }
   if (isset($_GET['callback'])) {
-   $callback = $_GET['callback'];
-   // Only allow a safe JSONP callback identifier. Echoing the raw callback
-   // is a reflected-XSS / JSONP-injection vector, so reject anything else.
-   if (!preg_match('/^[A-Za-z_$][A-Za-z0-9_$.]{0,127}$/',$callback)) {
-    header('content-type: text/plain; charset=utf-8');
-    http_response_code(400);
-    echo "invalid callback";
-    return;
-   }
-   echo htmlentities($callback) . "($json)";
+   // Shared whitelist+reply guard (H4212).
+   jsonp_reply($_GET['callback'], $json);
   }else {
    echo $json;
   }

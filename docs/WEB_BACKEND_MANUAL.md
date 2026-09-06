@@ -326,9 +326,18 @@ What CI already enforces on every push/PR
 Conventions the code expects (established by the merged sweeps, PR
 [#52](https://github.com/sanskrit-lexicon/csl-apidev/pull/52) + H1523):
 
-- **JSONP callbacks are whitelisted, never echoed raw**: validate against
-  `^[A-Za-z_$][A-Za-z0-9_$.]{0,127}$`, reject with `400 invalid callback`, entity-encode.
-  Copy the idiom from [api1/salt_entries.php](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/api1/salt_entries.php).
+- **JSONP callbacks are whitelisted, never echoed raw** (H4212): use the shared
+  [jsonp_callback_guard.php](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/jsonp_callback_guard.php)
+  (`jsonp_reply($_GET['callback'], $json)`; api1 salt_* pass `$jsContentType = true`) —
+  it enforces the whitelist `^[A-Za-z_$][A-Za-z0-9_$.]{0,127}$`, rejects with
+  `400 invalid callback`, and entity-encodes. Do not re-inline the idiom in new
+  endpoints; require the helper. (Historical idiom source: PR
+  [#52](https://github.com/sanskrit-lexicon/csl-apidev/pull/52).)
+- **Fork drift is runnable, not remembered** (H4212): `php tools/fork_sync_check.php`
+  byte-compares the three hand-synced fork files against the csl-websanlexicon
+  twin (`v02/makotemplates/web/webtc/`); run it after ANY touch to
+  `basicadjust.php` / `basicdisplay.php` / `getword_data.php`, and land twin
+  edits as a paired PR in csl-websanlexicon first.
 - **Every HTML/JSON entry point** `require_once`s
   [security_headers.php](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/security_headers.php)
   before any output — baseline headers + **Content-Security-Policy-Report-Only** (telemetry

@@ -9,7 +9,60 @@ Dates are UTC+3 (project local).
 ## [Unreleased]
 ### Fixed
 
+- **One malformed record no longer kills a whole multi-record response** (H4212):
+  `getword_batch.php` now degrades per key (a 500 row with an `error` field)
+  instead of letting the H3636 A10/A12 `RuntimeException` fatal the entire
+  batch into broken JSON; `app/entry.php`'s `entry_fetch_block()` degrades the
+  one dictionary block to the existing "could not be rendered" note instead of
+  fataling the whole stacked SSR page.
+- **`servepdf.php` with neither `page` nor `key` is now a 400**, not a 500:
+  the old flow fell through `get_pageinfos()` to a `count(null)` TypeError;
+  both the HTML face and the `api=1` JSON face now report the bad request
+  truthfully (`servepdfClass.php`, `html_construct_error()` gained a status arg).
+- **`servepdfClass.php` PWG/GRA page fallback isset-guarded** — an unadjusted
+  page absent from the hash fell through a suppressed undefined-key notice;
+  the duplicated `init_request()` call in `get_pageinfos()` was also removed.
+- **Stale `exit(1)` claim removed** from `api1/salt_selftest.php` (the
+  getword pipeline throws since H3636; the comment predated it).
+- **Unreachable dead code removed** after `return` in
+  `Getword_data::adjust_key2_mw()` (`getword_data.php`).
+- **`Dalglob::unused_get3b()` deleted** — dead, never called, and held a raw
+  `LIKE '$key'` string-interpolation shape next to the bound `Dal::get3b`
+  of the same name (SQLi-shaped trap; verified unreachable before deletion).
 - **`listhierClass.php` prefix fallback revived — the #153 root cause**:
+  `list1b()` initialized its capture flag `$more=false`, making its loop body
+  unreachable — it always returned an empty array, so `match_key()`'s
+  prefix-walk + `"a"` fallback (0.4.2's assumed recovery path) had been dead
+  code since the 2015 refactor out of `monier1list/monierlisthier.php` (whose
+  May-2013 original correctly reads `$more=true`). Any key without an exact
+  headword match therefore fell through to the empty match array that produced
+  the degenerate empty-key center row — the `getWordAlt_keyboard("")` dead
+  links of [csl-apidev#153](https://github.com/sanskrit-lexicon/csl-apidev/issues/153) —
+  and, after H3853, to an unconditional 404 (e.g. `mahArASwrIya` vs
+  `mahArAzwrIya`). Now approximate keys degrade gracefully: the pane anchors at
+  the nearest headword with the longest case-sensitive prefix match; H3853
+  throws remain for empty keys and missing/empty data.
+  `tools/listhier_empty_key_probe.php` extended: `zzqqqx` → z-anchored pane,
+  `mahArASwrIya` → mahArA-family pane, no empty-key onclick anywhere.
+
+### Changed
+
+- **17 copy-pasted JSONP callback guards consolidated** into
+  [jsonp_callback_guard.php](../jsonp_callback_guard.php) (`jsonp_callback_ok()`
+  + `jsonp_reply()`): identical whitelist `^[A-Za-z_$][A-Za-z0-9_$.]{0,127}$`,
+  identical 400 `invalid callback` rejection, identical entity-encoding; the
+  api1 salt_* JS content-type switch is the `$jsContentType` flag. Contract
+  byte-for-byte preserved at every call site (getword, getsuggest, servepdf,
+  listhier, dalglob, getword_xml, api_trial, pwkvn/01-03, simple-search
+  v1.0d/v1.0/v1.1/v1.1a, api1/salt_entries|salt_ids|salt_multidict).
+- **`getword_xml.md`** now documents the previously undocumented `lnum` and
+  `regex` selector parameters (precedence `lnum` > `regex` > `key`; `regex`
+  wildcard translation and the 100-record cap).
+- **New `tools/fork_sync_check.php`** — mechanical drift guard for the three
+  hand-synced fork files (`basicadjust.php`, `basicdisplay.php`,
+  `getword_data.php`) vs the csl-websanlexicon twin
+  (`v02/makotemplates/web/webtc/`); exit 1 on drift. The manual's
+  "keep the two copies in sync" check is now runnable instead of remembered.
   `list1b()` initialized its capture flag `$more=false`, making its loop body
   unreachable — it always returned an empty array, so `match_key()`'s
   prefix-walk + `"a"` fallback (0.4.2's assumed recovery path) had been dead
