@@ -1,4 +1,4 @@
-_Created: 12-06-2026 · Last updated: 05-09-2026_
+_Created: 12-06-2026 · Last updated: 06-09-2026_
 
 # Changelog
 
@@ -9,6 +9,23 @@ Dates are UTC+3 (project local).
 ## [Unreleased]
 ### Fixed
 
+- **Blanket error suppression lifted from the core serving chain (H4227, H3487
+  audit A1):** `error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING)` (17 root
+  entry/class files) replaced by `error_reporting(E_ALL)` +
+  `display_errors=0` + `log_errors=1` — notices and warnings now reach the
+  error log instead of being invisible, while the response body stays clean
+  (the original "Peter Scharf Mac" concern). Legacy dirs (sample/,
+  simple-search/, pwkvn/, api0/, api1/, app/, lookup/, monier1list/, tools/)
+  are out of scope.
+- **Missing `key` is a 400, not the 'guru' entry (H4227, audit A15):**
+  `parm.php` no longer invents `$tempkey='guru'` when `key` is absent; it
+  sets a `keyMissing` flag (deliberately without touching `$status`, so
+  term-only getsuggest / listhier / dalglob calls are unaffected).
+  `getword.php` answers a JSON 400 envelope; `getwordClass` skips the record
+  plumbing entirely; `getwordXmlClass` reports `status=400` which
+  `getword_xml.php` turns into `http_response_code(400)`. Verified with a
+  live `php -r` harness: no-key Parm → flag set + empty key; GetwordClass →
+  empty table, no lookup; with-key Parm → flag false, key intact.
 - **One malformed record no longer kills a whole multi-record response** (H4212):
   `getword_batch.php` now degrades per key (a 500 row with an `error` field)
   instead of letting the H3636 A10/A12 `RuntimeException` fatal the entire
