@@ -1,6 +1,12 @@
 <?php
 // Exclude WARNING messages also, to solve Peter Scharf Mac version.
-error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
+// H4227 A1 (H3487 audit): report everything; notices/warnings go to the
+// error log, never the response body. The old blanket suppression hid real
+// defects; display_errors=0 preserves the original 'Peter Scharf Mac'
+// concern (no diagnostics in output).
+error_reporting(E_ALL);
+ini_set('display_errors', '0');
+ini_set('log_errors', '1');
 ?>
 <?php
 //getwordXmlClass.php
@@ -17,11 +23,20 @@ class GetwordXmlClass {
  // H3636 A19: the HTTP status the endpoint should serve (200 or 404),
  // surfaced from the payload's status so JSON bodies stay unchanged.
  public $status;
- public function __construct() {
-  $getParms = new Parm();
-  
-  $dict = $getParms->dict;
-  $dal = new Dal($dict);
+  public function __construct() {
+   $getParms = new Parm();
+   
+   $dict = $getParms->dict;
+   // H4227 A15: a missing 'key' is a client error (400), not a lookup miss;
+   // getword_xml.php turns $this->status into http_response_code().
+   if ($getParms->keyMissing) {
+    $ans = array('dict'=>$dict,'status'=>400,
+      'error'=>"required parameter 'key' is missing");
+    $this->json = json_encode($ans);
+    $this->status = 400;
+    return;
+   }
+   $dal = new Dal($dict);
   
   /* $matches is array. each element is 3-element array
     list($key1,$lnum1,$data1)

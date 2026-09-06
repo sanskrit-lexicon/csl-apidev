@@ -1,6 +1,12 @@
 <?php
 // Exclude WARNING messages also, to solve Peter Scharf Mac version.
-error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
+// H4227 A1 (H3487 audit): report everything; notices/warnings go to the
+// error log, never the response body. The old blanket suppression hid real
+// defects; display_errors=0 preserves the original 'Peter Scharf Mac'
+// concern (no diagnostics in output).
+error_reporting(E_ALL);
+ini_set('display_errors', '0');
+ini_set('log_errors', '1');
 ?>
 <?php
 //getsuggestClass.php 08-16-2019

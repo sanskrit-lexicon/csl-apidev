@@ -1,6 +1,12 @@
 <?php
 require_once(__DIR__ . '/security_headers.php');
-error_reporting( error_reporting() & ~E_NOTICE );
+// H4227 A1 (H3487 audit): report everything; notices/warnings go to the
+// error log, never the response body. The old blanket suppression hid real
+// defects; display_errors=0 preserves the original 'Peter Scharf Mac'
+// concern (no diagnostics in output).
+error_reporting(E_ALL);
+ini_set('display_errors', '0');
+ini_set('log_errors', '1');
  header("Access-Control-Allow-Origin: *");
 /* removed 08-15-2019.
 if (isset($_GET['callback'])) {
@@ -17,7 +23,6 @@ if (isset($_GET['callback'])) {
   Aug 18, 2018. add error reporting to remove warnings; Peter's MacBookPro shows warning messages
     for the calls to setcookie. Hopefully this will suppress those warning messages.
 */
-error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
  $cookienames = array('dict','accent','input','output');
  foreach($cookienames as $name) {
   // use $_REQUEST, which includes $_GET and $_POST
