@@ -165,7 +165,14 @@ function entry_fetch_block($dict, $dockey, $fixtures, $alldockeys = null) {
  $_REQUEST['accent'] = 'no';
  $_REQUEST['dispopt'] = '3';      // bare fragment: no <html> wrapper, no <h1>
  $_REQUEST['dispcss'] = 'no';
- $gw = new GetwordClass();
+ try {
+  $gw = new GetwordClass();
+ } catch (Throwable $e) {
+  // H4212: one malformed record (H3636 A10/A12 throw) must degrade THIS
+  // dictionary block to null (skipped; the "could not be rendered" note
+  // covers it), not fatal the whole stacked page.
+  return null;
+ }
  return $gw->status ? $gw->table1 : null;
 }
 

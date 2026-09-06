@@ -6,6 +6,7 @@ error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
 <?php
 require_once('getwordXmlClass.php');
 require_once('dbgprint.php');
+require_once(__DIR__ . '/jsonp_callback_guard.php');
 if (isset($_GET['callback'])) {
  header('content-type: application/json; charset=utf-8');
 }
@@ -33,17 +34,8 @@ function getapiCall($url) {
    http_response_code(404);
   }
   if (isset($_GET['callback'])) {
-   $json = json_encode($table1);
-   $callback = $_GET['callback'];
-   // Only allow a safe JSONP callback identifier. Echoing the raw callback
-   // is a reflected-XSS / JSONP-injection vector, so reject anything else.
-   if (!preg_match('/^[A-Za-z_$][A-Za-z0-9_$.]{0,127}$/',$callback)) {
-    header('content-type: text/plain; charset=utf-8');
-    http_response_code(400);
-    echo "invalid callback";
-    return;
-   }
-   echo htmlentities($callback) . "($json)";
+   // Shared whitelist+reply guard (H4212).
+   jsonp_reply($_GET['callback'], json_encode($table1));
   }else {
    echo json_encode($table1);
   }

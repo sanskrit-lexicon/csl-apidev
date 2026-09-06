@@ -9,6 +9,19 @@ assumed that Javascript code provided by the calling application would provide t
 
 The parameters are the 5 primary ones used by the [getword](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/doc/getword.md) display: *dict, key, input, output, accent*.
 
+Two additional, mutually exclusive selector parameters exist (H4212 documentation
+of previously undocumented behavior — the code paths are in
+`getwordXmlClass.php`):
+
+- `lnum` — return the record(s) at this Cologne `lnum` (uses `Dal::get2`).
+  When present, `key` is ignored.
+- `regex` — wildcard key search: `*` is translated to the SQL `%` wildcard and
+  `?` to `_`, then matched with `Dal::get3b`, capped at 100 records. A leading
+  `*` therefore scans the whole key index. Documented for completeness; the
+  parameter set remains experimental ('alpha') as above.
+
+Precedence: `lnum` > `regex` > `key`.
+
 Data is returned in a JSON object with (a) the given 5 inputs and (b) an 'xml' attribute' whose value is an array of strings.  The array has as many elements as there are records the the dictionary xml file with 'key1 == key'.
 In the following example, there are 2 elements in the returned xml array.
 

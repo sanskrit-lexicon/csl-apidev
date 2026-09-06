@@ -40,9 +40,13 @@ class ServepdfClass {
   */
   $this->init_request($getParms,$dictinfo);
 
-  $this->init_request($getParms,$dictinfo);
   $page = $this->request['page'];
   $key = $this->request['key'];
+  // H4212: neither selector given is a client error, not a lookup miss.
+  if (($page == '') && ($key == '')) {
+   $this->status = 400;
+   return array();
+  }
   //dbgprint(true,"get_pageinfos: page=$page, key=$key\n");
   #list($page,$key) = $getParms->servepdfParms();  
   
@@ -73,14 +77,15 @@ class ServepdfClass {
    return $pageinfos;
   }
  }
- public function html_construct_error($errormsg) { 
-  #$errormsg = "<div>Servepdf error. No dictionary mentioned? </div>";
-  // H1523: $dictupper_attr was never set in this scope (empty/notice title).
-  // Escape the message — dicterr can include the raw dict parameter.
-  $errormsg_html = htmlspecialchars((string)$errormsg, ENT_QUOTES, 'UTF-8');
-  // H3636 A8: the error page is a not-found condition; let the endpoint
-  // surface it as a truthful HTTP status.
-  $this->status = 404;
+  public function html_construct_error($errormsg, $status = 404) {
+   #$errormsg = "<div>Servepdf error. No dictionary mentioned? </div>";
+   // H1523: $dictupper_attr was never set in this scope (empty/notice title).
+   // Escape the message — dicterr can include the raw dict parameter.
+   $errormsg_html = htmlspecialchars((string)$errormsg, ENT_QUOTES, 'UTF-8');
+   // H3636 A8: the error page is a not-found condition; let the endpoint
+   // surface it as a truthful HTTP status. H4212: callers may pass 400 for
+   // bad requests (e.g. neither 'page' nor 'key' given).
+   $this->status = $status;
   $html = <<<EOF
 <!DOCTYPE html>
 <html>
@@ -113,6 +118,13 @@ EOF;
    return;  
   }
   $pageinfos = $this->get_pageinfos($getParms,$dictinfo);
+  // H4212: a request with neither 'page' nor 'key' is a bad request —
+  // serve a 400 error page instead of falling through to the
+  // count(null)-TypeError 500 the old flow produced.
+  if ($this->status == 400) {
+   $this->html_construct_error("servepdf ERROR: one of the 'page' or 'key' parameters is required",400);
+   return;
+  }
   //dbgprint(true,"servepdfClass: # pageinfos=" . count($pageinfos) . "\n");
   if (count($pageinfos) > 0) {
    $pageinfo = $pageinfos[0];
@@ -307,7 +319,12 @@ HTML;
    if (($ipage % 2) == 0) {
     $ipage = $ipage - 1;
     $pagestr = sprintf('%s-%04d',$vol,$ipage);
-    $ncur = $pagehash[$pagestr]; 
+    // H4212: isset-guard — an unadjusted page not in the hash must fall
+    // through to the not-found path below, not raise a suppressed
+    // undefined-key notice.
+    if (isset($pagehash[$pagestr])) {
+     $ncur = $pagehash[$pagestr];
+    }
    }
   }
   if ((!$ncur) && ($dictupper == 'GRA')) {
@@ -317,7 +334,10 @@ HTML;
    if (($ipage % 2) == 0) {
     $ipage = $ipage - 1;
     $pagestr = sprintf('%d',$ipage);
-    $ncur = $pagehash[$pagestr]; 
+    // H4212: isset-guard, same rationale as the PWG branch above.
+    if (isset($pagehash[$pagestr])) {
+     $ncur = $pagehash[$pagestr];
+    }
    }
   }
  
@@ -363,8 +383,12 @@ HTML;
   $pdfpages_url = $dictinfo->get_pdfpages_url();
   // Construct final form
   if (count($pageinfos) == 0) {
-   $ans['status'] = 404;  # HTML status code 'not found'
-   $ans['errorinfo'] = "servepdf ERROR: " . "No pages found";
+   // H4212: distinguish bad request (no page AND no key) from a lookup miss.
+   $ans['status'] = ($this->status == 400) ? 400 : 404;
+   $ans['errorinfo'] = ($this->status == 400)
+    ? "servepdf ERROR: one of the 'page' or 'key' parameters is required"
+    : "servepdf ERROR: " . "No pages found";
+   $this->status = $ans['status'];
    $ans['links'] = []; # empty array
    $this->json = json_encode($ans);
    return;  // go no further

@@ -269,20 +269,6 @@ $homorganic_nasal = function($b) {
   $a = $b;
  }
  return $a;
-}
- public function unused_get3b($key,$max) {
- /*  This is not yet ready!!!
- returns an array of records, where 'key' is like $key
- The wildcards for sqlite are: 
-   (ref=https://www.sqlitetutorial.net/sqlite-like/)
- The percent sign % wildcard matches any sequence of zero or more characters.
- The underscore _ wildcard matches any single character.
- Setting a pragma for case_sensitive
-*/
-  $pragma="PRAGMA case_sensitive_like=true;";
-  $this->file_db->query($pragma);
-  $sql = " select * from {$this->tabname} where key LIKE '$key' LIMIT $max";
-  return $this->get($sql);
  }
 
 }

@@ -10,6 +10,7 @@ if (isset($_GET['callback'])) {
 }
 header("Access-Control-Allow-Origin: *");
 require_once("getwordClass.php");
+require_once(__DIR__ . '/jsonp_callback_guard.php');
 function getwordCall() {
   try {
    $temp = new GetwordClass();
@@ -22,21 +23,13 @@ function getwordCall() {
    return;
   }
   $table1 = $temp->table1;
-  if (isset($_GET['callback'])) {
-   $callback = $_GET['callback'];
-   // Only allow a safe JSONP callback identifier. Echoing the raw callback
-   // is a reflected-XSS / JSONP-injection vector, so reject anything else.
-   if (!preg_match('/^[A-Za-z_$][A-Za-z0-9_$.]{0,127}$/',$callback)) {
-    header('content-type: text/plain; charset=utf-8');
-    http_response_code(400);
-    echo "invalid callback";
-    return;
+   if (isset($_GET['callback'])) {
+    // Shared whitelist+reply guard (H4212; contract identical to the inline
+    // idiom this replaces — see jsonp_callback_guard.php header).
+    jsonp_reply($_GET['callback'], json_encode($table1));
+   }else {
+    echo $table1;
    }
-   $json = json_encode($table1);
-   echo htmlentities($callback) . "($json)";
-  }else {
-   echo $table1;
-  }
  }
  getwordCall();
 ?>

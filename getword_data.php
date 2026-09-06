@@ -202,9 +202,6 @@ public function adjust_key2_mw($key2) {
    throw new RuntimeException("adjust_key2_mw: leftover markup in key2: $ans1");
   }
   return $ans;
- $ans = preg_replace('||','',$ans);
- $ans = preg_replace('||','',$ans);
- return $ans;
 }
 }
 ?>
