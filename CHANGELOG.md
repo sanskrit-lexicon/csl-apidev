@@ -48,7 +48,7 @@ Dates are UTC+3 (project local).
 ### Changed
 
 - **17 copy-pasted JSONP callback guards consolidated** into
-  [jsonp_callback_guard.php](../jsonp_callback_guard.php) (`jsonp_callback_ok()`
+  jsonp_callback_guard.php (`jsonp_callback_ok()`
   + `jsonp_reply()`): identical whitelist `^[A-Za-z_$][A-Za-z0-9_$.]{0,127}$`,
   identical 400 `invalid callback` rejection, identical entity-encoding; the
   api1 salt_* JS content-type switch is the `$jsContentType` flag. Contract

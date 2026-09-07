@@ -21,7 +21,7 @@ csl-atlas ([csl-atlas#188](https://github.com/sanskrit-lexicon/csl-atlas/pull/18
 
 The live endpoints (`getword.php`, `getsuggest.php`/`getsuggestClass.php`,
 `dal.php`) do exact-match (`Dal::get1`) or prefix-match (`Dal::get3a`, `key
-LIKE '<prefix>%'`, [`dal.php`](dal.php) around line 239) lookups only. There is
+LIKE '<prefix>%'`, `dal.php` around line 239) lookups only. There is
 no edit-distance, soundex, or "did you mean" logic — a search either finds the
 literal or a literal-prefixed headword, or nothing. `transcoder_processString`
 only converts between transliteration schemes (SLP1/IAST/HK/Devanagari); it
