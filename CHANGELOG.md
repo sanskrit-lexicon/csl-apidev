@@ -7,6 +7,7 @@ recorded here. Format loosely follows [Keep a Changelog](https://keepachangelog.
 Dates are UTC+3 (project local).
 
 ## [Unreleased]
+- Added a root `AGENTS.md` agent-entrypoint stub (H4634): names itself the agent entrypoint, links [CLAUDE.md](CLAUDE.md), points at the [Uprava org standard](https://github.com/gasyoun/Uprava/blob/main/AGENTS.md).
 ### Fixed
 
 - **One malformed record no longer kills a whole multi-record response** (H4212):
