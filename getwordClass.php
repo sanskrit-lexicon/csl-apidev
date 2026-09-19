@@ -12,10 +12,20 @@ require_once('dispitem.php');
 class GetwordClass {
  public $getParms,$matches,$table1,$status,$basicOption;
  public $xmlmatches;
- public function __construct($basicOption = true) {
-  $this->getParms = new Parm();
-  $this->basicOption = $this->getParms->basicOption;
-  // $this->basicOption = $basicOption; // 06-19-2024 Refer webtc1/
+  public function __construct($basicOption = true) {
+   $this->getParms = new Parm();
+   $this->basicOption = $this->getParms->basicOption;
+   // H4227 A15: no key, no lookup. The endpoint answers 400 from
+   // $this->getParms->keyMissing; skip the record plumbing entirely
+   // instead of silently serving the entry for 'guru'.
+   if ($this->getParms->keyMissing) {
+    $this->matches = array();
+    $this->xmlmatches = array();
+    $this->table1 = '';
+    $this->status = false;
+    return;
+   }
+   // $this->basicOption = $basicOption; // 06-19-2024 Refer webtc1/
   $temp = new Getword_data($basicOption);
   $this->matches = $temp->matches; 
   $this->table1 = $this->getword_html();

@@ -1,6 +1,12 @@
 <?php
 require_once(__DIR__ . '/security_headers.php');
-error_reporting(E_ALL & ~E_NOTICE );
+// H4227 A1 (H3487 audit): report everything; notices/warnings go to the
+// error log, never the response body. The old blanket suppression hid real
+// defects; display_errors=0 preserves the original 'Peter Scharf Mac'
+// concern (no diagnostics in output).
+error_reporting(E_ALL);
+ini_set('display_errors', '0');
+ini_set('log_errors', '1');
 ?>
 <?php
 /* servepdf.php  Apr 27, 2015 Multidictionary display of scanned images
