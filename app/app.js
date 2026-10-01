@@ -85,6 +85,48 @@
  // level down -- same correction lookup.js and sample/dalglob1.php apply.
  function fixCssPath(html) { return html.replace('css/basic.css', '../css/basic.css'); }
 
+ /* Entry HTML is a disp response (rich dictionary markup from getword.php /
+    getword_batch.php) and must keep rendering as HTML -- textContent would
+    destroy the entry formatting. It is same-origin trusted content (curated
+    dictionary XML rendered by this repo's own PHP), but it is still HTTP
+    response text flowing into the app's one innerHTML sink, so active
+    content is stripped structurally before insertion as defense-in-depth
+    (H5543; dual-run reconciliation of the sanitizer lane + the textContent
+    render-policy lane, per the H5106 taint discipline). <template> parsing
+    is inert (no script runs, no resource loads), then script-capable
+    elements are removed outright and every surviving element loses
+    event-handler attributes and script-scheme URLs. */
+ var BAD_ENTRY_ELEMENTS = ['script', 'iframe', 'frame', 'frameset', 'object',
+  'embed', 'applet', 'base', 'link', 'meta', 'noscript', 'svg', 'math',
+  'template'];
+ var URL_ATTRS = ['href', 'src', 'xlink:href', 'action', 'formaction',
+  'poster', 'background', 'srcset'];
+ function hasScriptScheme(value) {
+  // Attr values may embed tabs/newlines/control chars to dodge a naive
+  // check (jav&#x09;ascript:); collapse all whitespace/control chars first.
+  var v = String(value).toLowerCase().replace(/[\s\x00-\x1f]+/g, '');
+  return v.indexOf('javascript:') === 0 || v.indexOf('vbscript:') === 0 ||
+   v.indexOf('data:text/html') === 0;
+ }
+ function sanitizeEntryHtml(html) {
+  var tpl = document.createElement('template');
+  tpl.innerHTML = html;
+  Array.prototype.forEach.call(
+   tpl.content.querySelectorAll(BAD_ENTRY_ELEMENTS.join(',')),
+   function (el) { if (el.parentNode) { el.parentNode.removeChild(el); } });
+  Array.prototype.forEach.call(tpl.content.querySelectorAll('*'), function (el) {
+   var attrs = Array.prototype.slice.call(el.attributes); // snapshot: live list
+   attrs.forEach(function (attr) {
+    var name = attr.name.toLowerCase();
+    if (name.indexOf('on') === 0 ||
+     (URL_ATTRS.indexOf(name) !== -1 && hasScriptScheme(attr.value))) {
+     el.removeAttribute(attr.name);
+    }
+   });
+  });
+  return tpl.innerHTML;
+ }
+
  function isMobile() { return window.matchMedia(MOBILE_MQ).matches; }
 
  // Headwords render IAST by default, Devanagari via the R5 toggle, both
@@ -211,9 +253,12 @@
   if (state.cache.has(cacheKey)) { return Promise.resolve(state.cache.get(cacheKey)); }
   if (FIXTURES) {
    return loadFixtures().then(function (fx) {
-    var r = Object.prototype.hasOwnProperty.call(fx, cacheKey)
-     ? fx[cacheKey]
-     : { key: key, status: 404, html: '<p>Not in fixtures: ' + key + '</p>' };
+   var r = Object.prototype.hasOwnProperty.call(fx, cacheKey)
+    ? fx[cacheKey]
+    // H5543: no key interpolation into HTML strings (server-supplied dockeys
+    // reached innerHTML via the fixture-miss message). Errors carry the raw
+    // fields; renderReader renders them as textContent.
+    : { key: key, status: 404 };
     state.cache.set(cacheKey, r);
     return r;
    });
@@ -233,7 +278,8 @@
    }
    var r = res.ok
     ? { key: key, status: 200, html: res.text }
-    : { key: key, status: res.status, html: '<p>Network error (' + res.status + ') for ' + key + '</p>' };
+    // H5543: status/key stay data, never interpolated into an HTML string.
+    : { key: key, status: res.status };
    state.cache.set(cacheKey, r);
    return r;
   });
@@ -385,13 +431,20 @@
   return String(n).split('').map(function (d) { return SUP_DIGITS[+d]; }).join('');
  }
 
- function renderRowBadges(row) {
-  var badges = row.badgesEl;
-  badges.innerHTML = '';
-  if (!row.dicts || !row.dicts.length) {
-   badges.innerHTML = '<span class="ap-row-pending">not found</span>';
-   return;
+  function pendingBadge(text) {
+   var span = document.createElement('span');
+   span.className = 'ap-row-pending';
+   span.textContent = text;
+   return span;
   }
+
+  function renderRowBadges(row) {
+   var badges = row.badgesEl;
+   badges.innerHTML = '';
+   if (!row.dicts || !row.dicts.length) {
+    badges.appendChild(pendingBadge('not found'));
+    return;
+   }
   var filterActive = Object.keys(state.dictFilter).length > 0;
   row.dicts.forEach(function (rec) {
    if (filterActive && !state.dictFilter[rec.dict]) { return; }
@@ -402,8 +455,15 @@
     b.className = 'ap-dictbadge';
     b.title = metaFor(rec.dict).title;
     // Homonyms render as numbered sub-badges (MW¹ MW²), same convention
-    // as lookup's homonym tabs (spec §Results list).
-    b.innerHTML = rec.dict.toUpperCase() + (multi ? '<sup>' + supNum(di + 1) + '</sup>' : '');
+    // as lookup's homonym tabs (spec §Results list). H5543: dict code and
+    // superscript go in as text nodes -- rec.dict is server-supplied
+    // (dalglob.php) and no longer reaches innerHTML.
+    b.textContent = rec.dict.toUpperCase();
+    if (multi) {
+     var sup = document.createElement('sup');
+     sup.textContent = supNum(di + 1);
+     b.appendChild(sup);
+    }
     var pressed = state.openRow === row && state.openDict === rec.dict && state.openDockey === dockey;
     b.setAttribute('aria-pressed', pressed ? 'true' : 'false');
     b.addEventListener('click', function (evt) {
@@ -414,7 +474,7 @@
    });
   });
   if (!badges.children.length) {
-   badges.innerHTML = '<span class="ap-row-pending">filtered out</span>';
+   badges.appendChild(pendingBadge('filtered out'));
   }
  }
 
@@ -519,7 +579,13 @@
    if (r.dicts) { renderRowBadges(r); }
   });
   placeReader(row);
-  els.reader.innerHTML = '<p class="ap-reader-hint">Loading ' + dict.toUpperCase() + '…</p>';
+  // H5543: dict originates server-side (dalglob) or from the ?dict= GET
+  // param, so it is composed as a text node, not interpolated into HTML.
+  var hint = document.createElement('p');
+  hint.className = 'ap-reader-hint';
+  hint.textContent = 'Loading ' + dict.toUpperCase() + '…';
+  els.reader.innerHTML = '';
+  els.reader.appendChild(hint);
   updatePermalink();
 
   fetchEntries(dict, rec.dockeys, output, accent).then(function (items) {
@@ -573,7 +639,27 @@
 
   var entry = document.createElement('div');
   entry.className = 'ap-entry';
-  entry.innerHTML = fixCssPath((item && item.html) || '<p>No entry text.</p>');
+  /* H5543 render policy: this is the app's ONE response-to-innerHTML sink.
+     item.html is entry HTML served by this repo's own PHP (getword.php /
+     getword_batch.php) rendering curated dictionary XML, same-origin with
+     the page -- and it still passes through sanitizeEntryHtml above as
+     defense-in-depth (H5543 dual-run reconciliation: the textContent
+     render-policy lane documented the trust boundary, the sanitizer lane
+     stripped active content at the sink; both land). Everything
+     server-supplied that is NOT entry body (dict codes, dockeys, status
+     lines) renders via textContent; metadata surfaces (dict.js/home.js)
+     keep the esc() rule. A non-200 / missing entry carries no html field
+     at all (H5543) and renders as a plain text notice below. */
+  if (item && item.html) {
+   entry.innerHTML = fixCssPath(sanitizeEntryHtml(item.html));
+  } else {
+   var miss = document.createElement('p');
+   miss.className = 'ap-entry-missing';
+   miss.textContent = item && item.status
+    ? 'No entry text for ' + dockey + ' (status ' + item.status + ').'
+    : 'No entry text.';
+   entry.appendChild(miss);
+  }
   els.reader.appendChild(entry);
  }
 
