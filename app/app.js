@@ -81,9 +81,48 @@
 
  function sleep(ms) { return new Promise(function (resolve) { setTimeout(resolve, ms); }); }
 
- // Entry HTML links 'css/basic.css' relative to the repo root; app/ sits one
- // level down -- same correction lookup.js and sample/dalglob1.php apply.
- function fixCssPath(html) { return html.replace('css/basic.css', '../css/basic.css'); }
+  // Entry HTML links 'css/basic.css' relative to the repo root; app/ sits one
+  // level down -- same correction lookup.js and sample/dalglob1.php apply.
+  function fixCssPath(html) { return html.replace('css/basic.css', '../css/basic.css'); }
+
+  /* Entry HTML is a disp response (rich dictionary markup from getword.php /
+     getword_batch.php) and must keep rendering as HTML -- textContent would
+     destroy the entry formatting -- but it is still server-controlled data
+     flowing into an innerHTML sink, so active content is stripped structurally
+     before insertion (H5543, per the H5106 taint discipline). <template>
+     parsing is inert (no script runs, no resource loads), then script-capable
+     elements are removed outright and every surviving element loses
+     event-handler attributes and script-scheme URLs. */
+  var BAD_ENTRY_ELEMENTS = ['script', 'iframe', 'frame', 'frameset', 'object',
+   'embed', 'applet', 'base', 'link', 'meta', 'noscript', 'svg', 'math',
+   'template'];
+  var URL_ATTRS = ['href', 'src', 'xlink:href', 'action', 'formaction',
+   'poster', 'background', 'srcset'];
+  function hasScriptScheme(value) {
+   // Attr values may embed tabs/newlines/control chars to dodge a naive
+   // check (jav&#x09;ascript:); collapse all whitespace/control chars first.
+   var v = String(value).toLowerCase().replace(/[\s\x00-\x1f]+/g, '');
+   return v.indexOf('javascript:') === 0 || v.indexOf('vbscript:') === 0 ||
+    v.indexOf('data:text/html') === 0;
+  }
+  function sanitizeEntryHtml(html) {
+   var tpl = document.createElement('template');
+   tpl.innerHTML = html;
+   Array.prototype.forEach.call(
+    tpl.content.querySelectorAll(BAD_ENTRY_ELEMENTS.join(',')),
+    function (el) { if (el.parentNode) { el.parentNode.removeChild(el); } });
+   Array.prototype.forEach.call(tpl.content.querySelectorAll('*'), function (el) {
+    var attrs = Array.prototype.slice.call(el.attributes); // snapshot: live list
+    attrs.forEach(function (attr) {
+     var name = attr.name.toLowerCase();
+     if (name.indexOf('on') === 0 ||
+      (URL_ATTRS.indexOf(name) !== -1 && hasScriptScheme(attr.value))) {
+      el.removeAttribute(attr.name);
+     }
+    });
+   });
+   return tpl.innerHTML;
+  }
 
  function isMobile() { return window.matchMedia(MOBILE_MQ).matches; }
 
@@ -402,8 +441,14 @@
     b.className = 'ap-dictbadge';
     b.title = metaFor(rec.dict).title;
     // Homonyms render as numbered sub-badges (MW¹ MW²), same convention
-    // as lookup's homonym tabs (spec §Results list).
-    b.innerHTML = rec.dict.toUpperCase() + (multi ? '<sup>' + supNum(di + 1) + '</sup>' : '');
+    // as lookup's homonym tabs (spec §Results list). rec.dict is dalglob
+    // response data, so the badge builds via textContent, never innerHTML.
+    b.textContent = rec.dict.toUpperCase();
+    if (multi) {
+     var sup = document.createElement('sup');
+     sup.textContent = supNum(di + 1);
+     b.appendChild(sup);
+    }
     var pressed = state.openRow === row && state.openDict === rec.dict && state.openDockey === dockey;
     b.setAttribute('aria-pressed', pressed ? 'true' : 'false');
     b.addEventListener('click', function (evt) {
@@ -519,7 +564,13 @@
    if (r.dicts) { renderRowBadges(r); }
   });
   placeReader(row);
-  els.reader.innerHTML = '<p class="ap-reader-hint">Loading ' + dict.toUpperCase() + '…</p>';
+  // dict is dalglob response data: build the hint via textContent, not the
+  // string-concatenated innerHTML it used to be (H5543).
+  var hint = document.createElement('p');
+  hint.className = 'ap-reader-hint';
+  hint.textContent = 'Loading ' + dict.toUpperCase() + '…';
+  els.reader.innerHTML = '';
+  els.reader.appendChild(hint);
   updatePermalink();
 
   fetchEntries(dict, rec.dockeys, output, accent).then(function (items) {
@@ -573,7 +624,9 @@
 
   var entry = document.createElement('div');
   entry.className = 'ap-entry';
-  entry.innerHTML = fixCssPath((item && item.html) || '<p>No entry text.</p>');
+  // item.html is the disp response: sanitize active content, keep markup
+  // (H5543), then fix the stylesheet path.
+  entry.innerHTML = fixCssPath(sanitizeEntryHtml((item && item.html) || '<p>No entry text.</p>'));
   els.reader.appendChild(entry);
  }
 
