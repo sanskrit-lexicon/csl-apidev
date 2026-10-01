@@ -211,9 +211,12 @@
   if (state.cache.has(cacheKey)) { return Promise.resolve(state.cache.get(cacheKey)); }
   if (FIXTURES) {
    return loadFixtures().then(function (fx) {
-    var r = Object.prototype.hasOwnProperty.call(fx, cacheKey)
-     ? fx[cacheKey]
-     : { key: key, status: 404, html: '<p>Not in fixtures: ' + key + '</p>' };
+   var r = Object.prototype.hasOwnProperty.call(fx, cacheKey)
+    ? fx[cacheKey]
+    // H5543: no key interpolation into HTML strings (server-supplied dockeys
+    // reached innerHTML via the fixture-miss message). Errors carry the raw
+    // fields; renderReader renders them as textContent.
+    : { key: key, status: 404 };
     state.cache.set(cacheKey, r);
     return r;
    });
@@ -233,7 +236,8 @@
    }
    var r = res.ok
     ? { key: key, status: 200, html: res.text }
-    : { key: key, status: res.status, html: '<p>Network error (' + res.status + ') for ' + key + '</p>' };
+    // H5543: status/key stay data, never interpolated into an HTML string.
+    : { key: key, status: res.status };
    state.cache.set(cacheKey, r);
    return r;
   });
@@ -385,13 +389,20 @@
   return String(n).split('').map(function (d) { return SUP_DIGITS[+d]; }).join('');
  }
 
- function renderRowBadges(row) {
-  var badges = row.badgesEl;
-  badges.innerHTML = '';
-  if (!row.dicts || !row.dicts.length) {
-   badges.innerHTML = '<span class="ap-row-pending">not found</span>';
-   return;
+  function pendingBadge(text) {
+   var span = document.createElement('span');
+   span.className = 'ap-row-pending';
+   span.textContent = text;
+   return span;
   }
+
+  function renderRowBadges(row) {
+   var badges = row.badgesEl;
+   badges.innerHTML = '';
+   if (!row.dicts || !row.dicts.length) {
+    badges.appendChild(pendingBadge('not found'));
+    return;
+   }
   var filterActive = Object.keys(state.dictFilter).length > 0;
   row.dicts.forEach(function (rec) {
    if (filterActive && !state.dictFilter[rec.dict]) { return; }
@@ -402,8 +413,15 @@
     b.className = 'ap-dictbadge';
     b.title = metaFor(rec.dict).title;
     // Homonyms render as numbered sub-badges (MW¹ MW²), same convention
-    // as lookup's homonym tabs (spec §Results list).
-    b.innerHTML = rec.dict.toUpperCase() + (multi ? '<sup>' + supNum(di + 1) + '</sup>' : '');
+    // as lookup's homonym tabs (spec §Results list). H5543: dict code and
+    // superscript go in as text nodes -- rec.dict is server-supplied
+    // (dalglob.php) and no longer reaches innerHTML.
+    b.textContent = rec.dict.toUpperCase();
+    if (multi) {
+     var sup = document.createElement('sup');
+     sup.textContent = supNum(di + 1);
+     b.appendChild(sup);
+    }
     var pressed = state.openRow === row && state.openDict === rec.dict && state.openDockey === dockey;
     b.setAttribute('aria-pressed', pressed ? 'true' : 'false');
     b.addEventListener('click', function (evt) {
@@ -414,7 +432,7 @@
    });
   });
   if (!badges.children.length) {
-   badges.innerHTML = '<span class="ap-row-pending">filtered out</span>';
+   badges.appendChild(pendingBadge('filtered out'));
   }
  }
 
@@ -519,7 +537,13 @@
    if (r.dicts) { renderRowBadges(r); }
   });
   placeReader(row);
-  els.reader.innerHTML = '<p class="ap-reader-hint">Loading ' + dict.toUpperCase() + '…</p>';
+  // H5543: dict originates server-side (dalglob) or from the ?dict= GET
+  // param, so it is composed as a text node, not interpolated into HTML.
+  var hint = document.createElement('p');
+  hint.className = 'ap-reader-hint';
+  hint.textContent = 'Loading ' + dict.toUpperCase() + '…';
+  els.reader.innerHTML = '';
+  els.reader.appendChild(hint);
   updatePermalink();
 
   fetchEntries(dict, rec.dockeys, output, accent).then(function (items) {
@@ -573,7 +597,24 @@
 
   var entry = document.createElement('div');
   entry.className = 'ap-entry';
-  entry.innerHTML = fixCssPath((item && item.html) || '<p>No entry text.</p>');
+  /* H5543 render policy: this is the app's ONE response-to-innerHTML sink,
+     and it is trusted by construction -- item.html is entry HTML served by
+     this repo's own PHP (getword.php / getword_batch.php) rendering curated
+     dictionary XML, same-origin with the page. Everything server-supplied
+     that is NOT entry body (dict codes, dockeys, status lines) renders via
+     textContent; metadata surfaces (dict.js/home.js) keep the esc() rule.
+     A non-200 / missing entry carries no html field at all (H5543) and
+     renders as a plain text notice below. */
+  if (item && item.html) {
+   entry.innerHTML = fixCssPath(item.html);
+  } else {
+   var miss = document.createElement('p');
+   miss.className = 'ap-entry-missing';
+   miss.textContent = item && item.status
+    ? 'No entry text for ' + dockey + ' (status ' + item.status + ').'
+    : 'No entry text.';
+   entry.appendChild(miss);
+  }
   els.reader.appendChild(entry);
  }
 
