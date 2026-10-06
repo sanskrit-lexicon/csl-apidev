@@ -1,4 +1,4 @@
-_Created: 12-06-2026 · Last updated: 05-09-2026_
+_Created: 12-06-2026 · Last updated: 06-10-2026_
 
 # Changelog
 
@@ -8,6 +8,7 @@ Dates are UTC+3 (project local).
 
 ## [Unreleased]
 - Added a root `AGENTS.md` agent-entrypoint stub (H4634): names itself the agent entrypoint, links [CLAUDE.md](CLAUDE.md), points at the [Uprava org standard](https://github.com/gasyoun/Uprava/blob/main/AGENTS.md).
+- **Added `api1/salt_union.php` — the union headword index endpoint (A55v2, H6065)**: one REST call answering across-dictionary headword membership plus full index meta (members, CDSL versions, per-dict counts, provenance, NWS pending note). Union extended to **21 dictionaries** (ruling D3: +mw72, +ap90, PWG per-volume counts; lan/mwe/wil added to clear ≥20 while NWS headwords await the kosha H6064 pipeline) — 458,355 union headwords. Self-contained on two committed data files (`api1/data/union_headwords.tsv` byte-sorted + `union_meta.json`), no `*.sqlite` dependency; `fseek` binary-search lookups; input/output transliteration and JSONP per the Salt conventions; 404/400/500 truth envelopes (H3636). Builder `tools/build_union_index.py` (deterministic, H4797 normalization contract) and consumer smoke `tools/union_consumer_smoke.py` (16/16 checks GREEN). Contract: [doc/salt_union.md](doc/salt_union.md).
 ### Fixed
 
 - **One malformed record no longer kills a whole multi-record response** (H4212):
