@@ -48,7 +48,7 @@ Response (200):
 ```json
 {"status":200,"key":"aNga","headword_slp1":"aNga","n_dicts":19,
  "dicts":["ap","bhs","bur","cae","ccs","gra","inm","lan","md","mw","mw72",
-          "pd","pw","pwg","sch","skd","vcp","wil"]}
+          "pd","pw","pwg","sch","skd","vcp","vei","wil"]}
 ```
 
 Errors: `400` invalid/empty key; `404` headword not in union
