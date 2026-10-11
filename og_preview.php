@@ -1,36 +1,19 @@
 <?php
-// og_preview.php — Open Graph / Twitter-card meta for Cologne dictionary entry
+// og_preview.php — Open Graph meta for Cologne dictionary entry
 // pages (H6478, 11-10-2026; procedure: Uprava docs/PLAYBOOK_OG_PREVIEW_CARDS_2026-10-11.md).
 //
 // Call og_preview_meta($parms, $matches) once inside the <head> template after
 // $parms (dict, key) and $matches are populated. Returns the meta lines joined
 // with newlines, or '' when the request is not an entry page.
 //
-// og:image points at the kosha preview-card set on samskrtam.ru (dictionaries
-// mw, pwg, ap90). For uncovered dictionaries, or a headword kosha has no card
-// for yet, the image URL 404s and chat apps (Telegram, Slack, X) fall back to
-// the text-only preview — so the image tags are emitted only for covered
-// dictionaries, and coverage grows with the kosha og/ card set without any
-// change here.
-//
-// Telegram renders the large full-width card only when
-// twitter:card=summary_large_image rides next to og:image — the hint GitHub
-// pages carry; do not remove it.
-
-function og_preview_image_url($dictlower, $slp1_key) {
- // kosha og/ cards are keyed by the filesystem-safe SLP1 token:
- // [a-z0-9] verbatim, every other UTF-8 byte as _<hexbyte> (kosha
- // app/word_page.py card_token; query keys are case-folded, kosha#433).
- $covered = array('mw', 'pwg', 'ap90');
- if (!in_array($dictlower, $covered)) {
-  return null;
- }
- $key = strtolower($slp1_key);
- $token = preg_replace_callback('/[^a-z0-9]/', function ($m) {
-  return sprintf('_%02x', ord($m[0]));
- }, $key);
- return 'https://samskrtam.ru/og/' . $token . '.png';
-}
+// Cards are Cologne-OWNED (MG ruling 11-10-2026 «keep them separate»): the
+// og/ directory in this repo holds 1200x630 preview PNGs rendered by
+// make_entry_cards.py from Cologne's own entry pages — nothing points at
+// kosha or samskrtam.ru. og:image + twitter:card are emitted only when the
+// card file exists server-side (file_exists), so coverage grows with the
+// committed og/ set and a missing card degrades gracefully to the text-only
+// preview. twitter:card=summary_large_image is what makes Telegram render the
+// large full-width card — keep it paired with og:image.
 
 function og_preview_description($matches) {
  // First record's <body> text, tags stripped, cut at ~200 chars on a word
@@ -51,6 +34,16 @@ function og_preview_description($matches) {
   return $text;
  }
  return '';
+}
+
+function og_preview_card_token($slp1_key) {
+ // Filesystem-safe SLP1 token: case-folded, [a-z0-9] verbatim, every other
+ // UTF-8 byte as _<hexbyte> (the same scheme kosha's card_token uses — the
+ // algorithm is shared, the card SETS are separate properties).
+ $key = strtolower($slp1_key);
+ return preg_replace_callback('/[^a-z0-9]/', function ($m) {
+  return sprintf('_%02x', ord($m[0]));
+ }, $key);
 }
 
 function og_preview_meta($parms, $matches) {
@@ -81,8 +74,13 @@ function og_preview_meta($parms, $matches) {
   '<meta property="og:description" content="' . htmlspecialchars($desc, ENT_QUOTES, 'UTF-8') . '">',
   '<meta property="og:url" content="' . htmlspecialchars($pageurl, ENT_QUOTES, 'UTF-8') . '">',
  );
- $img = og_preview_image_url($dictlower, $key);
- if ($img !== null) {
+ // Cologne-owned preview card (existence-gated): og/<dict>_<token>.png ships
+ // with the checkout, so file_exists is the coverage test — no cross-property
+ // lookups.
+ $cardfile = __DIR__ . '/og/' . $dictlower . '_' . og_preview_card_token($key) . '.png';
+ if (file_exists($cardfile)) {
+  $base = $scheme . '://' . $host . preg_replace('/getword\.php$/', '', $uri);
+  $img = $base . 'og/' . $dictlower . '_' . og_preview_card_token($key) . '.png';
   $lines[] = '<meta property="og:image" content="' . $img . '">';
   $lines[] = '<meta property="og:image:width" content="1200">';
   $lines[] = '<meta property="og:image:height" content="630">';

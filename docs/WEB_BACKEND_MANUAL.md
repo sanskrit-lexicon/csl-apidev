@@ -468,14 +468,31 @@ What the meta does:
 - `og:title` — headword in IAST + site name; `og:description` — first record's
   text, tags and the `[ID=...]` record-ID tail stripped, ~200 chars;
   `og:url` — the request URL (canonical).
-- `og:image` / `twitter:image` — emitted **only** for `mw`, `pwg`, `ap90`
-  (the kosha preview-card set at `https://samskrtam.ru/og/<token>.png`, token =
-  case-folded SLP1, `[a-z0-9]` verbatim + `_<hexbyte>` escapes). A missing card
-  404s and chat apps degrade gracefully to the text-only preview; coverage
-  grows with the kosha `og/` card set, no code change needed here.
+- `og:image` / `twitter:image` — emitted **only** when the Cologne-owned card
+  file `og/<dict>_<token>.png` exists in this checkout (token = case-folded
+  SLP1, `[a-z0-9]` verbatim + `_<hexbyte>` escapes; existence test is a local
+  `file_exists`, no cross-property lookups). Missing card → chat apps degrade
+  gracefully to the text-only preview; coverage grows by committing more cards.
 - `twitter:card=summary_large_image` — REQUIRED for Telegram's large
   full-width preview; og: tags alone render the compact layout (canary-verified
-  11-10-2026).
+  11-10-2026). Emitted together with `og:image`.
+
+**Card generation** (MG ruling 11-10-2026 «make it now, similar to kosha» /
+«keep them separate» — Cologne-owned set, nothing points at kosha or
+samskrtam.ru): [`make_entry_cards.py`](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/make_entry_cards.py)
+renders 1200x630 cards from Cologne's own data. Offline (preferred):
+
+```
+python3 make_entry_cards.py --dict mw   --sqlite ~/Documents/GitHub/mw/web/sqlite/mw.sqlite agni vac ...
+```
+
+It can also fetch live entry pages (same URLs Jim serves) with
+`--dict <code> <keys...>`, but the host throttles and blocks (§10): the curl
+user-agent passes while browser-like ones get 403/500, and bursts rate-limit —
+the sqlite mode avoids the host entirely. Requires `sanskrit-util` (the org's
+shared transliteration library — SHARED_CODE family #1). Ten MW pilot cards
+ship in `og/`; scale by running the same command over the frequency head and
+committing the set.
 
 Deploy steps for the host maintainer (nothing beyond the normal PHP checkout
 pull — no config, no new routes, no cron):
