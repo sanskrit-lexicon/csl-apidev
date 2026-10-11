@@ -8,6 +8,7 @@ require_once('dbgprint.php');
 require_once('parm.php');  // loads transcoder
 require_once('getword_data.php');
 require_once('dispitem.php');
+require_once(__DIR__ . '/og_preview.php');
 
 class GetwordClass {
  public $getParms,$matches,$table1,$status,$basicOption;
@@ -109,13 +110,17 @@ class GetwordClass {
 if ($options == '3') {
  $output = '';
 }else {
+ // H6478: Open Graph / Twitter-card meta for chat-app link previews
+ // (Telegram, Slack, X) — see og_preview.php and the
+ // "Open Graph preview tags" section of docs/WEB_BACKEND_MANUAL.md.
+ $ogmeta = og_preview_meta($parms,$matches);
  $output = <<<EOT
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 $linkcss
-</head>
+$ogmeta</head>
 <body>
 EOT;
 }
