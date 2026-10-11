@@ -17,7 +17,10 @@ name: Twin drift guard
 #   servepdf* (api-mode), dictinfo tables.
 #
 # Change either side of a guarded twin in both repos in the same pass; the
-# guard only tolerates the windows where both sides have landed.
+# guard only tolerates the windows where both sides have landed, plus the
+# paired-PR window: while an OPEN csl-websanlexicon PR carries a head version
+# of the twin byte-identical to this side, the drift is paired-in-flight
+# (§7.1 flow), not real drift (H6478).
 
 on:
   push:
@@ -44,9 +47,15 @@ jobs:
           ref: ${{ env.WEBSAN_REF }}
           path: websan
 
-      - name: Diff true twins
+      - name: Diff true twins (paired-PR aware)
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           set -u
+          # Head SHAs of open websanlexicon PRs (empty when none / API hiccup
+          # -> guard degrades to the strict main-only comparison).
+          pr_shas=$(gh api 'repos/sanskrit-lexicon/csl-websanlexicon/pulls?state=open&per_page=100' \
+            --jq '.[].head.sha' 2>/dev/null || true)
           fail=0
           twins=(
             "basicadjust.php:v02/makotemplates/web/webtc/basicadjust.php"
@@ -59,7 +68,19 @@ jobs:
             websan_file="${pair#*:}"
             if cmp -s "$apidev_file" "websan/$websan_file"; then
               echo "OK    $apidev_file == websan:$websan_file"
-            else
+              continue
+            fi
+            paired=0
+            for sha in $pr_shas; do
+              if gh api "repos/sanskrit-lexicon/csl-websanlexicon/contents/$websan_file?ref=$sha" \
+                   --jq '.content' 2>/dev/null | base64 -d > /tmp/websan_pr_file \
+                 && cmp -s "$apidev_file" /tmp/websan_pr_file; then
+                echo "PAIRED $apidev_file == websan:$websan_file @ open PR head $sha (§7.1 paired twin PR in flight)"
+                paired=1
+                break
+              fi
+            done
+            if [ "$paired" -ne 1 ]; then
               echo "DRIFT $apidev_file != websan:$websan_file"
               diff -u "$apidev_file" "websan/$websan_file" | head -60 || true
               fail=1
@@ -69,4 +90,4 @@ jobs:
             echo "::error::Twin drift detected. Named action: sync from csl-websanlexicon — run v02/apidev_copy.sh in the websanlexicon checkout, or copy websan/<file> over the apidev twin — then open a sync PR (H3634)."
             exit 1
           fi
-          echo "All guarded twins identical."
+          echo "All guarded twins identical (or paired-in-flight)."

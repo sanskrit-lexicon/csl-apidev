@@ -7,6 +7,12 @@ recorded here. Format loosely follows [Keep a Changelog](https://keepachangelog.
 Dates are UTC+3 (project local).
 
 ## [Unreleased]
+- **twin-drift CI guard is now paired-PR aware** (H6478): the
+  `apidev <-> websanlexicon twin diff` check tolerates drift on a guarded twin
+  while an **open** csl-websanlexicon PR carries a head version of that twin
+  byte-identical to this side (the §7.1 paired-PR window), instead of failing
+  every sanctioned twin-first change until both sides merge. Unpaired drift
+  still fails; API hiccups degrade to the strict main-only comparison.
 - **Entry pages now emit Open Graph (og:) + twitter:card meta** (H6478): `getword.php`
   full-page mode (`dispopt` 1/2) carries `og:title` (headword Devanagari + IAST),
   `og:description` (first sense line, 160-char cap), `og:url` (Cologne host) and

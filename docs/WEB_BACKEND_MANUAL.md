@@ -316,9 +316,11 @@ The rules:
    When you fix a display bug here, check whether the class exists in the makotemplates twin
    and open the sibling PR in the same pass.
 5. **Paired PRs drift transiently.** A twin-first change opens one PR in each repo
-   (e.g. the og: meta method `ogmeta_html`, H6478); between the two merges
-   `tools/fork_sync_check.php` reports drift on the touched file. That is expected —
-   resolve it by merging both PRs, never by hand-editing one side back.
+   (e.g. the og: meta method `ogmeta_html`, H6478); between the two merges the
+   local `tools/fork_sync_check.php` reports drift on the touched file, and the
+   CI `twin-drift` guard accepts it only while an **open** csl-websanlexicon PR
+   carries a byte-identical twin head (paired-PR window). Resolve by merging
+   both PRs, never by hand-editing one side back.
 
 ## 8. Scan / PDF serving
 
