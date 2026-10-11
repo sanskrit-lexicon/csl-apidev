@@ -454,4 +454,44 @@ This repo has **no agent-side deploy path**. Understand the three-stage reality:
 - **Improvement backlog for this manual**: see
   [docs/WEB_BACKEND_MANUAL.meta.md](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/docs/WEB_BACKEND_MANUAL.meta.md).
 
+## 14. Open Graph preview tags (H6478, landed 11-10-2026 — deploy pending)
+
+Dictionary entry pages served by [`getword.php`](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/getword.php)
+(through [`getwordClass.php`](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/getwordClass.php)
+`getwordDisplay()`) emit Open Graph and Twitter-card meta in the `<head>` so
+chat-app links (Telegram, Slack, X) preview with the exact headword and first
+sense instead of a bare URL. Implementation: [`og_preview.php`](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/og_preview.php)
+(single include, no configuration).
+
+What the meta does:
+
+- `og:title` — headword in IAST + site name; `og:description` — first record's
+  text, tags and the `[ID=...]` record-ID tail stripped, ~200 chars;
+  `og:url` — the request URL (canonical).
+- `og:image` / `twitter:image` — emitted **only** for `mw`, `pwg`, `ap90`
+  (the kosha preview-card set at `https://samskrtam.ru/og/<token>.png`, token =
+  case-folded SLP1, `[a-z0-9]` verbatim + `_<hexbyte>` escapes). A missing card
+  404s and chat apps degrade gracefully to the text-only preview; coverage
+  grows with the kosha `og/` card set, no code change needed here.
+- `twitter:card=summary_large_image` — REQUIRED for Telegram's large
+  full-width preview; og: tags alone render the compact layout (canary-verified
+  11-10-2026).
+
+Deploy steps for the host maintainer (nothing beyond the normal PHP checkout
+pull — no config, no new routes, no cron):
+
+1. Pull the checkout serving `scans/awork/apidev/` to this commit.
+2. Verify one page:
+   `curl -s "https://www.sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/getword.php?dict=mw&key=harika&input=slp1&output=iast" | grep -c 'og:title\|twitter:card'`
+   → expect `2`.
+3. Cache note: chat apps cache previews per URL; a bumped share
+   (`&v=2`) re-fetches.
+
+Out of scope / follow-ups: `app/dict.php` is a JS shell (no server-side
+dict/key in scope) — og: tags there would need the frontend route, not this
+include. `getwordClass.php` is apidev-owned (not in the
+[`v02/apidev_copy.sh`](https://github.com/sanskrit-lexicon/csl-websanlexicon/blob/main/v02/apidev_copy.sh)
+trio copy set), so no csl-websanlexicon mirror is required.
+
+
 _Dr. Mārcis Gasūns_
