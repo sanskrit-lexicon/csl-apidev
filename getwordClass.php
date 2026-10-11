@@ -12,12 +12,23 @@ require_once('dispitem.php');
 class GetwordClass {
  public $getParms,$matches,$table1,$status,$basicOption;
  public $xmlmatches;
+ public $ogmeta; // H6478: og: meta block for entry pages (see WEB_BACKEND_MANUAL §4.1)
  public function __construct($basicOption = true) {
   $this->getParms = new Parm();
   $this->basicOption = $this->getParms->basicOption;
   // $this->basicOption = $basicOption; // 06-19-2024 Refer webtc1/
   $temp = new Getword_data($basicOption);
   $this->matches = $temp->matches; 
+  // H6478: Open Graph meta for the entry page. Computed BEFORE
+  // getword_html() -- the full-page <head> (dispopt 1/2) emits it.
+  // Bases are host configuration, not data: og:url rides the Cologne host;
+  // og:image rides the kosha og card service on samskrtam.ru (MG ruling
+  // 11-10-2026). The twin method (getword_data.php, csl-websanlexicon fork
+  // twin) emits nothing without bases and never breaks the display on
+  // internal failure.
+  $this->ogmeta = $temp->ogmeta_html(
+   'https://www.sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/getword.php',
+   'https://samskrtam.ru');
   $this->table1 = $this->getword_html();
   $this->xmlmatches = $temp->xmlmatches;
   $nmatches = count($this->matches);
@@ -109,12 +120,15 @@ class GetwordClass {
 if ($options == '3') {
  $output = '';
 }else {
+ // H6478: og: + twitter:card meta for entry pages (WEB_BACKEND_MANUAL §4.1).
+ // Empty string when there is nothing to emit (no matches / no bases).
+ $ogmeta = (string)$this->ogmeta;
  $output = <<<EOT
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-$linkcss
+$ogmeta$linkcss
 </head>
 <body>
 EOT;

@@ -7,6 +7,17 @@ recorded here. Format loosely follows [Keep a Changelog](https://keepachangelog.
 Dates are UTC+3 (project local).
 
 ## [Unreleased]
+- **Entry pages now emit Open Graph (og:) + twitter:card meta** (H6478): `getword.php`
+  full-page mode (`dispopt` 1/2) carries `og:title` (headword Devanagari + IAST),
+  `og:description` (first sense line, 160-char cap), `og:url` (Cologne host) and
+  `og:image` → the kosha og card service `https://samskrtam.ru/og/<token>.png`.
+  Data half is `Getword_data::ogmeta_html()` in `getword_data.php` — added
+  csl-websanlexicon-first (§7 fork-sync; paired twin PR) with caller-supplied
+  bases (no host hardcoded in the twin; empty bases → no og: block; internal
+  failure → empty string, never a broken display); consumer wiring in
+  `getwordClass.php` (deliberately divergent file). Inert on the live site
+  until the maintainer pulls both PRs — see
+  [docs/WEB_BACKEND_MANUAL.md](docs/WEB_BACKEND_MANUAL.md) §4.1.
 - Added a root `AGENTS.md` agent-entrypoint stub (H4634): names itself the agent entrypoint, links [CLAUDE.md](CLAUDE.md), points at the [Uprava org standard](https://github.com/gasyoun/Uprava/blob/main/AGENTS.md).
 ### Fixed
 

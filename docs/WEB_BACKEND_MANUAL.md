@@ -1,6 +1,6 @@
 # csl-apidev — Web Backend Operator Manual
 
-_Created: 28-07-2026 · Last updated: 28-07-2026_
+_Created: 28-07-2026 · Last updated: 11-10-2026_
 
 The one-stop operator runbook for [csl-apidev](https://github.com/sanskrit-lexicon/csl-apidev) —
 the CDSL **web backend**: plain-PHP dictionary endpoints (`getword`, `listview`, `servepdf`,
@@ -116,7 +116,7 @@ endpoints: `https://www.sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/`.
 |---|---|---|---|
 | `listview.php` | Full two-pane display (word list + entry) as page or iframe component | [doc/listview.md](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/doc/listview.md) | HTML. The umbrella endpoint; includes listhier + getword |
 | `listhier.php` | Just the word-list pane (`direction=UP/DOWN/CENTER`, `lnum` recentring) | [doc/listhier.md](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/doc/listhier.md) | HTML. `lnum` beats `key` |
-| `getword.php` | Just the entry pane for one headword | [doc/getword.md](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/doc/getword.md) | HTML. `dispcss=no` has a known dead path (§11) |
+| `getword.php` | Just the entry pane for one headword | [doc/getword.md](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/doc/getword.md) | HTML. `dispcss=no` has a known dead path (§11); full-page mode emits og: meta (§4.1) |
 | `getword_batch.php` | One round-trip fetch of a headword's entries across dictionaries | (additive Wave-1 endpoint; see [doc/roadmap_lookup.md](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/doc/roadmap_lookup.md)) | HTML fragments; clients fall back to sequential `getword.php` + backoff when it 404s (not yet pulled on the server) |
 | `getword_xml.php` | Raw XML records for a headword, JSON-wrapped | [doc/getword_xml.md](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/doc/getword_xml.md) | Alpha, used by no display |
 | `getsuggest.php` | ≤10 prefix-completion suggestions | [doc/getsuggest.md](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/doc/getsuggest.md) | JSON array. Uses `term` (not `key`), for jQuery-UI autocomplete compatibility |
@@ -138,6 +138,41 @@ Dictionary codes (34 in `Parm`, `MW`, `PWG`, `AP90`, …): same doc, §dict. The
 `do_not_file_suppression_verdict` (why the SanskritSpellCheck suppression corpus is *not*
 wired into the exact/prefix-match production API):
 [doc/do_not_file_suppression_verdict.md](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/doc/do_not_file_suppression_verdict.md).
+
+### 4.1 Open Graph (og:) meta on entry pages — deploy-blocked (H6478)
+
+`getword.php` full-page mode (`dispopt` 1/2) emits the canonical og: +
+twitter:card meta set in its `<head>` (spec:
+[Uprava PLAYBOOK_OG_PREVIEW_CARDS_2026-10-11](https://github.com/gasyoun/Uprava/blob/main/docs/PLAYBOOK_OG_PREVIEW_CARDS_2026-10-11.md)):
+
+- `og:title` — headword Devanagari + IAST (English-headword dicts `ae/mwe/bor`:
+  the plain key);
+- `og:description` — the first sense line of the first record (display body,
+  tags stripped, whitespace collapsed, 160-char cap — the same derivation the
+  kosha word cards use, `app/word_page.py::_plain`);
+- `og:image` — `https://samskrtam.ru/og/<token>.png`, the kosha og card
+  service; `<token>` is the filesystem-safe SLP1 encoding (kosha `card_token`
+  twin: `[a-z0-9]` verbatim, every other UTF-8 byte as `_<hex>` — `Atman` →
+  `_41tman`);
+- `og:url` — the Cologne-host `getword.php?dict=<dict>&key=<key>&input=slp1`.
+
+Layering: the data half lives in `Getword_data::ogmeta_html()`
+(getword_data.php — a §7 fork twin; landed csl-websanlexicon-first) with
+caller-supplied bases (kosha R1 host-independence: no host is hardcoded in the
+twin, both bases empty → no og: block, and any internal failure returns ``
+rather than breaking the display). The consumer passing the Cologne +
+samskrtam.ru bases is `getwordClass.php` (§7.3 deliberately-divergent file,
+edited here only). Fragment mode (`dispopt=3`), JSONP replies without a page
+wrapper, and not-found replies carry no og: block.
+
+**Deploy-blocked, do not simulate (§10):** og: goes live on
+`sanskrit-lexicon.uni-koeln.de` only when the server maintainer pulls BOTH
+merged PRs (this repo **and** the csl-websanlexicon twin — §7 rule 1), and the
+large Telegram preview additionally needs the kosha og card service live on
+samskrtam.ru (MG deploy step; until then a crawler hitting the image URL falls
+back to the text-only preview — expected, not a defect). Post-deploy verify:
+`curl -s '<getword.php URL>' | grep -c twitter:card` → 1; the og:image URL →
+`200 image/png` once the card service is deployed.
 
 ## 5. Local run — environment and data
 
@@ -280,6 +315,10 @@ The rules:
    in both repos (see [CHANGELOG.md](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/CHANGELOG.md)).
    When you fix a display bug here, check whether the class exists in the makotemplates twin
    and open the sibling PR in the same pass.
+5. **Paired PRs drift transiently.** A twin-first change opens one PR in each repo
+   (e.g. the og: meta method `ogmeta_html`, H6478); between the two merges
+   `tools/fork_sync_check.php` reports drift on the touched file. That is expected —
+   resolve it by merging both PRs, never by hand-editing one side back.
 
 ## 8. Scan / PDF serving
 

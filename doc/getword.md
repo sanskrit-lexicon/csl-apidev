@@ -1,4 +1,4 @@
-_Created: 11-11-2019 · Last updated: 05-09-2026_
+_Created: 11-11-2019 · Last updated: 11-10-2026_
 
 
 # getword
@@ -25,5 +25,18 @@ By contrast, with basic.css loaded (as previous example), the css and getword ma
 
 ## A 'Basic' display with getword 
 getword.php has utility in addition to its use as a listview component.  Several examples of using getword.php as part of a VueJS application are https://funderburkjim.github.io/sanlex-vue/index.html.  For example there are several examples which are functionally quite similar to the Basic Displays (such as https://www.sanskrit-lexicon.uni-koeln.de/scans/MWScan/2014/web/webtc/indexcaller.php).
+
+## Open Graph (og:) meta (H6478)
+
+Full-page mode (`dispopt` 1/2) emits the canonical og: + twitter:card meta set
+in the `<head>`, built by `Getword_data::ogmeta_html()` from the first matched
+record: `og:title` = headword Devanagari + IAST, `og:description` = the first
+sense line (tags stripped, 160-char cap), `og:url` = the Cologne-host page,
+`og:image` = `https://samskrtam.ru/og/<token>.png` (the kosha og card service;
+`<token>` is the filesystem-safe SLP1 encoding). Fragment mode (`dispopt=3`),
+JSONP replies without a page wrapper, and not-found replies carry no og: block.
+The data half lives in the fork-synced `getword_data.php` (twin-first, see
+[WEB_BACKEND_MANUAL](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/docs/WEB_BACKEND_MANUAL.md) §4.1/§7); the host bases are passed by
+`getwordClass.php` (deliberately divergent, §7.3).
 
 _Dr. Mārcis Gasūns_
