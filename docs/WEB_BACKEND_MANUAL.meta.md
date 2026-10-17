@@ -22,7 +22,7 @@ successors. Assumes PHP familiarity; assumes zero Cologne-stack context.
 
 ## Provenance
 
-- Handoff: [H1784](https://github.com/gasyoun/Uprava/blob/main/handoffs/H1784-Fable_csl-apidev_web-backend-operator-manual_28.07.26.md)
+- Handoff: [H1784](https://github.com/gasyoun/Uprava/blob/main/handoffs/archive/H1784-Fable_csl-apidev_web-backend-operator-manual_28.07.26.md)
   (minted by Grok 4.5 `grok-4.5`, 28-07-2026, third engine of the H1782–H1786 docs-debt batch).
 - Authored 28-07-2026 by Fable 5 (`claude-fable-5`) from a full read of `doc/*`,
   [README.md](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/README.md),

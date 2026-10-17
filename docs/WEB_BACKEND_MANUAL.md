@@ -12,7 +12,7 @@ indexed from §4 here. Read this file to *run, extend, and fork-sync* the backen
 tribal knowledge; follow the links when you need the full contract of one endpoint.
 
 Audience: a new operator or agent session with PHP available and no prior contact with the
-Cologne stack. Handoff provenance: [H1784](https://github.com/gasyoun/Uprava/blob/main/handoffs/H1784-Fable_csl-apidev_web-backend-operator-manual_28.07.26.md);
+Cologne stack. Handoff provenance: [H1784](https://github.com/gasyoun/Uprava/blob/main/handoffs/archive/H1784-Fable_csl-apidev_web-backend-operator-manual_28.07.26.md);
 sibling manuals cover the frontend twin ([csl-websanlexicon](https://github.com/sanskrit-lexicon/csl-websanlexicon), H1782)
 and the dictionary-generation pipeline (csl-pywork, H1783).
 
