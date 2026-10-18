@@ -1,0 +1,415 @@
+{
+ "api": "salt_union",
+ "index_version": "A55v2",
+ "generated": "2026-10-06",
+ "n_dicts": 21,
+ "n_union_headwords": 458355,
+ "index_collation": "byte-order (UTF-8 codepoint); internal binary-search order, not varna-krama display order",
+ "normalization": "H4797 union contract: parenthetical segments stripped whole; marks / ˚ * ' ^ | - – — ‐ removed; residue (leading '(' or digit, leftover mark, non-ASCII-letter) counted and excluded; membership = norm(k1) ∪ norm(k2)",
+ "schema": {
+  "union_headwords.tsv": "slp1 \\t n_dicts \\t code,code,... (byte-sorted)",
+  "lookup_response": {
+   "status": "200",
+   "key": "<requested key, as given>",
+   "headword_slp1": "<union key>",
+   "n_dicts": "<int>",
+   "dicts": [
+    "<code>",
+    "..."
+   ],
+   "headword_output": "<transliterated form when output= given>"
+  }
+ },
+ "members": [
+  {
+   "code": "ap",
+   "title": "Apte Practical Sanskrit-English Dictionary, revised",
+   "version": "CDSL 2020",
+   "headwords": 88899,
+   "source": "csl-orig/v02/ap/ap.txt",
+   "residue_excluded": 446,
+   "residue_classes": {
+    "paren": 0,
+    "leading_digit": 0,
+    "marks_left": 0,
+    "other_non_slp1": 446
+   }
+  },
+  {
+   "code": "ap90",
+   "title": "Apte Practical Sanskrit-English Dictionary (1890)",
+   "version": "CDSL 2020",
+   "headwords": 34541,
+   "source": "csl-orig/v02/ap90/ap90.txt",
+   "residue_excluded": 1087,
+   "residue_classes": {
+    "paren": 0,
+    "leading_digit": 0,
+    "marks_left": 0,
+    "other_non_slp1": 1087
+   }
+  },
+  {
+   "code": "bhs",
+   "title": "Edgerton Buddhist Hybrid Sanskrit Dictionary",
+   "version": "CDSL 2020",
+   "headwords": 18110,
+   "source": "csl-orig/v02/bhs/bhs.txt",
+   "residue_excluded": 172,
+   "residue_classes": {
+    "paren": 0,
+    "leading_digit": 5,
+    "marks_left": 0,
+    "other_non_slp1": 167
+   }
+  },
+  {
+   "code": "bur",
+   "title": "Burnouf Dictionnaire Sanscrit-Français",
+   "version": "CDSL 2020",
+   "headwords": 19146,
+   "source": "csl-orig/v02/bur/bur.txt",
+   "residue_excluded": 2,
+   "residue_classes": {
+    "paren": 0,
+    "leading_digit": 0,
+    "marks_left": 0,
+    "other_non_slp1": 2
+   }
+  },
+  {
+   "code": "cae",
+   "title": "Cappeller Sanskrit-English Dictionary",
+   "version": "CDSL 2020",
+   "headwords": 38521,
+   "source": "csl-orig/v02/cae/cae.txt",
+   "residue_excluded": 448,
+   "residue_classes": {
+    "paren": 0,
+    "leading_digit": 0,
+    "marks_left": 0,
+    "other_non_slp1": 448
+   }
+  },
+  {
+   "code": "ccs",
+   "title": "Cappeller Sanskrit Wörterbuch",
+   "version": "CDSL 2020",
+   "headwords": 28752,
+   "source": "csl-orig/v02/ccs/ccs.txt",
+   "residue_excluded": 4,
+   "residue_classes": {
+    "paren": 0,
+    "leading_digit": 0,
+    "marks_left": 0,
+    "other_non_slp1": 4
+   }
+  },
+  {
+   "code": "gra",
+   "title": "Grassmann Wörterbuch zum Rig Veda",
+   "version": "CDSL 2020",
+   "headwords": 11108,
+   "source": "csl-orig/v02/gra/gra.txt",
+   "residue_excluded": 3,
+   "residue_classes": {
+    "paren": 0,
+    "leading_digit": 0,
+    "marks_left": 0,
+    "other_non_slp1": 3
+   }
+  },
+  {
+   "code": "inm",
+   "title": "Index to the Names in the Mahabharata",
+   "version": "CDSL 2020",
+   "headwords": 9454,
+   "source": "csl-orig/v02/inm/inm.txt",
+   "residue_excluded": 3,
+   "residue_classes": {
+    "paren": 0,
+    "leading_digit": 0,
+    "marks_left": 0,
+    "other_non_slp1": 3
+   }
+  },
+  {
+   "code": "lan",
+   "title": "Lanman Sanskrit Reader Dictionary",
+   "version": "CDSL 2020",
+   "headwords": 4726,
+   "source": "csl-orig/v02/lan/lan.txt",
+   "residue_excluded": 0
+  },
+  {
+   "code": "md",
+   "title": "Macdonell Sanskrit-English Dictionary",
+   "version": "CDSL 2020",
+   "headwords": 20103,
+   "source": "csl-orig/v02/md/md.txt",
+   "residue_excluded": 2,
+   "residue_classes": {
+    "paren": 0,
+    "leading_digit": 0,
+    "marks_left": 0,
+    "other_non_slp1": 2
+   }
+  },
+  {
+   "code": "mw",
+   "title": "Monier-Williams Sanskrit-English Dictionary",
+   "version": "CDSL 2020",
+   "headwords": 194085,
+   "source": "csl-orig/v02/mw/mw.txt",
+   "residue_excluded": 264,
+   "residue_classes": {
+    "paren": 0,
+    "leading_digit": 0,
+    "marks_left": 0,
+    "other_non_slp1": 264
+   }
+  },
+  {
+   "code": "mw72",
+   "title": "Monier-Williams Sanskrit-English Dictionary (1972 pagination)",
+   "version": "CDSL 2020",
+   "headwords": 51161,
+   "source": "csl-orig/v02/mw72/mw72.txt",
+   "residue_excluded": 2,
+   "residue_classes": {
+    "paren": 0,
+    "leading_digit": 0,
+    "marks_left": 0,
+    "other_non_slp1": 2
+   }
+  },
+  {
+   "code": "mwe",
+   "title": "Monier-Williams English-Sanskrit Dictionary",
+   "version": "CDSL 2020",
+   "headwords": 28118,
+   "source": "csl-orig/v02/mwe/mwe.txt",
+   "residue_excluded": 229,
+   "residue_classes": {
+    "paren": 0,
+    "leading_digit": 0,
+    "marks_left": 0,
+    "other_non_slp1": 229
+   }
+  },
+  {
+   "code": "pd",
+   "title": "An Encyclopedic Dictionary of Sanskrit on Historical Principles",
+   "version": "CDSL 2020",
+   "headwords": 104962,
+   "source": "SanskritLexicography HeadwordLists now-2026 PD exports (H4797)",
+   "residue_excluded": 50,
+   "residue_classes": {
+    "paren": 0,
+    "leading_digit": 0,
+    "marks_left": 0,
+    "other_non_slp1": 50
+   }
+  },
+  {
+   "code": "pw",
+   "title": "Böhtlingk Sanskrit-Wörterbuch in kürzerer Fassung",
+   "version": "CDSL 2020",
+   "headwords": 151341,
+   "source": "csl-orig/v02/pw/pw.txt",
+   "residue_excluded": 36,
+   "residue_classes": {
+    "paren": 0,
+    "leading_digit": 0,
+    "marks_left": 0,
+    "other_non_slp1": 36
+   },
+   "aka": "PWK in SanskritLexicography union naming"
+  },
+  {
+   "code": "pwg",
+   "title": "Böhtlingk and Roth Grosses Petersburger Wörterbuch",
+   "version": "CDSL 2020",
+   "headwords": 106086,
+   "source": "csl-orig/v02/pwg/pwg.txt",
+   "residue_excluded": 48,
+   "residue_classes": {
+    "paren": 0,
+    "leading_digit": 0,
+    "marks_left": 0,
+    "other_non_slp1": 48
+   },
+   "volumes": {
+    "1": 14374,
+    "2": 12307,
+    "3": 11060,
+    "4": 14495,
+    "5": 29138,
+    "6": 16244,
+    "7": 25748
+   }
+  },
+  {
+   "code": "sch",
+   "title": "Schmidt Nachträge zum Sanskrit-Wörterbuch",
+   "version": "CDSL 2020",
+   "headwords": 28721,
+   "source": "csl-orig/v02/sch/sch.txt",
+   "residue_excluded": 253,
+   "residue_classes": {
+    "paren": 0,
+    "leading_digit": 0,
+    "marks_left": 0,
+    "other_non_slp1": 253
+   }
+  },
+  {
+   "code": "skd",
+   "title": "Sabda-kalpadruma",
+   "version": "CDSL 2020",
+   "headwords": 40814,
+   "source": "csl-orig/v02/skd/skd.txt",
+   "residue_excluded": 6,
+   "residue_classes": {
+    "paren": 0,
+    "leading_digit": 0,
+    "marks_left": 0,
+    "other_non_slp1": 6
+   }
+  },
+  {
+   "code": "vcp",
+   "title": "Vacaspatyam",
+   "version": "CDSL 2020",
+   "headwords": 48635,
+   "source": "csl-orig/v02/vcp/vcp.txt",
+   "residue_excluded": 11,
+   "residue_classes": {
+    "paren": 0,
+    "leading_digit": 0,
+    "marks_left": 0,
+    "other_non_slp1": 11
+   }
+  },
+  {
+   "code": "vei",
+   "title": "The Vedic Index of Names and Subjects",
+   "version": "CDSL 2020",
+   "headwords": 3704,
+   "source": "csl-orig/v02/vei/vei.txt",
+   "residue_excluded": 0
+  },
+  {
+   "code": "wil",
+   "title": "Wilson Sanskrit-English Dictionary",
+   "version": "CDSL 2020",
+   "headwords": 43951,
+   "source": "csl-orig/v02/wil/wil.txt",
+   "residue_excluded": 9,
+   "residue_classes": {
+    "paren": 0,
+    "leading_digit": 0,
+    "marks_left": 0,
+    "other_non_slp1": 9
+   }
+  }
+ ],
+ "pending": [
+  {
+   "code": "nws",
+   "status": "pending",
+   "note": "Neues Sanskrit-Wörterbuch / Sanskrit-Wörterbuch der neuen Folge (nws.uzi.uni-halle.de) — kosha NWS ingest pipeline (H6064) output not yet on disk; declared pending, not counted as an active member."
+  }
+ ],
+ "ruling": "D3 (GRILL_RESEARCH_WIDENING 04-10-2026): +NWS/MW72/Apte/PWG-volumes; NWS pending, lan/mwe/wil added to clear >=20 with on-disk data",
+ "provenance": {
+  "csl_orig_v02": "/Users/mac/Documents/GitHub/csl-orig/v02",
+  "csl_orig_commit": "f4c08c578b330e2379e38f54d3a541f1564b8eee",
+  "csl_sources": {
+   "ap": {
+    "path": "csl-orig/v02/ap/ap.txt",
+    "sha256": "1f8c4c1305e2a98dddd938ed588698f2410d4aab31c29aff8ad1200edf95846c"
+   },
+   "ap90": {
+    "path": "csl-orig/v02/ap90/ap90.txt",
+    "sha256": "5d60a1d81faec991a128134728771fe22be869c6b8e30f58b55a9bda86a31da7"
+   },
+   "bhs": {
+    "path": "csl-orig/v02/bhs/bhs.txt",
+    "sha256": "1cf4a001a250b14b9b76477bab21748a60d7e9948276274704cd1d33756dd13f"
+   },
+   "bur": {
+    "path": "csl-orig/v02/bur/bur.txt",
+    "sha256": "2d43ecd19229458d2039e8ef9c9852f895ccf03e33113c9ba59cadacea8f95f6"
+   },
+   "cae": {
+    "path": "csl-orig/v02/cae/cae.txt",
+    "sha256": "be19a0a648a3eea94e16ce5c22d0f4065179cb1fa9f7c0ae8d0df02670ca66d2"
+   },
+   "ccs": {
+    "path": "csl-orig/v02/ccs/ccs.txt",
+    "sha256": "22ed59d6fdf20309eaaf9d1a9da616f24e2727adfbd3e39989fc8afd1176e475"
+   },
+   "gra": {
+    "path": "csl-orig/v02/gra/gra.txt",
+    "sha256": "991cfc16b8524bbac0d11d11832e0a8c15e571df2d969c6a54cc6cfce6554874"
+   },
+   "inm": {
+    "path": "csl-orig/v02/inm/inm.txt",
+    "sha256": "1575db0abf2b9f8acbdf3406361b3394c5ccfdb6f4530253cfae81de4512a2a6"
+   },
+   "lan": {
+    "path": "csl-orig/v02/lan/lan.txt",
+    "sha256": "4ac932024231eb050c016e795004f204cfc06fdf858030f5df73502d86b51c0e"
+   },
+   "md": {
+    "path": "csl-orig/v02/md/md.txt",
+    "sha256": "e099479d7264d07b6e461bb5beab693566802334460e70370465efc36a4f8ce1"
+   },
+   "mw": {
+    "path": "csl-orig/v02/mw/mw.txt",
+    "sha256": "f4fff3926d053848d44807b08d3f14f0755793e92f04e7424e03bcad2ca7e4e5"
+   },
+   "mw72": {
+    "path": "csl-orig/v02/mw72/mw72.txt",
+    "sha256": "fec625e2dccc7dae6ad98164d8c6cfef4396715ce82eb0405fc073a7c9450574"
+   },
+   "mwe": {
+    "path": "csl-orig/v02/mwe/mwe.txt",
+    "sha256": "2a2a5b9dd1e1b1c3594d26d916d466708a81435c2e2c173cce9d165934bbbcbd"
+   },
+   "pw": {
+    "path": "csl-orig/v02/pw/pw.txt",
+    "sha256": "399de2e20f8fff20860da18b46ced725b9ccb9ff975930b3cf86543cee75ae40"
+   },
+   "pwg": {
+    "path": "csl-orig/v02/pwg/pwg.txt",
+    "sha256": "430c910f8b0c9229d89ef1580b2385883ce5f4e2ee83dfc6ecb7d6251bb62166"
+   },
+   "sch": {
+    "path": "csl-orig/v02/sch/sch.txt",
+    "sha256": "6f019d0f5cce65e907e5ed8ce37a871fd0a3665625f510934197ad5128c89f08"
+   },
+   "skd": {
+    "path": "csl-orig/v02/skd/skd.txt",
+    "sha256": "c7d7c8a89a81b14e264ccde5963241c5549bfe820e60777504c7de5f7c5d4cec"
+   },
+   "vcp": {
+    "path": "csl-orig/v02/vcp/vcp.txt",
+    "sha256": "ecb3abbc931d64ce4c616223e64ecf1817a5f9c5e6486eb0b2979230ef634551"
+   },
+   "vei": {
+    "path": "csl-orig/v02/vei/vei.txt",
+    "sha256": "bcdaadf64ab64338278fe70f8d539d833220bdbade54b635ef5141f16c6d109e"
+   },
+   "wil": {
+    "path": "csl-orig/v02/wil/wil.txt",
+    "sha256": "299bcf7938f4113ff353333febc44d81bdd19616604fa9e920e2425bf4b47dee"
+   }
+  },
+  "pd_source": {
+   "path": "/Users/mac/Documents/GitHub/SanskritLexicography/HeadwordLists/now-2026",
+   "note": "PD has no csl-orig source (CODE2DIR['PD']=None, H4797)"
+  }
+ }
+}

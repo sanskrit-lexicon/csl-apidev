@@ -12,7 +12,7 @@ indexed from §4 here. Read this file to *run, extend, and fork-sync* the backen
 tribal knowledge; follow the links when you need the full contract of one endpoint.
 
 Audience: a new operator or agent session with PHP available and no prior contact with the
-Cologne stack. Handoff provenance: [H1784](https://github.com/gasyoun/Uprava/blob/main/handoffs/H1784-Fable_csl-apidev_web-backend-operator-manual_28.07.26.md);
+Cologne stack. Handoff provenance: [H1784](https://github.com/gasyoun/Uprava/blob/main/handoffs/archive/H1784-Fable_csl-apidev_web-backend-operator-manual_28.07.26.md);
 sibling manuals cover the frontend twin ([csl-websanlexicon](https://github.com/sanskrit-lexicon/csl-websanlexicon), H1782)
 and the dictionary-generation pipeline (csl-pywork, H1783).
 
@@ -453,5 +453,62 @@ This repo has **no agent-side deploy path**. Understand the three-stage reality:
   [COLOGNE#249](https://github.com/sanskrit-lexicon/COLOGNE/issues/249)).
 - **Improvement backlog for this manual**: see
   [docs/WEB_BACKEND_MANUAL.meta.md](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/docs/WEB_BACKEND_MANUAL.meta.md).
+
+## 14. Open Graph preview tags (H6478, landed 11-10-2026 — deploy pending)
+
+Dictionary entry pages served by [`getword.php`](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/getword.php)
+(through [`getwordClass.php`](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/getwordClass.php)
+`getwordDisplay()`) emit Open Graph and Twitter-card meta in the `<head>` so
+chat-app links (Telegram, Slack, X) preview with the exact headword and first
+sense instead of a bare URL. Implementation: [`og_preview.php`](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/og_preview.php)
+(single include, no configuration).
+
+What the meta does:
+
+- `og:title` — headword in IAST + site name; `og:description` — first record's
+  text, tags and the `[ID=...]` record-ID tail stripped, ~200 chars;
+  `og:url` — the request URL (canonical).
+- `og:image` / `twitter:image` — emitted **only** when the Cologne-owned card
+  file `og/<dict>_<token>.png` exists in this checkout (token = case-folded
+  SLP1, `[a-z0-9]` verbatim + `_<hexbyte>` escapes; existence test is a local
+  `file_exists`, no cross-property lookups). Missing card → chat apps degrade
+  gracefully to the text-only preview; coverage grows by committing more cards.
+- `twitter:card=summary_large_image` — REQUIRED for Telegram's large
+  full-width preview; og: tags alone render the compact layout (canary-verified
+  11-10-2026). Emitted together with `og:image`.
+
+**Card generation** (MG ruling 11-10-2026 «make it now, similar to kosha» /
+«keep them separate» — Cologne-owned set, nothing points at kosha or
+samskrtam.ru): [`make_entry_cards.py`](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/make_entry_cards.py)
+renders 1200x630 cards from Cologne's own data. Offline (preferred):
+
+```
+python3 make_entry_cards.py --dict mw   --sqlite ~/Documents/GitHub/mw/web/sqlite/mw.sqlite agni vac ...
+```
+
+It can also fetch live entry pages (same URLs Jim serves) with
+`--dict <code> <keys...>`, but the host throttles and blocks (§10): the curl
+user-agent passes while browser-like ones get 403/500, and bursts rate-limit —
+the sqlite mode avoids the host entirely. Requires `sanskrit-util` (the org's
+shared transliteration library — SHARED_CODE family #1). Ten MW pilot cards
+ship in `og/`; scale by running the same command over the frequency head and
+committing the set.
+
+Deploy steps for the host maintainer (nothing beyond the normal PHP checkout
+pull — no config, no new routes, no cron):
+
+1. Pull the checkout serving `scans/awork/apidev/` to this commit.
+2. Verify one page:
+   `curl -s "https://www.sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/getword.php?dict=mw&key=harika&input=slp1&output=iast" | grep -c 'og:title\|twitter:card'`
+   → expect `2`.
+3. Cache note: chat apps cache previews per URL; a bumped share
+   (`&v=2`) re-fetches.
+
+Out of scope / follow-ups: `app/dict.php` is a JS shell (no server-side
+dict/key in scope) — og: tags there would need the frontend route, not this
+include. `getwordClass.php` is apidev-owned (not in the
+[`v02/apidev_copy.sh`](https://github.com/sanskrit-lexicon/csl-websanlexicon/blob/main/v02/apidev_copy.sh)
+trio copy set), so no csl-websanlexicon mirror is required.
+
 
 _Dr. Mārcis Gasūns_

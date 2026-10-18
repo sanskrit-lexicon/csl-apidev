@@ -1,4 +1,4 @@
-_Created: 12-06-2026 · Last updated: 06-09-2026_
+_Created: 12-06-2026 · Last updated: 06-10-2026_
 
 # Changelog
 
@@ -7,6 +7,8 @@ recorded here. Format loosely follows [Keep a Changelog](https://keepachangelog.
 Dates are UTC+3 (project local).
 
 ## [Unreleased]
+- Added a root `AGENTS.md` agent-entrypoint stub (H4634): names itself the agent entrypoint, links [CLAUDE.md](CLAUDE.md), points at the [Uprava org standard](https://github.com/gasyoun/Uprava/blob/main/AGENTS.md).
+- **Added `api1/salt_union.php` — the union headword index endpoint (A55v2, H6065)**: one REST call answering across-dictionary headword membership plus full index meta (members, CDSL versions, per-dict counts, provenance, NWS pending note). Union extended to **21 dictionaries** (ruling D3: +mw72, +ap90, PWG per-volume counts; lan/mwe/wil added to clear ≥20 while NWS headwords await the kosha H6064 pipeline) — 458,355 union headwords. Self-contained on two committed data files (`api1/data/union_headwords.tsv` byte-sorted + `union_meta.json`), no `*.sqlite` dependency; `fseek` binary-search lookups; input/output transliteration and JSONP per the Salt conventions; 404/400/500 truth envelopes (H3636). Builder `tools/build_union_index.py` (deterministic, H4797 normalization contract) and consumer smoke `tools/union_consumer_smoke.py` (16/16 checks GREEN). Contract: [doc/salt_union.md](doc/salt_union.md).
 ### Fixed
 
 - **Blanket error suppression lifted from the core serving chain (H4227, H3487
@@ -65,7 +67,7 @@ Dates are UTC+3 (project local).
 ### Changed
 
 - **17 copy-pasted JSONP callback guards consolidated** into
-  [jsonp_callback_guard.php](../jsonp_callback_guard.php) (`jsonp_callback_ok()`
+  jsonp_callback_guard.php (`jsonp_callback_ok()`
   + `jsonp_reply()`): identical whitelist `^[A-Za-z_$][A-Za-z0-9_$.]{0,127}$`,
   identical 400 `invalid callback` rejection, identical entity-encoding; the
   api1 salt_* JS content-type switch is the `$jsContentType` flag. Contract
@@ -146,7 +148,7 @@ Dates are UTC+3 (project local).
 ### Added
 
 - **`docs/WEB_BACKEND_MANUAL.md` — operator manual for the whole web backend**
-  ([H1784](https://github.com/gasyoun/Uprava/blob/main/handoffs/H1784-Fable_csl-apidev_web-backend-operator-manual_28.07.26.md)):
+  ([H1784](https://github.com/gasyoun/Uprava/blob/main/handoffs/archive/H1784-Fable_csl-apidev_web-backend-operator-manual_28.07.26.md)):
   cheat-sheet, anatomy, request data-flow, endpoint catalogue (indexing the canonical
   `doc/*` specs), local run + csl-sqlite data staging (incl. the `csl-apidev`-basename
   trap), Salt/C-SALT phase status, the csl-websanlexicon fork-sync runbook, scan/PDF
@@ -165,7 +167,7 @@ Dates are UTC+3 (project local).
 
 ### Fixed
 
-- **`app.js` `rowSlp1()` now case-folds IAST before transcoding** ([SanskritLexicography#779](https://github.com/gasyoun/SanskritLexicography/issues/779), [H1695](https://github.com/gasyoun/Uprava/blob/main/handoffs/H1695-Opus_csl-apidev_rowslp1-iast-case-fold_26.07.26.md)): `sanskrit-util`'s `to_slp1` maps lowercase IAST and passes everything else through verbatim — into an output alphabet where case is **phonemic** (`R`=ṇ, `B`=bh, `E`=ai). A capitalised headword therefore transcoded to a different, plausible-looking word with no error path: `Rāma` → `RAma`, which **rendered in the results list as `ṇāma`** and looked up the wrong `dalglob|` key. `IAST_RE` deliberately auto-detects capitalised input, so the path was reachable by design, not by accident. `foldIast()` (NFC + lowercase, the same defence [csl-atlas](https://github.com/sanskrit-lexicon/csl-atlas) already applies in `lookup-normalize.js`) now runs first; SLP1 input is explicitly never folded, since there the case carries meaning. Found by the org-wide `to_slp1` caller audit that followed the same bug corrupting 60% of the keys in SanskritLexicography's ACC×NCC works crosswalk.
+- **`app.js` `rowSlp1()` now case-folds IAST before transcoding** ([SanskritLexicography#779](https://github.com/gasyoun/SanskritLexicography/issues/779), [H1695](https://github.com/gasyoun/Uprava/blob/main/handoffs/archive/H1695-Opus_csl-apidev_rowslp1-iast-case-fold_26.07.26.md)): `sanskrit-util`'s `to_slp1` maps lowercase IAST and passes everything else through verbatim — into an output alphabet where case is **phonemic** (`R`=ṇ, `B`=bh, `E`=ai). A capitalised headword therefore transcoded to a different, plausible-looking word with no error path: `Rāma` → `RAma`, which **rendered in the results list as `ṇāma`** and looked up the wrong `dalglob|` key. `IAST_RE` deliberately auto-detects capitalised input, so the path was reachable by design, not by accident. `foldIast()` (NFC + lowercase, the same defence [csl-atlas](https://github.com/sanskrit-lexicon/csl-atlas) already applies in `lookup-normalize.js`) now runs first; SLP1 input is explicitly never folded, since there the case carries meaning. Found by the org-wide `to_slp1` caller audit that followed the same bug corrupting 60% of the keys in SanskritLexicography's ACC×NCC works crosswalk.
 - **MW bare `&c.` tooltip** ([MWS#86](https://github.com/sanskrit-lexicon/MWS/issues/86), H1523): display-layer wrap of ~21k bare `&c.` occurrences so hover shows "et cetera; and so on" (same sense as already-marked `etc.`). Twin of csl-websanlexicon makotemplates fix. Optional bulk `<ab>&c.</ab>` in csl-orig remains a separate monthly-batch path.
 - **RV/AV links never emit `rv00.*`** ([COLOGNE#370](https://github.com/sanskrit-lexicon/COLOGNE/issues/370)): `parse_rv_mandala()` + guards in `ls_callback_mw_href` / `rgveda_link` / GRA callback so a bad mandala token cannot become `rv00.147.html`. Twin of csl-websanlexicon makotemplates fix.
 - **`servepdfClass.php` preface/title-page navigation** ([#45](https://github.com/sanskrit-lexicon/csl-apidev/issues/45), H1522): `getImagefiles()` used to strip *all* leading non-digits from the `page` parameter, so front-matter ids like `t36` became `36` and hit dictionary page `0036` instead of title-scan `t36`. Now strips only a leading `Page` prefix and preserves `tNN` title-page ids. Same fix landed in the csl-websanlexicon makotemplates twin.

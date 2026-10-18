@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8">
+<style>
+html,body { margin:0; padding:0; font-family:-apple-system,'Segoe UI',Helvetica,Arial,sans-serif; }
+#wrap { width:1400px; height:820px; display:flex; background:#17212b; }
+.panel { flex:1; padding:36px 40px; box-sizing:border-box; }
+.panel h2 { color:#8d9aa5; font-size:26px; font-weight:600; margin:0 0 22px; letter-spacing:0.5px; }
+.bubble { background:#182533; border-radius:12px; padding:14px 18px 10px; max-width:600px; }
+.bubble.light { background:#ffffff; color:#000000; }
+.link { color:#5eb5f7; font-size:22px; word-break:break-all; }
+.time { color:#6d7f8d; font-size:16px; text-align:right; margin-top:6px; }
+.preview { margin-top:10px; border-left:4px solid #5eb5f7; padding:6px 0 6px 12px; }
+.preview .site { color:#5eb5f7; font-size:20px; }
+.preview .title { color:#f5f5f5; font-size:24px; font-weight:600; margin-top:4px; }
+.bubble.light .preview .title { color:#000000; }
+.preview .desc { color:#c4cbd1; font-size:21px; margin-top:4px; line-height:1.4; }
+.bubble.light .preview .desc { color:#707579; }
+.preview img { width:100%; border-radius:6px; margin-top:10px; display:block; }
+.note { color:#8d9aa5; font-size:20px; margin-top:18px; line-height:1.5; }
+.after .bubble { background:#ffffff; }
+.after .preview .title { color:#000000; }
+.after .preview .desc { color:#3d444d; }
+</style></head>
+<body><div id="wrap">
+ <div class="panel before">
+  <h2>BEFORE — live today</h2>
+  <div class="bubble">
+   <div class="link">https://www.sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/getword.php?dict=mw&amp;key=agni&amp;input=slp1&amp;output=iast</div>
+   <div class="time">11:02 ✓</div>
+  </div>
+  <div class="note">No &lt;title&gt;, no og: / twitter: tags — chat apps show the bare URL only. (Probed 11-10-2026: 0 og/twitter tags on the entry page.)</div>
+ </div>
+ <div class="panel after">
+  <h2>AFTER — checkout pull to #175 + #176</h2>
+  <div class="bubble">
+   <div class="link">getword.php?dict=mw&amp;key=agni&amp;input=slp1&amp;output=iast</div>
+   <div class="preview">
+    <div class="site">Cologne Digital Sanskrit Dictionaries</div>
+    <div class="title">agni — Cologne Digital Sanskrit Dictionaries</div>
+    <div class="desc">agni m. (√ ag, Uṇ.) fire, sacrificial fire (of three kinds, Gārhapatya, Āhavanīya, and Dakṣiṇa)</div>
+    <img src="og/mw_agni.png">
+   </div>
+   <div class="time">11:03 ✓✓</div>
+  </div>
+  <div class="note">og:title = headword, og:description = first sense, og:image + twitter:card = the 1200×630 card from og/ (ships in the same pull). Telegram renders the large card because twitter:card=summary_large_image rides next to og:image.</div>
+ </div>
+</div></body></html>
