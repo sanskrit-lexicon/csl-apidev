@@ -1,5 +1,11 @@
 <?php
-error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
+// H4227 A1 (H3487 audit): report everything; notices/warnings go to the
+// error log, never the response body. The old blanket suppression hid real
+// defects; display_errors=0 preserves the original 'Peter Scharf Mac'
+// concern (no diagnostics in output).
+error_reporting(E_ALL);
+ini_set('display_errors', '0');
+ini_set('log_errors', '1');
 ?>
 <?php
 /* parm.php  Jul 10, 2015  Contains Parm class, which
@@ -32,11 +38,13 @@ class Parm {
  public $filter0,$filterin0,$keyin,$dict,$accent;
  public $filter,$filterin;
  public $dictinfo,$english;
- public $keyin1,$key;
- public $status,$errorinfo;
+  public $keyin1,$key;
+  public $status,$errorinfo;
+  public $keyMissing;
  public $getsuggestTerm,$basicOption,$dispcss,$lnumin,$direction;
- public function __construct() {
-  $this->status = 200;  // assume all is ok.
+  public function __construct() {
+   $this->status = 200;  // assume all is ok.
+   $this->keyMissing = false;
   $this->basicOption = false;
   $dbg=false;
   dbgprint($dbg,"enter parm construct\n");
@@ -84,7 +92,13 @@ class Parm {
    $tempkey = $_REQUEST['key'];
    $tempkey = $this->init_inputs_key($tempkey);
   }else {
-   $tempkey = 'guru';  // arbitrary
+   // H4227 A15 (H3487 audit): a missing key used to silently serve the
+   // entry for 'guru'. Parm no longer invents a key; it records the fact
+   // and leaves the answer to the endpoint. $status is deliberately
+   // untouched: consumers whose contract does not require 'key'
+   // (getsuggest's term-only calls, listhier, dalglob) are unaffected.
+   $tempkey = '';
+   $this->keyMissing = true;
   }
   dbgprint($dbg,"parm.php. tempkey=$tempkey\n");
   //dbgprint($dbg,"  REQUEST['key']= " . $_REQUEST['key'] . "\n");
