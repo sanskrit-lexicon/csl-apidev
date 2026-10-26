@@ -37,8 +37,8 @@ jobs:
     name: apidev <-> websanlexicon twin diff
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/checkout@v7.0.1
         with:
           repository: sanskrit-lexicon/csl-websanlexicon
           ref: ${{ env.WEBSAN_REF }}
