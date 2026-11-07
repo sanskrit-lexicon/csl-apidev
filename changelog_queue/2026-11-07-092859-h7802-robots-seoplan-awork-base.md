@@ -1,0 +1,1 @@
+- **Refreshed two stale `/csl-apidev/app/` URLs to the live awork base (H7802):** `app/robots.txt` Sitemap line and the `entry.php?key=agni` example in `doc/ux-redesign/SEO_PLAN.md` §2 now use `https://www.sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/app/`, matching `DEPLOY_REQUEST_JIM.md` (H7785) — the version-controlled copies no longer contradict the deploy instructions.

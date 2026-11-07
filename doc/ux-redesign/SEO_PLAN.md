@@ -55,7 +55,7 @@ server-side for offline development (always `noindex`).
 - **Clean form** (once [app/.htaccess](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/app/.htaccess)
   is confirmed active on the Cologne host — needs `AllowOverride FileInfo`):
   `…/app/entry/agni` and `…/app/entry/mw/agni`. Example:
-  [entry.php?key=agni](https://www.sanskrit-lexicon.uni-koeln.de/csl-apidev/app/entry.php?key=agni).
+  [entry.php?key=agni](https://www.sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/app/entry.php?key=agni).
   The canonical stays the query form until the rewrite is verified live;
   flipping canonicals to the clean form is a one-line change in `entry.php`
   (and a `--base`-only rerun of the sitemap builder). This coexists with the
