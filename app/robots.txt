@@ -16,4 +16,4 @@ Disallow: /*getword_batch.php
 Disallow: /*getsuggest.php
 Disallow: /*dalglob.php
 
-Sitemap: https://www.sanskrit-lexicon.uni-koeln.de/csl-apidev/app/sitemaps/sitemap.xml
+Sitemap: https://www.sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/app/sitemaps/sitemap.xml
