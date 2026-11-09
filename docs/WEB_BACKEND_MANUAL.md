@@ -454,7 +454,7 @@ This repo has **no agent-side deploy path**. Understand the three-stage reality:
 - **Improvement backlog for this manual**: see
   [docs/WEB_BACKEND_MANUAL.meta.md](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/docs/WEB_BACKEND_MANUAL.meta.md).
 
-## 14. Open Graph preview tags (H6478, landed 11-10-2026 — deploy pending)
+## 14. Open Graph preview tags (H6478 entry pages — LIVE; H7901 site surfaces — landed 09-11-2026)
 
 Dictionary entry pages served by [`getword.php`](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/getword.php)
 (through [`getwordClass.php`](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/getwordClass.php)
@@ -462,6 +462,11 @@ Dictionary entry pages served by [`getword.php`](https://github.com/sanskrit-lex
 chat-app links (Telegram, Slack, X) preview with the exact headword and first
 sense instead of a bare URL. Implementation: [`og_preview.php`](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/og_preview.php)
 (single include, no configuration).
+
+**Status (H7901 re-probe, 09-11-2026): the entry-page meta is LIVE on the host** — the
+maintainer pulled the H6478 checkout; `getword.php?dict=mw&key=harika…` serves 5
+og/twitter tags with `og:title "harika — Cologne Digital Sanskrit Dictionaries"`. The
+"deploy pending" note this section header used to carry was stale and is corrected here.
 
 What the meta does:
 
@@ -509,6 +514,58 @@ dict/key in scope) — og: tags there would need the frontend route, not this
 include. `getwordClass.php` is apidev-owned (not in the
 [`v02/apidev_copy.sh`](https://github.com/sanskrit-lexicon/csl-websanlexicon/blob/main/v02/apidev_copy.sh)
 trio copy set), so no csl-websanlexicon mirror is required.
+
+### 14a. Site surfaces — og_meta.php (H7901, landed 09-11-2026)
+
+Beyond the entry pages, the non-entry page surfaces emit og:/twitter: meta from
+[`og_meta.php`](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/og_meta.php) —
+a second single include that is **byte-identical to the csl-websanlexicon copy**
+[`v02/makotemplates/web/og_meta.php`](https://github.com/sanskrit-lexicon/csl-websanlexicon/blob/main/v02/makotemplates/web/og_meta.php)
+(canonical side lands first, per the fork-sync contract) and is guarded as a true twin
+by [`twin-drift.yml`](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/.github/workflows/twin-drift.yml).
+Never edit either copy alone: change the websanlexicon file and re-copy.
+
+Surfaces wired (each emits `og:title`, `og:description`, `og:image`, `twitter:*`):
+
+| Surface | Where | Emission |
+|---|---|---|
+| Site homepage | `csl-homepage` `index_cologne.py` → `/index.html` | site constants + live `indexdirs.xml` dictionary count |
+| Dictionary landing pages (all generated apps, 46 codes in `v02/distinctfiles/`) | csl-websanlexicon `v02/makotemplates/web/index.php` (mako `T` template; ships `web/og_meta.php` via `inventory.txt`) | `og_meta_page(dict)` |
+| List display (webtc1) | csl-websanlexicon `v02/makotemplates/web/webtc1/index.php` | `og_meta_page(dict)` |
+| Scan view, old-style trees | csl-websanlexicon `v02/makotemplates/web/webtc/servepdfClass.php` | `og_meta_page(dict)` |
+| Scan view (this repo) | `servepdfClass.php` — both heredoc shells | `og_meta_page(dict)`; `og_meta_site('Scan images')` on the no-dict error shell |
+| Listview | `listview.php`, `sample/list-0.2.php` | `og_meta_site('Listview')` |
+| Simple search | `simple-search/v1.0/list-0.2s_rw.php` | `og_meta_site('Simple search')` |
+| Newer-style scan landings | csl-westergaard / csl-whitroot / csl-kale `disp/index.php` (vendored byte-identical copy) | `og_meta_page(key)` |
+| Inflected-form lookup | csl-inflect `web/index.php` (vendored byte-identical copy) | `og_meta_page('inflect')` |
+
+**Data, not prose.** `og_meta_registry()` rows carry name/author/year from
+`csl-atlas/data/dictionary_inventory.csv` (`full_name`/`author_or_compiler`/`year`) and
+entry counts from `csl-atlas/data/headwords.json` (`L_count`), with `dictparms.py`
+`dictname` fallbacks — the provenance comment inside `og_meta.php` is the authority.
+`og:description` is composed from those fields by `og_meta_description()`; the only
+hand-written description in the whole surface set is the site-level home sentence in
+`index_cologne.py`, and even that interpolates the live `indexdirs.xml` count.
+
+**og:image.** One committed 1200x630 card — [`og/site_card.png`](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/og/site_card.png),
+rendered offline by [`make_site_card.py`](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/make_site_card.py)
+(Charis SIL, SIL OFL; raster output only). Every surface points at its absolute URL
+`https://www.sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/og/site_card.png`; no
+per-page images and no kosha/samskrtam.ru pointers (H6478 ruling). The card lands with
+this checkout, so the URL resolves only after the maintainer's pull.
+
+**Not wired (residual).** Static `.html` shells — `sample/list-0.2.html`,
+`simple-search/v1.0/list-0.2s.html`, `csl-santam/php/index.html` — cannot emit
+server-side meta unless the host executes PHP for `.html` (host config, out of scope
+here) or they are converted to `.php`; that needs a maintainer ruling.
+
+**Deploy** is still the normal checkout pull (§10) — no config, no new routes, no
+cron. Verify after the pull:
+
+```
+curl -s "https://www.sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/listview.php?dict=mw" | grep -c 'og:title'
+→ 1
+```
 
 
 _Dr. Mārcis Gasūns_

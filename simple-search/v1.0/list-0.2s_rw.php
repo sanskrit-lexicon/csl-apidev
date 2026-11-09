@@ -1,5 +1,6 @@
 <?php
 require_once(__DIR__ . '/../../security_headers.php');
+require_once(__DIR__ . '/../../og_meta.php'); // H7901: og: meta for simple search
  /* This is file list-0.2s_rw.php.  ('rw' = rewrite)
   Allows /simple/ urls to be parsed.
   See .htaccess in root directory.
@@ -70,6 +71,7 @@ for($i=0;$i<count($keys);$i++) {
 <head>
 <META charset="UTF-8">
 <title>Sanskrit simple search</title>
+<?= og_meta_site('Simple search') ?>
 <!-- ref=https://www.w3.org/TR/html4/struct/links.html#edef-BASE -->
 <?php 
  if ($dictinfowhich == "cologne") {
