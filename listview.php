@@ -1,5 +1,6 @@
 <?php
 require_once(__DIR__ . '/security_headers.php');
+require_once(__DIR__ . '/og_meta.php'); // H7901: og: meta for the listview surface
 // H4227 A1 (H3487 audit): report everything; notices/warnings go to the
 // error log, never the response body. The old blanket suppression hid real
 // defects; display_errors=0 preserves the original 'Peter Scharf Mac'
@@ -52,6 +53,7 @@ if (isset($_GET['callback'])) {
  <head>
   <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
   <title>Cologne apidev/Listview </title>
+  <?= og_meta_site('Listview') ?>
   <link rel="stylesheet" type="text/css" href="css/listview.css" />
 
   <script src="js/jquery.min.js"></script>

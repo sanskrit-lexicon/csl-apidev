@@ -4,6 +4,7 @@
  */
 // H1523: baseline headers + CSP-Report-Only
 require_once(__DIR__ . '/../security_headers.php');
+require_once(__DIR__ . '/../og_meta.php'); // H7901: og: meta for the sample listview
 // Report all errors except E_NOTICE  (also E_WARNING?)
 error_reporting(E_ALL & ~E_NOTICE);
 /* See phpinit
@@ -19,6 +20,7 @@ error_reporting(E_ALL & ~E_NOTICE);
 <head>
 <META charset="UTF-8">
 <title>Cologne Digital Sanskrit Dictionaries Sample Listview</title>
+<?= og_meta_site('Listview') ?>
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.css">
 <!-- links to jquery, using CDNs -->
 <script type="text/javascript" src="//code.jquery.com/jquery-3.7.1.min.js"></script>

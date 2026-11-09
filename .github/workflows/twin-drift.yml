@@ -10,6 +10,7 @@ name: Twin drift guard
 #   basicdisplay.php         <-> websan v02/makotemplates/web/webtc/basicdisplay.php
 #   getword_data.php         <-> websan v02/makotemplates/web/webtc/getword_data.php
 #   utilities/transcoder.php <-> websan v02/makotemplates/web/utilities/transcoder.php
+#   og_meta.php              <-> websan v02/makotemplates/web/og_meta.php  (H7901)
 #
 # ALLOWLISTED deliberate drift (api-mode trims, documented major-drift-by-design
 # in the H3487 adversarial audit §8/G4) — intentionally NOT guarded here:
@@ -53,6 +54,7 @@ jobs:
             "basicdisplay.php:v02/makotemplates/web/webtc/basicdisplay.php"
             "getword_data.php:v02/makotemplates/web/webtc/getword_data.php"
             "utilities/transcoder.php:v02/makotemplates/web/utilities/transcoder.php"
+            "og_meta.php:v02/makotemplates/web/og_meta.php"
           )
           for pair in "${twins[@]}"; do
             apidev_file="${pair%%:*}"
