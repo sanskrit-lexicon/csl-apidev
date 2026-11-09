@@ -560,7 +560,10 @@ server-side meta unless the host executes PHP for `.html` (host config, out of s
 here) or they are converted to `.php`; that needs a maintainer ruling.
 
 **Deploy** is still the normal checkout pull (§10) — no config, no new routes, no
-cron. Verify after the pull:
+cron. The Jim-facing request with before/after preview visuals, the full
+checklist (generator refresh + homepage regeneration included) and escalation
+rules: [`doc/DEPLOY_REQUEST_JIM_H7901_OG.md`](https://github.com/sanskrit-lexicon/csl-apidev/blob/main/doc/DEPLOY_REQUEST_JIM_H7901_OG.md).
+Verify after the pull:
 
 ```
 curl -s "https://www.sanskrit-lexicon.uni-koeln.de/scans/awork/apidev/listview.php?dict=mw" | grep -c 'og:title'
