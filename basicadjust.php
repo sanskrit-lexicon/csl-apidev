@@ -612,13 +612,16 @@ class BasicAdjust {
  }
  private function href_rvprat_roman($code,$data) {
   // ṚV. PRĀT./ṚV. PRĀTIŚ. Roman numeral → app2 by ipage.
-  // NOTE (H7948): the historic pattern below is |-delimited while its
-  // (TIŚ|T) alternation also uses | — PHP reads "T)" as modifiers ("Unknown
-  // modifier 'T'") and this rule has NEVER matched. Byte parity keeps the
-  // pattern verbatim; fixing it changes behavior and belongs in a separate
-  // change, not this structure-only refactor.
+  // NOTE (H7962): the historic pattern was |-delimited while its (TIŚ|T)
+  // alternation also used | — PHP read "T)" as modifiers ("Unknown modifier
+  // 'T'") and the rule had NEVER matched (H7948 preserved it verbatim for
+  // byte parity; corpus row rvprat_roman pinned (null)). Fixed here by
+  // switching ONLY the delimiter to ~; the pattern body and (TIŚ|T) capture
+  // semantics are unchanged. Rendered-URL change (links appear where none
+  // did) is declared in tests/golden_link_targets/intentional_divergences.tsv
+  // + roman_expected.tsv (H7962 URL-change review).
   $dbg = false;
-  if (preg_match("|^ṚV\. PRĀ(TIŚ|T)\. ([IVXLCDM]+)|",$data,$matches)) {
+  if (preg_match("~^ṚV\. PRĀ(TIŚ|T)\. ([IVXLCDM]+)~",$data,$matches)) {
    $roman = $matches[2];
    $ipage = $this->romanToInt($roman);
    $href = "https://sanskrit-lexicon-scans.github.io/rvps/app2/?$ipage";
