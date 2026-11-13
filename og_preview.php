@@ -79,7 +79,18 @@ function og_preview_meta($parms, $matches) {
  // lookups.
  $cardfile = __DIR__ . '/og/' . $dictlower . '_' . og_preview_card_token($key) . '.png';
  if (file_exists($cardfile)) {
-  $base = $scheme . '://' . $host . preg_replace('/getword\.php$/', '', $uri);
+  // #178 fix (13-11-2026): build the card URL from the PATH only. REQUEST_URI
+  // carries the query string, so the old end-anchored getword.php strip never
+  // matched and og:image became "<full-query-URL>og/<file>" (404, no large
+  // card). Clean-URL entry paths (…/entry/<token>, post-canonical-flip) map
+  // back to the app root, where og/ lives.
+  $path = parse_url($uri, PHP_URL_PATH);
+  if (!is_string($path) || $path === '') {
+   $path = $uri;
+  }
+  $dir = preg_replace('#/getword\.php$#', '', $path);
+  $dir = preg_replace('#/entry/[^/]+$#', '', $dir);
+  $base = $scheme . '://' . $host . rtrim($dir, '/') . '/';
   $img = $base . 'og/' . $dictlower . '_' . og_preview_card_token($key) . '.png';
   $lines[] = '<meta property="og:image" content="' . $img . '">';
   $lines[] = '<meta property="og:image:width" content="1200">';
